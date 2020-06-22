@@ -149,7 +149,7 @@ def plot_tests_posrate(datatable, location):
     """Create bar plot of tests and positive rate"""
     loc_level = datatable[datatable.NAME == location]
 
-    dateobjects = convert_datestring(loc_level.LoadDttm)   
+    dateobjects = loc_level.Date   
  
     # # date index past a starting date
     # datebegin = datetime.datetime(2020, 3, 31)     
@@ -183,34 +183,59 @@ def plot_tests_posrate(datatable, location):
     ax2.plot(dateobjects, posrate, '.-', label='Positive Rate', color='goldenrod', markersize=6)
     ax2.set_ylim((0, ax2.get_ylim()[1]))    
     plt.show()
+
+
+def plotDCT(datatable, location):
+    """Create line plot comparing deaths, cases, and tests
     
-def plot3(datatable, location):
-    """Create line plot comparing tests, cases, deaths
-    """
-    loc_level = datatable[datatable.NAME == location]
-    
-    loc_level = loc_level[['Date','TEST_NEW','POS_NEW','DTH_NEW']]
-    loc_level.set_index('Date')
+    datatable -- Standard DataFrame of covid data
+    location -- String or list of strings for counties or 'WI' to plot
+    """   
+    # for consistency, if location is a string make it a one-item list
+    if type(location) == str:
+        location = [location]
+
+    # 3 fields in standard plot
+    fields = ['DTH_NEW', 'POS_NEW', 'TEST_NEW']
+
+    # dividing factor for plotting 
+    factor = pd.Series({'DTH_NEW':1, 'POS_NEW':10, 'TEST_NEW':100})
+
+    # reorganize the data to MultiIndex in columns
+    filtered = datatable.pivot(index='Date', columns='NAME', values=fields)
+    # reorganize the MultiIndex, so it's filtered[County][field]
+    filtered = filtered.swaplevel(0,1,axis=1).sort_index(axis='columns', level=0)
+    # filter to just the desired locations
+    filtered = filtered[location]
     
     # create 7-day rolling mean
-    avg = loc_level.rolling(window=7, center=True).mean()
+    avg = filtered.rolling(window=7, center=True).mean()    
     
-    # dividing factor for plotting 
-    factor = pd.Series({'TEST_NEW':100, 'POS_NEW':10, 'DTH_NEW':1})
-    
-    labels = ['Tests per 100 deaths', 'Cases per 10 deaths', 'Deaths']
-    colors = ['goldenrod', 'mediumblue', 'firebrick']
-    
-    ax = (avg/factor).plot(color=colors)
-    
-    ax.set_title(location)
-    ax.set_ylabel('Deaths')
-    ax.set_xlabel('Date')
-    ax.legend(labels)
+    # grid of plots   
+    labels = ['Deaths', 'Cases per 10 deaths', 'Tests per 100 deaths']
+    colors = ['firebrick', 'mediumblue', 'goldenrod']
+
+    nrow = 3
+    nrow = min(nrow, len(location))
+    ncol = int(np.ceil(len(location)/nrow))
+    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=True)
+    # to make code below work for 1x1 plots
+    if type(axs) is not np.ndarray:
+        axs = np.array(axs)
+
+    for cc, county in enumerate(location):
+        # divide by plotting scale factor
+        scaled = avg[county] / factor
+        
+        scaled.plot(ax=axs.flat[cc], color=colors)
+        
+        axs.flat[cc].set_title(county)
+        axs.flat[cc].set_ylabel('Deaths')
+        axs.flat[cc].set_xlabel('Date')
+        axs.flat[cc].legend(labels, loc='upper left')
     
     plt.show()
     
-
 
 def plot_cases_deaths(datatable, location):
     """Create line plot comparing cases and deaths over time.
@@ -220,7 +245,7 @@ def plot_cases_deaths(datatable, location):
     """
     loc_level = datatable[datatable.NAME == location]
 
-    dateobjects = convert_datestring(loc_level.LoadDttm)
+    dateobjects = loc_level.Date
     
     cases = np.array(loc_level.POS_NEW);
     deaths = np.array(loc_level.DTH_NEW);
@@ -267,7 +292,7 @@ def plot_cases_tests(datatable, location):
     """
     loc_level = datatable[datatable.NAME == location]
 
-    dateobjects = convert_datestring(loc_level.LoadDttm)
+    dateobjects = loc_level.Date
     
     cases = np.array(loc_level.POS_NEW);
     tests = np.array(loc_level.TEST_NEW);
@@ -397,6 +422,16 @@ def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
     # Add new column with converted dates
     # LoadDttm contains hour/minute information, the conversion discards that
     covid_data['Date'] = convert_datestring(covid_data.LoadDttm)
+    
+    # Make a list of only useful columns
+    remove_list = ['OBJECTID','GEOID','GEO','LoadDttm','DATE']
+    col_list = covid_data.columns.tolist()
+    for s in remove_list:
+        col_list.remove(s)
+    # Take Date from the back and put it on the front
+    col_list.insert(0,col_list.pop())   
+    # Re-order according to the new list
+    covid_data = covid_data[col_list]    
     
     return covid_data
     

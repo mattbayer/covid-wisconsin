@@ -41,21 +41,22 @@ popdata = covid.read_pop_data_wi(csv_file_pop)
 # use seaborn theme for plotting
 # sns.set()
 
-covid.plot_tests_posrate(widata, 'WI')
-covid.plot_cases_deaths(widata, 'WI')
-covid.plot_cases_tests(widata, 'WI')
+# covid.plot_tests_posrate(widata, 'WI')
+# covid.plot_cases_deaths(widata, 'WI')
+# covid.plot_cases_tests(widata, 'WI')
 
-covid.plot_cases_deaths(widata, 'Milwaukee')
-covid.plot_cases_tests(widata, 'Milwaukee')
+# covid.plot_cases_deaths(widata, 'Milwaukee')
+# covid.plot_cases_tests(widata, 'Milwaukee')
 
-covid.plot_cases_deaths(widata, 'Brown')
-covid.plot_cases_deaths(widata, 'Racine')
-covid.plot_cases_tests(widata, 'Racine')
+# covid.plot_cases_deaths(widata, 'Brown')
+# covid.plot_cases_deaths(widata, 'Racine')
+# covid.plot_cases_tests(widata, 'Racine')
 
-#%%
-covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
+# #%%
+# covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
 
 #%% 
-covid.plot3(widata, 'WI')
+covid.plotDCT(widata, 'WI')
+covid.plotDCT(widata, ['Milwaukee', 'Brown', 'Racine'])
 
 
