@@ -28,15 +28,17 @@ def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
     'Other'. 
     """
     selected = select_by_county(datatable, datatype, n_display, county_list)
+    selected.columns.name = 'County'
+    
+    # create 7-day rolling mean
+    avg = selected.rolling(window=7, center=True).mean()    
 
     # stacked line plot
-    plt.figure()
-    plt.stackplot(selected.index, selected.transpose(), labels=selected.columns)
+    avg.plot(kind='area')
     plt.title(datatype + ' by county')
-    plt.legend(loc='upper left')
     
     # grid of per-capita plots
-    per_million = 1e6 * convert_per_capita(selected, popdata)
+    per_million = 1e6 * convert_per_capita(avg, popdata)
     fig, axs = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True)
     for cc, county in enumerate(per_million):
         axs.flat[cc].plot(per_million[county])
@@ -60,7 +62,11 @@ def convert_per_capita(countydata, popdata):
     pop_other = popdata['WI']    
     
     # loop over all counties except Other
-    all_but_other = [c for c in per_capita.columns if c != 'Other']
+    # first get the counties - this works for MultiIndex columns
+    counties = per_capita.columns.get_level_values(0).drop_duplicates()
+    # then get rid of 'Other' for now
+    all_but_other = [c for c in counties if c != 'Other']
+    # do the per-capita division
     for county in all_but_other:
         pop = popdata[county]
         county_series = per_capita[county]
@@ -95,7 +101,7 @@ def select_by_county(datatable, datatype,  n_display, county_list=[]):
     Returns DataFrame with date objects as index, selected counties as columns,
     7-day averaged datatype as data.
     """       
-    county_filtered = datatable[datatable.GEO == 'County']
+    county_filtered = datatable[datatable.NAME != 'WI']
     
     county_pivot = county_filtered.pivot(index='Date', columns='NAME', values=datatype)
     n_counties = county_pivot.shape[1]
@@ -138,10 +144,7 @@ def select_by_county(datatable, datatype,  n_display, county_list=[]):
             # if the n_display = n_counties, then don't create 'Other' just show all
             county_select = pd.DataFrame(pivot_sorted.iloc[:, 0:n_display])
     
-    # create 7-day rolling mean
-    county_avg = county_select.rolling(window=7, center=True).mean()
-    
-    return county_avg
+    return county_select
     
                      
 
@@ -184,56 +187,94 @@ def plot_tests_posrate(datatable, location):
     ax2.set_ylim((0, ax2.get_ylim()[1]))    
     plt.show()
 
+def select_data(datatable, locations, fields=['DTH_NEW', 'POS_NEW', 'TEST_NEW']):
+    """Select data and reorganize it.
+    
+    Returns a DataFrame with Date for index, MultiIndex for columns arranged 
+    as select[location][field]
+    
+    datatable -- Standard DataFrame of covid data
+    locations -- String or list of strings for counties or 'WI' to plot 
+    fields -- fields of the datatable to include.
+    """    
+        
+    # reorganize the data to MultiIndex in columns
+    select = datatable.pivot(index='Date', columns='NAME', values=fields)
+    # reorganize the MultiIndex, so it's select[location][field]
+    select = select.swaplevel(0,1,axis=1).sort_index(axis='columns', level=0)
+    # filter to just the desired locations
+    select = select[locations]
+    
+    return select
 
-def plotDCT(datatable, location):
+def plotDCT(datatable, locations, per_capita=False, popdata=None):
     """Create line plot comparing deaths, cases, and tests
     
     datatable -- Standard DataFrame of covid data
-    location -- String or list of strings for counties or 'WI' to plot
+    locations -- String or list of strings for counties or 'WI' to plot
+    per_capita -- Plot according to per capita or raw numbers
+    popdata -- population data by location, needed if per_capita is True
     """   
-    # for consistency, if location is a string make it a one-item list
-    if type(location) == str:
-        location = [location]
-
+    # catch error if per_capita True but popdata not provided
+    if per_capita and popdata is None:
+        raise ValueError('In plotDCT(), the argument popdata must be provided when per_capita=True.')
+    
+    # for consistency, if locations is a single string make it a one-item list
+    if type(locations) == str:
+        locations = [locations]
+        
     # 3 fields in standard plot
     fields = ['DTH_NEW', 'POS_NEW', 'TEST_NEW']
 
     # dividing factor for plotting 
     factor = pd.Series({'DTH_NEW':1, 'POS_NEW':10, 'TEST_NEW':100})
-
-    # reorganize the data to MultiIndex in columns
-    filtered = datatable.pivot(index='Date', columns='NAME', values=fields)
-    # reorganize the MultiIndex, so it's filtered[County][field]
-    filtered = filtered.swaplevel(0,1,axis=1).sort_index(axis='columns', level=0)
-    # filter to just the desired locations
-    filtered = filtered[location]
+    
+    # select the data
+    filtered = select_data(datatable, locations, fields)
     
     # create 7-day rolling mean
     avg = filtered.rolling(window=7, center=True).mean()    
     
+    # per capita or not
+    if per_capita:
+        leg_labels = ['Deaths per mil', 'Cases per 100k', 'Tests per 10k']
+        y_label = 'Deaths per mil'
+        # per million
+        # doesn't work - have to figure out how to do per capita with 
+        # MultiIndex column names
+        graphed = 1e6 * convert_per_capita(avg, popdata)
+        sharey_setting = True
+    else:
+        leg_labels = ['Deaths', 'Cases / 10', 'Tests / 100']
+        y_label = 'Deaths'
+        graphed = avg
+        sharey_setting = False
+            
     # grid of plots   
-    labels = ['Deaths', 'Cases per 10 deaths', 'Tests per 100 deaths']
-    colors = ['firebrick', 'mediumblue', 'goldenrod']
+    colors = ['firebrick', 'tab:blue', 'goldenrod']
 
     nrow = 3
-    nrow = min(nrow, len(location))
-    ncol = int(np.ceil(len(location)/nrow))
-    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=True)
+    nrow = min(nrow, len(locations))
+    ncol = int(np.ceil(len(locations)/nrow))
+    nrow = int(np.ceil(len(locations)/ncol))
+    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=sharey_setting)
     # to make code below work for 1x1 plots
     if type(axs) is not np.ndarray:
         axs = np.array(axs)
 
-    for cc, county in enumerate(location):
+    for cc, county in enumerate(locations):
         # divide by plotting scale factor
-        scaled = avg[county] / factor
+        scaled = graphed[county] / factor
         
-        scaled.plot(ax=axs.flat[cc], color=colors)
+        scaled.plot(ax=axs.flat[cc], color=colors, legend=None)
         
         axs.flat[cc].set_title(county)
-        axs.flat[cc].set_ylabel('Deaths')
+        axs.flat[cc].set_ylabel(y_label)
         axs.flat[cc].set_xlabel('Date')
-        axs.flat[cc].legend(labels, loc='upper left')
     
+    # single legend in first axes
+    axs.flat[0].legend(leg_labels, loc='upper left')
+
     plt.show()
     
 
@@ -432,6 +473,17 @@ def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
     col_list.insert(0,col_list.pop())   
     # Re-order according to the new list
     covid_data = covid_data[col_list]    
+    
+    # # Make new columns for *new* positives in age brackets
+    # age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+    # age_cols = ['POS_0_9', 'POS_10_19', 'POS_20_29', 'POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
+    # # view by location and data
+    # pivot = covid_data.pivot(index='Date', column='')
+    # for sfx in age_suffix:
+    #     cumul_col = 'POS_' + sfx
+    #     new_col = 'POS_NEW_' + sfx
+    #     covid_data[new_col] = np.diff(covid_data[cumul_col])
+        
     
     return covid_data
     
