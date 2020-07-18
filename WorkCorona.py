@@ -48,7 +48,7 @@ covid.plot_by_county(widata, popdata, 'POS_NEW', 9)
 
 #%% 
 # covid.plotDCT(widata, 'WI')
-covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=False, popdata=popdata)
+covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
 
 
 
@@ -75,6 +75,15 @@ avg.plot(y=new_cols)
 # Statement to compute new positives for all counties, before I realized 
 # the data wasn't there.  Functions are still useful to learn.
 # widata[new_cols] = widata.groupby('NAME')[cumul_cols].diff()
+
+#%% Plot hospitalization status
+
+select = covid.select_data(widata, 'WI', ['POSITIVE', 'HOSP_YES', 'HOSP_NO', 'HOSP_UNK'])
+
+select['HOSP_NEW'] = select['HOSP_YES'].diff()
+
+avg = select.rolling(window=7, center=True).mean()
+avg.plot(y='HOSP_NEW')
 
 
 #%% Try to estimate true prevalence
