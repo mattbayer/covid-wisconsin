@@ -277,6 +277,39 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
 
     plt.show()
     
+    
+def plot_cases_age(datatable):
+    """Plot cases in different age brackets.
+    
+    This data is only given for Wisconsin as a whole, so no need to specify 
+    a location or any other option.
+    """
+    
+    # The data provided is cumulative cases
+    # So make new columns for *new* cases in age brackets
+    age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+    cumul_cols = ['POS_' + sfx for sfx in age_suffix]  
+    new_cols = ['POS_NEW_' + sfx for sfx in age_suffix]
+    
+    # get cumulative data and compute new-case data
+    select = select_data(datatable, 'WI', cumul_cols)
+    select[new_cols] = select[cumul_cols].diff()
+    
+    # relabel and re-bin
+    relabels = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
+    select[relabels[0:-1]] = select[new_cols[0:-3]]
+    select['70+'] = select['POS_NEW_70_79'] + select['POS_NEW_80_89'] + select['POS_NEW_90']
+    
+    # first 7-day boxcar average for weekly effects, 
+    # then 5-day hamming to smooth more
+    avg = select.rolling(window=7, center=True).mean()
+    avg = avg.rolling(window=5, win_type='hamming', center=True).mean()
+        
+    # Create line plot.  Pretty busy, trying to think of better format...
+    ax = avg.plot(y=relabels, title='WI smoothed daily cases by age')
+    ax.set_ylabel('Cases')
+    
+    
 
 def plot_cases_deaths(datatable, location):
     """Create line plot comparing cases and deaths over time.

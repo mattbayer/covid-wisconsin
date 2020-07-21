@@ -25,11 +25,11 @@ csv_file_covid = path + 'Covid-Data-WI.csv'
 csv_file_pop = path + 'Population-Data-WI.csv'
 
 # population data
-covid.download_pop_data_wi(csv_file_pop)
+# covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-covid.download_covid_data_wi(csv_file_covid)
+# covid.download_covid_data_wi(csv_file_covid)
 widata = covid.read_covid_data_wi(csv_file_covid)
 
 
@@ -43,35 +43,25 @@ widata = covid.read_covid_data_wi(csv_file_covid)
 # covid.plot_cases_tests(widata, 'WI')
 
 
+#%% Plot by county
+
 covid.plot_by_county(widata, popdata, 'POS_NEW', 9)
 # covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
 
 
-#%% 
-# covid.plotDCT(widata, 'WI')
-covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
+#%% Plot deaths, cases, tests
+covid.plotDCT(widata, 'WI')
+covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, popdata=popdata)
 
+# covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
 
 
 
 #%% Plot age distribution
 # Note - this data is not present for counties.  Only data broken out by 
 # county is deaths, cases, tests.
+covid.plot_cases_age(widata)
 
-# Make new columns for *new* positives in age brackets
-age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
-cumul_cols = ['POS_' + sfx for sfx in age_suffix]  
-new_cols = ['POS_NEW_' + sfx for sfx in age_suffix]
-
-select = covid.select_data(widata, 'WI', cumul_cols)
-
-select[new_cols] = select[cumul_cols].diff()
-# first 7-day boxcar average for weekly effects, then 5-day hamming to smooth
-avg = select.rolling(window=7, center=True).mean()
-avg = avg.rolling(window=5, win_type='hamming', center=True).mean()
-    
-# avg.plot.area(y=new_cols)
-avg.plot(y=new_cols)
 
 # Statement to compute new positives for all counties, before I realized 
 # the data wasn't there.  Functions are still useful to learn.
