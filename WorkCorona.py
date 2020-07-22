@@ -74,6 +74,6 @@ select = covid.select_data(widata, 'WI', ['POSITIVE', 'HOSP_YES', 'HOSP_NO', 'HO
 select['HOSP_NEW'] = select['HOSP_YES'].diff()
 
 avg = select.rolling(window=7, center=True).mean()
-avg.plot(y='HOSP_NEW')
+avg.plot(y=['HOSP_YES', 'HOSP_NO', 'HOSP_UNK'])
 
 
