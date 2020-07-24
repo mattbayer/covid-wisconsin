@@ -278,8 +278,8 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
     plt.show()
     
     
-def plot_cases_age(datatable):
-    """Plot cases in different age brackets.
+def plot_by_age(datatable):
+    """Plot cases and deaths in different age brackets.
     
     This data is only given for Wisconsin as a whole, so no need to specify 
     a location or any other option.
@@ -288,26 +288,42 @@ def plot_cases_age(datatable):
     # The data provided is cumulative cases
     # So make new columns for *new* cases in age brackets
     age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
-    cumul_cols = ['POS_' + sfx for sfx in age_suffix]  
-    new_cols = ['POS_NEW_' + sfx for sfx in age_suffix]
+    case_cumul_cols = ['POS_' + sfx for sfx in age_suffix]  
+    death_cumul_cols = ['DTHS_' + sfx for sfx in age_suffix]
+    cumul_cols = case_cumul_cols + death_cumul_cols
     
+    # new names for daily data
+    case_new_cols = ['POS_NEW_' + sfx for sfx in age_suffix]
+    death_new_cols = ['DTH_NEW_' + sfx for sfx in age_suffix]
+    new_cols = case_new_cols + death_new_cols
+        
     # get cumulative data and compute new-case data
     select = select_data(datatable, 'WI', cumul_cols)
     select[new_cols] = select[cumul_cols].diff()
     
     # relabel and re-bin
-    relabels = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
-    select[relabels[0:-1]] = select[new_cols[0:-3]]
-    select['70+'] = select['POS_NEW_70_79'] + select['POS_NEW_80_89'] + select['POS_NEW_90']
+    relabel_suffix = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
+    
+    case_relabels = ['Cases ' + sfx for sfx in relabel_suffix] 
+    death_relabels = ['Deaths ' + sfx for sfx in relabel_suffix] 
+
+    select[case_relabels[0:-1]] = select[case_new_cols[0:-3]]
+    select[death_relabels[0:-1]] = select[death_new_cols[0:-3]]
+    select['Cases 70+'] = select['POS_NEW_70_79'] + select['POS_NEW_80_89'] + select['POS_NEW_90']
+    select['Deaths 70+'] = select['DTH_NEW_70_79'] + select['DTH_NEW_80_89'] + select['DTH_NEW_90']
     
     # first 7-day boxcar average for weekly effects, 
     # then 5-day hamming to smooth more
     avg = select.rolling(window=7, center=True).mean()
     avg = avg.rolling(window=5, win_type='hamming', center=True).mean()
         
-    # Create line plot.  Pretty busy, trying to think of better format...
-    ax = avg.plot(y=relabels, title='WI smoothed daily cases by age')
+    # Create cases line plot.  Pretty busy, trying to think of better format...
+    ax = avg.plot(y=case_relabels, title='WI smoothed daily cases by age')
     ax.set_ylabel('Cases')
+
+    # Create deaths line plot.  Pretty busy, trying to think of better format...
+    ax = avg.plot(y=death_relabels, title='WI smoothed daily deaths by age')
+    ax.set_ylabel('Deaths')
     
     
 
