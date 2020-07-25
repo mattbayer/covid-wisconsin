@@ -187,7 +187,7 @@ def plot_tests_posrate(datatable, location):
     ax2.set_ylim((0, ax2.get_ylim()[1]))    
     plt.show()
 
-def select_data(datatable, locations, fields=['DTH_NEW', 'POS_NEW', 'TEST_NEW']):
+def select_data(datatable, locations = None, fields=['DTH_NEW', 'POS_NEW', 'TEST_NEW']):
     """Select data and reorganize it.
     
     Returns a DataFrame with Date for index, MultiIndex for columns arranged 
@@ -202,8 +202,9 @@ def select_data(datatable, locations, fields=['DTH_NEW', 'POS_NEW', 'TEST_NEW'])
     select = datatable.pivot(index='Date', columns='NAME', values=fields)
     # reorganize the MultiIndex, so it's select[location][field]
     select = select.swaplevel(0,1,axis=1).sort_index(axis='columns', level=0)
-    # filter to just the desired locations
-    select = select[locations]
+    # filter to just the desired locations, if selected
+    if locations is not None:
+        select = select[locations]
     
     return select
 
