@@ -48,6 +48,20 @@ widata = covid.read_covid_data_wi(csv_file_covid)
 covid.plot_by_county(widata, popdata, 'POS_NEW', 9)
 # covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
 
+#%% Sort by county cases per-capita
+# sort by per-capita new cases
+pivot = widata.pivot(index='Date', columns='NAME', values='POS_NEW')
+avg = pivot.rolling(window=7, center=False).mean()
+capita = covid.convert_per_capita(avg, popdata)
+counties = capita.columns
+last_value = capita.iloc[-1]
+sort_order = last_value.sort_values(ascending=False)
+
+print(sort_order.index[0:10])
+
+covid.plotDCT(widata, ['WI', 'Milwaukee', 'Waukesha', 'Kenosha', 'Racine', 'Walworth'], per_capita=True, popdata=popdata)
+
+
 
 #%% Plot deaths, cases, tests
 covid.plotDCT(widata, 'WI')
