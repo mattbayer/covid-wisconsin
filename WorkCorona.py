@@ -14,6 +14,7 @@ import seaborn as sns
 import covid
 import urllib
 from scipy import signal
+import datetime
 
 
 #%% Get the data
@@ -29,7 +30,7 @@ csv_file_pop = path + 'Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-covid.download_covid_data_wi(csv_file_covid)
+# covid.download_covid_data_wi(csv_file_covid)
 widata = covid.read_covid_data_wi(csv_file_covid)
 
 
@@ -38,7 +39,7 @@ widata = covid.read_covid_data_wi(csv_file_covid)
 # use seaborn theme for plotting
 # sns.set()
 
-# covid.plot_tests_posrate(widata, 'WI')
+covid.plot_tests_posrate(widata, 'WI')
 # covid.plot_cases_deaths(widata, 'WI')
 # covid.plot_cases_tests(widata, 'WI')
 
@@ -69,7 +70,52 @@ covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, pop
 
 # covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
 
+#%% Adjust for testing
 
+select = covid.select_data(widata, 'WI', ['POS_NEW', 'TEST_NEW', 'DTH_NEW'])
+cases = select['POS_NEW'].rolling(window=7, center=False).mean()
+tests = select['TEST_NEW'].rolling(window=7, center=False).mean()
+deaths = select['DTH_NEW'].rolling(window=7, center=False).mean()
+
+# back-date tests by 7 days to account for  reporting delays? doesn't seem to make much difference
+# tests.index = tests.index - datetime.timedelta(days=7)
+
+est = pd.DataFrame({'cases': cases, 'tests': tests, 'deaths': deaths})
+
+est['Case prevalence'] = est['cases'] / popdata['WI']
+est['Detected prevalence'] = est['Case prevalence'] * 15
+est['Positive rate'] = est['cases'] / est['tests']
+est['Estimated infection prevalence'] = np.sqrt(est['Positive rate'] * est['Case prevalence'])
+
+est.plot(y=['Detected prevalence', 'Estimated infection prevalence'])
+
+est.plot(y='Positive rate')
+
+
+
+#%% Tests and cases for true dates in Milwaukee county
+
+
+#%% Compare to Youyang Gu's WI estimate
+
+gu_ifr_file = '..\covid19_projections\implied_ifr\IIFR_US_WI.csv'
+    
+# read CSV data into a DataFrame, then convert to a Series
+gudata = pd.read_csv(gu_ifr_file)
+gudata['Date'] = pd.to_datetime(gudata['date']) + datetime.timedelta(days=14)
+gudata = gudata.set_index('Date')
+
+
+est['Gu Estimate'] = gudata['true_inf_est_7day_ma']
+est['Bayer Estimate'] = est['Estimated infection prevalence'] * popdata['WI'] / 7
+est['Detected x10'] = est['cases'] * 10
+
+# back-dated deaths, assume IFR 1%
+deaths = select['DTH_NEW'].rolling(window=7, center=False).mean()
+deaths.index = deaths.index - datetime.timedelta(days=14)
+est['Deaths (IFR 0.75%)'] = deaths * 150
+
+est.plot(title='Wisconsin New Infection Estimates', y=['Detected x10', 'Gu Estimate', 'Bayer Estimate', 'Deaths (IFR 0.75%)'])
 
 #%% Plot age distribution
 # Note - this data is not present for counties.  Only data broken out by 
@@ -131,6 +177,7 @@ avg.plot(y=['Percent Hosp', 'Percent Hosp of Known', 'Percent Not Hosp', 'Percen
 avg['Cases / 1000'] = avg['Cases / 10']/100
 avg['Hosp / 100'] = avg['New Hospitalizations']/100
 avg.plot(y=['Percent Hosp', 'Percent Not Hosp', 'Percent Hosp Known', 'Percent Hosp of Known', 'Hosp / 100', 'Cases / 1000'])
+
 
 
 
