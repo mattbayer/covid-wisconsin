@@ -514,10 +514,10 @@ def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
     
     # Add new column with converted dates
     # LoadDttm contains hour/minute information, the conversion discards that
-    covid_data['Date'] = convert_datestring(covid_data.LoadDttm)
+    covid_data['Date'] = convert_datestring(covid_data.DATE)
     
     # Make a list of only useful columns
-    remove_list = ['OBJECTID','GEOID','GEO','LoadDttm','DATE']
+    remove_list = ['OBJECTID','GEOID','GEO','DATE']
     col_list = covid_data.columns.tolist()
     for s in remove_list:
         col_list.remove(s)
