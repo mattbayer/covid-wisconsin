@@ -39,10 +39,12 @@ def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
     
     # grid of per-capita plots
     per_million = 1e6 * convert_per_capita(avg, popdata)
-    fig, axs = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True)
+    fig, axs = plt.subplots(nrows=3, ncols=3, sharex=True, sharey=True, constrained_layout=True)
     for cc, county in enumerate(per_million):
-        axs.flat[cc].plot(per_million[county])
+        per_million[county].plot(ax=axs.flat[cc], legend=None)
         axs.flat[cc].set_title(county)
+        axs.flat[cc].set_ylabel('Cases / million')
+        axs.flat[cc].set_xlabel('Date')
         
     plt.show()
     

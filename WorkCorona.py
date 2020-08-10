@@ -18,59 +18,20 @@ import datetime
 
 
 #%% Get the data
-# First retrieve data from server and save to csv file
-# Second read data from the previously saved csv file
-# comment sections if no need to re-download    
+# Updated by UpdateData.py, just load from csv here
 
 csv_file_covid = path + 'Covid-Data-WI.csv'
 csv_file_pop = path + 'Population-Data-WI.csv'
 
 # population data
-# covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-# covid.download_covid_data_wi(csv_file_covid)
 widata = covid.read_covid_data_wi(csv_file_covid)
 
 
-#%% Plot cases and deaths for the state
 
-# use seaborn theme for plotting
-# sns.set()
-
-covid.plot_tests_posrate(widata, 'WI')
-# covid.plot_cases_deaths(widata, 'WI')
-# covid.plot_cases_tests(widata, 'WI')
-
-
-#%% Plot by county
-
-covid.plot_by_county(widata, popdata, 'POS_NEW', 9)
-# covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
-
-#%% Sort by county cases per-capita
-# sort by per-capita new cases
-pivot = widata.pivot(index='Date', columns='NAME', values='POS_NEW')
-avg = pivot.rolling(window=7, center=False).mean()
-capita = covid.convert_per_capita(avg, popdata)
-counties = capita.columns
-last_value = capita.iloc[-1]
-sort_order = last_value.sort_values(ascending=False)
-
-print(sort_order.index[0:10])
-
-covid.plotDCT(widata, ['WI', 'Milwaukee', 'Waukesha', 'Kenosha', 'Racine', 'Walworth'], per_capita=True, popdata=popdata)
-
-
-
-#%% Plot deaths, cases, tests
-covid.plotDCT(widata, 'WI')
-covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, popdata=popdata)
-
-# covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
-
-#%% Adjust for testing
+#%% Work on adjust cases for testing
 
 select = covid.select_data(widata, 'WI', ['POS_NEW', 'TEST_NEW', 'DTH_NEW'])
 cases = select['POS_NEW'].rolling(window=7, center=False).mean()
@@ -92,8 +53,6 @@ est.plot(y=['Detected prevalence', 'Estimated infection prevalence'])
 est.plot(y='Positive rate')
 
 
-
-#%% Tests and cases for true dates in Milwaukee county
 
 
 #%% Compare to Youyang Gu's WI estimate
@@ -117,17 +76,9 @@ est['Deaths (IFR 0.75%)'] = deaths * 150
 
 est.plot(title='Wisconsin New Infection Estimates', y=['Detected x10', 'Gu Estimate', 'Bayer Estimate', 'Deaths (IFR 0.75%)'])
 
-#%% Plot age distribution
-# Note - this data is not present for counties.  Only data broken out by 
-# county is deaths, cases, tests.
-covid.plot_by_age(widata)
 
 
-# Statement to compute new positives for all counties, before I realized 
-# the data wasn't there.  Functions are still useful to learn.
-# widata[new_cols] = widata.groupby('NAME')[cumul_cols].diff()
-
-#%% Plot hospitalization status
+#%% Work on hospitalization status
 
 select = covid.select_data(widata, 'WI', ['POS_NEW', 'DTH_NEW', 'HOSP_YES', 'HOSP_NO', 'HOSP_UNK'])
 
