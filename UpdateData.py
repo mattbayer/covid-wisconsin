@@ -30,7 +30,7 @@ csv_file_pop = path + 'Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-# covid.download_covid_data_wi(csv_file_covid)
+covid.download_covid_data_wi(csv_file_covid)
 widata = covid.read_covid_data_wi(csv_file_covid)
 
 
