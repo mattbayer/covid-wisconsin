@@ -153,7 +153,8 @@ def select_by_county(datatable, datatype,  n_display, county_list=[]):
 def plot_tests_posrate(datatable, location):
     """Create bar plot of tests and positive rate"""
     loc_level = datatable[datatable.NAME == location]
-
+    loc_level = loc_level.sort_values('Date')
+    
     dateobjects = loc_level.Date   
  
     # # date index past a starting date
