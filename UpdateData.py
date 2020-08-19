@@ -39,10 +39,11 @@ widata = covid.read_covid_data_wi(csv_file_covid)
 # use seaborn theme for plotting
 # sns.set()
 
-covid.plot_tests_posrate(widata, 'WI')
+# covid.plot_tests_posrate(widata, 'WI')
 # covid.plot_cases_deaths(widata, 'WI')
 # covid.plot_cases_tests(widata, 'WI')
 
+covid.plot_cases_posrate(widata, 'WI')
 
 #%% Plot by county
 

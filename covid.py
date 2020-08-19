@@ -221,7 +221,7 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
     """   
     # catch error if per_capita True but popdata not provided
     if per_capita and popdata is None:
-        raise ValueError('In plotDCT(), the argument popdata must be provided when per_capita=True.')
+        raise ValueError('The argument popdata must be provided when per_capita=True.')
     
     # for consistency, if locations is a single string make it a one-item list
     if type(locations) == str:
@@ -244,8 +244,6 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
         leg_labels = ['Deaths per mil', 'Cases per 100k', 'Tests per 10k']
         y_label = 'Deaths per mil'
         # per million
-        # doesn't work - have to figure out how to do per capita with 
-        # MultiIndex column names
         graphed = 1e6 * convert_per_capita(avg, popdata)
         sharey_setting = True
     else:
@@ -278,6 +276,93 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
     
     # single legend in first axes
     axs.flat[0].legend(leg_labels, loc='upper left')
+
+    plt.show()
+    
+    
+def plot_cases_posrate(datatable, locations, per_capita=False, popdata=None):
+    """Create line plot showing cases and positive test rate
+    
+    datatable -- Standard DataFrame of covid data
+    locations -- String or list of strings for counties or 'WI' to plot
+    per_capita -- Plot according to per capita or raw numbers
+    popdata -- population data by location, needed if per_capita is True
+    """   
+    # catch error if per_capita True but popdata not provided
+    if per_capita and popdata is None:
+        raise ValueError('The argument popdata must be provided when per_capita=True.')
+    
+    # for consistency, if locations is a single string make it a one-item list
+    if type(locations) == str:
+        locations = [locations]
+        
+    # 3 fields in standard plot
+    fields = ['DTH_NEW', 'POS_NEW', 'TEST_NEW']
+
+    # select the data
+    filtered = select_data(datatable, locations, fields)
+    
+    # create 7-day rolling mean
+    avg = filtered.rolling(window=7, center=True).mean()    
+       
+           
+    # per capita or not
+    if per_capita:
+        leg_labels = ['Cases / million', 'Pos test rate']
+        # per million
+        # doesn't work - have to figure out how to do per capita with 
+        # MultiIndex column names
+        graphed = 1e6 * convert_per_capita(avg, popdata)
+        sharey_setting = True
+    else:
+        leg_labels = ['Cases', 'Pos test rate']
+        graphed = avg
+        sharey_setting = False
+        
+    # compute positive rate from averaged values
+    # done after per-capita to avoid dividing pos rate by population
+    # DataFrame has multi-indexed columns, so kind of complicated
+    # loop over all counties except Other
+    # first get the counties - this works for MultiIndex columns
+    counties = avg.columns.get_level_values(0).drop_duplicates()
+    for county in counties:
+        graphed.loc[:, (county,'PosRate')] = graphed[county]['POS_NEW'] / graphed[county]['TEST_NEW']
+
+            
+    # create grid of plots   
+    colors = ['tab:blue', 'tab:brown']
+
+    nrow = 3
+    nrow = min(nrow, len(locations))
+    ncol = int(np.ceil(len(locations)/nrow))
+    nrow = int(np.ceil(len(locations)/ncol))
+    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=sharey_setting, constrained_layout=True)
+    # to make code below work for 1x1 plots
+    if type(axs) is not np.ndarray:
+        axs = np.array(axs)
+
+    # loop over counties, create plot for each
+    for cc, county in enumerate(locations):
+        # select axis
+        ax1 = axs.flat[cc]
+        # cases plot
+        graphed[county].plot(y='POS_NEW', ax=ax1, label=leg_labels[0], color=colors[0], legend=None)
+        # pos rate plot on secondary axis
+        ax2 = graphed[county].plot(y='PosRate', ax=ax1, label=leg_labels[1], secondary_y=True, color=colors[1], linestyle='--', legend=None)
+        
+        ax1.set_title(county)
+        ax1.set_xlabel('Date')
+        ax1.set_ylabel(leg_labels[0])
+        ax2.set_ylabel(leg_labels[1])
+        ax2.set_ylim(0, 0.25)  # hard coded pos rate y axis 0-25%   
+        
+    
+    # collect line handles and labels for legend
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    
+    # single legend in first axes
+    axs.flat[0].legend(lines1 + lines2, labels1 + labels2, loc='upper center')
 
     plt.show()
     
