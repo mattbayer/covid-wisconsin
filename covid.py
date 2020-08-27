@@ -259,7 +259,7 @@ def plotDCT(datatable, locations, per_capita=False, popdata=None):
     nrow = min(nrow, len(locations))
     ncol = int(np.ceil(len(locations)/nrow))
     nrow = int(np.ceil(len(locations)/ncol))
-    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=sharey_setting)
+    fig, axs = plt.subplots(nrows=nrow, ncols=ncol, sharex=True, sharey=sharey_setting, constrained_layout=True)
     # to make code below work for 1x1 plots
     if type(axs) is not np.ndarray:
         axs = np.array(axs)

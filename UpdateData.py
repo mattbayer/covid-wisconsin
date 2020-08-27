@@ -43,7 +43,7 @@ widata = covid.read_covid_data_wi(csv_file_covid)
 # covid.plot_cases_deaths(widata, 'WI')
 # covid.plot_cases_tests(widata, 'WI')
 
-covid.plot_cases_posrate(widata, 'WI')
+covid.plot_cases_posrate(widata, ['WI', 'Milwaukee'])
 
 #%% Plot by county
 
@@ -59,10 +59,15 @@ counties = capita.columns
 last_value = capita.iloc[-1]
 sort_order = last_value.sort_values(ascending=False)
 
-print(sort_order.index[0:10])
+# Current hot spots
+hotspots = sort_order.index[0:8].insert(0,'WI')
+covid.plotDCT(widata, hotspots, per_capita=True, popdata=popdata)
+plt.suptitle('Hotspots')
 
-covid.plotDCT(widata, ['WI', 'Milwaukee', 'Waukesha', 'Kenosha', 'Racine', 'Walworth'], per_capita=True, popdata=popdata)
 
+# Milwaukee area
+covid.plotDCT(widata, ['WI', 'Milwaukee', 'Waukesha', 'Kenosha', 'Racine', 'Washington'], per_capita=True, popdata=popdata)
+plt.suptitle('Milwaukee area')
 
 
 #%% Plot deaths, cases, tests
