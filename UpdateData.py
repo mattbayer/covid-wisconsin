@@ -61,7 +61,7 @@ sort_order = last_value.sort_values(ascending=False)
 
 # Sort counties by population
 popcounties = popdata.sort_values(ascending=False).head(10).index
-covid.plot_cases_posrate(widata, hotspots, per_capita=True, popdata=popdata)
+covid.plot_cases_posrate(widata, popcounties, per_capita=True, popdata=popdata)
 
 # Current hot spots
 hotspots = sort_order.index[0:8].insert(0,'WI')
