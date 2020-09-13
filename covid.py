@@ -11,6 +11,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import urllib
+import os
 
 
 def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
@@ -551,8 +552,61 @@ def read_pop_data_wi(csv_file = 'Population-Data-WI.csv'):
     return popdata_series
     
     
-def download_covid_data_wi(save_file = 'Covid-Data-WI.csv'):
-    """Download latest WI Covid data, parse, and save to csv file.
+def download_covid_wi_tract(tract, save_path = ''):
+    """Download WI Covid data by census tract, parse, and save to csv file.
+    
+    Only requests select data fields to limit download size; the other 
+    data fields are not currently populated anyway.
+    
+    tract -- 6-digit census tract number for WI, input as a string
+    
+    save_path -- file name for CSV file to save the results.
+    """
+    
+    # Check for existence of save_path and create it if it doesn't exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+        
+    # Download data in JSON format from server and save to current path
+    # create intermediate JSON file with same name and location as save_file
+    # (path, filename) = os.path.split(save_file)
+    # (root, ext) = os.path.splitext(filename)
+    # file_json = os.path.join(path, root + '.geojson')
+    
+    
+    
+    # URL for json request, for specific tract number
+    url_root = "https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson?where=GEOID%20%3D%20"
+    # add the tract number, with the constant prefix
+    url_tract = url_root + "'55079" + tract + "'"
+    
+    # make the request from WI DHS - directly from url to memory
+    jsondata = pd.read_json(url_tract, typ='series', orient='index')
+
+    # Parse data into a pandas DataFrame.
+    # The JSON file seems to be arranged a little idiosyncratically.
+    # The default reader function parses the data into a pandas Series of 
+    # lists of dictionaries of dictionaries.  The last level of dictionary is 
+    # what contains all the data I want to ultimately put into a DataFrame.
+    # e.g. jsondata.features[0]['properties']['POSITIVE']   
+    # So now once read in, loop through the useless upper layers of the 
+    # structure to create a list of all records.  Then convert that list into
+    # a pandas DataFrame.
+    data_list = list()
+    for record in jsondata.features:
+        data_list.append(record['properties'])
+        
+    data_table = pd.DataFrame.from_records(data_list)
+    
+    # Now save that data into a CSV file, which will be much smaller and 
+    # easier for a person to read directly.
+    save_file = os.path.join(save_path, 'Covid-Data-WI-Tract-' + tract + '.csv')
+    data_table.to_csv(save_file, index=False)    
+    
+    
+def download_covid_wi_county(save_file = 'Covid-Data-WI.csv'):
+    """Download latest WI Covid data for state and county, parse, 
+    and save to csv file.
     
     Note that the URL retrieval will not work behind GE's VPN.
     
