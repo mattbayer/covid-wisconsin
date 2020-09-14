@@ -33,7 +33,7 @@ csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data by county
-covid.download_covid_wi_county(csv_file_county)
+covid.download_covid_wi_county(datapath)
 widata = covid.read_covid_data_wi(csv_file_county)
 
 # covid data by census tract
