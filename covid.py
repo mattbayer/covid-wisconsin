@@ -522,10 +522,13 @@ def download_pop_data_wi(save_file = 'Population-Data-WI.csv'):
     Download an Excel file from a server at the WI Deparment of Administration.
     Parse, then save in simplified csv format.
     """
+    # get path and file name root from save_file, to use for intermediate files
+    (path, filename) = os.path.split(save_file)
+    (root, ext) = os.path.splitext(filename)
+
     # Download Excel file from the server
-    path = './'
     url_pop = 'https://doa.wi.gov/DIR/Final_Ests_Co_2019.xlsx'
-    file_excel = path + 'Population-WI-County.xlsx'
+    file_excel = os.path.join(path, root + '.xlsx')
     urllib.request.urlretrieve(url_pop, file_excel)
     
     # Parse data into a pandas DataFrame.
@@ -552,7 +555,7 @@ def read_pop_data_wi(csv_file = 'Population-Data-WI.csv'):
     return popdata_series
     
     
-def download_covid_wi_tract(tract, save_path = ''):
+def download_covid_wi_tract(tract, save_path = '.\\data\\tracts'):
     """Download WI Covid data by census tract, parse, and save to csv file.
     
     Only requests select data fields to limit download size; the other 
@@ -560,19 +563,13 @@ def download_covid_wi_tract(tract, save_path = ''):
     
     tract -- 6-digit census tract number for WI, input as a string
     
-    save_path -- file name for CSV file to save the results.
+    save_path -- path name for CSV file to save the results. Inside this
+                 path the file names are hardcoded as 
+                 'Covid-Data-WI-Tract-' + tract + '.csv'
     """
-    
     # Check for existence of save_path and create it if it doesn't exist
     if not os.path.exists(save_path):
         os.mkdir(save_path)
-        
-    # Download data in JSON format from server and save to current path
-    # create intermediate JSON file with same name and location as save_file
-    # (path, filename) = os.path.split(save_file)
-    # (root, ext) = os.path.splitext(filename)
-    # file_json = os.path.join(path, root + '.geojson')
-    
     
     
     # URL for json request, for specific tract number
@@ -584,14 +581,13 @@ def download_covid_wi_tract(tract, save_path = ''):
     jsondata = pd.read_json(url_tract, typ='series', orient='index')
 
     # Parse data into a pandas DataFrame.
-    # The JSON file seems to be arranged a little idiosyncratically.
-    # The default reader function parses the data into a pandas Series of 
+    # The JSON file is arranged a little idiosyncratically.
+    # The reader function parses the data into a pandas Series of 
     # lists of dictionaries of dictionaries.  The last level of dictionary is 
     # what contains all the data I want to ultimately put into a DataFrame.
     # e.g. jsondata.features[0]['properties']['POSITIVE']   
-    # So now once read in, loop through the useless upper layers of the 
-    # structure to create a list of all records.  Then convert that list into
-    # a pandas DataFrame.
+    # So loop through the useless upper layers of the structure to create a 
+    # list of all records.  Then convert that list into a pandas DataFrame.
     data_list = list()
     for record in jsondata.features:
         data_list.append(record['properties'])
@@ -604,34 +600,41 @@ def download_covid_wi_tract(tract, save_path = ''):
     data_table.to_csv(save_file, index=False)    
     
     
-def download_covid_wi_county(save_file = 'Covid-Data-WI.csv'):
+def download_covid_wi_county(save_path = '.\\data'):
     """Download latest WI Covid data for state and county, parse, 
     and save to csv file.
     
     Note that the URL retrieval will not work behind GE's VPN.
     
-    save_file -- file name for CSV file to save the results 
+    save_path -- path name for CSV file to save the results. Inside this
+                 path the file name is hardcoded as 'Covid-Data-WI.csv'
     """
+        
+    # Check for existence of save_path and create it if it doesn't exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
     # Download data in JSON format from server and save to current path
-    path = './'
-    # filtered, only state and county
+    # path = './'
+    # URL for json request, filtered to only state and county
     url_json = "https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson?where=%20(GEO%20%3D%20'County'%20OR%20GEO%20%3D%20'State')%20"
     # unfiltered, includes census tracts
     # url_json = 'https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson'
-    file_json = path + 'Covid-Data-WI.geojson'
-    urllib.request.urlretrieve(url_json, file_json)
+    # file_json = path + 'Covid-Data-WI.geojson'
+    # urllib.request.urlretrieve(url_json, file_json)
+
+
+    # make the request from WI DHS - directly from url to memory
+    jsondata = pd.read_json(url_json, typ='series', orient='index')
 
     # Parse data into a pandas DataFrame.
-    # The JSON file seems to be arranged a little idiosyncratically.
-    # The default reader function parses the data into a pandas Series of 
+    # The JSON file is arranged a little idiosyncratically.
+    # The reader function parses the data into a pandas Series of 
     # lists of dictionaries of dictionaries.  The last level of dictionary is 
     # what contains all the data I want to ultimately put into a DataFrame.
-    # e.g. jsondata.features[0]['properties']['POSITIVE']
-    jsondata = pd.read_json(file_json, typ='series', orient='index')
-    
-    # So now once read in, loop through the useless upper layers of the 
-    # structure to create a list of all records.  Then convert that list into
-    # a pandas DataFrame.
+    # e.g. jsondata.features[0]['properties']['POSITIVE']   
+    # So loop through the useless upper layers of the structure to create a 
+    # list of all records.  Then convert that list into a pandas DataFrame.
     data_list = list()
     for record in jsondata.features:
         data_list.append(record['properties'])
@@ -640,6 +643,7 @@ def download_covid_wi_county(save_file = 'Covid-Data-WI.csv'):
     
     # Now save that data into a CSV file, which will be much smaller and 
     # easier for a person to read directly.
+    save_file = os.path.join(save_path, 'Covid-Data-WI.csv')
     data_table.to_csv(save_file, index=False)
     
     

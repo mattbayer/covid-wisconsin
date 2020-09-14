@@ -28,13 +28,13 @@ tractpath = os.path.join(datapath, 'tracts')
 csv_file_county = os.path.join(datapath, 'Covid-Data-WI.csv')
 csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 
-# # population data
+# population data
 # covid.download_pop_data_wi(csv_file_pop)
-# popdata = covid.read_pop_data_wi(csv_file_pop)
+popdata = covid.read_pop_data_wi(csv_file_pop)
 
-# # covid data by county
-# covid.download_covid_wi_county(csv_file_county)
-# widata = covid.read_covid_data_wi(csv_file_county)
+# covid data by county
+covid.download_covid_wi_county(csv_file_county)
+widata = covid.read_covid_data_wi(csv_file_county)
 
 # covid data by census tract
 covid.download_covid_wi_tract('007500', tractpath)
