@@ -576,18 +576,23 @@ def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
     if type(tracts) == str:
         tracts = [tracts]
         
+    print('Number of tracts:', len(tracts))
+        
     for tract in tracts:
         # URL for json request, for specific tract number
-        url_root = "https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson?where=GEOID%20%3D%20"
+        # requesting through GeoServices API, rather than GeoJSON API which 
+        # appears to be flaky for filtered requests
+        url_root = "https://dhsgis.wi.gov/server/rest/services/DHS_COVID19/COVID19_WI/FeatureServer/10/query?where=GEOID%20%3D%20"
+        url_end = "&outFields=*&outSR=4326&f=json"
         # add the tract number, with the constant prefix
-        url_tract = url_root + "'55079" + tract + "'"
+        url_tract = url_root + "'55079" + tract + "'" + url_end
     
         # make the request from WI DHS, first to temp file then read in
         # this seems to be more reliable and quicker than going directly to memory
         file_json = os.path.join(save_path, 'temp.geojson')
         
-        urllib.request.urlretrieve(url_tract, file_json)
-        jsondata = pd.read_json(file_json, typ='series', orient='index')
+        # urllib.request.urlretrieve(url_tract, file_json)
+        jsondata = pd.read_json(url_tract, typ='series', orient='index')
           
         # Parse data into a pandas DataFrame.
         # The JSON file is arranged a little idiosyncratically.
@@ -599,7 +604,8 @@ def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
         # list of all records.  Then convert that list into a pandas DataFrame.
         data_list = list()
         for record in jsondata.features:
-            data_list.append(record['properties'])
+            # data_list.append(record['properties'])
+            data_list.append(record['attributes'])
             
         data_table = pd.DataFrame.from_records(data_list)
         
@@ -608,9 +614,16 @@ def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
         save_file = os.path.join(save_path, 'Covid-Data-WI-Tract-' + tract + '.csv')
         data_table.to_csv(save_file, index=False)    
         
+        # print to screen to display progress
+        print('.', end='')
+        
+    # print new line to screen to end progress tracker
+    print('')
+    
     # delete temporary file
     if os.path.exists(file_json):
         os.remove(file_json)
+    
         
     
     
@@ -672,7 +685,7 @@ def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
     
     # Add new column with converted dates
     # LoadDttm contains hour/minute information, the conversion discards that
-    covid_data['Date'] = convert_datestring(covid_data.DATE)
+    covid_data['Date'] = convert_rawdates(covid_data.DATE)
     
     # Make a list of only useful columns
     remove_list = ['OBJECTID','GEOID','GEO','DATE']
@@ -699,14 +712,27 @@ def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
     
 
 
-def convert_datestring(datestrings, discard_time=True):
-    """Convert date strings from WI data to date objects."""
-    format_str = "%Y/%m/%d %H:%M:%S+00"
+def convert_rawdates(rawdates, discard_time=True):
+    """Convert raw dates from WI data to date objects.
+    
+    From the WI data, dates either come in the form of a string or a large
+    number of milleseconds. This function figures out which and processes
+    accordingly.
+    """
     dobj = list()
-    for dstr in datestrings:
-        d = datetime.datetime.strptime(dstr, format_str)
-        if discard_time:
-            d = d.replace(hour=0, minute=0, second=0)
-        dobj.append(d)
+
+    if type(rawdates[0]) is str:
+        format_str = "%Y/%m/%d %H:%M:%S+00"
+        for dstr in rawdates:
+            d = datetime.datetime.strptime(dstr, format_str)
+            if discard_time:
+                d = d.replace(hour=0, minute=0, second=0)
+            dobj.append(d)
+    else:          
+        for dint in rawdates:
+            # if a number, then it is in UNIX timestamp format, 
+            # but times 1000 for some reason.
+            d = datetime.date.fromtimestamp(dint/1000)
+            dobj.append(d)  
         
     return dobj
