@@ -25,7 +25,7 @@ import covid
 datapath = '.\\data'
 tractpath = os.path.join(datapath, 'tracts')
 
-csv_file_county = os.path.join(datapath, 'Covid-Data-WI.csv')
+csv_file_county = os.path.join(datapath, 'Covid-Data-WI-County.csv')
 csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 
 # population data
@@ -41,6 +41,9 @@ UWM = ['007300', '007400', '007800', '007500']
 Marquette = ['186400', '014600', '014700']
 covid.download_covid_wi_tract(UWM + Marquette, tractpath)
 data = covid.read_covid_data_wi('data\\tracts\\Covid-Data-WI-Tract-007300.csv')
+
+# update ALL data at once
+# covid.update_covid_wi_all(datapath)
 
 
 #%% Plot cases and deaths for the state

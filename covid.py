@@ -626,7 +626,6 @@ def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
     
         
     
-    
 def download_covid_wi_county(save_path = '.\\data'):
     """Download latest WI Covid data for state and county, parse, 
     and save to csv file.
@@ -653,6 +652,72 @@ def download_covid_wi_county(save_path = '.\\data'):
 
     # make the request from WI DHS - directly from url to memory
     jsondata = pd.read_json(url_json, typ='series', orient='index')
+
+    # Parse data into a pandas DataFrame.
+    # The JSON file is arranged a little idiosyncratically.
+    # The reader function parses the data into a pandas Series of 
+    # lists of dictionaries of dictionaries.  The last level of dictionary is 
+    # what contains all the data I want to ultimately put into a DataFrame.
+    # e.g. jsondata.features[0]['properties']['POSITIVE']   
+    # So loop through the useless upper layers of the structure to create a 
+    # list of all records.  Then convert that list into a pandas DataFrame.
+    data_list = list()
+    for record in jsondata.features:
+        data_list.append(record['properties'])
+        
+    data_table = pd.DataFrame.from_records(data_list)
+    
+    # Now save that data into a CSV file, which will be much smaller and 
+    # easier for a person to read directly.
+    save_file = os.path.join(save_path, 'Covid-Data-WI.csv')
+    data_table.to_csv(save_file, index=False)
+    
+    
+    
+def update_covid_wi_all(save_path = '.\\data'):
+    """Download latest WI Covid data for state, county, and census tract;
+    parse, and save to CSV file.
+    
+    If download from URL does not work, the function checks if a raw JSON file
+    exists that is newer than the CSV file, and if so updates the CSV. This 
+    allows manual download of the raw data in case of VPN not allowing 
+    automated downloads.
+    
+    save_path -- path name for CSV file to save the results. Inside this
+                 path the file names are hardcoded as 'Covid-Data-WI.geojson'
+                 and 'Covid-Data-WI.csv'.
+    """
+        
+    # Check for existence of save_path and create it if it doesn't exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
+    # Define required file names    
+    file_json = os.path.join(save_path, 'Covid-Data-WI.geojson')
+    file_csv = os.path.join(save_path, 'Covid-Data-WI.csv')
+
+    # URL for json request, including state, counties, and tracts
+    url_json = 'https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson'
+    
+    # Download data in JSON format from server if possible and download to file
+    try:
+        urllib.request.urlretrieve(url_json, file_json)
+        print('Data URL request successful. Updating CSV file.')
+    except:
+        # Update request failed.  
+        # If the JSON file is newer than the CSV file (such as if it has been
+        # manually downloaded), then continue the function. Otherwise exit.
+        if not os.path.exists(file_json):
+            print('Data URL request failed, and could not find a previous JSON data file. No data update performed.')
+            return
+        elif os.path.exists(file_csv) and os.path.getmtime(file_csv) > os.path.getmtime(file_json):
+            print('Data URL request failed, and CSV data file is up to date with existing JSON file. No data update performed.')
+            return
+        else:
+            print('Data URL request failed, but CSV data file is not up to date with existing JSON file. Updating CSV file.')
+
+    # Read in the JSON file
+    jsondata = pd.read_json(file_json, typ='series', orient='index')
 
     # Parse data into a pandas DataFrame.
     # The JSON file is arranged a little idiosyncratically.
