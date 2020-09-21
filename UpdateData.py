@@ -39,8 +39,8 @@ widata = covid.read_covid_data_wi(csv_file_county)
 # covid data by census tract
 UWM = ['007300', '007400', '007800', '007500']
 Marquette = ['186400', '014600', '014700']
-covid.download_covid_wi_tract(UWM + Marquette, tractpath)
-data = covid.read_covid_data_wi('data\\tracts\\Covid-Data-WI-Tract-007300.csv')
+# covid.download_covid_wi_tract(UWM + Marquette, tractpath)
+# data = covid.read_covid_data_wi('data\\tracts\\Covid-Data-WI-Tract-007300.csv')
 
 # update ALL data at once
 # covid.update_covid_wi_all(datapath)
