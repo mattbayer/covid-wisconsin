@@ -669,7 +669,7 @@ def download_covid_wi_county(save_path = '.\\data'):
     
     # Now save that data into a CSV file, which will be much smaller and 
     # easier for a person to read directly.
-    save_file = os.path.join(save_path, 'Covid-Data-WI.csv')
+    save_file = os.path.join(save_path, 'Covid-Data-WI-County.csv')
     data_table.to_csv(save_file, index=False)
     
     
