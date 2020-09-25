@@ -33,14 +33,14 @@ csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data by county
-covid.download_covid_wi_county(datapath)
-widata = covid.read_covid_data_wi(csv_file_county)
+covid.download_covid_wi_county()
+widata = covid.read_covid_data_wi(dataset='county')
 
 # covid data by census tract
 UWM = ['007300', '007400', '007800', '007500']
 Marquette = ['186400', '014600', '014700']
 # covid.download_covid_wi_tract(UWM + Marquette, tractpath)
-# data = covid.read_covid_data_wi('data\\tracts\\Covid-Data-WI-Tract-007300.csv')
+# data = covid.read_covid_data_wi(data_path='.\\data\\tracts', csv_file='Covid-Data-WI-Tract-007300.csv')
 
 # update ALL data at once
 # covid.update_covid_wi_all(datapath)

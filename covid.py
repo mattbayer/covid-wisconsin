@@ -739,14 +739,26 @@ def update_covid_wi_all(save_path = '.\\data'):
     data_table.to_csv(save_file, index=False)
     
     
-def read_covid_data_wi(csv_file = 'Covid-Data-WI.csv'):
+def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None):
     """Read previously downloaded WI population data into DataFrame.
     
     Needs some pre-processing after load.
     - Convert date strings into Python datetime objects.
+    
+    dataset   -- name of defined data set, 'county'
+    data_path -- path name for location of CSV data file
+    csv_file  -- data file name. If this is defined, it overrides dataset.  
     """
+    # Input processing
+    if csv_file is None:
+        if dataset == 'county':
+            csv_file = 'Covid-Data-WI-County.csv'
+        else:
+            raise ValueError("The dataset '" + dataset + "' is not a valid option.")
+    
     # Read from CSV file
-    covid_data = pd.read_csv(csv_file)
+    path_file = os.path.join(data_path, csv_file)
+    covid_data = pd.read_csv(path_file) 
     
     # Add new column with converted dates
     # LoadDttm contains hour/minute information, the conversion discards that
