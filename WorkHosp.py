@@ -127,14 +127,14 @@ pop_college = popdata[college_counties]
 region_map_college = region_map
 region_map_college[college_counties] = 'Colleges'
 
-widata['RegionCollege'] = widata.NAME.apply(lambda n: region_map_college[n])
+widata['County group'] = widata.NAME.apply(lambda n: region_map_college[n])
 
 
 
 #%%
 
-hosp_college = widata.groupby(['Date', 'RegionCollege']).HOSP_YES.sum()
-case_college = widata.groupby(['Date', 'RegionCollege']).POSITIVE.sum()
+hosp_college = widata.groupby(['Date', 'County group']).HOSP_YES.sum()
+case_college = widata.groupby(['Date', 'County group']).POSITIVE.sum()
 
 # hosp_region = widata.groupby(['Date', 'Region']).HOSP_YES.sum()
 # case_region = widata.groupby(['Date', 'Region']).POSITIVE.sum()
@@ -142,8 +142,8 @@ case_college = widata.groupby(['Date', 'RegionCollege']).POSITIVE.sum()
 hosp_college = hosp_college.unstack()
 case_college = case_college.unstack()
 
-hosp_college['Northeast + Fox Valley'] = hosp_college['Northeast'] + hosp_college['Fox Valley']
-case_college['Northeast + Fox Valley'] = case_college['Northeast'] + case_college['Fox Valley']
+hosp_college['Packerland'] = hosp_college['Northeast'] + hosp_college['Fox Valley']
+case_college['Packerland'] = case_college['Northeast'] + case_college['Fox Valley']
 
 hosp_new = hosp_college.diff(periods=7)/7
 case_new = case_college.diff(periods=7)/7
@@ -155,8 +155,10 @@ date_start = datetime.datetime(2020, 6, 1)
 hosp_new = hosp_new.iloc[hosp_new.index >= date_start]
 case_new = case_new.iloc[case_new.index >= date_start]
 
-hosp_new.plot(y=['Colleges', 'Northeast + Fox Valley'])
-case_new.plot(y=['Colleges', 'Northeast + Fox Valley'])
+fig, axs = plt.subplot(nrows=1, ncols=2)
+
+hosp_new.plot(ax=axs[0], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily hospitalizations (7-day avg)')
+case_new.plot(ax=axs[1], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily cases (7-day avg)')
 
 
 
