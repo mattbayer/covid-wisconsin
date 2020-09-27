@@ -155,10 +155,10 @@ date_start = datetime.datetime(2020, 6, 1)
 hosp_new = hosp_new.iloc[hosp_new.index >= date_start]
 case_new = case_new.iloc[case_new.index >= date_start]
 
-fig, axs = plt.subplot(nrows=1, ncols=2)
+fig, axs = plt.subplots(nrows=1, ncols=2, constrained_layout=True)
 
-hosp_new.plot(ax=axs[0], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily hospitalizations (7-day avg)')
-case_new.plot(ax=axs[1], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily cases (7-day avg)')
+case_new.plot(ax=axs[0], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily cases (7-day avg)')
+hosp_new.plot(ax=axs[1], y=['Colleges', 'Packerland'], color=['red', 'darkgreen'], style=['--', '-'], title='Two outbreaks: daily hospitalizations (7-day avg)')
 
 
 
