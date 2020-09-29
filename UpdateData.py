@@ -106,11 +106,3 @@ covid.plot_by_age(widata)
 # widata[new_cols] = widata.groupby('NAME')[cumul_cols].diff()
 
 
-#%% Plotly
-
-import plotly.express as px
-from plotly.offline import plot as pxplot
-
-fig = px.line(avg.WI, title='WI Cases 7-day avg', legend=False)
-
-pxplot(fig, filename='..\\mattbayer.github.io\\assets\\plotly\\Cases_WI_2020-09-28.html')
