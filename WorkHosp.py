@@ -172,13 +172,13 @@ quit()
 #%% Hospitalization by county
 
 counties = ['WI', 'Milwaukee', 'Brown', 'Dane']
-county = 'Brown'
+county = 'Racine'
 
 select = covid.select_data(widata, county, ['HOSP_YES'])
 
 select['New Hospitalizations'] = select['HOSP_YES'].diff()
 
-select.plot(y = 'New Hospitalizations')
+# select.plot(y = 'New Hospitalizations')
 
 
 
