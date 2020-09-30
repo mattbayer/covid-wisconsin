@@ -57,41 +57,18 @@ covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, pop
 # covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
 
 
-#%% Plot by county
 
-covid.plot_by_county(widata, popdata, 'POS_NEW', 9)
-# covid.plot_by_county(widata, popdata, 'DTH_NEW', 6)
-
-#%% Various groups of counties, cases and pos rate
-
-# Current hot spots - sort by per-capita new cases
-pivot = widata.pivot(index='Date', columns='NAME', values='POS_NEW')
-avg = pivot.rolling(window=7, center=False).mean()
-capita = covid.convert_per_capita(avg, popdata)
-counties = capita.columns
-last_value = capita.iloc[-1]
-sort_order = last_value.sort_values(ascending=False)
-
-hotspots = sort_order.index[0:8].insert(0,'WI')
-covid.plot_cases_posrate(widata, hotspots, per_capita=True, popdata=popdata)
-plt.suptitle('Hotspots')
-
-# Sort counties by population
-popcounties = popdata.sort_values(ascending=False).head(9).index
-covid.plot_cases_posrate(widata, popcounties, per_capita=True, popdata=popdata)
-
-
-# Milwaukee area
-covid.plot_cases_posrate(widata, ['WI', 'Milwaukee', 'Waukesha', 'Kenosha', 'Racine', 'Washington'], per_capita=True, popdata=popdata)
-plt.suptitle('Milwaukee area')
 
 
 
 
 #%% Plotly
 
+import plotly
 import plotly.express as px
 from plotly.offline import plot as pxplot
+import plotly.graph_objects as go
+
 
 # filter to state
 state = widata[widata.NAME == 'WI']
@@ -113,7 +90,38 @@ state = state.rename(columns=col_rename)
 state_avg = state.rolling(window=7, center=True).mean()
 
 
-# # Create plot
+# create one-axis plot
+# fig = px.line(state_avg, y='Cases', title='WI Cases/Tests 7-day avg')
+
+# # pxplot(fig, filename='..\\mattbayer.github.io\\assets\\plotly\\Cases_WI_2020-09-28.html')
+
+# pxplot(fig, filename='.\\plots\\plotly\\temp.html')
+
+
+
+# compute y axis range
+# want tests to be on a scale exactly 10x cases
+range_max = max(state_avg.Tests.max()/10, state_avg.Cases.max())
+range_cases = np.array([-range_max * 0.05, 1.05*range_max])
+
+
+
+fig2 = plotly.subplots.make_subplots(specs=[[{"secondary_y": True}]])
+fig2.add_trace(
+    go.Scatter(x=state_avg.index, y=state_avg.Cases, name='Cases'),
+    secondary_y=False)
+fig2.add_trace(
+    go.Scatter(x=state_avg.index, y=state_avg.Tests, name='Tests'),
+    secondary_y=True)
+
+fig2.update_yaxes({'range': range_cases}, secondary_y=False)
+fig2.update_yaxes({'range': range_cases*10}, secondary_y=True)
+
+
+pxplot(fig2, filename='.\\plots\\plotly\\temp2.html')
+
+
+#%% # Create plot
 
 # import plotly.graph_objects as go
 # from plotly.subplots import make_subplots
@@ -146,9 +154,3 @@ state_avg = state.rolling(window=7, center=True).mean()
 
 # fig.show()
 
-# create plot
-fig = px.line(state_avg, y=['Cases', 'Tests'], title='WI Cases/Tests 7-day avg')
-
-# pxplot(fig, filename='..\\mattbayer.github.io\\assets\\plotly\\Cases_WI_2020-09-28.html')
-
-pxplot(fig, filename='.\\plots\\plotly\\temp.html')
