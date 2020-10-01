@@ -2,7 +2,7 @@
 layout: post
 title: Two outbreaks
 ---
-Wisconsin has two outbreaks. [The first is on college campuses](https://mattbayer.github.io//2020/09/14/wisconsin-colleges/). Cases exploded after classes began, especially at UW-Madison and UW-La Crosse, but at many other campuses as well. Dorms are quarantined, students are rushing to buy ramen before lockdown, and I get to tut-tut to myself about the party kids in Sellery and Witte. 
+Wisconsin has two outbreaks. [The first is on college campuses]({% post_url 2020-09-14-wisconsin-colleges %}). Cases exploded after classes began, especially at UW-Madison and UW-La Crosse, but at many other campuses as well. Dorms are quarantined, students are rushing to buy ramen before lockdown, and I get to tut-tut to myself about the party kids in Sellery and Witte. 
 
 But while this outbreak has possibly already peaked - at least at Madison, though not yet at Marquette and UW-Milwaukee - a second outbreak is underway in the northeast corner of the state. I believe this second outbreak is more serious, although I think it has received less media coverage. It comes with a rapid increase in hospitalizations due to (I'm guessing) less of a skew towards young people. Wisconsin is at a record high for current people hospitalized - 574 at this writing - and this outbreak is what is driving that trend.
 
