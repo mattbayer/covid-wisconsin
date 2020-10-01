@@ -1,1 +1,22 @@
-theme: minima
+# Setup
+title:               Covid in Wisconsin
+tagline:             ''
+description:         'A blog for unique analysis of Covid data in Wisconsin.'
+url:                 https://mattbayer.github.io/
+baseurl:             ''
+paginate:            5
+permalink:           pretty
+
+# About/contact
+author:
+  name:              Matt Bayer
+  url:               https://twitter.com/MattBayer3
+  email:             
+
+# Gems
+plugins:
+  - jekyll-paginate
+
+# Custom vars
+version:             1.1.0
+google_analytics_id: #UA-XXXX-Y
