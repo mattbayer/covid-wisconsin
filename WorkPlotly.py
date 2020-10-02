@@ -75,7 +75,7 @@ state_avg = state.rolling(window=7, center=False).mean()
 # pplot(fig, filename='.\\plots\\plotly\\temp.html')
 
 #%% Standard plots
-plotpath = '..\\mattbayer.github.io\\assets\\plotly'
+plotpath = '.\\docs\\assets\\plotly'
 
 # Cases/Tests
 
@@ -123,13 +123,23 @@ range_deaths = np.array([-range_max * 0.05, 1.05*range_max])
 
 fig = plotly.subplots.make_subplots()
 
+# individual deaths bar chart
 fig.add_trace(
     go.Bar(x=state.index, 
            y=state.Deaths,
            name='Deaths', 
-           marker_color='firebrick', 
+           marker_color='rosybrown', 
            hovertemplate='%{y:.0f}'),)
 
+# death 7-day avg
+fig.add_trace(
+    go.Scatter(x=state_avg.index, 
+           y=state_avg.Deaths,
+           name='Deaths (7-day avg)', 
+           line_color='firebrick', 
+           hovertemplate='%{y:.1f}'),)
+
+# new hospitalization 7-day average
 fig.add_trace(
     go.Scatter(x=state_avg.index, 
                y=state_avg.Hospitalizations, 
