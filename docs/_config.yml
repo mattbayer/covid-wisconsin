@@ -2,8 +2,8 @@
 title:               Covid in Wisconsin
 tagline:             ''
 description:         'A blog for unique analysis of Covid data in Wisconsin.'
-url:                 https://mattbayer.github.io
-baseurl:             '/covid-wisconsin'
+url:                 https://covid-wisconsin.com
+baseurl:             ''
 paginate:            5
 permalink:           pretty
 
@@ -16,12 +16,6 @@ author:
 # Gems
 plugins:
   - jekyll-paginate
-  - jekyll-relative-links
-  
-# Options
-relative_links:
-  enabled:     true
-  collections: true 
 
 # Custom vars
 version:             1.1.0
