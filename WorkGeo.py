@@ -102,6 +102,7 @@ from plotly.offline import plot as pplot
 
 plotcol = 'Cases per 100,000'
 plotcol2 = 'Hospitalizations per 100,000'
+hosp_scale = [0, 4]
 
 # with urllib.request.urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
     
@@ -126,6 +127,7 @@ fig2 = px.choropleth(countiesWI,
                     locations=countiesWI.index, 
                     color=plotcol2, 
                     color_continuous_scale=px.colors.sequential.Oranges,
+                    range_color=hosp_scale,
                     title='Hospitalizations by County',
                     projection='mercator')
 fig2.update_geos(fitbounds='locations', visible=False)
@@ -134,5 +136,45 @@ fig2.update_geos(fitbounds='locations', visible=False)
 pplot(fig2, filename='.\\plots\\plotly\\temp2.html' )
 
 
+#%% try a different map 
+import plotly.graph_objects as go
 
+# this will give warning but I don't care
+longitude = countiesWI.geometry.centroid.x
+latitude = countiesWI.geometry.centroid.y
+popscale = 500;
+plotcol = 'Cases per 100,000'
+
+fig = px.choropleth(countiesWI, 
+                    geojson=countiesJS, 
+                    locations=countiesWI.index, 
+                    color_discrete_sequence=['white'],
+                    title='Cases by County',
+                    projection='mercator')
+
+
+fig.add_trace(go.Scattergeo(lon=longitude,
+                            lat=latitude,
+                            marker=dict(size=countiesWI.Population / popscale,
+                                        color=countiesWI[plotcol],
+                                        sizemode='area',
+                                        colorscale='Blues')))
+
+fig.update_geos(fitbounds='locations', visible=False)
+
+
+# fig = px.scatter_geo(countiesWI, 
+#                      lat=latitude,
+#                      lon=longitude,
+#                      color=plotcol, 
+#                      color_continuous_scale=px.colors.sequential.Blues,
+#                      size='Population',
+#                      title='Cases by County',
+#                      projection='mercator')
+
+
+
+fig.update_geos(fitbounds='locations', visible=False)
+
+pplot(fig, filename='.\\plots\\plotly\\temp.html')
 
