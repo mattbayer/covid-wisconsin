@@ -139,12 +139,19 @@ pplot(fig2, filename='.\\plots\\plotly\\temp2.html' )
 #%% try a different map 
 import plotly.graph_objects as go
 
+# get latitude and longitude of centroids of counties for plotting
 # this will give warning but I don't care
-longitude = countiesWI.geometry.centroid.x
-latitude = countiesWI.geometry.centroid.y
-popscale = 500;
-plotcol = 'Cases per 100,000'
+countiesWI['plotlon'] = countiesWI.geometry.centroid.x
+countiesWI['plotlat'] = countiesWI.geometry.centroid.y
+# move Milwaukee's plot center to the right a bit to make more room
+countiesWI.loc['Milwaukee', 'plotlon'] = countiesWI.loc['Milwaukee', 'plotlon'] + 0.15
+# set scales for sizes of bubbles
+popscale = 300
+casescale = 0.3
+hospscale = 0.006
 
+# Cases
+plotcol = 'Cases per 100,000'
 fig = px.choropleth(countiesWI, 
                     geojson=countiesJS, 
                     locations=countiesWI.index, 
@@ -152,29 +159,46 @@ fig = px.choropleth(countiesWI,
                     title='Cases by County',
                     projection='mercator')
 
+# fig = go.Figure()
 
-fig.add_trace(go.Scattergeo(lon=longitude,
-                            lat=latitude,
-                            marker=dict(size=countiesWI.Population / popscale,
+fig.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
+                            lat=countiesWI.plotlat,
+                            marker=dict(size=countiesWI.Cases / casescale, #size=countiesWI.Population / popscale,
                                         color=countiesWI[plotcol],
                                         sizemode='area',
-                                        colorscale='Blues')))
-
-fig.update_geos(fitbounds='locations', visible=False)
-
-
-# fig = px.scatter_geo(countiesWI, 
-#                      lat=latitude,
-#                      lon=longitude,
-#                      color=plotcol, 
-#                      color_continuous_scale=px.colors.sequential.Blues,
-#                      size='Population',
-#                      title='Cases by County',
-#                      projection='mercator')
-
-
+                                        colorscale='Blues'),
+                            line=dict(color='lightgray')
+                            ))
 
 fig.update_geos(fitbounds='locations', visible=False)
 
 pplot(fig, filename='.\\plots\\plotly\\temp.html')
+
+
+# Hospitalizations
+plotcol = 'Hospitalizations per 100,000'
+
+fig = px.choropleth(countiesWI, 
+                    geojson=countiesJS, 
+                    locations=countiesWI.index, 
+                    color_discrete_sequence=['white'],
+                    title='Hospitalizations by County',
+                    projection='mercator')
+
+# fig = go.Figure()
+
+fig.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
+                            lat=countiesWI.plotlat,
+                            marker=dict(size=countiesWI.Hospitalizations / hospscale, #size=countiesWI.Population / popscale,
+                                        color=countiesWI[plotcol],
+                                        cmin=hosp_scale[0],
+                                        cmax=hosp_scale[1],
+                                        sizemode='area',
+                                        colorscale='Oranges'),
+                            line=dict(color='lightgray')
+                            ))
+
+fig.update_geos(fitbounds='locations', visible=False)
+
+pplot(fig, filename='.\\plots\\plotly\\temp2.html')
 
