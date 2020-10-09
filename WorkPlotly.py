@@ -110,8 +110,10 @@ fig.update_layout(title_text='WI Daily Cases and Tests',
                   hovermode='x unified',
                   legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))                
                 
-
-pplot(fig, filename = plotpath + '\\Cases-Tests-WI.html')
+# plot and save as html, with plotly JS library in separate file in same directory
+pplot(fig, 
+      filename = plotpath + '\\Cases-Tests-WI.html', 
+      include_plotlyjs='directory')
 
 
 #%% Hospitalizations / Deaths
@@ -159,5 +161,8 @@ fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
 #                         xref='paper', yref='paper',
 #                         showarrow=False))
 
-pplot(fig, filename = plotpath + '\\Deaths-Hosp-WI.html')
+# plot and save as html, with plotly JS library in separate file in same directory
+pplot(fig, 
+      filename = plotpath + '\\Deaths-Hosp-WI.html',
+      include_plotlyjs='directory')
 
