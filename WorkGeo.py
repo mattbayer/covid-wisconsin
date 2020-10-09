@@ -210,7 +210,7 @@ fig_cases.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
 fig_cases.update_geos(fitbounds='locations', visible=False)
 
 pplot(fig_cases, 
-      filename='.\\docs\\assets\\plotly\\Map-Cases.html',
+      filename='.\\docs\\assets\\plotly\\Map-Cases-WI.html',
       include_plotlyjs='cdn')
 
 
@@ -244,6 +244,6 @@ fig_hosp.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
 fig_hosp.update_geos(fitbounds='locations', visible=False)
 
 pplot(fig_hosp, 
-      filename='.\\docs\\assets\\plotly\\Map-Hosp.html',
+      filename='.\\docs\\assets\\plotly\\Map-Hosp-WI.html',
       include_plotlyjs='cdn')
 
