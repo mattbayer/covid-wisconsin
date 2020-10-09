@@ -113,7 +113,7 @@ fig.update_layout(title_text='WI Daily Cases and Tests',
 # plot and save as html, with plotly JS library in separate file in same directory
 pplot(fig, 
       filename = plotpath + '\\Cases-Tests-WI.html', 
-      include_plotlyjs='directory')
+      include_plotlyjs='cdn')
 
 
 #%% Hospitalizations / Deaths
@@ -164,5 +164,5 @@ fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
 # plot and save as html, with plotly JS library in separate file in same directory
 pplot(fig, 
       filename = plotpath + '\\Deaths-Hosp-WI.html',
-      include_plotlyjs='directory')
+      include_plotlyjs='cdn')
 
