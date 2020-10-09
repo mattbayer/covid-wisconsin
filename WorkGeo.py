@@ -150,7 +150,7 @@ display_names = [n + ' County' for n in countiesWI.index]
 
 # set scales for sizes of bubbles
 popscale = 300
-casescale = 0.25
+casescale = 0.3
 hospscale = casescale*.05;   # so that bubbles are same size if hosp = 5% of cases
 hosp_scale = [0, 6]
 
@@ -167,6 +167,8 @@ fig_bkgd = px.choropleth(countiesWI,
                          geojson=countiesJS, 
                          locations=countiesWI.index, 
                          color_discrete_sequence=[line_colors['land']],
+                         width=600,
+                         height=600,
                          projection='mercator')
 
 # turn off hover tooltips for this layer - have to set both of these because
