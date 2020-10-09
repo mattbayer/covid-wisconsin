@@ -152,95 +152,98 @@ display_names = [n + ' County' for n in countiesWI.index]
 popscale = 300
 casescale = 0.25
 hospscale = casescale*.05;   # so that bubbles are same size if hosp = 5% of cases
+hosp_scale = [0, 6]
 
-#%% Cases
-plotcol = 'Cases per 100,000'
+
+#%% Create background to figures
+
 # line_colors = {'land':'darkgrey', 'border':'lightgray', 'marker':'dimgray'}
 # line_colors = {'land':'darkgrey', 'border':'dimgray', 'marker':'lightgray'}
 # line_colors = {'land':'lightgray', 'border':'white', 'marker':'dimgray'}
 line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
 
 # background map of counties
-fig = px.choropleth(countiesWI, 
-                    geojson=countiesJS, 
-                    locations=countiesWI.index, 
-                    color_discrete_sequence=[line_colors['land']],
-                    title='Cases by County',
-                    projection='mercator')
+fig_bkgd = px.choropleth(countiesWI, 
+                         geojson=countiesJS, 
+                         locations=countiesWI.index, 
+                         color_discrete_sequence=[line_colors['land']],
+                         projection='mercator')
 
 # turn off hover tooltips for this layer - have to set both of these because
 # hovertemplate is set automatically and it supersedes hoverinfo.
 # Also take out legend because it's not very useful right now; I could add
 # a fancier custom legend later.
-fig.update_traces(hovertemplate=None, 
-                  hoverinfo='skip', 
-                  marker_line_color=line_colors['border'],
-                  showlegend=False)
+fig_bkgd.update_traces(hovertemplate=None, 
+                       hoverinfo='skip', 
+                       marker_line_color=line_colors['border'],
+                       showlegend=False)
 
 
-fig.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
-                            lat=countiesWI.plotlat,
-                            text=display_names,
-                            customdata=countiesWI.Population,
-                            marker=dict(size=countiesWI.Cases, #size=countiesWI.Population / popscale,
-                                        sizeref=casescale,
-                                        color=countiesWI[plotcol],
-                                        sizemode='area',
-                                        colorscale='Blues'),
-                            line=dict(color=line_colors['marker']),
-                            hovertemplate=
-                            '<b>%{text}</b><br>' +
-                            'Population: %{customdata:.0f}<br>' +
-                            'Cases: %{marker.size:.1f}<br>' + 
-                            'Cases per 100K: %{marker.color:.1f}'
-                            ))
+
+
+#%% Complete the figures - cases
+plotcol = 'Cases per 100,000'
+
+# copy background
+fig_cases = go.Figure(fig_bkgd)
+fig_cases.update_layout(title='Cases by County<br>(7-day avg)')
+
+fig_cases.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
+                                  lat=countiesWI.plotlat,
+                                  text=display_names,
+                                  customdata=countiesWI.Population,
+                                  marker=dict(size=countiesWI.Cases, #size=countiesWI.Population / popscale,
+                                              sizeref=casescale,
+                                              color=countiesWI[plotcol],
+                                              sizemode='area',
+                                              colorscale='Blues'),
+                                  line=dict(color=line_colors['marker']),
+                                  hovertemplate=
+                                  '<b>%{text}</b><br>' +
+                                  'Population: %{customdata:.0f}<br>' +
+                                  'Cases: %{marker.size:.1f}<br>' + 
+                                  'Cases per 100K : %{marker.color:.1f}'+
+                                  '<extra></extra>'
+                                  ))
 
 # only display wisconsin counties, not whole world
-fig.update_geos(fitbounds='locations', visible=False)
+fig_cases.update_geos(fitbounds='locations', visible=False)
 
-pplot(fig, filename='.\\plots\\plotly\\temp.html')
+pplot(fig_cases, 
+      filename='.\\docs\\assets\\plotly\\Map-Cases.html',
+      include_plotlyjs='cdn')
 
 
 #%% Hospitalizations
 plotcol = 'Hospitalizations per 100,000'
 
-# background map of counties
-fig = px.choropleth(countiesWI, 
-                    geojson=countiesJS, 
-                    locations=countiesWI.index, 
-                    color_discrete_sequence=['white'],
-                    title='Hospitalizations by County',
-                    projection='mercator')
+# copy background
+fig_hosp = go.Figure(fig_bkgd)
+fig_hosp.update_layout(title='Hospitalizations by County<br>(7-day avg)')
 
-# turn off hover tooltips for this layer - have to set both of these because
-# hovertemplate is set automatically and it supersedes hoverinfo
-# Also take out legend because it's not very useful right now; I could add
-# a fancier custom legend later.
-fig.update_traces(hovertemplate=None, 
-                  hoverinfo='skip',
-                  showlegend=False)
+fig_hosp.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
+                                 lat=countiesWI.plotlat,
+                                 text=display_names,
+                                 customdata=countiesWI.Population,
+                                 marker=dict(size=countiesWI.Hospitalizations,
+                                             sizeref=hospscale,
+                                             color=countiesWI[plotcol],
+                                             cmin=hosp_scale[0],
+                                             cmax=hosp_scale[1],
+                                             sizemode='area',
+                                             colorscale='Oranges'),
+                                 line=dict(color=line_colors['marker']),
+                                 hovertemplate=
+                                 '<b>%{text}</b><br>' +
+                                 'Population: %{customdata:.0f}<br>' +
+                                 'Hospitalizations: %{marker.size:.1f}<br>' + 
+                                 'Hospitalizations per 100K: %{marker.color:.1f}' +
+                                 '<extra></extra>'
+                                 ))
 
+fig_hosp.update_geos(fitbounds='locations', visible=False)
 
-fig.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
-                            lat=countiesWI.plotlat,
-                            text=display_names,
-                            customdata=countiesWI.Population,
-                            marker=dict(size=countiesWI.Hospitalizations,
-                                        sizeref=hospscale,
-                                        color=countiesWI[plotcol],
-                                        cmin=hosp_scale[0],
-                                        cmax=hosp_scale[1],
-                                        sizemode='area',
-                                        colorscale='Oranges'),
-                            line=dict(color='lightgray'),
-                            hovertemplate=
-                            '<b>%{text}</b><br>' +
-                            'Population: %{customdata:.0f}<br>' +
-                            'Hospitalizations: %{marker.size:.1f}<br>' + 
-                            'Hosp per 100K: %{marker.color:.1f}'
-                            ))
-
-fig.update_geos(fitbounds='locations', visible=False)
-
-pplot(fig, filename='.\\plots\\plotly\\temp2.html')
+pplot(fig_hosp, 
+      filename='.\\docs\\assets\\plotly\\Map-Hosp.html',
+      include_plotlyjs='cdn')
 
