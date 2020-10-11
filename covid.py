@@ -624,6 +624,172 @@ def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
         os.remove(file_json)
     
         
+def download_covid_data_wi(dataset='state'):
+    """Download one of the three datasets from WI DHS and return as DataFrame.
+
+    dataset -- 'state', 'county', or 'tract'. Each dataset has its own 
+               assortment of data columns.
+    """
+    url_json_state  = "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson"
+    url_json_county = "https://opendata.arcgis.com/datasets/5374188992374b318d3e2305216ee413_12.geojson"
+    url_json_tract  = "https://opendata.arcgis.com/datasets/89d7a90aafa24519847c89b249be96ca_13.geojson"
+    
+    urls = {'state': url_json_state, 'county': url_json_county, 'tract': url_json_tract}
+    
+    if dataset not in urls.keys():
+        raise ValueError("Dataset not supported. Supported datasets are 'state', 'county', or 'tract'.")
+        
+    # make the request from WI DHS - directly from url to memory
+    jsondata = pd.read_json(urls[dataset], typ='series', orient='index')
+
+    # Parse data into a pandas DataFrame.
+    # The JSON file is arranged a little idiosyncratically.
+    # The reader function parses the data into a pandas Series of 
+    # lists of dictionaries of dictionaries.  The last level of dictionary is 
+    # what contains all the data I want to ultimately put into a DataFrame.
+    # e.g. jsondata.features[0]['properties']['POSITIVE']   
+    # So loop through the useless upper layers of the structure to create a 
+    # list of all records.  Then convert that list into a pandas DataFrame.
+    data_list = list()
+    for record in jsondata.features:
+        data_list.append(record['properties'])
+        
+    data_table = pd.DataFrame.from_records(data_list)
+    
+    # make sure everything is interpreted as numeric if it can be
+    # this is important for consistency with loading from CSV files later
+    data_table = data_table.apply(pd.to_numeric, errors='ignore')
+    
+    return data_table
+
+
+def update_covid_data_wi(dataset='state', save_path='.\\data'):
+    """Update Covid data by downloading recent updates from WI DHS.
+    This function downloads updated data, cleans it, then merges it with 
+    historical data. It then saves a CSV file of the updated data.
+    
+    DHS no longer provides data dated back to the beginning of the pandemic, 
+    but only the last 90 days. That means I have maintain a historic record 
+    and update it from DHS data.
+    
+    There are three datasets: state, county, and census tract. They each have
+    their own data columns. DHS stores them entirely separately. For my data 
+    analysis, I want each smaller level of data to contain the higher levels 
+    for comparison. So when I update 'county', it will also download 'state'
+    and merge it into the county DataFrame, stripping any extra data columns
+    that only state has.    
+    
+    The data path can be specified, but the data file names are hardcoded as
+    'Covid-Data-WI-State.csv', 'Covid-Data-WI-County.csv, 'Covid-Data-WI-Tract.csv'
+    
+    dataset -- 'state', 'county', or 'tract'.
+    save_path -- Path for saving the data files.
+    """
+    # Check for existence of save_path and create it if it doesn't exist
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
+    filenames = {'state':  'Covid-Data-WI-State.csv',
+                 'county': 'Covid-Data-WI-County.csv',
+                 'tract':  'Covid-Data-WI-Tract.csv'}
+    
+    if dataset not in filenames.keys():
+        raise ValueError("Dataset not supported. Supported datasets are 'state', 'county', or 'tract'.")
+            
+    # update and merge state, county, tract in order,stopping at the chosen 
+    # dataset
+    data_update = download_covid_data_wi('state')
+    if dataset == 'county' or dataset == 'tract':
+        county_update = download_covid_data_wi('county')
+        data_update = pd.concat([data_update, county_update], join='inner')
+    if dataset == 'tract':
+        tract_update = download_covid_data_wi('tract')
+        data_update = pd.concat([data_update, tract_update], join='inner')
+    
+    # Some limited data cleaning - mainly for NaNs
+    # Replace N/A or None objects (for blank data) with NaN
+    # Some places also have -999 values, also replace those with NaN
+    # More data cleaning is done in read_covid_data_wi, which makes it more 
+    # accessible for analysis
+    data_update = data_update.fillna(value=np.nan)
+    data_update = data_update.replace(to_replace=-999, value=np.nan)
+
+    # Load the historical data, as long as it exists
+    path_file = os.path.join(save_path, filenames[dataset])
+    if os.path.exists(path_file):
+        data_saved = pd.read_csv(path_file) 
+        
+        # Merge with the update. 
+        # First use update() to overwrite any updated data. Need to reindex first.
+        data_update = data_update.set_index(['DATE','GEOID'])
+        data_saved = data_saved.set_index(['DATE', 'GEOID'])
+        data_saved.update(data_update)
+        data_update = data_update.reset_index()
+        data_saved = data_saved.reset_index()
+        # Next do an outer join to get new dates.
+        data_update = pd.merge(data_update, data_saved, how='outer') 
+        
+    # Sort by date and GEOID
+    # This makes updates to the CSV file easier to read in diff programs, 
+    # since all the changes should be on the bottom.
+    data_update = data_update.sort_values(by=['DATE','GEOID'])
+    
+    # Now save that data into the CSV file.
+    save_file = os.path.join(save_path, filenames[dataset])
+    data_update.to_csv(save_file, index=False)    
+    
+
+def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None):
+    """Read previously downloaded WI covid data into DataFrame.
+    
+    Needs some pre-processing after load.
+    - Convert date strings into Python datetime objects.
+    
+    dataset   -- name of defined data set, 'county'
+    data_path -- path name for location of CSV data file
+    csv_file  -- data file name. If this is defined, it overrides dataset.  
+    """
+    # Input processing
+    filenames = {'state':  'Covid-Data-WI-State.csv',
+                 'county': 'Covid-Data-WI-County.csv',
+                 'tract':  'Covid-Data-WI-Tract.csv'}
+    if csv_file is None:
+        if dataset in filenames.keys():
+            csv_file = filenames[dataset]
+        else:
+            raise ValueError("Dataset not supported. Supported datasets are 'state', 'county', or 'tract'.")
+    
+    # Read from CSV file
+    path_file = os.path.join(data_path, csv_file)
+    covid_data = pd.read_csv(path_file) 
+    
+    # Add new column with converted dates
+    # LoadDttm contains hour/minute information, the conversion discards that
+    covid_data['Date'] = convert_rawdates(covid_data.DATE)
+    
+    # Make a list of only useful columns
+    remove_list = ['OBJECTID','GEOID','GEO','DATE']
+    col_list = covid_data.columns.tolist()
+    for s in remove_list:
+        col_list.remove(s)
+    # Take Date from the back and put it on the front
+    col_list.insert(0,col_list.pop())   
+    # Re-order according to the new list
+    covid_data = covid_data[col_list]    
+    
+    # # Make new columns for *new* positives in age brackets
+    # age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+    # age_cols = ['POS_0_9', 'POS_10_19', 'POS_20_29', 'POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
+    # # view by location and data
+    # pivot = covid_data.pivot(index='Date', column='')
+    # for sfx in age_suffix:
+    #     cumul_col = 'POS_' + sfx
+    #     new_col = 'POS_NEW_' + sfx
+    #     covid_data[new_col] = np.diff(covid_data[cumul_col])
+        
+    
+    return covid_data
+    
     
 def download_covid_wi_county(save_path = '.\\data'):
     """Download latest WI Covid data for state and county, parse, 
@@ -738,53 +904,7 @@ def update_covid_wi_all(save_path = '.\\data'):
     data_table.to_csv(save_file, index=False)
     
     
-def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None):
-    """Read previously downloaded WI population data into DataFrame.
-    
-    Needs some pre-processing after load.
-    - Convert date strings into Python datetime objects.
-    
-    dataset   -- name of defined data set, 'county'
-    data_path -- path name for location of CSV data file
-    csv_file  -- data file name. If this is defined, it overrides dataset.  
-    """
-    # Input processing
-    if csv_file is None:
-        if dataset == 'county':
-            csv_file = 'Covid-Data-WI-County.csv'
-        else:
-            raise ValueError("The dataset '" + dataset + "' is not a valid option.")
-    
-    # Read from CSV file
-    path_file = os.path.join(data_path, csv_file)
-    covid_data = pd.read_csv(path_file) 
-    
-    # Add new column with converted dates
-    # LoadDttm contains hour/minute information, the conversion discards that
-    covid_data['Date'] = convert_rawdates(covid_data.DATE)
-    
-    # Make a list of only useful columns
-    remove_list = ['OBJECTID','GEOID','GEO','DATE']
-    col_list = covid_data.columns.tolist()
-    for s in remove_list:
-        col_list.remove(s)
-    # Take Date from the back and put it on the front
-    col_list.insert(0,col_list.pop())   
-    # Re-order according to the new list
-    covid_data = covid_data[col_list]    
-    
-    # # Make new columns for *new* positives in age brackets
-    # age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
-    # age_cols = ['POS_0_9', 'POS_10_19', 'POS_20_29', 'POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
-    # # view by location and data
-    # pivot = covid_data.pivot(index='Date', column='')
-    # for sfx in age_suffix:
-    #     cumul_col = 'POS_' + sfx
-    #     new_col = 'POS_NEW_' + sfx
-    #     covid_data[new_col] = np.diff(covid_data[cumul_col])
-        
-    
-    return covid_data
+
     
 
 
