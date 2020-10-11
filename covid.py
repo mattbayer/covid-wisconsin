@@ -640,14 +640,18 @@ def download_covid_wi_county(save_path = '.\\data'):
         os.mkdir(save_path)
 
     # Download data in JSON format from server and save to current path
-    # URL for json request, separate URLs for state and county
-    url_json_state = "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson"
-    url_json_county = "https://opendata.arcgis.com/datasets/5374188992374b318d3e2305216ee413_12.geojson"
+    # path = './'
+    # URL for json request, filtered to only state and county
+    url_json = "https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson?where=%20(GEO%20%3D%20'County'%20OR%20GEO%20%3D%20'State')%20"
+    # unfiltered, includes census tracts
+    # url_json = 'https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson'
+    # file_json = path + 'Covid-Data-WI.geojson'
+    # urllib.request.urlretrieve(url_json, file_json)
 
-    # make the requests from WI DHS - directly from url to memory
-    jsondata_state = pd.read_json(url_json_state, typ='series', orient='index')
-    jsondata_county = pd.read_json(url_json_county, typ='series', orient='index')
-    
+
+    # make the request from WI DHS - directly from url to memory
+    jsondata = pd.read_json(url_json, typ='series', orient='index')
+
     # Parse data into a pandas DataFrame.
     # The JSON file is arranged a little idiosyncratically.
     # The reader function parses the data into a pandas Series of 
@@ -657,10 +661,8 @@ def download_covid_wi_county(save_path = '.\\data'):
     # So loop through the useless upper layers of the structure to create a 
     # list of all records.  Then convert that list into a pandas DataFrame.
     data_list = list()
-    for record in jsondata_state.features:
+    for record in jsondata.features:
         data_list.append(record['properties'])
-    for record in jsondata_county.features:
-        data_list.append(record['properties'])   
         
     data_table = pd.DataFrame.from_records(data_list)
     
