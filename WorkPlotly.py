@@ -1,58 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-Update Coronavirus data for Wisconsin and make standard plots
-
-Script for downloading, parsing, plotting Covid data from Wisconsin.
+Create interactive line plots using Plotly.
 """
 
-import os
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import urllib
-from scipy import signal
-import datetime
+
+import plotly
+from plotly.offline import plot as pplot
+import plotly.graph_objects as go
 
 import covid
 
 
 #%% Get the data
 
-# First retrieve data from server and save to csv file
-# Second read data from the previously saved csv file
-# comment sections if no need to re-download    
-datapath = '.\\data'
-tractpath = os.path.join(datapath, 'tracts')
-
-csv_file_county = os.path.join(datapath, 'Covid-Data-WI-County.csv')
-csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
-
-# population data
-# covid.download_pop_data_wi(csv_file_pop)
-popdata = covid.read_pop_data_wi(csv_file_pop)
-
-# covid data by county
-# covid.download_covid_wi_county()
-widata = covid.read_covid_data_wi(dataset='county')
+widata = covid.read_covid_data_wi(dataset='state')
 
 
-
-
-
-#%% Plotly
-
-import plotly
-import plotly.express as px
-from plotly.offline import plot as pplot
-import plotly.graph_objects as go
-
+#%% Manipulate data columns for prep
 
 # filter to state
 state = widata[widata.NAME == 'WI']
 # index and sort by date
 state = state.set_index('Date')
 state = state.sort_index()
-# state = state.sort_values('Date')
 
 # create new hosp column
 state = state.assign(HOSP_NEW = state.HOSP_YES.diff(periods=1))
@@ -66,13 +37,6 @@ state = state.rename(columns=col_rename)
 # rolling 7-day average
 state_avg = state.rolling(window=7, center=False).mean()
 
-
-# create one-axis plot
-# fig = px.line(state_avg, y='Cases', title='WI Cases/Tests 7-day avg')
-
-# # pplot(fig, filename='..\\mattbayer.github.io\\assets\\plotly\\Cases_WI_2020-09-28.html')
-
-# pplot(fig, filename='.\\plots\\plotly\\temp.html')
 
 #%% Standard plots
 plotpath = '.\\docs\\assets\\plotly'
