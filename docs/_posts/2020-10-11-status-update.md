@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Covid WI status update: Oct 11
+title: "Covid WI status update: Oct 11"
 ---
 What is happening right now with Covid in the state? It can be hard to piece together an overall picture from hearing the daily headline numbers, or reading news stories with different national or local framings. So in this post I will try to give a status update for the state, as I see it.
 
