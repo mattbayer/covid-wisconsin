@@ -6,6 +6,7 @@ Create interactive line plots using Plotly.
 import numpy as np
 
 import plotly
+import plotly.express as px
 from plotly.offline import plot as pplot
 import plotly.graph_objects as go
 
