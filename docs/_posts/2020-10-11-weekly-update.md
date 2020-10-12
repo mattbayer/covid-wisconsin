@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Weekly update, Oct 11
+published: false
 ---
 
 ### Cases have possibly peaked - but maybe only among younger people.
