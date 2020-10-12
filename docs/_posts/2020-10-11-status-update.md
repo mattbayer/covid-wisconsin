@@ -10,7 +10,7 @@ The number of new daily cases has possibly peaked or plateaued, which is obvious
 ![Daily cases by age](../assets/CasesByAge_WI_2020-10-11.png)
 
 ### Deaths and hospitalizations are still up
-Deaths have averaged between 10 and 15 per day, matching my [prediction from last week](2020-10-04-what-expect-for-deaths.md]. Unfortunately, hospitalizations have continued increasing rapidly, so I would expect the death rate to increase further in the next week or two.
+Deaths have averaged between 10 and 15 per day, matching my [prediction from last week](2020-10-04-what-expect-for-deaths.md). Unfortunately, hospitalizations have continued increasing rapidly, so I would expect the death rate to increase further in the next week or two.
 
 ![Recent deaths and hospitalizations](../assets/Deaths-Hosp-WI_2020-10-11.png)
 
