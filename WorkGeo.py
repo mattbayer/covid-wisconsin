@@ -1,22 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Work on positivity rate
-
-Comparing positivity rate for new persons, vs. all tests
+Create interactive maps for cases and hospitalizations using Plotly.
 """
-# path = 'C:/dev/Covid/'
-path = './'
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import covid
-import urllib
-from scipy import signal
-import datetime
 
 import geopandas as gpd
 
+import covid
 
 #%% Get the coviddata
 # Updated by UpdateData.py, just load from csv here
@@ -28,7 +17,7 @@ csv_file_pop = datapath + '\\Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-widata = covid.read_covid_data_wi()
+widata = covid.read_covid_data_wi('county')
 
 
 #%% Geography work
