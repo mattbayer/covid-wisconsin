@@ -19,7 +19,7 @@ import covid
 covid.update_covid_data_wi('state')
 widata = covid.read_covid_data_wi('state')
 
-
+quit()
 #%% Get the data
 
 # First retrieve data from server and save to csv file
