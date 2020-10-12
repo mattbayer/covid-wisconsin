@@ -4,7 +4,7 @@ title: "Covid WI status update: Oct 11"
 ---
 What is happening right now with Covid in the state? It can be hard to piece together an overall picture from hearing the daily headline numbers, or reading news stories with different national or local framings. So in this post I will try to give a status update for the state, as I see it.
 
-### Cases have plateaued overall - but are still rising for older people.
+### Cases have plateaued overall - but are still rising for older people
 The number of new daily cases has possibly peaked or plateaued, which is obviously good news. That news is tempered, however, when you look at the age distribution. Only the age brackets 10-19 and 20-29 age brackets are strongly decreasing, while higher-risk ages 30+ have either only flattened or are still going up.
 
 ![Daily cases by age](../assets/CasesByAge_WI_2020-10-11.png)
