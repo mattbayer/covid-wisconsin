@@ -27,7 +27,7 @@ As for the other two major population centers, I think Milwaukee and Madison are
 ![Milwaukee County](../assets/Milwaukee_2020-10-11.png)
 
 ### Madison
-Madison appears to have its campus outbreak under control, but cases have plateaued at a higher level than they were before the outbreak, and now hospitalizations are rising fairly quickly. Two weeks ago I was impressed that the campus outbreak seemed to have been contained to young people, but now it appears it may have spread more widely. (The college cases weeks ago and the hospitalizations now could also be unrelated, I do not know of strong evidence one way or the other.)
+Madison appears to have its campus outbreak under control, but cases have plateaued at a higher level than they were before the outbreak, and now hospitalizations are rising fairly quickly. Two weeks ago I was impressed that the campus outbreak seemed to have been contained to young people, but now it appears it may have spread more widely. (**Update**: [Dane County Public Health has a blog post](https://www.publichealthmdc.com/blog/these-next-few-weeks-are-a-pivotal-moment-for-our-county-and-our-state) with more details. It is also possible that the college cases weeks ago and the hospitalizations now are actually unrelated; it is hard to have strong evidence one way or the other.)
 
 ![Dane County](../assets/Madison_2020-10-11.png)
 
