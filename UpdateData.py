@@ -15,39 +15,30 @@ import datetime
 
 import covid
 
-#%%
-covid.update_covid_data_wi('state')
-widata = covid.read_covid_data_wi('state')
+#%% Update the data
 
-quit()
-#%% Get the data
-
-# First retrieve data from server and save to csv file
-# Second read data from the previously saved csv file
-# comment sections if no need to re-download    
-datapath = '.\\data'
-tractpath = os.path.join(datapath, 'tracts')
-
-csv_file_county = os.path.join(datapath, 'Covid-Data-WI-County.csv')
-csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
+# covid data by county
+covid.update_covid_data_wi('county')
+widata = covid.read_covid_data_wi('county')
 
 # population data
+datapath = '.\\data'
+csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 # covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
-# covid data by county
-# covid.download_covid_wi_county()
-widata = covid.read_covid_data_wi(dataset='county')
 
-# covid data by census tract
-UWM = ['007300', '007400', '007800', '007500']
-Marquette = ['186400', '014600', '014700']
-# covid.download_covid_wi_tract(UWM + Marquette, tractpath)
-# data = covid.read_covid_data_wi(data_path='.\\data\\tracts', csv_file='Covid-Data-WI-Tract-007300.csv')
+#%% Data update work
+# tractpath = os.path.join(datapath, 'tracts')
 
-# update ALL data at once
-# covid.update_covid_wi_all(datapath)
+# # covid data by census tract
+# UWM = ['007300', '007400', '007800', '007500']
+# Marquette = ['186400', '014600', '014700']
+# # covid.download_covid_wi_tract(UWM + Marquette, tractpath)
+# # data = covid.read_covid_data_wi(data_path='.\\data\\tracts', csv_file='Covid-Data-WI-Tract-007300.csv')
 
+# # update ALL data at once
+# # covid.update_covid_wi_all(datapath)
 
 #%% Plot cases and deaths for the state
 
