@@ -18,6 +18,7 @@ import covid
 #%% Update the data
 
 # covid data by county
+covid.update_covid_data_wi('state')
 covid.update_covid_data_wi('county')
 widata = covid.read_covid_data_wi('county')
 
