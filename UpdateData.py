@@ -28,6 +28,9 @@ csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 # covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
+#%% Update Dashboard plots by importing other scripts
+import WorkPlotly
+import WorkGeo
 
 #%% Data update work
 # tractpath = os.path.join(datapath, 'tracts')

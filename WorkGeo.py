@@ -141,7 +141,8 @@ display_names = [n + ' County' for n in countiesWI.index]
 popscale = 300
 casescale = 0.3
 hospscale = casescale*.05;   # so that bubbles are same size if hosp = 5% of cases
-hosp_scale = [0, 6]
+hosp_scale = [0, 7]
+case_scale = [0, 140]
 
 
 #%% Create background to figures
@@ -186,6 +187,8 @@ fig_cases.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
                                   marker=dict(size=countiesWI.Cases, #size=countiesWI.Population / popscale,
                                               sizeref=casescale,
                                               color=countiesWI[plotcol],
+                                              cmin=case_scale[0],
+                                              cmax=case_scale[1],
                                               sizemode='area',
                                               colorscale='Blues'),
                                   line=dict(color=line_colors['marker']),
