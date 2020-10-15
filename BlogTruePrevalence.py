@@ -91,6 +91,50 @@ people.plot(y=['Cases', 'Cases Reported'])
 people.plot(y=['New people tested', 'Tests Reported'])
 deaths.plot(y=['Deaths', 'Reported'])
 
+#%% Estimate true new cases
+
+test['PosAvg'] = test.Positives.rolling(window=7, center=False).mean()
+test['TestAvg'] = test.Tests.rolling(window=7, center=False).mean()
+deaths['DeathAvg'] = deaths.Deaths.rolling(window=7, center=False).mean()
+
+test.plot(y=['PosAvg', 'TestAvg'])
+
+est = pd.DataFrame({'cases': test.PosAvg, 'tests': test.TestAvg, 'deaths': deaths.DeathAvg})
+
+inf_const = 1/7
+
+est['infections'] = inf_const * est['cases'] * np.sqrt(popdata['WI'] / est['tests'])
+
+est.plot(y=['cases','infections'])
+
+
+
+#%% Compare to Youyang Gu's WI estimate
+
+gu_ifr_file = '..\covid19_projections\implied_ifr\IIFR_US_WI.csv'
+    
+# read CSV data into a DataFrame, then convert to a Series
+gudata = pd.read_csv(gu_ifr_file)
+gudata['Date'] = pd.to_datetime(gudata['date']) + datetime.timedelta(days=14)
+gudata = gudata.set_index('Date')
+
+
+est['Gu Estimate'] = gudata['true_inf_est_7day_ma']
+est['Bayer Estimate'] = est['infections']
+est['Detected x10'] = est['cases'] * 10
+est['Detected Cases'] = est['cases']
+
+# back-dated deaths, assume IFR 1%
+backdate = 14
+ifr = 0.3
+name = 'Deaths (IFR ' + str(ifr) + '%, ' + str(backdate) + ' day shift)'
+deaths_temp = deaths['DeathAvg'].copy()
+deaths_temp.index = deaths_temp.index - datetime.timedelta(days=backdate)
+est[name] = deaths_temp / ifr * 100
+
+# est.plot(title='Wisconsin New Infection Estimates', y=['Detected Cases', 'Gu Estimate', 'Bayer Estimate', name])
+
+est.plot(title='Wisconsin New Infection Estimates', y=['cases', 'infections', name])
 
 #%%
 quit()
@@ -119,29 +163,7 @@ est.plot(y='Positive rate')
 
 
 
-#%% Compare to Youyang Gu's WI estimate
 
-gu_ifr_file = '..\covid19_projections\implied_ifr\IIFR_US_WI.csv'
-    
-# read CSV data into a DataFrame, then convert to a Series
-gudata = pd.read_csv(gu_ifr_file)
-gudata['Date'] = pd.to_datetime(gudata['date']) + datetime.timedelta(days=14)
-gudata = gudata.set_index('Date')
-
-
-est['Gu Estimate'] = gudata['true_inf_est_7day_ma']
-est['Bayer Estimate'] = est['Estimated infection prevalence'] * popdata['WI'] / 7
-est['Detected x10'] = est['cases'] * 10
-est['Detected Cases'] = est['cases']
-
-# back-dated deaths, assume IFR 1%
-deaths = select['DTH_NEW'].rolling(window=7, center=False).mean()
-deaths.index = deaths.index - datetime.timedelta(days=14)
-est['Deaths (IFR 0.75%, 14 day shift)'] = deaths * 150
-
-est.plot(title='Wisconsin New Infection Estimates', y=['Detected Cases', 'Gu Estimate', 'Bayer Estimate', 'Deaths (IFR 0.75%, 14 day shift)'])
-
-est.plot(title='Wisconsin New Infection Estimates', y=['Detected Cases', 'Gu Estimate', 'Bayer Estimate'])
 
 
 
