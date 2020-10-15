@@ -61,6 +61,39 @@ people = people.set_index('Date')
 people.plot(y=['Cases', 'New people tested'])
 
 
+#%% Deaths by death date
+deaths_file = "data\\Deaths by day_crosstab_2020-10-14.csv"
+deaths_raw = pd.read_csv(deaths_file)
+# Note: key is to download the file and then re-save it in Excel specifically
+# as csv, otherwise it's actually tab delimited and harder to read in in python
+
+deaths = pd.DataFrame(dict(Date=deaths_raw.T.iloc[2:,0],
+                           Deaths=deaths_raw.T.iloc[2:,1],
+                           Prelim=deaths_raw.T.iloc[2:,2]))
+         
+# date leaves out the year, so suffix it properly, then convert to datetime       
+deaths.Date = deaths.Date.astype(str) + '-2020'            
+deaths.Date = pd.to_datetime(deaths.Date)
+deaths = deaths.set_index('Date')
+
+# make sure everything's numeric
+deaths.Deaths = pd.to_numeric(deaths.Deaths)
+deaths.Prelim = pd.to_numeric(deaths.Prelim)
+
+
+#%% Compare cases, tests, deaths by date to as-reported
+
+people['Cases Reported'] = widata.set_index('Date').POS_NEW
+people['Tests Reported'] = widata.set_index('Date').TEST_NEW
+deaths['Reported'] = widata.set_index('Date').DTH_NEW
+
+people.plot(y=['Cases', 'Cases Reported'])
+people.plot(y=['New people tested', 'Tests Reported'])
+deaths.plot(y=['Deaths', 'Reported'])
+
+
+#%%
+quit()
 
 #%% Work on adjust cases for testing
 
