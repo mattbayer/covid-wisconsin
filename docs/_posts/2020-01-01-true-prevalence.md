@@ -17,12 +17,13 @@ This is a formula I came up with, so take it with a grain of salt. But I really 
 
 Testing some math: $$E=mc^2$$.
 
-Testing some more math: $ E = mc^2 $
+Testing some more math: \( E = mc^2 \)
 
 $$ E = mc^2 $$
 
-$$
+\[
 A = \pi r^2
-$$
+\]
+
 
 Goodbye!
