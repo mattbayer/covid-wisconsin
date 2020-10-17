@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "How many people have really been infected?"
+usemathjax: true
 ---
 
 ### The easy way
