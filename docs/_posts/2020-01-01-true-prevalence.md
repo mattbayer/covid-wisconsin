@@ -15,4 +15,4 @@ That's it!
 ### The medium way
 This is a formula I came up with, so take it with a grain of salt. But I really think it strikes a balance of simplicity and plausibility that I have not seen anywhere else.
 
-Testing some math: $$\neg\exists x\in X:P(x)$$
+Testing some math: $$E=mc^2$$
