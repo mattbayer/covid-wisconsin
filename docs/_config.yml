@@ -6,6 +6,7 @@ url:                 https://covid-wisconsin.com
 baseurl:             ''
 paginate:            5
 permalink:           pretty
+markdown:            kramdown
 
 # About/contact
 author:
