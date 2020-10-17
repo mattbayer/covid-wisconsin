@@ -36,10 +36,10 @@ $$
 N_{new} = \frac{N_{cases}}{d} \sqrt{\frac{N_{pop}}{N_{tests}}}
 $$
 
-If I plug in $$N_pop$$ for Wisconsin (5.8 million people), and use a $$d$$ estimate of 7 days, I get an approximate formula
+If I plug in $$N_{pop}$$ for Wisconsin (5.8 million people), and use a $$d$$ estimate of 7 days, I get an approximate formula
 
 $$
-N_{new} = 340 \frac{N_{cases}}{sqrt{N_{tests}}}
+N_{new} = 340 \frac{N_{cases}}{\sqrt{N_{tests}}}
 $$
 
 With daily tests averaging 30,000 (?) right now, that comes out to $$N_{new} \approx 2 N_{cases}$$.
