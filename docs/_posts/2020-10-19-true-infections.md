@@ -3,7 +3,7 @@ layout: post
 title: "How many have really been infected?"
 usemathjax: true
 ---
-The DHS did not put out any data updates this weekend, [because of computer system maintenance](https://www.jsonline.com/story/news/2020/10/17/heres-why-wisconsin-wont-report-new-coronavirus-numbers-weekend/3697080001/). (Seems like a bad time?) Let's use this time of mystery and uncertainty to address another unknown number, the true number of infections in the state.
+The DHS did not put out any data updates this weekend, [because of computer system maintenance](https://www.jsonline.com/story/news/2020/10/17/heres-why-wisconsin-wont-report-new-coronavirus-numbers-weekend/3697080001/). (Seems like a bad time?) I decided to use this time of mystery and uncertainty to address another unknown number, the true number of infections in the state.
 
 It is well known by now that the number of cases, infections confirmed by a positive Covid test, do not capture all of the infections in the state. Some people may be asymptomatic, some people may be sick but not get a test for various reasons. Early on, one large study estimated that only about [1 in 10](https://www.statnews.com/2020/07/21/cdc-study-actual-covid-19-cases/) infections were actually being detected as confirmed cases. That study did not look at Wisconsin, however. It was also for a period of very limited testing; we are certainly catching more cases now.
 
