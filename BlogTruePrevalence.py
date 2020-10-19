@@ -30,7 +30,7 @@ widata = covid.read_covid_data_wi('state')
 #%% By Test
 
 # manually downloaded file - positives and tests
-test_file = "data\\By_Test_Data_data_2020-10-09.csv"
+test_file = "data\\By_Test_Data_data_2020-10-19.csv"
 test = pd.read_csv(test_file)
 
 test = test[test['Measure Names']=='Positive tests']
@@ -42,11 +42,11 @@ test = test.rename(columns=col_rename)
 test['Date'] = pd.to_datetime(test['Date'])
 test = test.set_index('Date')
 
-test.plot(y=['Positives','Tests'])
+# test.plot(y=['Positives','Tests'])
 
 #%% By People
 # cases and new people tested
-people_file = "data\\By_Person_Data_data_2020-10-09.csv"
+people_file = "data\\By_Person_Data_data_2020-10-19.csv"
 people = pd.read_csv(people_file)
 
 people = people[people['Measure Names']=='People tested positive']
@@ -58,7 +58,7 @@ people = people.rename(columns=col_rename)
 people['Date'] = pd.to_datetime(people['Date'])
 people = people.set_index('Date')
 
-people.plot(y=['Cases', 'New people tested'])
+# people.plot(y=['Cases', 'New people tested'])
 
 
 #%% Deaths by death date
@@ -93,15 +93,16 @@ deaths.plot(y=['Deaths', 'Reported'])
 
 #%% Estimate true new cases
 
+people['CaseAvg'] = people.Cases.rolling(window=7, center=False).mean()
 test['PosAvg'] = test.Positives.rolling(window=7, center=False).mean()
 test['TestAvg'] = test.Tests.rolling(window=7, center=False).mean()
 deaths['DeathAvg'] = deaths.Deaths.rolling(window=7, center=False).mean()
 
 test.plot(y=['PosAvg', 'TestAvg'])
 
-est = pd.DataFrame({'cases': test.PosAvg, 'tests': test.TestAvg, 'deaths': deaths.DeathAvg})
+est = pd.DataFrame({'cases': people.CaseAvg, 'positives': test.PosAvg, 'tests': test.TestAvg, 'deaths': deaths.DeathAvg})
 
-inf_const = 1/7
+inf_const = 1/10
 
 est['infections'] = inf_const * est['cases'] * np.sqrt(popdata['WI'] / est['tests'])
 
@@ -125,8 +126,8 @@ est['Detected x10'] = est['cases'] * 10
 est['Detected Cases'] = est['cases']
 
 # back-dated deaths, assume IFR 1%
-backdate = 14
-ifr = 0.3
+backdate = 16
+ifr = 0.5
 name = 'Deaths (IFR ' + str(ifr) + '%, ' + str(backdate) + ' day shift)'
 deaths_temp = deaths['DeathAvg'].copy()
 deaths_temp.index = deaths_temp.index - datetime.timedelta(days=backdate)
@@ -136,29 +137,23 @@ est[name] = deaths_temp / ifr * 100
 
 est.plot(title='Wisconsin New Infection Estimates', y=['cases', 'infections', name])
 
-#%%
-quit()
+#%% Cumulative 
 
-#%% Work on adjust cases for testing
+plt.figure()
+plt.plot(people['Cases'].sort_index().cumsum())
+plt.plot(est['infections'].cumsum())
+plt.plot(datetime.datetime(2020, 6, 30, 0, 0), 93000,'o')
 
-select = covid.select_data(widata, 'WI', ['POS_NEW', 'TEST_NEW', 'DTH_NEW'])
-cases = select['POS_NEW'].rolling(window=7, center=False).mean()
-tests = select['TEST_NEW'].rolling(window=7, center=False).mean()
-deaths = select['DTH_NEW'].rolling(window=7, center=False).mean()
+est['Detected cases'] = est['cases']
+est['Estimated infections'] = est['infections']
+est['Infection / Case Ratio'] = est['infections'] / est['cases']
 
-# back-date tests by 7 days to account for  reporting delays? doesn't seem to make much difference
-# tests.index = tests.index - datetime.timedelta(days=7)
+est.plot(title='Daily True Infection Estimate', y=['Detected Cases', 'Estimated infections'])
+est.plot(title='Infection / Case Ratio', y=['Infection / Case Ratio'])
 
-est = pd.DataFrame({'cases': cases, 'tests': tests, 'deaths': deaths})
 
-est['Case prevalence'] = est['cases'] / popdata['WI']
-est['Detected prevalence'] = est['Case prevalence'] * 15
-est['Positive rate'] = est['cases'] / est['tests']
-est['Estimated infection prevalence'] = np.sqrt(est['Positive rate'] * est['Case prevalence'])
 
-est.plot(y=['Detected prevalence', 'Estimated infection prevalence'])
 
-est.plot(y='Positive rate')
 
 
 
