@@ -3,8 +3,13 @@ layout: post
 title: "How many people have really been infected?"
 usemathjax: true
 ---
+The DHS did not put out any data updates this weekend, [because of compute system maintenance](https://www.jsonline.com/story/news/2020/10/17/heres-why-wisconsin-wont-report-new-coronavirus-numbers-weekend/3697080001/). (Seems like a bad time?) Let's use this time of mystery and uncertainty to address another unknown number, the true number of infections in the state.
 
-### The easy way
+It is well known by now that the number of cases, infections confirmed by a positive Covid test, do not capture all of the infections in the state. Some people may be asymptomatic, some people may be sick but not get a test for various reasons. Early on, one large study estimated that only about [1 in 10](https://www.statnews.com/2020/07/21/cdc-study-actual-covid-19-cases/) infections were actually being detected as confirmed cases. That study did not look at Wisconsin, however. It was also for a period of very limited testing; we are certainly catching more cases now.
+
+So what is the current true number of infections in Wisconsin?
+
+### TL;DR - just times two
 Here's one way to get an estimate of the true number of new infections per day.
 
 1. Take the 7-day average of new cases.
@@ -12,7 +17,7 @@ Here's one way to get an estimate of the true number of new infections per day.
 
 That's it! 
 
-I think this is a plausible estimate based on the approaches I will go on to explain later in this post. It only applies to current case numbers, however. Earlier in the pandemic, we had less testing and we were not catching as many infections.
+I think this is a plausible estimate based on two approaches I will go on to explain. It only applies to current case numbers, however. Earlier in the pandemic, we had less testing and we were not catching as many infections.
 
 ### The medium way
 The next method is to extrapolate from the number of deaths and an assumed infection fatality rate, or IFR. The big advantage of this approach is that the statistics on death are more certain than the statistics on cases. We probably catch most of the Covid deaths, while we probably only confirm half or less of the cases. The disadvantages of this approach are that IFR may change over time, due to varying age distributions of cases and improvements in treatment; and that deaths lag infections by weeks, so the information is not timely.
