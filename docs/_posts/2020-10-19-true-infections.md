@@ -9,7 +9,7 @@ It is well known by now that the number of cases, infections confirmed by a posi
 
 So what is the current true number of infections in Wisconsin?
 
-### First I'll just tell you the answer
+### Let me just tell you the answer
 Here's one way to get an estimate of the true number of new infections per day.
 
 1. Take the 7-day average of new cases.
@@ -26,7 +26,7 @@ Luckily, more representative evidence has recently come in. Two weeks ago the Jo
 
 This study found that an estimated 1.6% of Wisconsin residents had been infected as of July and August, when they took the blood samples for the study. That would be 93,000 people. The CDC says it takes 1-3 weeks after an infection for antibodies to show up, so to compare to the number of detected cases we want to look at late June. The cumulative number of detected cases then was about 30,000. So up to that point we were detecting 1 in 3 infections. This would actually be pretty good compared to other places. And if we were detecting 1 in 3 infections in the spring and summer, we are very likely detecting a higher proportion now.
 
-There is a lot of room for error here, unfortunately. I have not been able to find a more formal writeup of the study, so I don't know things like how representative their sample was. I also do not think scientists are certain about the false positive or false negative rates of these antibody test - do all infections produce detectable antibodies, or only a certain percentage? But it is good to have this data in any case, and it is broadly consistent with what I think we know about the virus.
+There is a lot of room for error here, unfortunately. I have not been able to find a more formal writeup of the study, so I don't know things like how representative their sample was. I also do not think scientists are certain about the false positive or false negative rates of these antibody tests - do all infections produce detectable antibodies, or only a certain percentage? But it is good to have this data in any case, and it is broadly consistent with what I think we know about the virus.
 
 ### Cases and tests
 This antibody data tells us the true infection rate for a period of time, but only months after the fact. It does not help us react to new data. For example, when I hear that cases are increasing, does that mean the virus is spreading (bad), or that testing is increasing (good)?
