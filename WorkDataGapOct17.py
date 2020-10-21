@@ -41,15 +41,41 @@ def load_people_file(people_file):
     people = people.set_index('Date')
     return people
 
-people1 = load_people_file("data\\By_Person_Data_data_2020-10-19.csv")
+people1 = load_people_file("data\\By_Person_Data_data_2020-10-19B.csv")
 people = load_people_file("data\\By_Person_Data_data_2020-10-20.csv")
 
 people['Tested Oct-20'] = people['New people tested']
-people['Tested Oct-19'] = people1['New people tested']
+people['Tested Oct-18'] = people1['New people tested']
 
-people['Tested Oct-19'] = people['Tested Oct-19'].fillna(0)
+people['Tested Oct-18'] = people['Tested Oct-18'].fillna(0)
 
-difference = people['Tested Oct-20'] - people['Tested Oct-19']
+difference = people['Tested Oct-20'] - people['Tested Oct-18']
+plt.figure()
+difference.plot()
+print(difference.sum())
+
+#%% By Tests
+# manually downloaded file - positives and tests
+
+def load_test_file(test_file):
+    test = pd.read_csv(test_file)
+    test = test[test['Measure Names']=='Positive tests']
+    col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Positives', 'Totals': 'Tests' }
+    test = test[col_rename.keys()]
+    test = test.rename(columns=col_rename)
+    test['Date'] = pd.to_datetime(test['Date'])
+    test = test.set_index('Date')
+    return test
+    
+test1 = load_test_file("data\\By_Test_Data_data_2020-10-19.csv")
+test = load_test_file("data\\By_Test_Data_data_2020-10-19B.csv")
+
+test['Tests Oct-19'] = test['Tests']
+test['Tests Oct-18'] = test1['Tests']
+
+test['Tests Oct-18'] = test['Tests Oct-18'].fillna(0)
+
+difference = test['Tests Oct-19'] - test['Tests Oct-18']
 plt.figure()
 difference.plot()
 print(difference.sum())
