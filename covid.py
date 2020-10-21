@@ -2,7 +2,7 @@
 """
 Created on Wed May 27 20:57:44 2020
 
-@author: 212367548
+@author: Matt Bayer
 """
 import datetime
 import numpy as np

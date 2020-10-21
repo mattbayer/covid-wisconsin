@@ -52,6 +52,24 @@ range_cases = np.array([-range_max * 0.05, 1.05*range_max])
 
 fig = plotly.subplots.make_subplots(specs=[[{"secondary_y": True}]])
 
+# # individual cases bar chart
+# fig.add_trace(
+#     go.Bar(x=state.index, 
+#            y=state.Cases,
+#            name='Cases', 
+#            marker_color='lightsteelblue', 
+#            hovertemplate='%{y:.0f}'),)
+
+# # individual tests bar chart
+# fig.add_trace(
+#     go.Bar(x=state.index, 
+#            y=state.Tests,
+#            name='Tests', 
+#            marker_color='darkkhaki', 
+#            hovertemplate='%{y:.0f}'),
+#     secondary_y=True)
+
+
 fig.add_trace(
     go.Scatter(x=state_avg.index, 
                y=state_avg.Cases, 
@@ -64,7 +82,7 @@ fig.add_trace(
     go.Scatter(x=state_avg.index, 
                y=state_avg.Tests, 
                name='Tests (7-day avg)', 
-               line_color='olivedrab', 
+               line_color='olivedrab', #darkolivegreen
                hovertemplate='%{y:.0f}'),
     secondary_y=True)
 
