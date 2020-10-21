@@ -11,7 +11,81 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import urllib
 import os
+import plotly
+import plotly.graph_objects as go
 
+
+def plotly_casetest(data, cases, tests, dates='Date', savefile='.\\temp.html'):
+    """Create interactive plotly chart of cases and tests
+    
+    cases -- name of column containing cases
+    tests -- name of column containing tests
+    date  -- name of column containing datetime objects as x-axis
+    """
+    
+    # create columns for 7-day average
+    data.set_index(dates)
+    cases_avg = cases + ' (7-day avg)'
+    tests_avg = tests + ' (7-day avg)'
+    data[cases_avg] = data[cases].rolling(window=7, center=False).mean()
+    data[tests_avg] = data[tests].rolling(window=7, center=False).mean()
+    
+    # compute y axis range
+    # want tests to be on a scale exactly 10x cases
+    range_max = max(data[tests_avg].max()/10, data[cases_avg].max())
+    range_cases = np.array([-range_max * 0.05, 1.05*range_max])
+    
+    
+    fig = plotly.subplots.make_subplots(specs=[[{"secondary_y": True}]])
+    
+    # # individual cases bar chart
+    # fig.add_trace(
+    #     go.Bar(x=state.index, 
+    #            y=state.Cases,
+    #            name='Cases', 
+    #            marker_color='lightsteelblue', 
+    #            hovertemplate='%{y:.0f}'),)
+    
+    # # individual tests bar chart
+    # fig.add_trace(
+    #     go.Bar(x=state.index, 
+    #            y=state.Tests,
+    #            name='Tests', 
+    #            marker_color='darkkhaki', 
+    #            hovertemplate='%{y:.0f}'),
+    #     secondary_y=True)
+    
+    # 7-day average lines
+    fig.add_trace(
+        go.Scatter(x=data[dates], 
+                   y=data[cases_avg], 
+                   name=cases_avg, 
+                   line_color='steelblue', 
+                   hovertemplate='%{y:.0f}'),
+        secondary_y=False)
+    
+    fig.add_trace(
+        go.Scatter(x=data[dates], 
+                   y=data[tests_avg], 
+                   name=tests_avg, 
+                   line_color='olivedrab', #darkolivegreen
+                   hovertemplate='%{y:.0f}'),
+        secondary_y=True)
+    
+    
+    fig.update_yaxes({'range': range_cases}, secondary_y=False, title_text='Daily cases')
+    fig.update_yaxes({'range': range_cases*10}, secondary_y=True, title_text='Daily new people tested')
+    fig.update_layout(title_text='WI Daily Cases and Tests',
+                      hovermode='x unified',
+                      legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))                
+                    
+    # plot and save as html, with plotly JS library loaded from CDN
+    plotly.offline.plot(fig, 
+          filename = savefile, 
+          include_plotlyjs='cdn')    
+    
+    
+    
 
 def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
     """Create stacked line plot of data points by county

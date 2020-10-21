@@ -42,7 +42,71 @@ state_avg = state.rolling(window=7, center=False).mean()
 #%% Standard plots
 plotpath = '.\\docs\\assets\\plotly'
 
-# Cases/Tests
+# Cases / Tests
+covid.plotly_casetest(data=state.reset_index(), 
+                      cases='Cases', 
+                      tests='Tests', 
+                      dates='Date', 
+                      savefile=plotpath + '\\Cases-Tests-WI.html'
+                      )
+
+
+
+
+#%% Hospitalizations / Deaths
+
+hosp_death_factor = 1
+
+range_max = max(state_avg.Deaths.max(), state_avg.Hospitalizations.max()/hosp_death_factor)
+range_deaths = np.array([-range_max * 0.05, 1.05*range_max])
+
+fig = plotly.subplots.make_subplots()
+
+# individual deaths bar chart
+fig.add_trace(
+    go.Bar(x=state.index, 
+           y=state.Deaths,
+           name='Deaths', 
+           marker_color='rosybrown', 
+           hovertemplate='%{y:.0f}'),)
+
+# death 7-day avg
+fig.add_trace(
+    go.Scatter(x=state_avg.index, 
+           y=state_avg.Deaths,
+           name='Deaths (7-day avg)', 
+           line_color='firebrick', 
+           hovertemplate='%{y:.1f}'),)
+
+# new hospitalization 7-day average
+fig.add_trace(
+    go.Scatter(x=state_avg.index, 
+               y=state_avg.Hospitalizations, 
+               name='Hospitalizations (7-day avg)', 
+               line_color='darkorange', 
+               hovertemplate='%{y:.1f}'),)
+
+
+fig.update_yaxes({'range': range_deaths}, secondary_y=False, title_text='Daily deaths / hospitalizations')
+fig.update_yaxes({'range': range_deaths*hosp_death_factor}, secondary_y=True, title_text='Daily hospitalizations')
+fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
+                  hovermode='x unified',
+                  legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
+
+# fig.add_annotation(dict(text='*Deaths are daily reported values, Hospitalizations are 7-day averages.',
+#                         x=0.05, y=-0.1, 
+#                         xref='paper', yref='paper',
+#                         showarrow=False))
+
+# plot and save as html, with plotly JS library in separate file in same directory
+pplot(fig, 
+      filename = plotpath + '\\Deaths-Hosp-WI.html',
+      include_plotlyjs='cdn')
+
+
+#%%
+quit()
+#%% OLD: Cases/Tests
 
 # compute y axis range
 # want tests to be on a scale exactly 10x cases
@@ -97,55 +161,3 @@ fig.update_layout(title_text='WI Daily Cases and Tests',
 pplot(fig, 
       filename = plotpath + '\\Cases-Tests-WI.html', 
       include_plotlyjs='cdn')
-
-
-#%% Hospitalizations / Deaths
-
-hosp_death_factor = 1
-
-range_max = max(state_avg.Deaths.max(), state_avg.Hospitalizations.max()/hosp_death_factor)
-range_deaths = np.array([-range_max * 0.05, 1.05*range_max])
-
-fig = plotly.subplots.make_subplots()
-
-# individual deaths bar chart
-fig.add_trace(
-    go.Bar(x=state.index, 
-           y=state.Deaths,
-           name='Deaths', 
-           marker_color='rosybrown', 
-           hovertemplate='%{y:.0f}'),)
-
-# death 7-day avg
-fig.add_trace(
-    go.Scatter(x=state_avg.index, 
-           y=state_avg.Deaths,
-           name='Deaths (7-day avg)', 
-           line_color='firebrick', 
-           hovertemplate='%{y:.1f}'),)
-
-# new hospitalization 7-day average
-fig.add_trace(
-    go.Scatter(x=state_avg.index, 
-               y=state_avg.Hospitalizations, 
-               name='Hospitalizations (7-day avg)', 
-               line_color='darkorange', 
-               hovertemplate='%{y:.1f}'),)
-
-
-fig.update_yaxes({'range': range_deaths}, secondary_y=False, title_text='Daily deaths / hospitalizations')
-fig.update_yaxes({'range': range_deaths*hosp_death_factor}, secondary_y=True, title_text='Daily hospitalizations')
-fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
-                  hovermode='x unified',
-                  legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))
-
-# fig.add_annotation(dict(text='*Deaths are daily reported values, Hospitalizations are 7-day averages.',
-#                         x=0.05, y=-0.1, 
-#                         xref='paper', yref='paper',
-#                         showarrow=False))
-
-# plot and save as html, with plotly JS library in separate file in same directory
-pplot(fig, 
-      filename = plotpath + '\\Deaths-Hosp-WI.html',
-      include_plotlyjs='cdn')
-
