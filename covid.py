@@ -15,16 +15,28 @@ import plotly
 import plotly.graph_objects as go
 
 
-def plotly_casetest(data, cases, tests, dates='Date', savefile='.\\temp.html'):
-    """Create interactive plotly chart of cases and tests
+def plotly_casetest(
+        data, 
+        cases, 
+        tests, 
+        dates='Date', 
+        savefile='.\\temp.html',
+        groupby=None,
+        grouplist=None
+        ):
+    """Create interactive plotly figure of cases and tests
     
     cases -- name of column containing cases
     tests -- name of column containing tests
-    date  -- name of column containing datetime objects as x-axis
+    dates -- name of column containing datetime objects as x-axis
+    savefile -- full path of file for saving the html of the figure
+    groupby  -- name of column to use for splitting into a plot grid, such as region
+    grouplist -- list of members of groupby to plot. If None then plot first 9.
     """
     
     # create columns for 7-day average
-    data.set_index(dates)
+    # sort by date first to make sure it's in the right order
+    data = data.sort_values(dates)
     cases_avg = cases + ' (7-day avg)'
     tests_avg = tests + ' (7-day avg)'
     data[cases_avg] = data[cases].rolling(window=7, center=False).mean()
