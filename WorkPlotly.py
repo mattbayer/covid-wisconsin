@@ -50,6 +50,14 @@ covid.plotly_casetest(data=state.reset_index(),
                       savefile=plotpath + '\\Cases-Tests-WI.html'
                       )
 
+# Deaths / Hospitalizations
+covid.plotly_hospdeath(data=state.reset_index(), 
+                       hosp_col='Hospitalizations', 
+                       death_col='Deaths', 
+                       date_col='Date', 
+                       savefile=plotpath + '\\Deaths-Hosp-WI.html'
+                       )
+
 # covid.plotly_casetest(data=widata, 
 #                       case_col='POS_NEW', 
 #                       test_col='TEST_NEW', 
@@ -60,7 +68,8 @@ covid.plotly_casetest(data=state.reset_index(),
 #                       )
 
 
-
+#%%
+quit()
 
 #%% Hospitalizations / Deaths
 
@@ -113,8 +122,7 @@ pplot(fig,
       include_plotlyjs='cdn')
 
 
-#%%
-quit()
+
 #%% OLD: Cases/Tests
 
 # compute y axis range

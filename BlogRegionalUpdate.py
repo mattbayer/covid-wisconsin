@@ -62,11 +62,20 @@ popdata_region['Region'] = region_map
 
 pop_region = popdata_region.groupby('Region').sum().squeeze()
 
+#%% Create new hospitalizations column
+
+hospyes = regiondata.pivot(index='Date', columns='Region', values='HOSP_YES')
+hospnew = hospyes.diff(periods=1)
+hospnew = hospnew.melt(ignore_index=False, value_name='HOSP_NEW')
+regiondata = regiondata.merge(right=hospnew, how='outer', on=['Date', 'Region'])
+
 #%% Trim data
 col_rename = {'Date': 'Date', 
               'Region': 'Region', 
               'POS_NEW': 'Cases',
               'TEST_NEW': 'Tests',
+              'DTH_NEW': 'Deaths',
+              'HOSP_NEW': 'Hospitalizations',
               }
 
 regiondata = regiondata[col_rename.keys()]
@@ -91,7 +100,15 @@ covid.plotly_casetest(data=regiondata,
                       savefile=plotpath + '\\Cases-Tests-Region.html'
                       )
 
-
+#%%
+covid.plotly_hospdeath(data=regiondata, 
+                       hosp_col='Hospitalizations', 
+                       death_col='Deaths', 
+                       date_col='Date',
+                       groupby='Region',
+                       grouplist=region_ordered, 
+                       savefile=plotpath + '\\Hosp-Death-Region.html'
+                       )
 
 #%% Create map of regions
 
