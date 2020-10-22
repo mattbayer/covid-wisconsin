@@ -100,14 +100,16 @@ covid.plotly_casetest(data=regiondata,
                       savefile=plotpath + '\\Cases-Tests-Region.html'
                       )
 
-#%%
-covid.plotly_hospdeath(data=regiondata, 
+#%% Hospitalizations
+# Individual county data has a big spike when they first started recording 
+# hospitalizations.  For now, just filter on dates after the summer.
+covid.plotly_hospdeath(data=regiondata[regiondata.Date >= datetime.datetime(year=2020, month=7, day=1)], 
                        hosp_col='Hospitalizations', 
                        death_col='Deaths', 
                        date_col='Date',
                        groupby='Region',
                        grouplist=region_ordered, 
-                       savefile=plotpath + '\\Hosp-Death-Region.html'
+                       savefile=plotpath + '\\Deaths-Hosp-Region.html'
                        )
 
 #%% Create map of regions
