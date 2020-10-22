@@ -62,12 +62,35 @@ popdata_region['Region'] = region_map
 
 pop_region = popdata_region.groupby('Region').sum().squeeze()
 
+#%% Trim data
+col_rename = {'Date': 'Date', 
+              'Region': 'Region', 
+              'POS_NEW': 'Cases',
+              'TEST_NEW': 'Tests',
+              }
+
+regiondata = regiondata[col_rename.keys()]
+regiondata = regiondata.rename(columns=col_rename)
+
+
 #%% Facet plot
+plotpath = '.\\docs\\assets\\plotly'
+
 regiondata['NAME'] = regiondata['Region']
 region_ordered = ['Northwest', 'North Central', 'Northeast', 
                   'Western',   'Fox Valley',    'Outer Southeast',
                   'Outer South Central', 'Madison', 'Milwaukee']
-covid.plotDCT(regiondata, region_ordered, per_capita=True, popdata=pop_region)
+# covid.plotDCT(regiondata, region_ordered, per_capita=True, popdata=pop_region)
+
+covid.plotly_casetest(data=regiondata, 
+                      case_col='Cases', 
+                      test_col='Tests', 
+                      date_col='Date',
+                      groupby='Region',
+                      grouplist=region_ordered, 
+                      savefile=plotpath + '\\Cases-Tests-Region.html'
+                      )
+
 
 
 #%% Create map of regions

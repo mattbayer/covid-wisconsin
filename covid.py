@@ -34,8 +34,9 @@ def plotly_casetest(
     grouplist -- list of members of groupby to plot. If None then plot first 9.
     """
     
-    # input processing
-    # pivot around cases and tests
+    # input processing for groupby and grouplist
+    # make sure grouplist is always a list, even with one element, and 
+    # cases/tests always a 2d DataFrame, even with one column
     if groupby is None:
         grouplist = ['All']
         cases = pd.DataFrame({'All': data.set_index(date_col)[case_col]})
@@ -62,30 +63,39 @@ def plotly_casetest(
     tests_avg = tests.rolling(window=7, center=False).mean()
     caseavg_label = case_col + ' (7-day avg)'
     testavg_label = test_col + ' (7-day avg)'
-    
-    # compute y axis range - to_numpy to make robust to multiple columns
-    # want tests to be on a scale exactly 10x cases
-    test_max = tests_avg.to_numpy(na_value=0).max();
-    case_max = cases_avg.to_numpy(na_value=0).max()
-    range_max = max(test_max/10, case_max)
-    range_cases = np.array([-range_max * 0.05, 1.05*range_max])
-            
+                
     # create layout of plot grid
     nplots = len(grouplist)      
     ncol = int(np.ceil(np.sqrt(nplots)))
     nrow = int(np.ceil(nplots/ncol))
     
+    # make subplot grid
+    if nplots > 1:
+        sub_titles = grouplist
+    else:
+        sub_titles = None
+        
     sub_spec = [[{"secondary_y": True}]*ncol]*nrow
+    
     fig = plotly.subplots.make_subplots(
         rows=nrow,
         cols=ncol,
-        specs=sub_spec
+        subplot_titles=sub_titles,
+        horizontal_spacing=0.05,
+        vertical_spacing=0.1,
+        specs=sub_spec,
         )
     
     for gg, group in enumerate(grouplist):
         sub_row = int(gg / ncol) + 1
         sub_col = gg - (sub_row-1)*ncol + 1
     
+        # only include the very first set of traces in the legend
+        if gg == 0:
+            showlegend = True
+        else:
+            showlegend = False
+            
         # # individual cases bar chart
         # fig.add_trace(
         #     go.Bar(x=state.index, 
@@ -103,33 +113,65 @@ def plotly_casetest(
         #            hovertemplate='%{y:.0f}'),
         #     secondary_y=True)
         
-        # 7-day average lines
+        
+        # 7-day average lines           
         fig.add_trace(
-            go.Scatter(x=cases_avg.index, 
-                       y=cases_avg.iloc[:,gg], 
-                       name=caseavg_label, 
-                       line_color='steelblue', 
-                       hovertemplate='%{y:.0f}'),
+            go.Scatter(
+                x=cases_avg.index, 
+                y=cases_avg.iloc[:,gg], 
+                name=caseavg_label, 
+                line_color='steelblue', 
+                hovertemplate='%{y:.0f}',
+                showlegend=showlegend,
+                ),
             row=sub_row,
             col=sub_col,
-            secondary_y=False)
+            secondary_y=False,
+            )
         
         fig.add_trace(
-            go.Scatter(x=tests_avg.index, 
-                       y=tests_avg.iloc[:,gg], 
-                       name=testavg_label, 
-                       line_color='olivedrab', #darkolivegreen
-                       hovertemplate='%{y:.0f}'),
+            go.Scatter(
+                x=tests_avg.index, 
+                y=tests_avg.iloc[:,gg], 
+                name=testavg_label, 
+                line_color='olivedrab', #darkolivegreen
+                hovertemplate='%{y:.0f}',
+                showlegend=showlegend,
+                ),
             row=sub_row,
             col=sub_col,
-            secondary_y=True)
+            secondary_y=True,
+            )
     
     
-    fig.update_yaxes({'range': range_cases}, secondary_y=False, title_text='Daily cases')
-    fig.update_yaxes({'range': range_cases*10}, secondary_y=True, title_text='Daily new people tested')
+    # compute y axis range - to_numpy to make robust to multiple columns
+    # want tests to be on a scale exactly 10x cases
+    case_max = cases_avg.to_numpy(na_value=0).max()
+    test_max = tests_avg.to_numpy(na_value=0).max();
+    range_max = max(test_max/10, case_max)
+    range_cases = np.array([-range_max * 0.05, 1.05*range_max])
+    
+    # compute x axis range - want to extend past the latest date just for viewing niceness
+    date_min = cases_avg.index.min()
+    date_max = cases_avg.index.max() + datetime.timedelta(days=5)
+    range_dates = [date_min, date_max]
+
+    # update axes for all plots
+    fig.update_xaxes({'range': range_dates}, showticklabels=False)
+    fig.update_yaxes({'range': range_cases}, secondary_y=False, showticklabels=False)
+    fig.update_yaxes({'range': range_cases*10}, secondary_y=True, showticklabels=False)
+    # update axes for border plots
+    fig.update_xaxes(row=nrow, showticklabels=True)
+    fig.update_yaxes(col=1, title_text='Cases', secondary_y=False, showticklabels=True)
+    fig.update_yaxes(col=ncol, title_text='New people tested', secondary_y=True, showticklabels=True)
+    
     fig.update_layout(title_text='WI Daily Cases and Tests',
-                      hovermode='x unified',
-                      legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))                
+                      hovermode='x unified')
+    if nplots == 1:
+        fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
+    else:
+        fig.update_layout(legend=dict(yanchor="bottom", y=1.04, xanchor="right", x=1))     
+           
                     
     # plot and save as html, with plotly JS library loaded from CDN
     plotly.offline.plot(fig, 
