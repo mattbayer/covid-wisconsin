@@ -44,11 +44,20 @@ plotpath = '.\\docs\\assets\\plotly'
 
 # Cases / Tests
 covid.plotly_casetest(data=state.reset_index(), 
-                      cases='Cases', 
-                      tests='Tests', 
-                      dates='Date', 
+                      case_col='Cases', 
+                      test_col='Tests', 
+                      date_col='Date', 
                       savefile=plotpath + '\\Cases-Tests-WI.html'
                       )
+
+# covid.plotly_casetest(data=widata, 
+#                       case_col='POS_NEW', 
+#                       test_col='TEST_NEW', 
+#                       date_col='Date',
+#                       groupby='NAME',
+#                       grouplist=['Milwaukee', 'Brown', 'Dane'], 
+#                       savefile=plotpath + '\\Cases-Tests-Multi.html'
+#                       )
 
 
 

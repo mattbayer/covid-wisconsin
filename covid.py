@@ -17,38 +17,65 @@ import plotly.graph_objects as go
 
 def plotly_casetest(
         data, 
-        cases, 
-        tests, 
-        dates='Date', 
+        case_col, 
+        test_col, 
+        date_col='Date', 
         savefile='.\\temp.html',
         groupby=None,
         grouplist=None
         ):
     """Create interactive plotly figure of cases and tests
     
-    cases -- name of column containing cases
-    tests -- name of column containing tests
-    dates -- name of column containing datetime objects as x-axis
+    case_col -- name of column containing cases
+    test_col -- name of column containing tests
+    date_col -- name of column containing datetime objects as x-axis
     savefile -- full path of file for saving the html of the figure
     groupby  -- name of column to use for splitting into a plot grid, such as region
     grouplist -- list of members of groupby to plot. If None then plot first 9.
     """
     
-    # create columns for 7-day average
-    # sort by date first to make sure it's in the right order
-    data = data.sort_values(dates)
-    cases_avg = cases + ' (7-day avg)'
-    tests_avg = tests + ' (7-day avg)'
-    data[cases_avg] = data[cases].rolling(window=7, center=False).mean()
-    data[tests_avg] = data[tests].rolling(window=7, center=False).mean()
+    # pivot around cases and tests
+    if groupby is not None:
+        cases = data.pivot(index=date_col, columns=groupby, values=case_col)
+        tests = data.pivot(index=date_col, columns=groupby, values=test_col)
+    else:
+        cases = data.set_index(date_col)[case_col]
+        tests = data.set_index(date_col)[test_col]
+        
+    # create variables for 7-day average
+    cases_avg = cases.rolling(window=7, center=False).mean()
+    tests_avg = tests.rolling(window=7, center=False).mean()
+    caseavg_label = case_col + ' (7-day avg)'
+    testavg_label = test_col + ' (7-day avg)'
     
     # compute y axis range
     # want tests to be on a scale exactly 10x cases
-    range_max = max(data[tests_avg].max()/10, data[cases_avg].max())
+    range_max = max(tests_avg.max()/10, cases_avg.max())
     range_cases = np.array([-range_max * 0.05, 1.05*range_max])
     
+    # create layout of plot grid
+    if groupby is not None and grouplist is None:
+        # take all the columns, or the first 9, whichever is smaller
+        grouplist = cases_avg.columns
+        if len(grouplist) > 9:
+            print('Displaying only the first 9 ' + groupby + 'categories.')
+        grouplist = grouplist[0:10]
+        
+    if grouplist is not None:            
+        nplots = len(grouplist)
+        cases = cases[grouplist]
+        tests = tests[grouplist]
+    else:
+        nplots=1
+        
+    ncol = int(np.ceil(np.sqrt(nplots)))
+    nrow = int(np.ceil(nplots/ncol))
     
-    fig = plotly.subplots.make_subplots(specs=[[{"secondary_y": True}]])
+    fig = plotly.subplots.make_subplots(
+        rows=nrow,
+        cols=ncol,
+        specs=[[{"secondary_y": True}]]
+        )
     
     # # individual cases bar chart
     # fig.add_trace(
@@ -69,17 +96,17 @@ def plotly_casetest(
     
     # 7-day average lines
     fig.add_trace(
-        go.Scatter(x=data[dates], 
-                   y=data[cases_avg], 
-                   name=cases_avg, 
+        go.Scatter(x=cases_avg.index, 
+                   y=cases_avg, 
+                   name=caseavg_label, 
                    line_color='steelblue', 
                    hovertemplate='%{y:.0f}'),
         secondary_y=False)
     
     fig.add_trace(
-        go.Scatter(x=data[dates], 
-                   y=data[tests_avg], 
-                   name=tests_avg, 
+        go.Scatter(x=tests_avg.index, 
+                   y=tests_avg, 
+                   name=testavg_label, 
                    line_color='olivedrab', #darkolivegreen
                    hovertemplate='%{y:.0f}'),
         secondary_y=True)
