@@ -34,13 +34,28 @@ def plotly_casetest(
     grouplist -- list of members of groupby to plot. If None then plot first 9.
     """
     
+    # input processing
     # pivot around cases and tests
-    if groupby is not None:
+    if groupby is None:
+        grouplist = ['All']
+        cases = pd.DataFrame({'All': data.set_index(date_col)[case_col]})
+        tests = pd.DataFrame({'All': data.set_index(date_col)[test_col]})
+
+    else:
         cases = data.pivot(index=date_col, columns=groupby, values=case_col)
         tests = data.pivot(index=date_col, columns=groupby, values=test_col)
-    else:
-        cases = data.set_index(date_col)[case_col]
-        tests = data.set_index(date_col)[test_col]
+
+        if grouplist is None:
+            # take all the columns, or the first 9, whichever is smaller
+            grouplist = cases.columns
+            if len(grouplist) > 9:
+                print('Displaying only the first 9 ' + groupby + 'categories.')
+            grouplist = grouplist[0:10]
+        elif type(grouplist) is not list:
+            grouplist = [grouplist]
+            
+        cases = cases[grouplist]
+        tests = tests[grouplist]
         
     # create variables for 7-day average
     cases_avg = cases.rolling(window=7, center=False).mean()
@@ -48,68 +63,66 @@ def plotly_casetest(
     caseavg_label = case_col + ' (7-day avg)'
     testavg_label = test_col + ' (7-day avg)'
     
-    # compute y axis range
+    # compute y axis range - to_numpy to make robust to multiple columns
     # want tests to be on a scale exactly 10x cases
-    range_max = max(tests_avg.max()/10, cases_avg.max())
+    test_max = tests_avg.to_numpy(na_value=0).max();
+    case_max = cases_avg.to_numpy(na_value=0).max()
+    range_max = max(test_max/10, case_max)
     range_cases = np.array([-range_max * 0.05, 1.05*range_max])
-    
+            
     # create layout of plot grid
-    if groupby is not None and grouplist is None:
-        # take all the columns, or the first 9, whichever is smaller
-        grouplist = cases_avg.columns
-        if len(grouplist) > 9:
-            print('Displaying only the first 9 ' + groupby + 'categories.')
-        grouplist = grouplist[0:10]
-        
-    if grouplist is not None:            
-        nplots = len(grouplist)
-        cases = cases[grouplist]
-        tests = tests[grouplist]
-    else:
-        nplots=1
-        
+    nplots = len(grouplist)      
     ncol = int(np.ceil(np.sqrt(nplots)))
     nrow = int(np.ceil(nplots/ncol))
     
+    sub_spec = [[{"secondary_y": True}]*ncol]*nrow
     fig = plotly.subplots.make_subplots(
         rows=nrow,
         cols=ncol,
-        specs=[[{"secondary_y": True}]]
+        specs=sub_spec
         )
     
-    # # individual cases bar chart
-    # fig.add_trace(
-    #     go.Bar(x=state.index, 
-    #            y=state.Cases,
-    #            name='Cases', 
-    #            marker_color='lightsteelblue', 
-    #            hovertemplate='%{y:.0f}'),)
+    for gg, group in enumerate(grouplist):
+        sub_row = int(gg / ncol) + 1
+        sub_col = gg - (sub_row-1)*ncol + 1
     
-    # # individual tests bar chart
-    # fig.add_trace(
-    #     go.Bar(x=state.index, 
-    #            y=state.Tests,
-    #            name='Tests', 
-    #            marker_color='darkkhaki', 
-    #            hovertemplate='%{y:.0f}'),
-    #     secondary_y=True)
-    
-    # 7-day average lines
-    fig.add_trace(
-        go.Scatter(x=cases_avg.index, 
-                   y=cases_avg, 
-                   name=caseavg_label, 
-                   line_color='steelblue', 
-                   hovertemplate='%{y:.0f}'),
-        secondary_y=False)
-    
-    fig.add_trace(
-        go.Scatter(x=tests_avg.index, 
-                   y=tests_avg, 
-                   name=testavg_label, 
-                   line_color='olivedrab', #darkolivegreen
-                   hovertemplate='%{y:.0f}'),
-        secondary_y=True)
+        # # individual cases bar chart
+        # fig.add_trace(
+        #     go.Bar(x=state.index, 
+        #            y=state.Cases,
+        #            name='Cases', 
+        #            marker_color='lightsteelblue', 
+        #            hovertemplate='%{y:.0f}'),)
+        
+        # # individual tests bar chart
+        # fig.add_trace(
+        #     go.Bar(x=state.index, 
+        #            y=state.Tests,
+        #            name='Tests', 
+        #            marker_color='darkkhaki', 
+        #            hovertemplate='%{y:.0f}'),
+        #     secondary_y=True)
+        
+        # 7-day average lines
+        fig.add_trace(
+            go.Scatter(x=cases_avg.index, 
+                       y=cases_avg.iloc[:,gg], 
+                       name=caseavg_label, 
+                       line_color='steelblue', 
+                       hovertemplate='%{y:.0f}'),
+            row=sub_row,
+            col=sub_col,
+            secondary_y=False)
+        
+        fig.add_trace(
+            go.Scatter(x=tests_avg.index, 
+                       y=tests_avg.iloc[:,gg], 
+                       name=testavg_label, 
+                       line_color='olivedrab', #darkolivegreen
+                       hovertemplate='%{y:.0f}'),
+            row=sub_row,
+            col=sub_col,
+            secondary_y=True)
     
     
     fig.update_yaxes({'range': range_cases}, secondary_y=False, title_text='Daily cases')
