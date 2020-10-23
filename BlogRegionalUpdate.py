@@ -130,22 +130,42 @@ covid.plotly_casetest(sourcedata=capita,
                       date_col='Date',
                       groupby='Region',
                       grouplist=region_ordered, 
-                      savefile=plotpath + '\\Cases-Tests-Region.html',
                       groupcolors=colors,
-                      column1_bar=True,
+                      savefile=plotpath + '\\Cases-Tests-Region.html',
                       )
+
 
 #%% Hospitalizations
 # Individual county data has a big spike when they first started recording 
 # hospitalizations.  For now, just filter on dates after the summer.
-covid.plotly_hospdeath(data=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)], 
-                       hosp_col='Hospitalizations', 
-                       death_col='Deaths', 
-                       date_col='Date',
-                       groupby='Region',
-                       grouplist=region_ordered, 
-                       savefile=plotpath + '\\Deaths-Hosp-Region.html'
-                       )
+
+covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)], 
+                      dead_col='Deaths', 
+                      hosp_col='Hospitalizations', 
+                      date_col='Date',
+                      groupby='Region',
+                      grouplist=region_ordered, 
+                      groupcolors=colors,
+                      savefile=plotpath + '\\Deaths-Hosp-Region.html',
+                      plotlabels=dict(title='Regional Deaths and Hospitalizations per 100K',
+                                      yaxis='Per 100K',
+                                      ),
+                      )
+
+# # Deaths / Hospitalizations - example of using twolines explicitly
+# covid.plotly_twolines(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)],
+#                       column1='Deaths',
+#                       column2='Hospitalizations',
+#                       date_col='Date',
+#                       groupby='Region',
+#                       grouplist=region_ordered,
+#                       groupcolors=colors,
+#                       savefile=plotpath + '\\Deaths-Hosp-Region-temp.html',
+#                       plotcolors=['firebrick', 'darkorange', 'rosybrown'],
+#                       plotlabels=dict(title='Regional Deaths and Hospitalizations per 100K',
+#                                       yaxis='Per 100K',
+#                                       ),
+#                       )
 
 #%% Create map of regions
 

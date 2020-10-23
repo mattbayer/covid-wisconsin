@@ -20,7 +20,9 @@ import covid
 # covid data by county
 covid.update_covid_data_wi('state')
 covid.update_covid_data_wi('county')
+
 widata = covid.read_covid_data_wi('county')
+state = covid.read_covid_data_wi('state')
 
 # population data
 datapath = '.\\data'
@@ -28,8 +30,13 @@ csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 # covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
-#%% Update Dashboard plots by importing other scripts
+#%% Update Dashboard plot
+plotpath = '.\\docs\\assets\\plotly'
+
+# Standard line plots
 import WorkPlotly
+
+# Map plots by importing other script
 import WorkGeo
 
 #%% Data update work

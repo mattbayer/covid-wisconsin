@@ -16,43 +16,62 @@ import plotly.graph_objects as go
 
 
 def plotly_casetest(
-        sourcedata, 
-        case_col='Cases', 
-        test_col='Tests', 
-        date_col='Date', 
+        sourcedata,
+        case_col,
+        test_col,
         plotcolors=['steelblue','olivedrab','lightsteelblue'],
-        savefile='.\\temp.html',
-        groupby=None,
-        grouplist=None,
         secondary_scale=10,
-        groupcolors=None,
-        column1_bar=False,
+        plotlabels = {'title': 'WI Daily Cases and Tests',
+                      'yaxis': 'Cases',
+                      'yaxis_secondary': 'New people tested',
+                      },
+        **kwargs,
         ):
-    """Create interactive plotly figure of cases and tests.
+    """Create interactive plotly figure for cases and tests.
     
-    Calls plotly_twolines with many parameters defaulted.
-    
-    case_col -- name of column containing cases
-    test_col -- name of column containing tests
-    date_col -- name of column containing datetime objects as x-axis
-    savefile -- full path of file for saving the html of the figure
-    groupby  -- name of column to use for splitting into a plot grid, such as region
-    grouplist -- list of members of groupby to plot. If None then plot first 9.
-    """
-    
+    This is a wrapper for plotly_twolines with two differences. First, column1
+    and column2 are renamed to the more explicit case_col and test_col. Second,
+    a number of layout parameters are given default values. These layout 
+    parameters can still be overridden.
+    """      
     plotly_twolines(
-        sourcedata=sourcedata,
-        column1=case_col,
-        column2=test_col,
-        date_col=date_col,
+        sourcedata,
+        case_col,
+        test_col,
         plotcolors=plotcolors,
-        savefile=savefile,
-        groupby=groupby,
-        grouplist=grouplist,
         secondary_scale=secondary_scale,
-        groupcolors=groupcolors,
-        column1_bar=column1_bar,
-        )
+        plotlabels=plotlabels,
+        **kwargs,
+        )    
+    
+def plotly_deadhosp(
+        sourcedata,
+        dead_col,
+        hosp_col,
+        plotcolors=['firebrick', 'darkorange', 'rosybrown'],
+        secondary_scale=1,
+        plotlabels=dict(title='WI Daily Deaths and Hospitalizations',
+                        yaxis='Deaths / Hospitalizations',
+                        ),
+        **kwargs,
+        ):
+    """Create interactive plotly figure for deaths and hospitalizations.
+    
+    This is a wrapper for plotly_twolines with two differences. First, column1
+    and column2 are renamed to the more explicit dead_col and hosp_col. Second,
+    a number of layout parameters are given default values. These layout 
+    parameters can still be overridden.
+    """      
+    plotly_twolines(
+        sourcedata,
+        dead_col,
+        hosp_col,
+        plotcolors=plotcolors,
+        secondary_scale=secondary_scale,
+        plotlabels=plotlabels,
+        **kwargs,
+        )    
+
     
 def plotly_twolines(
         sourcedata, 
@@ -65,7 +84,8 @@ def plotly_twolines(
         grouplist=None,
         secondary_scale=1,
         groupcolors=None,
-        column1_bar=False
+        column1_bar=True,
+        plotlabels=None,
         ):
     """Create interactive plotly figure of two quantities.
     
@@ -80,6 +100,7 @@ def plotly_twolines(
     secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
     groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
     column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
+    plotlabels -- dict containing strings for 'title', 'yaxis', 'yaxis_secondary'
     """
 
     # misc input processing - plotcolors
@@ -90,6 +111,14 @@ def plotly_twolines(
         plotcolors_in = plotcolors
         plotcolors = plotcolors_default
         plotcolors[0:len(plotcolors_in)] = plotcolors_in
+    # secondary yaxis - if secondary_scale != 1, then have a second y-axis
+    secondary_y = (secondary_scale != 1)
+    # plotlabels
+    if plotlabels is None:
+        if secondary_y:
+            plotlabels = {'title': column1+' and '+column2, 'yaxis': column1, 'yaxis_secondary': column2}
+        else:
+            plotlabels = {'title': column1+' and '+column2, 'yaxis': column1+' / '+column2, 'yaxis_secondary': ''}
         
     # input processing for groupby and grouplist
     # make sure grouplist is always a list, even with one element, and 
@@ -136,7 +165,7 @@ def plotly_twolines(
     else:
         sub_titles = None
         
-    sub_spec = [[{"secondary_y": True}]*ncol]*nrow
+    sub_spec = [[{"secondary_y": secondary_y}]*ncol]*nrow
     
     fig = plotly.subplots.make_subplots(
         rows=nrow,
@@ -177,16 +206,6 @@ def plotly_twolines(
                 col=sub_col[gg],
                 )
         
-        # # individual secondary bar chart
-        # fig.add_trace(
-        #     go.Bar(x=state.index, 
-        #            y=state.secondary,
-        #            name='secondary', 
-        #            marker_color='darkkhaki', 
-        #            hovertemplate='%{y:.0f}'),
-        #     secondary_y=True)
-        
-        
         # 7-day average lines           
         fig.add_trace(
             go.Scatter(
@@ -194,7 +213,7 @@ def plotly_twolines(
                 y=avg1.iloc[:,gg], 
                 name=avg1_label, 
                 line_color=plotcolors[0], 
-                hovertemplate='%{y:.0f}',
+                hovertemplate='%{y:.1f}',
                 showlegend=showlegend,
                 ),
             row=sub_row[gg],
@@ -208,12 +227,12 @@ def plotly_twolines(
                 y=avg2.iloc[:,gg], 
                 name=avg2_label, 
                 line_color=plotcolors[1], 
-                hovertemplate='%{y:.0f}',
+                hovertemplate='%{y:.1f}',
                 showlegend=showlegend,
                 ),
             row=sub_row[gg],
             col=sub_col[gg],
-            secondary_y=True,
+            secondary_y=secondary_y,
             )
     
     
@@ -222,8 +241,10 @@ def plotly_twolines(
     avg1_max = avg1.to_numpy(na_value=0).max()
     avg2_max = avg2.to_numpy(na_value=0).max();
     range_max = max(avg1_max, avg2_max/secondary_scale)
-    range_avg1 = np.array([-range_max * 0.05, 1.05*range_max])
-    range_avg2 = range_avg1 * secondary_scale
+    if column1_bar:
+        data1_max = data1.to_numpy(na_value=0).max();
+        range_max = max(range_max, data1_max)
+    range_y = np.array([-range_max * 0.05, 1.05*range_max])
     
     # compute x axis range - want to extend past the latest date just for viewing niceness
     date_min = avg1.index.min()
@@ -232,12 +253,14 @@ def plotly_twolines(
 
     # update axes for all plots
     fig.update_xaxes({'range': range_dates}, showticklabels=False)
-    fig.update_yaxes({'range': range_avg1}, secondary_y=False, showticklabels=False)
-    fig.update_yaxes({'range': range_avg2}, secondary_y=True, showticklabels=False)
+    fig.update_yaxes({'range': range_y}, secondary_y=False, showticklabels=False)
     # update axes for border plots
     fig.update_xaxes(row=nrow, showticklabels=True)
-    fig.update_yaxes(col=1, title_text='Cases', secondary_y=False, showticklabels=True)
-    fig.update_yaxes(col=ncol, title_text='New people tested', secondary_y=True, showticklabels=True)
+    fig.update_yaxes(col=1, title_text=plotlabels['yaxis'], secondary_y=False, showticklabels=True)
+    # secondary axis
+    if secondary_y:
+        fig.update_yaxes({'range': range_y*secondary_scale}, secondary_y=True, showticklabels=False)
+        fig.update_yaxes(col=ncol, title_text=plotlabels['yaxis_secondary'], secondary_y=True, showticklabels=True)
     
     # outline subplots in group colors
     if groupcolors is not None:
@@ -250,12 +273,12 @@ def plotly_twolines(
         else:
             raise ValueError('Number of elements in groupcolors does not match number of elements in grouplist.')
     
-    fig.update_layout(title_text='WI Daily Cases and Tests',
+    fig.update_layout(title_text=plotlabels['title'],
                       hovermode='x unified')
     if nplots == 1:
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
-        fig.update_layout(legend=dict(yanchor="bottom", y=1.04, xanchor="right", x=1))     
+        fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.12, xanchor="center", x=0.5))     
            
                     
     # plot and save as html, with plotly JS library loaded from CDN
@@ -407,10 +430,6 @@ def plotly_hospdeath(
     # update axes for border plots
     fig.update_xaxes(row=nrow, showticklabels=True)
     fig.update_yaxes(col=1, title_text='Deaths / Hospitalizations', secondary_y=False, showticklabels=True)
-    
-    fig.update_xaxes(showline=True, linewidth=2, linecolor='steelblue', mirror=True, row=1, col=1)
-    fig.update_yaxes(showline=True, linewidth=2, linecolor='steelblue', mirror=True, row=1, col=1)
-    
     fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
                       hovermode='x unified')
     if nplots == 1:
