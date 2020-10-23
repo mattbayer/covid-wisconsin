@@ -16,15 +16,17 @@ import plotly.graph_objects as go
 
 
 def plotly_casetest(
-        data, 
+        sourcedata, 
         case_col='Cases', 
         test_col='Tests', 
         date_col='Date', 
+        plotcolors=['steelblue','olivedrab','lightsteelblue'],
         savefile='.\\temp.html',
         groupby=None,
         grouplist=None,
         secondary_scale=10,
         groupcolors=None,
+        column1_bar=False,
         ):
     """Create interactive plotly figure of cases and tests.
     
@@ -39,15 +41,17 @@ def plotly_casetest(
     """
     
     plotly_twolines(
-        data,
-        case_col,
-        test_col,
-        date_col,
-        savefile,
-        groupby,
-        grouplist,
-        secondary_scale,
-        groupcolors,
+        sourcedata=sourcedata,
+        column1=case_col,
+        column2=test_col,
+        date_col=date_col,
+        plotcolors=plotcolors,
+        savefile=savefile,
+        groupby=groupby,
+        grouplist=grouplist,
+        secondary_scale=secondary_scale,
+        groupcolors=groupcolors,
+        column1_bar=column1_bar,
         )
     
 def plotly_twolines(
@@ -55,11 +59,13 @@ def plotly_twolines(
         column1, 
         column2, 
         date_col='Date', 
+        plotcolors=None,
         savefile='.\\temp.html',
         groupby=None,
         grouplist=None,
         secondary_scale=1,
         groupcolors=None,
+        column1_bar=False
         ):
     """Create interactive plotly figure of two quantities.
     
@@ -67,13 +73,24 @@ def plotly_twolines(
     column1 -- name of first column to plot
     column2 -- name of second column to plot
     date_col -- name of column containing datetime objects as x-axis
+    plotcolors -- colors for the three possible plots, in the order [column1 avg, column2 avg, column1 non-avg]
     savefile -- full path of file for saving the html of the figure
     groupby  -- name of column to use for splitting into a plot grid, such as region
     grouplist -- list of members of groupby to plot. If None then plot first 9.
     secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
     groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
+    column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
     """
-    
+
+    # misc input processing - plotcolors
+    plotcolors_default = ['black', 'red', 'gray']
+    if type(plotcolors_default) is not list:
+        plotcolors = plotcolors_default
+    elif len(plotcolors) < 3:
+        plotcolors_in = plotcolors
+        plotcolors = plotcolors_default
+        plotcolors[0:len(plotcolors_in)] = plotcolors_in
+        
     # input processing for groupby and grouplist
     # make sure grouplist is always a list, even with one element, and 
     # cases/secondary always a 2d DataFrame, even with one column
@@ -145,13 +162,20 @@ def plotly_twolines(
         else:
             showlegend = False
             
-        # # individual primary bar chart
-        # fig.add_trace(
-        #     go.Bar(x=state.index, 
-        #            y=state.Cases,
-        #            name='Cases', 
-        #            marker_color='lightsteelblue', 
-        #            hovertemplate='%{y:.0f}'),)
+        # daily non-avg numbers bar chart for column1
+        if column1_bar:
+            fig.add_trace(
+                go.Bar(
+                    x=data1.index, 
+                    y=data1.iloc[:,gg],
+                    name=data1_label, 
+                    marker_color=plotcolors[2], 
+                    hovertemplate='%{y:.0f}',
+                    showlegend=showlegend,
+                    ),
+                row=sub_row[gg],
+                col=sub_col[gg],
+                )
         
         # # individual secondary bar chart
         # fig.add_trace(
@@ -169,7 +193,7 @@ def plotly_twolines(
                 x=avg1.index, 
                 y=avg1.iloc[:,gg], 
                 name=avg1_label, 
-                line_color='steelblue', 
+                line_color=plotcolors[0], 
                 hovertemplate='%{y:.0f}',
                 showlegend=showlegend,
                 ),
@@ -183,7 +207,7 @@ def plotly_twolines(
                 x=avg2.index, 
                 y=avg2.iloc[:,gg], 
                 name=avg2_label, 
-                line_color='olivedrab', #darkolivegreen
+                line_color=plotcolors[1], 
                 hovertemplate='%{y:.0f}',
                 showlegend=showlegend,
                 ),

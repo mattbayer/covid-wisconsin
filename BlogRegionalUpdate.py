@@ -124,7 +124,7 @@ colors = [color_dict[r] for r in region_ordered]
 
 # covid.plotDCT(regiondata, region_ordered, per_capita=True, popdata=pop_region)
 
-covid.plotly_casetest(data=capita, 
+covid.plotly_casetest(sourcedata=capita, 
                       case_col='Cases', 
                       test_col='Tests', 
                       date_col='Date',
@@ -132,6 +132,7 @@ covid.plotly_casetest(data=capita,
                       grouplist=region_ordered, 
                       savefile=plotpath + '\\Cases-Tests-Region.html',
                       groupcolors=colors,
+                      column1_bar=True,
                       )
 
 #%% Hospitalizations
