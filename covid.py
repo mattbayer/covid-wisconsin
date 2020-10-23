@@ -15,17 +15,20 @@ import plotly
 import plotly.graph_objects as go
 
 
-
 def plotly_casetest(
         data, 
-        case_col, 
-        test_col, 
+        case_col='Cases', 
+        test_col='Tests', 
         date_col='Date', 
         savefile='.\\temp.html',
         groupby=None,
-        grouplist=None
+        grouplist=None,
+        secondary_scale=10,
+        groupcolors=None,
         ):
-    """Create interactive plotly figure of cases and tests
+    """Create interactive plotly figure of cases and tests.
+    
+    Calls plotly_twolines with many parameters defaulted.
     
     case_col -- name of column containing cases
     test_col -- name of column containing tests
@@ -35,35 +38,75 @@ def plotly_casetest(
     grouplist -- list of members of groupby to plot. If None then plot first 9.
     """
     
+    plotly_twolines(
+        data,
+        case_col,
+        test_col,
+        date_col,
+        savefile,
+        groupby,
+        grouplist,
+        secondary_scale,
+        groupcolors,
+        )
+    
+def plotly_twolines(
+        sourcedata, 
+        column1, 
+        column2, 
+        date_col='Date', 
+        savefile='.\\temp.html',
+        groupby=None,
+        grouplist=None,
+        secondary_scale=1,
+        groupcolors=None,
+        ):
+    """Create interactive plotly figure of two quantities.
+    
+    sourcedata -- a DataFrame containing the data to plot
+    column1 -- name of first column to plot
+    column2 -- name of second column to plot
+    date_col -- name of column containing datetime objects as x-axis
+    savefile -- full path of file for saving the html of the figure
+    groupby  -- name of column to use for splitting into a plot grid, such as region
+    grouplist -- list of members of groupby to plot. If None then plot first 9.
+    secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
+    groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
+    """
+    
     # input processing for groupby and grouplist
     # make sure grouplist is always a list, even with one element, and 
-    # cases/tests always a 2d DataFrame, even with one column
+    # cases/secondary always a 2d DataFrame, even with one column
     if groupby is None:
         grouplist = ['All']
-        cases = pd.DataFrame({'All': data.set_index(date_col)[case_col]})
-        tests = pd.DataFrame({'All': data.set_index(date_col)[test_col]})
+        data1 = pd.DataFrame({'All': sourcedata.set_index(date_col)[column1]})
+        data2 = pd.DataFrame({'All': sourcedata.set_index(date_col)[column2]})
 
     else:
-        cases = data.pivot(index=date_col, columns=groupby, values=case_col)
-        tests = data.pivot(index=date_col, columns=groupby, values=test_col)
+        data1 = sourcedata.pivot(index=date_col, columns=groupby, values=column1)
+        data2 = sourcedata.pivot(index=date_col, columns=groupby, values=column2)
 
         if grouplist is None:
             # take all the columns, or the first 9, whichever is smaller
-            grouplist = cases.columns
+            grouplist = data1.columns
             if len(grouplist) > 9:
                 print('Displaying only the first 9 ' + groupby + 'categories.')
             grouplist = grouplist[0:10]
         elif type(grouplist) is not list:
             grouplist = [grouplist]
             
-        cases = cases[grouplist]
-        tests = tests[grouplist]
+        data1 = data1[grouplist]
+        data2 = data2[grouplist]
         
     # create variables for 7-day average
-    cases_avg = cases.rolling(window=7, center=False).mean()
-    tests_avg = tests.rolling(window=7, center=False).mean()
-    caseavg_label = case_col + ' (7-day avg)'
-    testavg_label = test_col + ' (7-day avg)'
+    avg1 = data1.rolling(window=7, center=False).mean()
+    avg2 = data2.rolling(window=7, center=False).mean()
+
+    # create labels
+    data1_label = column1
+    data2_label = column2
+    avg1_label = data1_label + ' (7-day avg)'
+    avg2_label = data2_label + ' (7-day avg)'
                 
     # create layout of plot grid
     nplots = len(grouplist)      
@@ -87,9 +130,14 @@ def plotly_casetest(
         specs=sub_spec,
         )
     
+    # keep track of row and col of each index plot
+    sub_row = [1] * nplots
+    sub_col = [1] * nplots
+    
+    # loop over the plots
     for gg, group in enumerate(grouplist):
-        sub_row = int(gg / ncol) + 1
-        sub_col = gg - (sub_row-1)*ncol + 1
+        sub_row[gg] = int(gg / ncol) + 1
+        sub_col[gg] = gg - (sub_row[gg]-1)*ncol + 1
     
         # only include the very first set of traces in the legend
         if gg == 0:
@@ -97,7 +145,7 @@ def plotly_casetest(
         else:
             showlegend = False
             
-        # # individual cases bar chart
+        # # individual primary bar chart
         # fig.add_trace(
         #     go.Bar(x=state.index, 
         #            y=state.Cases,
@@ -105,11 +153,11 @@ def plotly_casetest(
         #            marker_color='lightsteelblue', 
         #            hovertemplate='%{y:.0f}'),)
         
-        # # individual tests bar chart
+        # # individual secondary bar chart
         # fig.add_trace(
         #     go.Bar(x=state.index, 
-        #            y=state.Tests,
-        #            name='Tests', 
+        #            y=state.secondary,
+        #            name='secondary', 
         #            marker_color='darkkhaki', 
         #            hovertemplate='%{y:.0f}'),
         #     secondary_y=True)
@@ -118,53 +166,65 @@ def plotly_casetest(
         # 7-day average lines           
         fig.add_trace(
             go.Scatter(
-                x=cases_avg.index, 
-                y=cases_avg.iloc[:,gg], 
-                name=caseavg_label, 
+                x=avg1.index, 
+                y=avg1.iloc[:,gg], 
+                name=avg1_label, 
                 line_color='steelblue', 
                 hovertemplate='%{y:.0f}',
                 showlegend=showlegend,
                 ),
-            row=sub_row,
-            col=sub_col,
+            row=sub_row[gg],
+            col=sub_col[gg],
             secondary_y=False,
             )
         
         fig.add_trace(
             go.Scatter(
-                x=tests_avg.index, 
-                y=tests_avg.iloc[:,gg], 
-                name=testavg_label, 
+                x=avg2.index, 
+                y=avg2.iloc[:,gg], 
+                name=avg2_label, 
                 line_color='olivedrab', #darkolivegreen
                 hovertemplate='%{y:.0f}',
                 showlegend=showlegend,
                 ),
-            row=sub_row,
-            col=sub_col,
+            row=sub_row[gg],
+            col=sub_col[gg],
             secondary_y=True,
             )
     
     
     # compute y axis range - to_numpy to make robust to multiple columns
-    # want tests to be on a scale exactly 10x cases
-    case_max = cases_avg.to_numpy(na_value=0).max()
-    test_max = tests_avg.to_numpy(na_value=0).max();
-    range_max = max(test_max/10, case_max)
-    range_cases = np.array([-range_max * 0.05, 1.05*range_max])
+    # want secondary to be on a scale exactly 10x primary
+    avg1_max = avg1.to_numpy(na_value=0).max()
+    avg2_max = avg2.to_numpy(na_value=0).max();
+    range_max = max(avg1_max, avg2_max/secondary_scale)
+    range_avg1 = np.array([-range_max * 0.05, 1.05*range_max])
+    range_avg2 = range_avg1 * secondary_scale
     
     # compute x axis range - want to extend past the latest date just for viewing niceness
-    date_min = cases_avg.index.min()
-    date_max = cases_avg.index.max() + datetime.timedelta(days=5)
+    date_min = avg1.index.min()
+    date_max = avg2.index.max() + datetime.timedelta(days=5)
     range_dates = [date_min, date_max]
 
     # update axes for all plots
     fig.update_xaxes({'range': range_dates}, showticklabels=False)
-    fig.update_yaxes({'range': range_cases}, secondary_y=False, showticklabels=False)
-    fig.update_yaxes({'range': range_cases*10}, secondary_y=True, showticklabels=False)
+    fig.update_yaxes({'range': range_avg1}, secondary_y=False, showticklabels=False)
+    fig.update_yaxes({'range': range_avg2}, secondary_y=True, showticklabels=False)
     # update axes for border plots
     fig.update_xaxes(row=nrow, showticklabels=True)
     fig.update_yaxes(col=1, title_text='Cases', secondary_y=False, showticklabels=True)
     fig.update_yaxes(col=ncol, title_text='New people tested', secondary_y=True, showticklabels=True)
+    
+    # outline subplots in group colors
+    if groupcolors is not None:
+        if len(groupcolors) == len(grouplist):
+            for gg, boxcolor in enumerate(groupcolors):
+                rr = sub_row[gg]
+                cc = sub_col[gg]
+                fig.update_xaxes(showline=True, linewidth=4, linecolor=boxcolor, mirror=True, row=rr, col=cc)
+                fig.update_yaxes(showline=True, linewidth=4, linecolor=boxcolor, mirror=True, row=rr, col=cc)
+        else:
+            raise ValueError('Number of elements in groupcolors does not match number of elements in grouplist.')
     
     fig.update_layout(title_text='WI Daily Cases and Tests',
                       hovermode='x unified')
@@ -323,6 +383,9 @@ def plotly_hospdeath(
     # update axes for border plots
     fig.update_xaxes(row=nrow, showticklabels=True)
     fig.update_yaxes(col=1, title_text='Deaths / Hospitalizations', secondary_y=False, showticklabels=True)
+    
+    fig.update_xaxes(showline=True, linewidth=2, linecolor='steelblue', mirror=True, row=1, col=1)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='steelblue', mirror=True, row=1, col=1)
     
     fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
                       hovermode='x unified')
