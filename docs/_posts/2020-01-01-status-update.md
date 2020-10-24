@@ -4,11 +4,22 @@ title: "Covid WI status update: Oct 24"
 ---
 
 ### Everything going up
-Two weeks ago [I sounded a couple optimistic notes](2020-10-11-status-update.md) - new cases had been hinting at flattening, and Milwaukee's wave had not yet gotten as bad as the late summer one - that have now been proven wrong. Wisconsin cases numbers paused, as if on a staircase landing, but then sprinted up the next flight. And Milwaukee's metrics are now the worst they have been since the pandemic first hit in March.
+Two weeks ago [I sounded a couple optimistic notes](2020-10-11-status-update.md) - new cases had been hinting at flattening, and Milwaukee's wave had not yet gotten as bad as the late summer one - that have now been proven wrong. Wisconsin cases numbers paused, as if on a staircase landing, but then sprinted up the next flight. 
+
+The pause in the total numbers was caused by young cases decreasing, I think due to college outbreaks being brought under control. But despite colleges remaining relatively calm (more on that later), in the last 10 days young cases have gone up again, seemingly pulled along by the other age groups. 
+
+![Age plot]
+
+To make matters worse, Milwaukee's metrics are now the worst they have been overall since the pandemic first hit in March.
 
 ![Mashup of Milwaukee metrics](../assets/Metrics_Milwaukee_2020-10-23.png)
 
-### College outbreaks are under control
+### Regional
+
+### What's the matter with Sheboygan?
+A question we've all asked ourselves. Just kidding! I have family there, it's a wonderful city. But its Covid cases did shoot up recently
+
+### College outbreaks are under control?
 Wisconsin kicked off the fall season with [large Covid outbreaks at colleges across the state](2020-09-14-wisconsin-colleges.md). But after many countermeasures, including locking down dorms for weeks, moving to virtual classes, and continuing widespread testing, things have ... [actually gotten under control?](https://madison.com/wsj/news/local/health-med-fit/cdc-director-uw-madison-covid-19-testing-outbreak-turnaround-model-for-nation/article_fc4c498b-9393-50bc-93c4-68aa15e597de.html?utm_medium=social&utm_source=twitter&utm_campaign=user-share) Here's cases at UW-Madison:
 
 ![Cases at UW-Madison](../assets/Cases_UWMadison_2020-10-23.png)
