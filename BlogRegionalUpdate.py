@@ -205,4 +205,4 @@ fig = px.choropleth(countiesWI,
                     projection='mercator')
 fig.update_geos(fitbounds='locations', visible=False)
 fig.update_traces(marker_line_color='white')
-pplot(fig, filename='.\\temp.html' )
+pplot(fig, filename=plotpath+'.\\Regions-Map.html' )
