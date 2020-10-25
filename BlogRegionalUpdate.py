@@ -199,14 +199,14 @@ countiesJS = json.loads(countiesWI.to_json())
 
 #%%
 
-fig = px.choropleth(countiesWI, 
-                    geojson=countiesJS, 
-                    locations=countiesWI.index, 
-                    color='Region', 
-                    color_discrete_map=color_dict,
-                    category_orders={'Region': list(color_dict.keys())},
-                    title='WI Regions',
-                    projection='mercator')
-fig.update_geos(fitbounds='locations', visible=False)
-fig.update_traces(marker_line_color='white')
-pplot(fig, filename=plotpath+'.\\Regions-Map.html' )
+# fig = px.choropleth(countiesWI, 
+#                     geojson=countiesJS, 
+#                     locations=countiesWI.index, 
+#                     color='Region', 
+#                     color_discrete_map=color_dict,
+#                     category_orders={'Region': list(color_dict.keys())},
+#                     title='WI Regions',
+#                     projection='mercator')
+# fig.update_geos(fitbounds='locations', visible=False)
+# fig.update_traces(marker_line_color='white')
+# pplot(fig, filename=plotpath+'.\\Map-Region.html' )
