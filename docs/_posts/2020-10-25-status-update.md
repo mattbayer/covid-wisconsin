@@ -3,18 +3,18 @@ layout: post
 title: "Covid WI status update: Oct 25"
 ---
 
-### Everything going up
+### Everything is going up
 Two weeks ago [I sounded a couple optimistic notes](2020-10-11-status-update.md) - new cases had been hinting at flattening, and Milwaukee's wave had not yet gotten as bad as the late summer one - that have now been proven wrong. Wisconsin cases numbers paused, as if on a staircase landing, but then sprinted up the next flight. And Milwaukee's metrics are now [the worst they have been overall since the pandemic first hit in March](https://twitter.com/MattBayer3/status/1316818108322119681?s=20).
 
 That brief flattening of cases reflected numbers in the Green Bay and Fox Valley areas, which have been the worst hit in the state over the last month but plateaued a few weeks ago. They appear to have resumed their rise, unfortunately; and even more unfortunately, the rest of the state is now catching up. 
 
-Below are plots of cases, hospitalizations, and deaths grouped by region. I am also adding interactive versions of these plots to a new [Regional Dashboard](../dashboard-regional.md) page. These are the same regions as shown on the [DHS hospital page](https://www.dhs.wisconsin.gov/covid-19/hosp-data.htm), but with Milwaukee County and Dane County (Madison) broken out separately. The Northeast, Fox Valley, and North Central regions are still in the worst shape. But Milwaukee, the rest of the Southeast, and the South Central outside Madison are not far behind. The Madison, Northwest, and Western regions are in better shape, but still getting worse.
-
 ![Regional cases](../assets/Cases-Tests-Regional_2020-10-25.png)
+
+These are plots of cases, hospitalizations, and deaths grouped by region. I am also adding interactive versions of these plots to a new [Regional Dashboard](../dashboard-regional.md) page. These are the same regions as shown on the [DHS hospital page](https://www.dhs.wisconsin.gov/covid-19/hosp-data.htm), but with Milwaukee County and Dane County (Madison) broken out separately. The Northeast, Fox Valley, and North Central regions are still in the worst shape. But Milwaukee, the rest of the Southeast, and the South Central outside Madison are not far behind. The Madison, Northwest, and Western regions are in better shape, but still getting worse.
 
 ![Regional hospitalizations](../assets/Deaths-Hosp-Regional_2020-10-25.png)
 
-This fall Wisconsin started with [one outbreak in colleges](2020-09-14-wisconsin-colleges.md), then a [second in the northeast](2020-09-26-two-outbreaks.md); now it is really everywhere.
+This fall Wisconsin started with [one outbreak in colleges](2020-09-14-wisconsin-colleges.md), then a [second in the northeast](2020-09-26-two-outbreaks.md); now it really is everywhere.
 
 ### College outbreaks are under control?
 There is one bright spot, though, which is that the college outbreaks seem to actually be under control. Here are cases at UW-Madison:
