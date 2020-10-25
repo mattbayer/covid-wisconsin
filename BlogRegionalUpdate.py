@@ -124,7 +124,7 @@ colors = [color_dict[r] for r in region_ordered]
 
 # covid.plotDCT(regiondata, region_ordered, per_capita=True, popdata=pop_region)
 
-covid.plotly_casetest(sourcedata=capita, 
+covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)],  
                       case_col='Cases', 
                       test_col='Tests', 
                       date_col='Date',
@@ -132,6 +132,10 @@ covid.plotly_casetest(sourcedata=capita,
                       grouplist=region_ordered, 
                       groupcolors=colors,
                       savefile=plotpath + '\\Cases-Tests-Region.html',
+                      plotlabels=dict(title='Regional Cases and New People Tested per 100K',
+                                      yaxis='Cases per 100K',
+                                      yaxis_secondary='Tested per 100K',
+                                      ),
                       )
 
 
