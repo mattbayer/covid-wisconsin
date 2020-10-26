@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Regional Dashboard
+title: Dashboard - Regional
 ---
 {% include_relative assets/plotly/Map-Region.html %}
 {% include_relative assets/plotly/Cases-Tests-Region.html %}
