@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Dashboard
+title: Dashboard - State
 ---
 {% include_relative assets/plotly/Cases-Tests-WI.html %}
 {% include_relative assets/plotly/Deaths-Hosp-WI.html %}
