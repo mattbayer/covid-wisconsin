@@ -39,6 +39,9 @@ import WorkPlotly
 # Map plots by importing other script
 import WorkGeo
 
+# Regional plots by importing other script
+import BlogRegionalUpdate
+
 #%% Data update work
 # tractpath = os.path.join(datapath, 'tracts')
 
