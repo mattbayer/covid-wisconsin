@@ -262,7 +262,7 @@ def plotly_twolines(
     if secondary_y:
         fig.update_yaxes({'range': range_y*secondary_scale}, secondary_y=True, showticklabels=False)
         fig.update_yaxes(col=ncol, secondary_y=True, showticklabels=True)
-        fig.update_yaxes(col=ncol, secondary_y=True, title_text=plotlabels['yaxis_secondary'])
+        fig.update_yaxes(col=ncol, row=int(nrow/2)+1, secondary_y=True, title_text=plotlabels['yaxis_secondary'])
     
     # outline subplots in group colors
     if groupcolors is not None:
