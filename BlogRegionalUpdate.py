@@ -41,7 +41,7 @@ widata = covid.read_covid_data_wi('county')
 region_file = 'data\\Regions-WI.csv'
 
 region_map = pd.read_csv(region_file)
-region_map = region_map[['County',  'Modified HERC']]
+region_map = region_map[['County',  'Modified HERC Short']]
 region_map = region_map.set_index('County')
 region_map = region_map.squeeze()
 
@@ -93,13 +93,13 @@ capita[datacols] = regiondata[datacols].div(regiondata['RegionPop'], axis=0) * 1
 
 
 
-#%% Facet plot
+#%% Region names and colors
 plotpath = '.\\docs\\assets\\plotly'
 
 regiondata['NAME'] = regiondata['Region']
 region_ordered = ['Northwest', 'North Central', 'Northeast', 
-                  'Western',   'Fox Valley',    'Outer Southeast',
-                  'Outer South Central', 'Madison', 'Milwaukee']
+                  'Western',   'Fox Valley',    'Southeast',
+                  'South Central', 'Madison', 'Milwaukee']
 # color_dict = {'Northwest':     'teal',
 #               'North Central': 'darkkhaki',
 #               'Northeast':     'dimgrey',
@@ -115,13 +115,14 @@ color_dict = {'Northwest':     'thistle',
               'Northeast':     'green',
               'Western':       'sandybrown',
               'Fox Valley':    'yellowgreen',
-              'Outer Southeast': 'lightsteelblue',
-              'Outer South Central': 'pink',
+              'Southeast': 'lightsteelblue',
+              'South Central': 'pink',
               'Madison':       'red',
               'Milwaukee':     'navy'}
 
 colors = [color_dict[r] for r in region_ordered]
 
+#%% Facet plot
 # covid.plotDCT(regiondata, region_ordered, per_capita=True, popdata=pop_region)
 
 covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)],  
@@ -173,40 +174,39 @@ covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=20
 
 #%% Create map of regions
 
-from plotly.offline import plot as pplot
-
-# shapefile from US census - doesn't have lake winnebago which is annoying
-shapefile = 'data\\geo\\cb_2019_us_county_500k.shp'
-# read data set of all USA counties
-countiesUSA = gpd.read_file(shapefile)
-# filter on wisconsin
-countiesWI = countiesUSA[countiesUSA.STATEFP == '55']
-
-# reindex on county name
-countiesWI = countiesWI.set_index('NAME')
-# sort by name
-countiesWI = countiesWI.sort_index()
-# add Region column
-countiesWI['Region'] = region_map
-
-# chloropleth by population from geopandas
-# base = countiesWI.plot(column='Region', color=colors, edgecolor='w', linewidth=0.5)
-
-
-# filter counties shapefile to WI, convert to JSON format string, then decode 
-# to dictionary with json.loads()
-countiesJS = json.loads(countiesWI.to_json())
-
-#%%
-
-# fig = px.choropleth(countiesWI, 
-#                     geojson=countiesJS, 
-#                     locations=countiesWI.index, 
-#                     color='Region', 
-#                     color_discrete_map=color_dict,
-#                     category_orders={'Region': list(color_dict.keys())},
-#                     title='WI Regions',
-#                     projection='mercator')
-# fig.update_geos(fitbounds='locations', visible=False)
-# fig.update_traces(marker_line_color='white')
-# pplot(fig, filename=plotpath+'.\\Map-Region.html' )
+if False:
+    from plotly.offline import plot as pplot
+    
+    # shapefile from US census - doesn't have lake winnebago which is annoying
+    shapefile = 'data\\geo\\cb_2019_us_county_500k.shp'
+    # read data set of all USA counties
+    countiesUSA = gpd.read_file(shapefile)
+    # filter on wisconsin
+    countiesWI = countiesUSA[countiesUSA.STATEFP == '55']
+    
+    # reindex on county name
+    countiesWI = countiesWI.set_index('NAME')
+    # sort by name
+    countiesWI = countiesWI.sort_index()
+    # add Region column
+    countiesWI['Region'] = region_map
+    
+    # chloropleth by population from geopandas
+    # base = countiesWI.plot(column='Region', color=colors, edgecolor='w', linewidth=0.5)
+    
+    
+    # filter counties shapefile to WI, convert to JSON format string, then decode 
+    # to dictionary with json.loads()
+    countiesJS = json.loads(countiesWI.to_json())
+    
+    fig = px.choropleth(countiesWI, 
+                        geojson=countiesJS, 
+                        locations=countiesWI.index, 
+                        color='Region', 
+                        color_discrete_map=color_dict,
+                        category_orders={'Region': list(color_dict.keys())},
+                        title='WI Regions',
+                        projection='mercator')
+    fig.update_geos(fitbounds='locations', visible=False)
+    fig.update_traces(marker_line_color='white')
+    pplot(fig, filename=plotpath+'.\\Map-Region.html' )

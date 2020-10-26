@@ -278,7 +278,7 @@ def plotly_twolines(
     if nplots == 1:
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
-        fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.15, xanchor="center", x=0.5))     
+        fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.18, xanchor="center", x=0.5))     
            
                     
     # plot and save as html, with plotly JS library loaded from CDN
