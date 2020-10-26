@@ -256,11 +256,11 @@ def plotly_twolines(
     fig.update_yaxes({'range': range_y}, secondary_y=False, showticklabels=False)
     # update axes for border plots
     fig.update_xaxes(row=nrow, showticklabels=True)
-    fig.update_yaxes(col=1, title_text=plotlabels['yaxis'], secondary_y=False, showticklabels=True)
+    fig.update_yaxes(col=1, row=int(nrow/2)+1, title_text=plotlabels['yaxis'], secondary_y=False, showticklabels=True)
     # secondary axis
     if secondary_y:
         fig.update_yaxes({'range': range_y*secondary_scale}, secondary_y=True, showticklabels=False)
-        fig.update_yaxes(col=ncol, title_text=plotlabels['yaxis_secondary'], secondary_y=True, showticklabels=True)
+        fig.update_yaxes(col=ncol, row=int(nrow/2)+1, title_text=plotlabels['yaxis_secondary'], secondary_y=True, showticklabels=True)
     
     # outline subplots in group colors
     if groupcolors is not None:
@@ -278,7 +278,7 @@ def plotly_twolines(
     if nplots == 1:
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
-        fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.12, xanchor="center", x=0.5))     
+        fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.15, xanchor="center", x=0.5))     
            
                     
     # plot and save as html, with plotly JS library loaded from CDN

@@ -152,7 +152,7 @@ covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=20
                       groupcolors=colors,
                       savefile=plotpath + '\\Deaths-Hosp-Region.html',
                       plotlabels=dict(title='Regional Deaths and Hospitalizations per 100K',
-                                      yaxis='Per 100K',
+                                      yaxis='Deaths and Hosp per 100K',
                                       ),
                       )
 
