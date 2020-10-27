@@ -904,11 +904,11 @@ def download_covid_data_wi(dataset='state'):
     dataset -- 'state', 'county', or 'tract'. Each dataset has its own 
                assortment of data columns.
     """
-    url_json_state  = "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson"
-    url_json_county = "https://opendata.arcgis.com/datasets/5374188992374b318d3e2305216ee413_12.geojson"
-    url_json_tract  = "https://opendata.arcgis.com/datasets/89d7a90aafa24519847c89b249be96ca_13.geojson"
-    
-    urls = {'state': url_json_state, 'county': url_json_county, 'tract': url_json_tract}
+    # URLs for direct download of WI DHS data
+    urls = {'state' : "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson",
+            'county': "https://opendata.arcgis.com/datasets/5374188992374b318d3e2305216ee413_12.geojson",
+            'tract' : "https://opendata.arcgis.com/datasets/89d7a90aafa24519847c89b249be96ca_13.geojson",
+            }
     
     if dataset not in urls.keys():
         raise ValueError("Dataset not supported. Supported datasets are 'state', 'county', or 'tract'.")
@@ -1069,51 +1069,7 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     return covid_data
     
     
-def download_covid_wi_county(save_path = '.\\data'):
-    """Download latest WI Covid data for state and county, parse, 
-    and save to csv file.
-    
-    Note that the URL retrieval will not work behind GE's VPN.
-    
-    save_path -- path name for CSV file to save the results. Inside this
-                 path the file name is hardcoded as 'Covid-Data-WI.csv'
-    """
-        
-    # Check for existence of save_path and create it if it doesn't exist
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
 
-    # Download data in JSON format from server and save to current path
-    # path = './'
-    # URL for json request, filtered to only state and county
-    url_json = "https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson?where=%20(GEO%20%3D%20'County'%20OR%20GEO%20%3D%20'State')%20"
-    # unfiltered, includes census tracts
-    # url_json = 'https://opendata.arcgis.com/datasets/b913e9591eae4912b33dc5b4e88646c5_10.geojson'
-    # file_json = path + 'Covid-Data-WI.geojson'
-    # urllib.request.urlretrieve(url_json, file_json)
-
-
-    # make the request from WI DHS - directly from url to memory
-    jsondata = pd.read_json(url_json, typ='series', orient='index')
-
-    # Parse data into a pandas DataFrame.
-    # The JSON file is arranged a little idiosyncratically.
-    # The reader function parses the data into a pandas Series of 
-    # lists of dictionaries of dictionaries.  The last level of dictionary is 
-    # what contains all the data I want to ultimately put into a DataFrame.
-    # e.g. jsondata.features[0]['properties']['POSITIVE']   
-    # So loop through the useless upper layers of the structure to create a 
-    # list of all records.  Then convert that list into a pandas DataFrame.
-    data_list = list()
-    for record in jsondata.features:
-        data_list.append(record['properties'])
-        
-    data_table = pd.DataFrame.from_records(data_list)
-    
-    # Now save that data into a CSV file, which will be much smaller and 
-    # easier for a person to read directly.
-    save_file = os.path.join(save_path, 'Covid-Data-WI-County.csv')
-    data_table.to_csv(save_file, index=False)
     
     
     
@@ -1180,10 +1136,6 @@ def update_covid_wi_all(save_path = '.\\data'):
     # easier for a person to read directly.
     save_file = os.path.join(save_path, 'Covid-Data-WI.csv')
     data_table.to_csv(save_file, index=False)
-    
-    
-
-    
 
 
 def convert_rawdates(rawdates, discard_time=True):
