@@ -30,11 +30,29 @@ csv_file_pop = os.path.join(datapath, 'Population-Data-WI.csv')
 # covid.download_pop_data_wi(csv_file_pop)
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
-#%% Update Dashboard plot
+#%% Update Dashboard plots
 plotpath = '.\\docs\\assets\\plotly'
 
-# Standard line plots
-import WorkPlotly
+# reduce and rename at state level
+col_rename = {'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
+state = state.rename(columns=col_rename)
+
+# Cases / Tests line plot
+covid.plotly_casetest(sourcedata=state, 
+                      case_col='Cases', 
+                      test_col='Tests', 
+                      date_col='Date', 
+                      savefile=plotpath + '\\Cases-Tests-WI.html',
+                      )
+
+# Deaths / Hospitalizations line plot
+covid.plotly_deadhosp(sourcedata=state, 
+                      hosp_col='Hospitalizations', 
+                      dead_col='Deaths', 
+                      date_col='Date', 
+                      savefile=plotpath + '\\Deaths-Hosp-WI.html'
+                      )
+
 
 # Map plots by importing other script
 import WorkGeo

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Create interactive line plots using Plotly.
+
+Script is now obsolete, but preserved for remembering my work on it.
 """
 
 import numpy as np
@@ -15,31 +17,16 @@ import covid
 
 #%% Get the data
 
-widata = covid.read_covid_data_wi(dataset='state')
+state = covid.read_covid_data_wi(dataset='state')
 
 
 #%% Manipulate data columns for prep
 
-# filter to state
-state = widata[widata.NAME == 'WI']
-# index and sort by date
-state = state.set_index('Date')
-state = state.sort_index()
-
-# create new hosp column
-state = state.assign(HOSP_NEW = state.HOSP_YES.diff(periods=1))
-
 # reduce and rename columns
-col_rename = {'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
+col_rename = {'Date':'Date','POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
 col_cumul = {'POSITIVE': 'Total Cases', 'NEGATIVE': 'Total Negative', 'HOSP_YES': 'Total Hospitalizations', 'DEATHS': 'Total Deaths'}
 state = state[col_rename.keys()]
 state = state.rename(columns=col_rename)
-
-# rolling 7-day average
-state_avg = state.rolling(window=7, center=False).mean()
-
-state = state.reset_index()
-
 
 #%% Standard plots
 plotpath = '.\\docs\\assets\\plotly'

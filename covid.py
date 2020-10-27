@@ -1178,7 +1178,7 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     Needs some pre-processing after load.
     - Convert date strings into Python datetime objects.
     
-    dataset   -- name of defined data set, 'county'
+    dataset   -- name of defined data set, 'state', 'county', or 'tract'.
     data_path -- path name for location of CSV data file
     csv_file  -- data file name. If this is defined, it overrides dataset.  
     """
@@ -1208,7 +1208,12 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     # Take Date from the back and put it on the front
     col_list.insert(0,col_list.pop())   
     # Re-order according to the new list
-    covid_data = covid_data[col_list]    
+    covid_data = covid_data[col_list]
+
+    # Create new hospitalizations column by taking difference of HOSP_YES
+    if 'HOSP_YES' in col_list:
+        covid_data = covid_data.sort_values('Date')
+        covid_data = covid_data.assign(HOSP_NEW = covid_data.groupby('NAME').HOSP_YES.diff(periods=1))
     
     # # Make new columns for *new* positives in age brackets
     # age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
@@ -1220,7 +1225,6 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     #     new_col = 'POS_NEW_' + sfx
     #     covid_data[new_col] = np.diff(covid_data[cumul_col])
         
-    
     return covid_data
     
     
