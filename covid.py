@@ -235,7 +235,6 @@ def plotly_twolines(
             secondary_y=secondary_y,
             )
     
-    
     # compute y axis range - to_numpy to make robust to multiple columns
     # want secondary to be on a scale exactly 10x primary
     avg1_max = avg1.to_numpy(na_value=0).max()
@@ -281,170 +280,12 @@ def plotly_twolines(
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
         fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.18, xanchor="center", x=0.5))     
-           
-                    
+                           
     # plot and save as html, with plotly JS library loaded from CDN
     plotly.offline.plot(fig, 
           filename = savefile, 
           include_plotlyjs='cdn')    
-    
-    
-def plotly_hospdeath(
-        data, 
-        hosp_col, 
-        death_col, 
-        date_col='Date', 
-        savefile='.\\temp.html',
-        groupby=None,
-        grouplist=None
-        ):
-    """Create interactive plotly figure of hospitalizations and deaths
-    
-    hosp_col -- name of column containing hospitalizations
-    death_col -- name of column containing deaths
-    date_col -- name of column containing datetime objects as x-axis
-    savefile -- full path of file for saving the html of the figure
-    groupby  -- name of column to use for splitting into a plot grid, such as region
-    grouplist -- list of members of groupby to plot. If None then plot first 9.
-    """
-    
-    # input processing for groupby and grouplist
-    # make sure grouplist is always a list, even with one element, and 
-    # hosp/tests always a 2d DataFrame, even with one column
-    if groupby is None:
-        grouplist = ['All']
-        hosp = pd.DataFrame({'All': data.set_index(date_col)[hosp_col]})
-        deaths = pd.DataFrame({'All': data.set_index(date_col)[death_col]})
-
-    else:
-        hosp = data.pivot(index=date_col, columns=groupby, values=hosp_col)
-        deaths = data.pivot(index=date_col, columns=groupby, values=death_col)
-
-        if grouplist is None:
-            # take all the columns, or the first 9, whichever is smaller
-            grouplist = hosp.columns
-            if len(grouplist) > 9:
-                print('Displaying only the first 9 ' + groupby + 'categories.')
-            grouplist = grouplist[0:10]
-        elif type(grouplist) is not list:
-            grouplist = [grouplist]
-            
-        hosp = hosp[grouplist]
-        deaths = deaths[grouplist]
-        
-    # create variables for 7-day average
-    hosp_avg = hosp.rolling(window=7, center=False).mean()
-    deaths_avg = deaths.rolling(window=7, center=False).mean()
-    hospavg_label = hosp_col + ' (7-day avg)'
-    deathavg_label = death_col + ' (7-day avg)'
-                
-    # create layout of plot grid
-    nplots = len(grouplist)      
-    ncol = int(np.ceil(np.sqrt(nplots)))
-    nrow = int(np.ceil(nplots/ncol))
-    
-    # make subplot grid
-    if nplots > 1:
-        sub_titles = grouplist
-    else:
-        sub_titles = None
-        
-    sub_spec = [[{"secondary_y": False}]*ncol]*nrow
-    
-    fig = plotly.subplots.make_subplots(
-        rows=nrow,
-        cols=ncol,
-        subplot_titles=sub_titles,
-        horizontal_spacing=0.05,
-        vertical_spacing=0.1,
-        specs=sub_spec,
-        )
-    
-    for gg, group in enumerate(grouplist):
-        sub_row = int(gg / ncol) + 1
-        sub_col = gg - (sub_row-1)*ncol + 1
-    
-        # only include the very first set of traces in the legend
-        if gg == 0:
-            showlegend = True
-        else:
-            showlegend = False
-            
-        # individual deaths bar chart
-        fig.add_trace(
-            go.Bar(
-                x=deaths.index, 
-                y=deaths.iloc[:,gg],
-                name=death_col, 
-                marker_color='rosybrown', 
-                hovertemplate='%{y:.0f}',
-                showlegend=showlegend,
-                ),
-            row=sub_row,
-            col=sub_col,
-            )
-        
-        # 7-day average lines           
-        fig.add_trace(
-            go.Scatter(
-                x=deaths_avg.index, 
-                y=deaths_avg.iloc[:,gg], 
-                name=deathavg_label, 
-                line_color='firebrick', 
-                hovertemplate='%{y:.1f}',
-                showlegend=showlegend,
-                ),
-            row=sub_row,
-            col=sub_col,
-            secondary_y=False,
-            )
-
-        fig.add_trace(
-            go.Scatter(
-                x=hosp_avg.index, 
-                y=hosp_avg.iloc[:,gg], 
-                name=hospavg_label, 
-                line_color='darkorange', 
-                hovertemplate='%{y:.1f}',
-                showlegend=showlegend,
-                ),
-            row=sub_row,
-            col=sub_col,
-            secondary_y=False,
-            )
-    
-    
-    # compute y axis range - to_numpy to make robust to multiple columns
-    # want deaths to be on a scale exactly 10x hosp
-    hosp_max = hosp_avg.to_numpy(na_value=0).max()
-    deaths_max = deaths_avg.to_numpy(na_value=0).max();
-    range_max = max(hosp_max, deaths_max)
-    range_hosp = np.array([-range_max * 0.05, 1.05*range_max])
-    
-    # compute x axis range - want to extend past the latest date just for viewing niceness
-    date_min = hosp_avg.index.min()
-    date_max = hosp_avg.index.max() + datetime.timedelta(days=5)
-    range_dates = [date_min, date_max]
-
-    # update axes for all plots
-    fig.update_xaxes({'range': range_dates}, showticklabels=False)
-    fig.update_yaxes({'range': range_hosp}, secondary_y=False, showticklabels=False)
-    # update axes for border plots
-    fig.update_xaxes(row=nrow, showticklabels=True)
-    fig.update_yaxes(col=1, title_text='Deaths / Hospitalizations', secondary_y=False, showticklabels=True)
-    fig.update_layout(title_text='WI Daily Deaths and Hospitalizations',
-                      hovermode='x unified')
-    if nplots == 1:
-        fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
-    else:
-        fig.update_layout(legend=dict(yanchor="bottom", y=1.04, xanchor="right", x=1))     
-           
-                    
-    # plot and save as html, with plotly JS library loaded from CDN
-    plotly.offline.plot(fig, 
-          filename = savefile, 
-          include_plotlyjs='cdn')    
-    
+  
 
 def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
     """Create stacked line plot of data points by county
