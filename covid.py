@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import urllib
 import os
 import plotly
+import plotly.subplots
 import plotly.graph_objects as go
 
 

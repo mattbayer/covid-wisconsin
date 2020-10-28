@@ -64,13 +64,6 @@ popdata_region['Region'] = region_map
 
 pop_region = popdata_region.groupby('Region').sum().squeeze()
 
-#%% Create new hospitalizations column
-
-hospyes = regiondata.pivot(index='Date', columns='Region', values='HOSP_YES')
-hospnew = hospyes.diff(periods=1)
-hospnew = hospnew.melt(ignore_index=False, value_name='HOSP_NEW')
-regiondata = regiondata.merge(right=hospnew, how='outer', on=['Date', 'Region'])
-
 #%% Trim data
 col_rename = {'Date': 'Date', 
               'Region': 'Region', 
