@@ -3,6 +3,7 @@
 Create interactive maps for cases and hospitalizations using Plotly.
 """
 
+import pandas as pd
 import geopandas as gpd
 
 import covid
@@ -20,6 +21,24 @@ popdata = covid.read_pop_data_wi(csv_file_pop)
 tract = covid.read_covid_data_wi('tract')
 
 
+#%% Tract population
+
+tractpopfile = '.\\data\\geo\\Tract-Population-WI\\Tract-Population-WI.csv'
+tractcsv = pd.read_csv(tractpopfile)
+tractpop = pd.DataFrame({'GEOID': [s[9:] for s in tractcsv.iloc[1:,0]],
+                         'NAME' : tractcsv.iloc[1:,1],
+                         'Population': pd.to_numeric(tractcsv.iloc[1:,2]),
+                         'Margin of Error': pd.to_numeric(tractcsv.iloc[1:,3], errors='coerce'),
+                         })
+# remove Wisconsin state
+tractpop = tractpop[tractpop.GEOID!='55']
+
+# set GEOID as index
+tractpop = tractpop.set_index('GEOID')
+
+# plot distribution of tract populations
+# tractpop.sort_values('Population').reset_index(drop=True).plot(y='Population')
+
 #%% Geography work
 
 # WI DNR shapefile - doesn't have lake winnebago either, so never mind
@@ -36,9 +55,45 @@ witracts = gpd.read_file(shapefile)
 # filter on Milwaukee county
 mketracts = witracts[witracts.COUNTYFP=='079']
 
+# set GEOID as index
+mketracts = mketracts.set_index('GEOID')
+
+# now that both have same index, get population from tractpop
+mketracts['Population'] = tractpop['Population']
+
 #%%
-# chloropleth by population from geopandas
-mketracts.plot(color='blue', edgecolor='w', linewidth=0.5)
+
+# add deaths as a column
+latest_date = tract.Date.max()
+select = tract[tract.GEO=='Census tract']
+select = select[select.Date==latest_date]
+select = select.set_index('GEOID')
+
+mketracts['Total Deaths'] = select['DEATHS']
+mketracts['Total Hosp'] = select['HOSP_YES']
+mketracts['Total Cases'] = select['POSITIVE']
+mketracts['Cases per 10K'] = mketracts['Total Cases'] / mketracts['Population'] * 10000
+mketracts['Hosp per 10K'] = mketracts['Total Hosp'] / mketracts['Population'] * 10000
+
+
+# mketracts = mketracts.assign(Deaths=mketracts.GEOID.apply(lambda id: select.loc[id,'DEATHS']))
+# mketracts = mketracts.assign(Cases=mketracts.GEOID.apply(lambda id: select.loc[id,'POSITIVE']))
+# mketracts = mketracts.assign(Hosp=mketracts.GEOID.apply(lambda id: select.loc[id,'HOSP_YES']))
+
+# chloropleths by population, cases, hosp, deaths
+mketracts.plot(column='Population', edgecolor='w', linewidth=0.5, legend=True)
+mketracts.plot(column='Total Cases', edgecolor='w', linewidth=0.5, legend=True, cmap='Blues')
+mketracts.plot(column='Cases per 10K', edgecolor='w', linewidth=0.5, legend=True, cmap='Blues')
+mketracts.plot(column='Total Hosp', edgecolor='w', linewidth=0.5, legend=True, cmap='Oranges')
+mketracts.plot(column='Hosp per 10K', edgecolor='w', linewidth=0.5, legend=True, cmap='Oranges')
+mketracts.plot(column='Total Deaths', edgecolor='w', linewidth=0.5, legend=True, cmap='Reds')
+
+# deaths by tract do not sum up to the state deaths, less than half accounted for.
+# positives and negatives do.
+# HOSP_YES is close but about 10% off.
+
+#%%
+quit()
 
 #%%
 # reindex on county name

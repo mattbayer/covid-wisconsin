@@ -1043,7 +1043,7 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     covid_data['Date'] = convert_rawdates(covid_data.DATE)
     
     # Make a list of only useful columns
-    remove_list = ['OBJECTID','GEOID','GEO','DATE']
+    remove_list = ['OBJECTID','DATE']
     col_list = covid_data.columns.tolist()
     for s in remove_list:
         col_list.remove(s)
