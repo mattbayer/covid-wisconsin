@@ -18,6 +18,9 @@ author:
 plugins:
   - jekyll-paginate
   - jekyll-relative-links
+  
+# Google Analytics
+google_analytics: G-G84CM55HBV
 
 # Options
 relative_links:
