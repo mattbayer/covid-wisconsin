@@ -126,7 +126,7 @@ covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=20
                       grouplist=region_ordered, 
                       groupcolors=colors,
                       savefile=plotpath + '\\Cases-Tests-Region.html',
-                      plotlabels=dict(title='Regional Cases and New People Tested per 100K',
+                      plotlabels=dict(title='Regional Cases and New People Tested<br>(per 100K population)',
                                       yaxis='Cases per 100K',
                                       yaxis_secondary='Tested per 100K',
                                       ),
@@ -145,7 +145,7 @@ covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=20
                       grouplist=region_ordered, 
                       groupcolors=colors,
                       savefile=plotpath + '\\Deaths-Hosp-Region.html',
-                      plotlabels=dict(title='Regional Deaths and Hospitalizations per 100K',
+                      plotlabels=dict(title='Regional Deaths and Hospitalizations<br>(per 100K population)',
                                       yaxis='Deaths and Hosp per 100K',
                                       ),
                       )

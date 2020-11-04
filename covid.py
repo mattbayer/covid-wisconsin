@@ -22,7 +22,7 @@ def plotly_casetest(
         test_col,
         plotcolors=['steelblue','olivedrab','lightsteelblue'],
         secondary_scale=10,
-        plotlabels = {'title': 'WI Daily Cases and Tests',
+        plotlabels = {'title': 'WI Daily Cases and New People Tested',
                       'yaxis': 'Cases',
                       'yaxis_secondary': 'New people tested',
                       },
@@ -172,10 +172,15 @@ def plotly_twolines(
         rows=nrow,
         cols=ncol,
         subplot_titles=sub_titles,
-        horizontal_spacing=0.05,
-        vertical_spacing=0.1,
+        horizontal_spacing=0.03,
+        vertical_spacing=0.03,
         specs=sub_spec,
         )
+    
+    # Subplot title annotation - shrink font size and move inside plot box
+    for subtitle in fig['layout']['annotations']:
+        subtitle['font'] = dict(size=14)    # default is 16
+        subtitle['yanchor'] = 'top'   
     
     # keep track of row and col of each index plot
     sub_row = [1] * nplots
