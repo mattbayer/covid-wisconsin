@@ -50,7 +50,7 @@ covid.plotly_deadhosp(sourcedata=state,
                       hosp_col='Hospitalizations', 
                       dead_col='Deaths', 
                       date_col='Date', 
-                      savefile=plotpath + '\\Deaths-Hosp-WI.html'
+                      savefile=plotpath + '\\Deaths-Hosp-WI.html',
                       )
 
 
