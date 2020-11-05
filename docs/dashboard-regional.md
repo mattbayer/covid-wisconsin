@@ -2,15 +2,10 @@
 layout: page
 title: Dashboard - Regional
 ---
-<head>
-  <style>
-    .graph div {height: inherit}
-  </style>
-</head>
-  
+
 <div style="max-width: 48rem; margin-left: -2rem; margin-right: -2rem">
   {% include_relative assets/plotly/Map-Region.html %}
-  <div class="graph" style="height: 550px">
+  <div style="height: 550px">
     {% include_relative assets/plotly/Cases-Tests-Region.html %}
   </div>
   {% include_relative assets/plotly/Deaths-Hosp-Region.html %}
