@@ -5,7 +5,7 @@ title: Dashboard - Regional
 
 <head>
   <style>
-    .plotly-graph-div.js-plotly-plot {height: inherit !important}
+    .plotly-graph-div.js-plotly-plot {height: 100% !important}
   </style>
 </head>
 
