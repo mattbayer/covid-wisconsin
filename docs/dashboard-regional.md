@@ -4,7 +4,7 @@ title: Dashboard - Regional
 ---
 <head>
   <style>
-    .graph div {height: inherit}
+    .graph div {height: 100%}
   </style>
 </head>
   
