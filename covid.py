@@ -6,14 +6,110 @@ Created on Wed May 27 20:57:44 2020
 """
 import datetime
 import numpy as np
-from scipy import signal
 import pandas as pd
+
 import matplotlib.pyplot as plt
 import urllib
 import os
 import plotly
 import plotly.subplots
+import plotly.express as px
 import plotly.graph_objects as go
+import json
+
+
+
+def plotly_colorbubble(
+        geodata,
+        sizecol,
+        colorcol,
+        popcol='Population',
+        savefile='.\\temp.html',
+        size_factor = 1,
+        color_range = [0, 600],
+        plotlabels = {'title': 'Color-Bubble Map',
+                      },
+        ):
+    """Create interactive plotly map figure, with bubbles that show size and color
+    
+    geodata     -- GeoPandas DataFrame 
+    sizecol     -- Column to use for bubble sizes
+    colorcol    -- Column to use for bubble color
+    """
+    # Plotly needs a JSON format string for plotting arbitrary shapes, so -
+    # convert geodata to JSON format string, then decode to dictionary with json.loads()
+    geoJS = json.loads(geodata.to_json())
+
+    # Colors for the background map
+    line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
+    
+    # Background map
+    fig = px.choropleth(
+        geodata, 
+        geojson=geoJS,
+        locations=geodata.index,
+        color_discrete_sequence=[line_colors['land']],
+        # width=600,
+        # height=600,
+        projection='mercator',
+        )
+    
+    # turn off hover tooltips for this layer - have to set both of these because
+    # hovertemplate is set automatically and it supersedes hoverinfo.
+    # Also take out legend because it's not very useful right now; I could add
+    # a fancier custom legend later.
+    fig.update_traces(
+        hovertemplate=None, 
+        hoverinfo='skip', 
+        marker_line_color=line_colors['border'],
+        showlegend=False,
+        )
+    
+    fig.update_layout(title=plotlabels['title'])
+    
+    # Get latitude and longitude of centroids for plotting the bubbles
+    # This will give warning but I don't care
+    geodata['plotlon'] = geodata.geometry.centroid.x
+    geodata['plotlat'] = geodata.geometry.centroid.y    
+    
+    # Create display names for tooltip
+    display_names = [n + ' County' for n in geodata.index]
+
+    
+    # Create the bubble figure
+    fig.add_trace(
+        go.Scattergeo(
+            lon=geodata.plotlon,
+            lat=geodata.plotlat,
+            text=display_names,
+            customdata=geodata[popcol],
+            marker=dict(
+                size=geodata[sizecol], 
+                sizeref=size_factor,
+                color=geodata[colorcol],
+                cmin=color_range[0],
+                cmax=color_range[1],
+                sizemode='area',
+                colorscale='Blues',
+                ),
+            line=dict(color=line_colors['marker']),
+            hovertemplate=
+                '<b>%{text}</b><br>' +
+                'Population: %{customdata:.0f}<br>' +
+                'Cases: %{marker.size:.1f}<br>' + 
+                'Cases per 10K : %{marker.color:.1f}'+
+                '<extra></extra>'
+            )
+        )
+    
+    # Only display this specific geography, not whole world
+    fig.update_geos(fitbounds='locations', visible=False)
+    
+    # plot and save as html, with plotly JS library loaded from CDN
+    plotly.offline.plot(
+        fig, 
+        filename=savefile,
+        include_plotlyjs='cdn')   
 
 
 def plotly_casetest(
