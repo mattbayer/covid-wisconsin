@@ -136,154 +136,21 @@ if False:
     
 
 
-#%% Plotly
-import json
-import plotly.express as px
-from plotly.offline import plot as pplot
-import plotly.graph_objects as go
 
 
-# filter counties shapefile to WI, convert to JSON format string, then decode 
-# to dictionary with json.loads()
-tractsJS = json.loads(mketracts.to_json())
+#%% Color-bubble maps
 
-
-
-#%% Bubble map - size is numbers, color is per-population
-
-geodata = mketracts;
-geoJS = tractsJS;
-
-# get latitude and longitude of centroids of counties for plotting
-# this will give warning but I don't care
-geodata['plotlon'] = geodata.geometry.centroid.x
-geodata['plotlat'] = geodata.geometry.centroid.y
-
-# append 'County' for display names
-display_names = [n + ' County' for n in geodata.index]
-
-
-
-#%% Create background to figures
-
-# line_colors = {'land':'darkgrey', 'border':'lightgray', 'marker':'dimgray'}
-# line_colors = {'land':'darkgrey', 'border':'dimgray', 'marker':'lightgray'}
-# line_colors = {'land':'lightgray', 'border':'white', 'marker':'dimgray'}
-line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
-
-# background map of counties
-fig_bkgd = px.choropleth(geodata, 
-                         geojson=geoJS, 
-                         locations=geodata.index, 
-                         color_discrete_sequence=[line_colors['land']],
-                         # width=600,
-                         # height=600,
-                         projection='mercator')
-
-# turn off hover tooltips for this layer - have to set both of these because
-# hovertemplate is set automatically and it supersedes hoverinfo.
-# Also take out legend because it's not very useful right now; I could add
-# a fancier custom legend later.
-fig_bkgd.update_traces(hovertemplate=None, 
-                       hoverinfo='skip', 
-                       marker_line_color=line_colors['border'],
-                       showlegend=False)
-
-
-
-
-#%% Complete the figures - cases
-sizecol = 'Total Cases'
-colorcol = 'Cases per 10K'
-sizescale = 0.6
-colorscale = [0, 600]
-
-
-# copy background
-fig_cases = go.Figure(fig_bkgd)
-fig_cases.update_layout(title='Milwaukee: Cases by Census Tract<br>(7-day avg)')
-
-fig_cases.add_trace(go.Scattergeo(lon=geodata.plotlon,
-                                  lat=geodata.plotlat,
-                                  text=display_names,
-                                  customdata=geodata.Population,
-                                  marker=dict(size=geodata[sizecol], 
-                                              sizeref=sizescale,
-                                              color=geodata[colorcol],
-                                              cmin=colorscale[0],
-                                              cmax=colorscale[1],
-                                              sizemode='area',
-                                              colorscale='Blues'),
-                                  line=dict(color=line_colors['marker']),
-                                  hovertemplate=
-                                  '<b>%{text}</b><br>' +
-                                  'Population: %{customdata:.0f}<br>' +
-                                  'Cases: %{marker.size:.1f}<br>' + 
-                                  'Cases per 10K : %{marker.color:.1f}'+
-                                  '<extra></extra>'
-                                  ))
-
-# only display wisconsin counties, not whole world
-fig_cases.update_geos(fitbounds='locations', visible=False)
-
-pplot(fig_cases, 
-      filename='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
-      include_plotlyjs='cdn')
-
-
-
-#%% Hospitalizations
-sizecol = 'Total Hosp'
-colorcol = 'Hosp per 10K'
-
-# set scales for sizes of bubbles
-casescale = sizescale
-sizescale = casescale*.05;   # so that bubbles are same size if hosp = 5% of cases
-colorscale = [0, 40]
-
-
-# copy background
-fig_hosp = go.Figure(fig_bkgd)
-fig_hosp.update_layout(title='Hospitalizations by County<br>(7-day avg)')
-
-fig_hosp.add_trace(go.Scattergeo(lon=geodata.plotlon,
-                                 lat=geodata.plotlat,
-                                 text=display_names,
-                                 customdata=geodata.Population,
-                                 marker=dict(size=abs(geodata[sizecol]),
-                                             sizeref=sizescale,
-                                             color=geodata[colorcol],
-                                             cmin=colorscale[0],
-                                             cmax=colorscale[1],
-                                             sizemode='area',
-                                             colorscale='Oranges'),
-                                 line=dict(color=line_colors['marker']),
-                                 hovertemplate=
-                                 '<b>%{text}</b><br>' +
-                                 'Population: %{customdata:.0f}<br>' +
-                                 'Hospitalizations: %{marker.size:.1f}<br>' + 
-                                 'Hospitalizations per 10K: %{marker.color:.1f}' +
-                                 '<extra></extra>'
-                                 ))
-
-fig_hosp.update_geos(fitbounds='locations', visible=False)
-
-pplot(fig_hosp, 
-      filename='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
-      include_plotlyjs='cdn')
-
-#%%
 cases_size_factor = 0.6
 cases_color_max = 600
 cases_color_range = [0, cases_color_max]
 hosp_size_factor = cases_size_factor * .05   # so that bubbles are same size if hosp = 5% of cases 
 hosp_color_range = [0, cases_color_max*.05]
 
-tract_names = ['Tract ' + n[5:] for n in geodata.index]
+tract_names = ['Tract ' + n[5:] for n in mketracts.index]
 
 # Cases color-bubble
 covid.plotly_colorbubble(
-    geodata,
+    mketracts,
     sizecol='Total Cases',
     colorcol='Cases per 10K',
     size_factor=cases_size_factor,
@@ -297,7 +164,7 @@ covid.plotly_colorbubble(
 
 #%% Hospitalizations color-bubble
 covid.plotly_colorbubble(
-    geodata,
+    mketracts,
     sizecol='Total Hosp',
     colorcol='Hosp per 10K',
     size_factor=hosp_size_factor,
