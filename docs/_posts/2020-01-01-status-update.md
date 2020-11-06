@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Covid WI status update: Nov 6"
+title: "Draft - Covid WI status update: Nov 6"
 ---
 
 ### All together now
@@ -9,7 +9,7 @@ All the regions of Wisconsin are now in a pretty similar place for new cases per
 
 ![Regional cases and tests](../assets/Cases-Tests-Regional_2020-11-06.png)
 
-### 
+### Deaths and Hospitalizations
 In another previous post I [estimated future deaths from current hospitalizations](2020-10-04-what-expect-for-deaths.md), observing that historically, daily deaths tended to run at 15-20% of the number of daily hospitalizations from 2 weeks prior. Since then, the rate of deaths first met and then exceeded my prediction. The current 7-day average death rate in Wisconsin is 40 per day, while 2 weeks ago the rate of new hospitalizations was about 160 per day, for a 25% ratio. Is hospital care and death rate actually getting worse?
 
 I do not think so; instead I think part of the explanation is regional variation. Prior to this fall surge, Milwaukee was the largest contributor to statewide hospitalizations and deaths, so my previous estimate was biased towards Milwaukee's statistics. The current surge has revealed, however, that there is very large regional variation in this ratio of deaths and hospitalizations. In the Fox Valley and North Central regions, the death rate is almost 50% of the hospitalizations rate! Milwaukee, Madison, and the Southeast are still in the 15-20% range, and the other regions are in between.
