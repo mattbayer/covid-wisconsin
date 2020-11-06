@@ -25,10 +25,11 @@ def plotly_colorbubble(
         colorcol,
         popcol='Population',
         savefile='.\\temp.html',
-        size_factor = 1,
-        color_range = [0, 600],
-        plotlabels = {'title': 'Color-Bubble Map',
-                      },
+        size_factor=1,
+        color_range=[0, 600],
+        colorscale=None,
+        location_names=None,
+        plotlabels=None,
         ):
     """Create interactive plotly map figure, with bubbles that show size and color
     
@@ -36,6 +37,18 @@ def plotly_colorbubble(
     sizecol     -- Column to use for bubble sizes
     colorcol    -- Column to use for bubble color
     """
+    # Input process plotlabels
+    plotlabels_default = dict(title='Color-Bubble Map',
+                              sizelabel=sizecol,
+                              colorlabel=colorcol,
+                              )
+    if plotlabels is not None:
+        # replace default values with the passed values
+        for n in plotlabels.keys():
+            plotlabels_default[n] = plotlabels[n]
+    # then overwrite
+    plotlabels = plotlabels_default
+    
     # Plotly needs a JSON format string for plotting arbitrary shapes, so -
     # convert geodata to JSON format string, then decode to dictionary with json.loads()
     geoJS = json.loads(geodata.to_json())
@@ -73,15 +86,15 @@ def plotly_colorbubble(
     geodata['plotlat'] = geodata.geometry.centroid.y    
     
     # Create display names for tooltip
-    display_names = [n + ' County' for n in geodata.index]
-
+    if location_names is None:
+        location_names = geodata.index
     
     # Create the bubble figure
     fig.add_trace(
         go.Scattergeo(
             lon=geodata.plotlon,
             lat=geodata.plotlat,
-            text=display_names,
+            text=location_names,
             customdata=geodata[popcol],
             marker=dict(
                 size=geodata[sizecol], 
@@ -90,14 +103,14 @@ def plotly_colorbubble(
                 cmin=color_range[0],
                 cmax=color_range[1],
                 sizemode='area',
-                colorscale='Blues',
+                colorscale=colorscale,
                 ),
             line=dict(color=line_colors['marker']),
             hovertemplate=
                 '<b>%{text}</b><br>' +
                 'Population: %{customdata:.0f}<br>' +
-                'Cases: %{marker.size:.1f}<br>' + 
-                'Cases per 10K : %{marker.color:.1f}'+
+                plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
+                plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
                 '<extra></extra>'
             )
         )

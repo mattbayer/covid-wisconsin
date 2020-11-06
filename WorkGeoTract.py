@@ -230,16 +230,7 @@ pplot(fig_cases,
       filename='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
       include_plotlyjs='cdn')
 
-#%%
 
-covid.plotly_colorbubble(
-    geodata,
-    sizecol='Total Cases',
-    colorcol='Cases per 10K',
-    size_factor=0.6,
-    color_range=[0,600],
-    savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
-    )
 
 #%% Hospitalizations
 sizecol = 'Total Hosp'
@@ -281,3 +272,38 @@ pplot(fig_hosp,
       filename='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
       include_plotlyjs='cdn')
 
+#%%
+cases_size_factor = 0.6
+cases_color_max = 600
+cases_color_range = [0, cases_color_max]
+hosp_size_factor = cases_size_factor * .05   # so that bubbles are same size if hosp = 5% of cases 
+hosp_color_range = [0, cases_color_max*.05]
+
+tract_names = ['Tract ' + n[5:] for n in geodata.index]
+
+# Cases color-bubble
+covid.plotly_colorbubble(
+    geodata,
+    sizecol='Total Cases',
+    colorcol='Cases per 10K',
+    size_factor=cases_size_factor,
+    color_range=cases_color_range,
+    colorscale='Blues',
+    location_names=tract_names,
+    savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee1.html',
+    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(Total)'),
+    )
+
+
+#%% Hospitalizations color-bubble
+covid.plotly_colorbubble(
+    geodata,
+    sizecol='Total Hosp',
+    colorcol='Hosp per 10K',
+    size_factor=hosp_size_factor,
+    color_range=hosp_color_range,
+    colorscale='Oranges',
+    location_names=tract_names,
+    savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee1.html',
+    plotlabels=dict(title='Milwaukee: Hospitalizations by Census Tract<br>(Total)'),
+    )
