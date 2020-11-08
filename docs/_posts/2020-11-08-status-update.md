@@ -1,7 +1,6 @@
 ---
 layout: post
-title: "Draft - Covid WI status update: Nov 6"
-hidden: true
+title: "Draft - Covid WI status update: Nov 8"
 ---
 
 ### All together now
@@ -23,7 +22,7 @@ I can think of several possible explanations for this phenomenon. Certainly area
 This pattern highlights the importance of looking at more than just the case numbers to understand what's happening. Milwaukee and the Fox Valley currently have pretty similar per-capita rates of new cases and new hospitalizations, but the Fox Valley's death rate is 3-4 times higher. Besides the death-to-hospitalization ratio, another cause of this difference is that the Fox Valley's surge started earlier, so that deaths have had more time to catch up to cases and hospitalizations. Unfortunately, I do think Milwaukee's death rate will rise sharply in the coming weeks.
 
 ### Other stories
-- [UW schools offer free Covid testing](https://www.jsonline.com/story/news/2020/11/04/uw-system-campuses-offer-free-covid-19-tests-communities/6164822002/?utm_campaign=snd-autopilot). These are rapid tests, so somewhat less accurate but you get the results "within 15 minutes." I think this is the first time these rapid tests will be widely available in the state. The program is starting this week. Community members need to register for an appointment at [www.doineedacovid19test.com](www.doineedacovid19test.com).
+- [UW schools offer free Covid testing](https://www.jsonline.com/story/news/2020/11/04/uw-system-campuses-offer-free-covid-19-tests-communities/6164822002/?utm_campaign=snd-autopilot). These are rapid tests, so somewhat less accurate but you get the results "within 15 minutes." I think this is the first time these rapid tests will be widely available in the state. The program is starting this week. Community members need to register for an appointment at [www.doineedacovid19test.com](https://www.doineedacovid19test.com).
 
 - [Evidence that the college outbreaks led to community spread](https://madison.com/wsj/news/local/education/university/uw-campuses-grapple-with-whether-reopening-led-to-community-spread-of-covid-19/article_d49fa7f0-4e1b-5018-b41c-19da7b8d64ad.html), from analyzing the genetics of particular virus strains. I am still skeptical that the college outbreaks had a strong impact on their surrounding communities. The two counties with colleges mentioned in the story, La Crosse and Dane (Madison), had large student outbreaks but currently have [among the lowest hospitalization rates in the state](https://twitter.com/MattBayer3/status/1323459224412803076?s=20).
 
