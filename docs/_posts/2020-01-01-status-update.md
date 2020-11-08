@@ -21,7 +21,7 @@ I do not think so; instead I think part of the explanation is regional variation
 
 I can think of several possible explanations for this phenomenon. Certainly areas outside of Milwaukee and Madison skew older, and so have higher mortality risk. Another possibility could be that the more populous Madison, Milwaukee, and Southeast regions have more hospital capacity, so that they end up admitting a greater proportion of moderate-severity patients less likely to die.
 
-This pattern highlights the importance of looking at more than just the case numbers to understand what's happening. Milwaukee and the Fox Valley currently have pretty similar per-capita rates of new cases and new hospitalizations, but the Fox Valley's death rate is 3-4 times higher. Besides the death-to-hospitalization ratio, another cause of this difference in death rate is that the Fox Valley's surge started earlier. Milwaukee's death rate will certainly rise sharply in the coming weeks.
+This pattern highlights the importance of looking at more than just the case numbers to understand what's happening. Milwaukee and the Fox Valley currently have pretty similar per-capita rates of new cases and new hospitalizations, but the Fox Valley's death rate is 3-4 times higher. Besides the death-to-hospitalization ratio, another cause of this difference in death rate is that the Fox Valley's surge started earlier, so deaths have had more time to catch up to cases and hospitalizations. Sadly, I do think Milwaukee's death rate will rise sharply in the coming weeks.
 
 ### Links
 - UW schools testing sites
