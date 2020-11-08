@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Draft - Covid WI status update: Nov 8"
+title: "Covid WI status update: Nov 8"
 ---
 
 ### All together now
