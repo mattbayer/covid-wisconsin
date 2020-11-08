@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Draft - Covid WI status update: Nov 6"
+hidden: true
 ---
 
 ### All together now
