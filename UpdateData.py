@@ -88,8 +88,6 @@ import BlogRegionalUpdate
 covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, popdata=popdata)
 
 
-# covid.plotDCT(widata, ['WI', 'Milwaukee', 'Sheboygan', 'Brown', 'Dane', 'La Crosse'], per_capita=True, popdata=popdata)
-
 
 #%% Plot by county
 
