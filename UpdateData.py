@@ -84,7 +84,7 @@ import BlogRegionalUpdate
 #%% Plot deaths, cases, tests
 
 # WI and top 3 counties
-covid.plotDCT(widata, 'WI')
+# covid.plotDCT(widata, 'WI')
 covid.plotDCT(widata, ['WI', 'Milwaukee', 'Dane', 'Brown'], per_capita=True, popdata=popdata)
 
 
