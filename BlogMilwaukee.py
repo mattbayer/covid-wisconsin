@@ -53,9 +53,6 @@ mke.plot(x='Date', y='Positive Rate')
 
 
 
-#%%
-quit()
-
 #%% Get the coviddata
 # Updated by UpdateData.py, just load from csv here
 
@@ -122,21 +119,25 @@ delta = 14
 total_delta = select[select.Date==(latest_date - datetime.timedelta(days=delta))]
 total_delta = total_delta.set_index('GEOID')
 
-col_list = ['POSITIVE', 'HOSP_YES', 'DEATHS']
+col_list = ['POSITIVE', 'NEGATIVE', 'HOSP_YES', 'DEATHS']
 recent = total[col_list]
 recent = recent - total_delta[col_list]
 # get rid of negative values - weird that this is needed
 recent.POSITIVE = (recent.POSITIVE >=0) * recent.POSITIVE
 recent.HOSP_YES = (recent.HOSP_YES >=0) * recent.HOSP_YES
 
-mketracts['Total Deaths'] = total['DEATHS']
-mketracts['Total Hosp'] = total['HOSP_YES']
+mketracts['Total Tested'] = total['POSITIVE'] + total['NEGATIVE']
 mketracts['Total Cases'] = total['POSITIVE']
+mketracts['Total Hosp'] = total['HOSP_YES']
+mketracts['Total Deaths'] = total['DEATHS']
+mketracts['Tested (14 days)'] = recent['POSITIVE'] + recent['NEGATIVE']
 mketracts['Cases (14 days)'] = recent['POSITIVE']
 mketracts['Hosp (14 days)'] = recent['HOSP_YES']
 mketracts['Deaths (14 days)'] = recent['DEATHS']
+mketracts['Tested per 10K'] = mketracts['Total Tested'] / mketracts['Population'] * 10000
 mketracts['Cases per 10K'] = mketracts['Total Cases'] / mketracts['Population'] * 10000
 mketracts['Hosp per 10K'] = mketracts['Total Hosp'] / mketracts['Population'] * 10000
+mketracts['Tested per 10K (14 days)'] = mketracts['Tested (14 days)'] / mketracts['Population'] * 10000
 mketracts['Cases per 10K (14 days)'] = mketracts['Cases (14 days)'] / mketracts['Population'] * 10000
 mketracts['Hosp per 10K (14 days)'] = mketracts['Hosp (14 days)'] / mketracts['Population'] * 10000
 
@@ -170,10 +171,12 @@ cases_color_max = 150
 cases_color_range = [0, cases_color_max]
 hosp_size_factor = cases_size_factor * .05   # so that bubbles are same size if hosp = 5% of cases 
 hosp_color_range = [0, cases_color_max*.05]
+tested_size_factor = cases_size_factor * 5 # so that bubbles are the same size if cases = 20% of tested
+tested_color_range = [0, cases_color_max*5]
 
 tract_names = ['Tract ' + n[5:] for n in mketracts.index]
 
-# Cases color-bubble
+#%% Cases color-bubble
 covid.plotly_colorbubble(
     mketracts,
     # sizecol='Total Cases',
@@ -184,10 +187,24 @@ covid.plotly_colorbubble(
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=tract_names,
-    savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee1.html',
+    savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
     plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(Total)'),
     )
 
+#%% Tests color-bubble
+covid.plotly_colorbubble(
+    mketracts,
+    # sizecol='Total Cases',
+    # colorcol='Cases per 10K',
+    sizecol='Tested (14 days)',
+    colorcol='Tested per 10K (14 days)',
+    size_factor=tested_size_factor,
+    color_range=tested_color_range,
+    colorscale='Greens',
+    location_names=tract_names,
+    savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
+    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(Total)'),
+    )
 
 #%% Hospitalizations color-bubble
 covid.plotly_colorbubble(
@@ -200,6 +217,6 @@ covid.plotly_colorbubble(
     color_range=hosp_color_range,
     colorscale='Oranges',
     location_names=tract_names,
-    savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee1.html',
+    savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
     plotlabels=dict(title='Milwaukee: Hospitalizations by Census Tract<br>(Total)'),
     )
