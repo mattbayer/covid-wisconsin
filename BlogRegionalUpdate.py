@@ -202,4 +202,8 @@ if False:
                         projection='mercator')
     fig.update_geos(fitbounds='locations', visible=False)
     fig.update_traces(marker_line_color='white')
-    pplot(fig, filename=plotpath+'.\\Map-Region.html' )
+    
+    pplot(fig, 
+          filename=plotpath+'\\Map-Region.html',
+          include_plotlyjs='cdn',
+          )
