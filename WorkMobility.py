@@ -13,9 +13,32 @@ import datetime
 
 import covid
 
+update = False
+
+#%% Auto-download the google file
+if update:
+    
+    import zipfile
+    import requests
+    
+    zip_url = 'https://www.gstatic.com/covid19/mobility/Region_Mobility_Report_CSVs.zip'
+    mobility_dir = '.\\data\\mobility\\'
+    
+    # download the zip file
+    r = requests.get(zip_url)
+    # write the zip file
+    zip_filename = os.path.join(mobility_dir, 'Google_Region_Mobility_Report_CSVs.zip')
+    open(zip_filename, 'wb').write(r.content)
+    
+    with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+        zip_ref.extract('2020_US_Region_Mobility_Report.csv', path=mobility_dir)
+        
+    # remove temp zip file
+    os.remove(zip_filename)
+
 #%%
 apple_file = '.\\data\\mobility\\applemobilitytrends-2020-11-08.csv'
-google_file = '.\\data\\mobility\\2020_US_Region_Mobility_Report-2020-11-08.csv'
+google_file = '.\\data\\mobility\\2020_US_Region_Mobility_Report.csv'
 
 apple_csv = pd.read_csv(apple_file)
 google_csv = pd.read_csv(google_file)
