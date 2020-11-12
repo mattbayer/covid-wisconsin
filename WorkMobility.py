@@ -70,8 +70,8 @@ google_county.plot()
 #%% Or compare counties
 
 counties = ['Milwaukee County', 'Dane County', 'Brown County']
-# category = 'Retail/Recreation'
-category = 'Workplace'
+category = 'Retail/Recreation'
+# category = 'Workplace'
 
 google_wi = google_wi
 google_category = google_wi.pivot(index='Date', columns='County', values=category)
