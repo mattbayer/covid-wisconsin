@@ -69,7 +69,8 @@ google_county.plot()
 
 #%% Or compare counties
 
-counties = ['Milwaukee County', 'Dane County', 'Brown County']
+# counties = ['Milwaukee County', 'Dane County', 'Brown County']
+counties = ['Brown County', 'Outagamie County', 'Winnebago County']
 category = 'Retail/Recreation'
 # category = 'Workplace'
 
