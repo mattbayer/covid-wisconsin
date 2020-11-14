@@ -13,7 +13,7 @@ import datetime
 
 import covid
 
-update = True
+update = False
 
 #%% Auto-download the google file
 if update:
@@ -103,7 +103,18 @@ fig = px.line(
     range_y=[-90, 200],
     )
 fig.update_layout(legend_title_text='Category')
-pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-WI.html' )
+
+pplot(
+      fig, 
+      filename='.\\docs\\assets\\plotly\\Mobility-Google-WI.html',
+      include_plotlyjs='cdn',
+      )
+fig.write_image(
+    '.\\docs\\assets\\Mobility-Google-WI_2020-11-14.png',
+    width=700,
+    height=600,
+    engine='kaleido',
+    )
 
 
 
@@ -132,7 +143,18 @@ fig = px.line(
     )
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1], font_size=14))
 
-pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-3county.html' )
+pplot(
+      fig, 
+      filename='.\\docs\\assets\\plotly\\Mobility-Google-3county.html',
+      include_plotlyjs='cdn',
+      )
+
+fig.write_image(
+    '.\\docs\\assets\\Mobility-Google-3county_2020-11-14.png',
+    width=700,
+    height=600,
+    engine='kaleido',
+    )
 
 #%% Apple processing
 
