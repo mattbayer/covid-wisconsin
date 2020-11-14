@@ -13,7 +13,7 @@ import datetime
 
 import covid
 
-update = False
+update = True
 
 #%% Auto-download the google file
 if update:
@@ -59,7 +59,12 @@ data_cols = ['Retail/Recreation', 'Grocery/Pharmacy', 'Parks', 'Transit', 'Workp
 google_wi = google_csv[google_csv['sub_region_1'] == 'Wisconsin']
 google_wi = google_wi.rename(columns=col_rename)
 
-#%% Plot categories for a single county
+#%% Plot categories for a single county or the state
+google_state = google_wi[google_wi['iso_3166_2_code'] == 'US-WI']
+google_state = google_state.set_index('Date')
+google_state = google_state[data_cols]
+google_state.plot()
+
 county = 'Dane'
 google_county = google_wi[google_wi['County'] == (county+' County')]
 google_county = google_county.set_index('Date')
@@ -69,18 +74,63 @@ google_county.plot()
 
 #%% Or compare counties
 
-# counties = ['Milwaukee County', 'Dane County', 'Brown County']
-counties = ['Brown County', 'Outagamie County', 'Winnebago County']
+counties = ['Milwaukee County', 'Dane County', 'Brown County']
+# counties = ['Brown County', 'Outagamie County', 'Winnebago County']
 category = 'Retail/Recreation'
 # category = 'Workplace'
+# category = ['Workplace', 'Retail/Recreation']
 
-google_wi = google_wi
 google_category = google_wi.pivot(index='Date', columns='County', values=category)
 
 google_category = google_category[counties]
 
 google_category.plot(title=category)
 
+#%% Plotly versions
+import plotly.express as px
+from plotly.offline import plot as pplot
+
+# don't show transit
+data_cols = ['Retail/Recreation', 'Workplace', 'Parks', 'Residential', 'Grocery/Pharmacy']
+
+# State
+fig = px.line(
+    google_state, 
+    x=google_state.index, 
+    y=data_cols,
+    title='Wisconsin Google Mobility',
+    range_y=[-90, 150],
+    )
+pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-WI.html' )
+
+
+
+#%% Comparison
+category = ['Workplace', 'Retail/Recreation']
+counties = ['Milwaukee County', 'Dane County', 'Brown County']
+# take out whole-state
+google_compare = google_wi[google_wi['iso_3166_2_code'] != 'US-WI']
+# sort to the chosen categories and counties
+google_compare = google_compare.pivot(index='Date', columns='County', values=category)
+google_compare = google_compare.swaplevel(axis=1)
+google_compare = google_compare[counties]
+google_compare.columns.names = ['County', 'Category']
+google_compare = google_compare.reset_index()
+google_compare = google_compare.melt(id_vars='Date', value_name='Mobility (%)')
+
+fig = px.line(
+    google_compare, 
+    x='Date',
+    y='Mobility (%)', 
+    color='County',
+    facet_col='Category',
+    facet_col_wrap=1,
+    # color_discrete_sequence=['#636EFA', '#EF553B', 'saddlebrown'],
+    title='Workplace and Retail/Recreation by County',
+    )
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+
+pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-3county.html' )
 
 #%% Apple processing
 
