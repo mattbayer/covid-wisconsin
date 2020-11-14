@@ -92,6 +92,7 @@ from plotly.offline import plot as pplot
 
 # don't show transit
 data_cols = ['Retail/Recreation', 'Workplace', 'Parks', 'Residential', 'Grocery/Pharmacy']
+google_state.columns.name='Category'
 
 # State
 fig = px.line(
@@ -99,8 +100,9 @@ fig = px.line(
     x=google_state.index, 
     y=data_cols,
     title='Wisconsin Google Mobility',
-    range_y=[-90, 150],
+    range_y=[-90, 200],
     )
+fig.update_layout(legend_title_text='Category')
 pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-WI.html' )
 
 
@@ -128,7 +130,7 @@ fig = px.line(
     # color_discrete_sequence=['#636EFA', '#EF553B', 'saddlebrown'],
     title='Workplace and Retail/Recreation by County',
     )
-fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1], font_size=14))
 
 pplot(fig, filename='.\\plots\\plotly\\Mobility-Google-3county.html' )
 
