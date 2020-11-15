@@ -180,7 +180,7 @@ county = 'Dane'
 apple_county = apple_counties[apple_counties['region'] == county+' County']
 apple_county = apple_county.pivot(index='Date', columns='transportation_type', values='value')
 
-apple_county.plot(title=county+' County')
+apple_county.plot(title='Apple data, '+county+' County')
 
 #%% Compare counties for a single type
 transp = 'walking'
