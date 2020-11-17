@@ -99,11 +99,18 @@ def plotly_colorbubble(
             marker=dict(
                 size=geodata[sizecol], 
                 sizeref=size_factor,
+                sizemode='area',
                 color=geodata[colorcol],
                 cmin=color_range[0],
                 cmax=color_range[1],
-                sizemode='area',
                 colorscale=colorscale,
+                colorbar=dict(
+                    title=colorcol,
+                    yanchor='bottom',
+                    y=0.6,
+                    len=0.25,
+                    thickness=12,
+                    ),
                 ),
             line=dict(color=line_colors['marker']),
             hovertemplate=
@@ -111,12 +118,100 @@ def plotly_colorbubble(
                 'Population: %{customdata:.0f}<br>' +
                 plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
                 plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
-                '<extra></extra>'
+                '<extra></extra>',
+            name=sizecol,
+            showlegend=False,
+            legendgroup=sizecol,
             )
         )
     
+    # Add artificial traces to create a legend
+    # Max size in pixels from web search and experiment; 
+    # then convert to sizes in the units of the sizecol
+    legend_marker_pixel_max = 16    # diameter
+    legend_marker_sizecol_max = (legend_marker_pixel_max)**2 * size_factor / 2
+    
+    sizes_sizecol = np.array([1, 0.25]) * legend_marker_sizecol_max
+    # round to nearest first significant digit
+    power10 = 10**np.floor(np.log10(sizes_sizecol))
+    sizes_sizecol = np.round(sizes_sizecol / power10) * power10
+    # round up to whole integer in case lowest is < 1
+    sizes_sizecol = np.ceil(sizes_sizecol)
+    
+    sizes_pixel = np.round(np.sqrt(sizes_sizecol/size_factor*2))
+
+    sizes_names = [str(int(s)) for s in sizes_sizecol]
+    
+    # find dummy locations
+    idx = geodata[sizecol].idxmax()
+    dummy_lon = geodata.plotlon[idx]
+    dummy_lat = geodata.plotlat[idx]
+    
+    for ss in range(len(sizes_pixel)):
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[dummy_lon], #[geodata.plotlon[0]],   # just dummy locations
+                lat=[dummy_lat], #[geodata.plotlat[0]],
+                name=sizes_names[ss],
+                # visible='legendonly',
+                marker=dict(
+                    size=sizes_pixel[ss],
+                    sizemode='area',
+                    color=[(color_range[0]+color_range[1])/2],  # enclose in list so it interprets as data not literal color
+                    cmin=color_range[0],
+                    cmax=color_range[1],
+                    colorscale=colorscale,
+                    # opacity=0.5,
+                    line=dict(color=line_colors['marker'], width=1),
+                    ),
+                showlegend=True,
+                legendgroup=sizecol,
+                )
+            )
+    # Title
+    fig.update_layout(
+        legend_title_text=sizecol, 
+        legend_itemclick=False,
+        legend_itemdoubleclick=False,
+        )
+    
+    # Attempt at plotting 3 circles on the plot itself with labels
+    # max_size = geodata[sizecol].max()
+    # # max in the legend is the nearest most significant digit
+    # power10 = 10**np.floor(np.log10(max_size))
+    # max_legend = np.floor(max_size / power10) * power10
+    # sizes = np.array([max_legend/10, max_legend/2, max_legend])
+    # text = [str(int(s)) for s in sizes]
+    
+    # lon = np.array(3*[geodata.plotlon[0]+0.2])
+    # lat = geodata.plotlat[0] + np.array([0, 0.02, 0.04])
+    # size1 = 1
+    # size1_name = str(size1)
+    # fig.add_trace(
+    #     go.Scattergeo(
+    #         lon=lon,
+    #         lat=lat,
+    #         text=text,
+    #         # lon=[geodata.plotlon[0]],
+    #         # lat=[geodata.plotlat[0]],
+    #         name=size1_name,
+    #         # visible='legendonly',
+    #         marker=dict(
+    #             size=sizes,#[size1],
+    #             sizeref=size_factor,
+    #             color='gray',
+    #             sizemode='area',
+    #             ),
+    #         showlegend=True,
+    #         )
+    #     )
+    
+    fig.update_layout(legend_itemsizing='trace')
+    
     # Only display this specific geography, not whole world
     fig.update_geos(fitbounds='locations', visible=False)
+    
+    # fig.data = fig.data[-2:] + fig.data[0:-2]
     
     # plot and save as html, with plotly JS library loaded from CDN
     plotly.offline.plot(
