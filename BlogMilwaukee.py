@@ -63,6 +63,7 @@ csv_file_pop = datapath + '\\Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
+covid.update_covid_data_wi('tract')
 tract = covid.read_covid_data_wi('tract')
 
 
@@ -188,7 +189,7 @@ covid.plotly_colorbubble(
     colorscale='Blues',
     location_names=tract_names,
     savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(Total)'),
+    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(14 days)'),
     )
 
 #%% Tests color-bubble
@@ -203,7 +204,7 @@ covid.plotly_colorbubble(
     colorscale='Greens',
     location_names=tract_names,
     savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(Total)'),
+    plotlabels=dict(title='Milwaukee: Tests by Census Tract<br>(14 days)'),
     )
 
 #%% Hospitalizations color-bubble
@@ -218,5 +219,5 @@ covid.plotly_colorbubble(
     colorscale='Oranges',
     location_names=tract_names,
     savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Hospitalizations by Census Tract<br>(Total)'),
+    plotlabels=dict(title='Milwaukee: Hospitalizations by Census Tract<br>(14 days)'),
     )
