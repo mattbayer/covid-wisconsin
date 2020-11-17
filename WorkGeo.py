@@ -140,10 +140,25 @@ display_names = [n + ' County' for n in countiesWI.index]
 # set scales for sizes of bubbles
 popscale = 300
 casescale = 0.3
-hospscale = casescale*.05;   # so that bubbles are same size if hosp = 5% of cases
+cases_size_factor = casescale
+hospscale = casescale*.05   # so that bubbles are same size if hosp = 5% of cases
 hosp_scale = [0, 7]
 case_scale = [0, 140]
+cases_color_range = case_scale
 
+
+#%% Cases figure
+covid.plotly_colorbubble(
+    countiesWI,
+    sizecol='Cases',
+    colorcol='Cases per 100,000',
+    size_factor=cases_size_factor,
+    color_range=cases_color_range,
+    colorscale='Blues',
+    location_names=display_names,
+    savefile='.\\docs\\assets\\plotly\\Map-Cases-WI-1.html',
+    plotlabels=dict(title='Cases by County<br>(7-day avg)'),
+    )
 
 #%% Create background to figures
 

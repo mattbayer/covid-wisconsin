@@ -41,6 +41,8 @@ def plotly_colorbubble(
     plotlabels_default = dict(title='Color-Bubble Map',
                               sizelabel=sizecol,
                               colorlabel=colorcol,
+                              sizelegend=sizecol,
+                              colorlegend=colorcol,
                               )
     if plotlabels is not None:
         # replace default values with the passed values
@@ -77,8 +79,9 @@ def plotly_colorbubble(
         marker_line_color=line_colors['border'],
         showlegend=False,
         )
-    
+
     fig.update_layout(title=plotlabels['title'])
+    
     
     # Get latitude and longitude of centroids for plotting the bubbles
     # This will give warning but I don't care
@@ -105,7 +108,7 @@ def plotly_colorbubble(
                 cmax=color_range[1],
                 colorscale=colorscale,
                 colorbar=dict(
-                    title=colorcol,
+                    title=plotlabels['colorlegend'],
                     yanchor='bottom',
                     y=0.6,
                     len=0.25,
@@ -129,29 +132,29 @@ def plotly_colorbubble(
     # Max size in pixels from web search and experiment; 
     # then convert to sizes in the units of the sizecol
     legend_marker_pixel_max = 16    # diameter
-    legend_marker_sizecol_max = (legend_marker_pixel_max)**2 * size_factor / 2
-    
+    legend_marker_sizecol_max = (legend_marker_pixel_max)**2 * size_factor / 2   
     sizes_sizecol = np.array([1, 0.25]) * legend_marker_sizecol_max
     # round to nearest first significant digit
     power10 = 10**np.floor(np.log10(sizes_sizecol))
     sizes_sizecol = np.round(sizes_sizecol / power10) * power10
     # round up to whole integer in case lowest is < 1
     sizes_sizecol = np.ceil(sizes_sizecol)
-    
+    # convert to pixel diameter scale
     sizes_pixel = np.round(np.sqrt(sizes_sizecol/size_factor*2))
-
+    # create text labels
     sizes_names = [str(int(s)) for s in sizes_sizecol]
     
-    # find dummy locations
-    idx = geodata[sizecol].idxmax()
-    dummy_lon = geodata.plotlon[idx]
+    # find dummy locations - put outside the map and hide with a white circle
+    lon_range = np.abs(geodata.plotlon.max() - geodata.plotlon.min())
+    idx = geodata.plotlon.idxmax()   
+    dummy_lon = geodata.plotlon[idx] + 0.1*lon_range
     dummy_lat = geodata.plotlat[idx]
     
     for ss in range(len(sizes_pixel)):
         fig.add_trace(
             go.Scattergeo(
                 lon=[dummy_lon], #[geodata.plotlon[0]],   # just dummy locations
-                lat=[dummy_lat], #[geodata.plotlat[0]],
+                lat=[dummy_lat] , #[geodata.plotlat[0]],
                 name=sizes_names[ss],
                 # visible='legendonly',
                 marker=dict(
@@ -166,11 +169,31 @@ def plotly_colorbubble(
                     ),
                 showlegend=True,
                 legendgroup=sizecol,
+                hovertemplate=None, 
+                hoverinfo='skip', 
                 )
             )
+    # plot a white marker over the top to hide them
+    fig.add_trace(
+        go.Scattergeo(
+            lon=[dummy_lon],
+            lat=[dummy_lat],
+            marker=dict(
+                size=legend_marker_pixel_max+3,
+                color='white',  
+                opacity=1,
+                ),
+            showlegend=False,
+            legendgroup='camouflage',
+            hovertemplate=None, 
+            hoverinfo='skip', 
+            ),
+        )
+        
+        
     # Title
     fig.update_layout(
-        legend_title_text=sizecol, 
+        legend_title_text=plotlabels['sizelegend'], 
         legend_itemclick=False,
         legend_itemdoubleclick=False,
         )
@@ -210,8 +233,6 @@ def plotly_colorbubble(
     
     # Only display this specific geography, not whole world
     fig.update_geos(fitbounds='locations', visible=False)
-    
-    # fig.data = fig.data[-2:] + fig.data[0:-2]
     
     # plot and save as html, with plotly JS library loaded from CDN
     plotly.offline.plot(
