@@ -53,7 +53,7 @@ covid.plotly_deadhosp(sourcedata=state,
 
 
 # Map plots by importing other script
-import WorkGeo
+import UpdateGeo
 
 # Regional plots by importing other script
 import BlogRegionalUpdate
