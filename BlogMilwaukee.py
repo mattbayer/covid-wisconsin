@@ -188,8 +188,12 @@ covid.plotly_colorbubble(
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Cases by Census Tract<br>(14 days)',
+        sizelabel='Number of cases',
+        colorlabel='Cases per 10K',
+        ),
     savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Cases by Census Tract<br>(14 days)'),
     )
 
 #%% Tests color-bubble
@@ -203,8 +207,13 @@ covid.plotly_colorbubble(
     color_range=tested_color_range,
     colorscale='Greens',
     location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Tests by Census Tract<br>(14 days)',
+        sizelabel='Number tested',
+        colorlabel='Tested per 10K',
+        ),
     savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Tests by Census Tract<br>(14 days)'),
+    # fig_height=600,
     )
 
 #%% Hospitalizations color-bubble
@@ -218,6 +227,10 @@ covid.plotly_colorbubble(
     color_range=hosp_color_range,
     colorscale='Oranges',
     location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Hospitalizations by Census Tract<br>(14 days)',
+        sizelabel='Number of hosp',
+        colorlabel='Hosp per 10K',
+        ),
     savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
-    plotlabels=dict(title='Milwaukee: Hospitalizations by Census Tract<br>(14 days)'),
     )

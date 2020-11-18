@@ -30,6 +30,7 @@ def plotly_colorbubble(
         colorscale=None,
         location_names=None,
         plotlabels=None,
+        fig_height='100%',
         ):
     """Create interactive plotly map figure, with bubbles that show size and color
     
@@ -108,7 +109,7 @@ def plotly_colorbubble(
                 cmax=color_range[1],
                 colorscale=colorscale,
                 colorbar=dict(
-                    title=plotlabels['colorlegend'],
+                    title=plotlabels['colorlabel'],
                     yanchor='bottom',
                     y=0.6,
                     len=0.25,
@@ -193,21 +194,26 @@ def plotly_colorbubble(
         
     # Title
     fig.update_layout(
-        legend_title_text=plotlabels['sizelegend'], 
+        legend_title_text=plotlabels['sizelabel'], 
         legend_itemclick=False,
         legend_itemdoubleclick=False,
         )
     
     fig.update_layout(legend_itemsizing='trace')
     
+    # change margins to smaller than default to get map to be bigger
+    fig.update_layout(margin=dict(l=30,b=20))
+    
     # Only display this specific geography, not whole world
     fig.update_geos(fitbounds='locations', visible=False)
     
     # plot and save as html, with plotly JS library loaded from CDN
-    plotly.offline.plot(
-        fig, 
-        filename=savefile,
-        include_plotlyjs='cdn')   
+    fig.write_html(
+        file=savefile,
+        default_height=fig_height,
+        include_plotlyjs='cdn',
+        )      
+    os.startfile(savefile)
 
 
 def plotly_casetest(
