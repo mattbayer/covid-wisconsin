@@ -24,12 +24,12 @@ def plotly_colorbubble(
         sizecol,
         colorcol,
         popcol='Population',
-        savefile='.\\temp.html',
         size_factor=1,
         color_range=[0, 600],
         colorscale=None,
         location_names=None,
         plotlabels=None,
+        savefile='.\\temp.html',
         fig_height='100%',
         ):
     """Create interactive plotly map figure, with bubbles that show size and color

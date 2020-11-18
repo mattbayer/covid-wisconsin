@@ -70,7 +70,7 @@ cases_avg = cases.rolling(window=avg_window, center=False).mean()
 cases_for_map = cases_avg.iloc[-1]
 
 countiesWI['Cases'] = cases_for_map
-countiesWI['Cases per 100,000'] = countiesWI['Cases'] / countiesWI['Population'] * 100000
+countiesWI['Cases per 100K'] = countiesWI['Cases'] / countiesWI['Population'] * 100000
 
 # hospitalizations
 hosp = reduced.pivot(index='Date', columns='County', values='Hospitalizations')
@@ -78,7 +78,7 @@ hosp_avg = hosp.rolling(window=avg_window, center=False).mean()
 hosp_for_map = hosp_avg.iloc[-1]
 
 countiesWI['Hospitalizations'] = hosp_for_map
-countiesWI['Hospitalizations per 100,000'] = countiesWI['Hospitalizations'] / countiesWI['Population'] * 100000
+countiesWI['Hospitalizations per 100K'] = countiesWI['Hospitalizations'] / countiesWI['Population'] * 100000
 
 
 
@@ -90,8 +90,8 @@ import plotly.graph_objects as go
 
 do_choropleth = False
 
-plotcol = 'Cases per 100,000'
-plotcol2 = 'Hospitalizations per 100,000'
+plotcol = 'Cases per 100K'
+plotcol2 = 'Hospitalizations per 100K'
 hosp_scale = [0, 4]
 
 # filter counties shapefile to WI, convert to JSON format string, then decode 
@@ -146,18 +146,38 @@ hosp_scale = [0, 7]
 case_scale = [0, 140]
 cases_color_range = case_scale
 
+hosp_size_factor=hospscale
+hosp_color_range=hosp_scale
 
 #%% Cases figure
 covid.plotly_colorbubble(
     countiesWI,
     sizecol='Cases',
-    colorcol='Cases per 100,000',
+    colorcol='Cases per 100K',
     size_factor=cases_size_factor,
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=display_names,
-    savefile='.\\docs\\assets\\plotly\\Map-Cases-WI-1.html',
-    plotlabels=dict(title='Cases by County<br>(7-day avg)'),
+    plotlabels=dict(title='Cases by County<br>(Daily, 7-day avg)'),
+    savefile='.\\docs\\assets\\plotly\\Map-Cases-WI.html',
+    fig_height=600,
+    )
+
+#%% Hospitalizations figure
+covid.plotly_colorbubble(
+    countiesWI,
+    sizecol='Hospitalizations',
+    colorcol='Hospitalizations per 100K',
+    size_factor=hosp_size_factor,
+    color_range=hosp_color_range,
+    colorscale='Oranges',
+    location_names=display_names,
+    plotlabels=dict(
+        title='Hospitalizations by County<br>(Daily, 7-day avg)',
+        colorlabel='Hosp per 100K',
+        ),
+    savefile='.\\docs\\assets\\plotly\\Map-Hosp-WI.html',
+    fig_height=600,
     )
 
 #%% Create background to figures
@@ -189,7 +209,7 @@ fig_bkgd.update_traces(hovertemplate=None,
 
 
 #%% Complete the figures - cases
-plotcol = 'Cases per 100,000'
+plotcol = 'Cases per 100K'
 
 # copy background
 fig_cases = go.Figure(fig_bkgd)
@@ -219,12 +239,12 @@ fig_cases.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
 fig_cases.update_geos(fitbounds='locations', visible=False)
 
 pplot(fig_cases, 
-      filename='.\\docs\\assets\\plotly\\Map-Cases-WI.html',
+      filename='.\\docs\\assets\\plotly\\Map-Cases-WI-1.html',
       include_plotlyjs='cdn')
 
 
 #%% Hospitalizations
-plotcol = 'Hospitalizations per 100,000'
+plotcol = 'Hospitalizations per 100K'
 
 # copy background
 fig_hosp = go.Figure(fig_bkgd)
@@ -253,6 +273,6 @@ fig_hosp.add_trace(go.Scattergeo(lon=countiesWI.plotlon,
 fig_hosp.update_geos(fitbounds='locations', visible=False)
 
 pplot(fig_hosp, 
-      filename='.\\docs\\assets\\plotly\\Map-Hosp-WI.html',
+      filename='.\\docs\\assets\\plotly\\Map-Hosp-WI-1.html',
       include_plotlyjs='cdn')
 
