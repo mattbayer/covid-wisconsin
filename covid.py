@@ -198,37 +198,6 @@ def plotly_colorbubble(
         legend_itemdoubleclick=False,
         )
     
-    # Attempt at plotting 3 circles on the plot itself with labels
-    # max_size = geodata[sizecol].max()
-    # # max in the legend is the nearest most significant digit
-    # power10 = 10**np.floor(np.log10(max_size))
-    # max_legend = np.floor(max_size / power10) * power10
-    # sizes = np.array([max_legend/10, max_legend/2, max_legend])
-    # text = [str(int(s)) for s in sizes]
-    
-    # lon = np.array(3*[geodata.plotlon[0]+0.2])
-    # lat = geodata.plotlat[0] + np.array([0, 0.02, 0.04])
-    # size1 = 1
-    # size1_name = str(size1)
-    # fig.add_trace(
-    #     go.Scattergeo(
-    #         lon=lon,
-    #         lat=lat,
-    #         text=text,
-    #         # lon=[geodata.plotlon[0]],
-    #         # lat=[geodata.plotlat[0]],
-    #         name=size1_name,
-    #         # visible='legendonly',
-    #         marker=dict(
-    #             size=sizes,#[size1],
-    #             sizeref=size_factor,
-    #             color='gray',
-    #             sizemode='area',
-    #             ),
-    #         showlegend=True,
-    #         )
-    #     )
-    
     fig.update_layout(legend_itemsizing='trace')
     
     # Only display this specific geography, not whole world
