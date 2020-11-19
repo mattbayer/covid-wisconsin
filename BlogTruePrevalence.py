@@ -155,7 +155,34 @@ est.plot(title='Infection / Case Ratio', y=['Infection / Case Ratio'])
 
 
 
+#%% Improve new infection estimate?
 
+inf_const = 1/10
+
+est['Current Infections'] = est['cases'] * np.sqrt(popdata['WI'] / est['tests'])
+
+est['New Infections 2'] = 0 * est['Current Infections']
+
+duration = 14
+
+# fill NaN with zeroes or the loop below won't work
+est = est.fillna(value=0)
+
+for kk in range(len(est['Current Infections'])):
+    if kk >= duration:
+        est['New Infections 2'].iloc[kk] = (est['Current Infections'].iloc[kk] 
+                                            - est['Current Infections'].iloc[kk-1] 
+                                            + est['New Infections 2'].iloc[kk-duration])
+    elif kk > 0:
+        est['New Infections 2'].iloc[kk] = (est['Current Infections'].iloc[kk] 
+                                            - est['Current Infections'].iloc[kk-1])
+    else:
+        est['New Infections 2'].iloc[kk] = est['Current Infections'].iloc[kk]
+    
+
+est.plot(y=['Detected Cases', 'Estimated infections', 'New Infections 2'], ylim=[0, 5000])
+        
+    
 
 
 
