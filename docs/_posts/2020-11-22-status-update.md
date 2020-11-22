@@ -16,7 +16,7 @@ If confirmed cases are flat or slightly down, and the test positivity rate is al
 
 This would be great news, though the trend is fresh and could easily change quickly. Keep in mind also that even if cases flatten or decline, it would be several more weeks before we would expect to see deaths do the same.
 
-This case trend is evident on a [regional](../dashboard-regional.md) level. Cases in the North Central, Northeast, and Fox Valley are declining. They are flat or declining just slightly in Milwaukee, Madison, and the South Central. But the trend still seems to be increasing in the Northwest, West, and Southeast.
+This case trend is also evident at the [regional](../dashboard-regional.md) level. Cases in the North Central, Northeast, and Fox Valley are declining. They are flat or declining just slightly in Milwaukee, Madison, and the South Central. But the trend still seems to be increasing in the Northwest, West, and Southeast.
 
 ![Regional plot](../assets/Cases-Tests-Regional_2020-11-21.png)
 
