@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Covid WI status update: Nov 22"
-hidden: true
 ---
 
 ### Hints of a peak
