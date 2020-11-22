@@ -13,7 +13,7 @@ import datetime
 
 import covid
 
-update = False
+update = True
 
 #%% Auto-download the google file
 if update:
