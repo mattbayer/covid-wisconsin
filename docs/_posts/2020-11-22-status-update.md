@@ -9,7 +9,7 @@ If I write it out loud will I jinx it? There are signs that the case numbers may
 
 In the past week, the 7-day average for the state has flattened out. 
 
-![State plot](../assets/Cases-Tests-Regional_2020-11-21.png)
+![State plot](../assets/Cases-Tests-WI_2020-11-21.png)
 
 At the same time, the case positivity rate has also started to decline. This chart from the DHS is tricky because it shows positive/negative by date of test, rather than date reported like the one above, so the last two weeks of data is strictly preliminary. (More tests from those days can get reported later.) But my experience looking at this chart is that while the absolute numbers can change a lot, the positivity rate does not tend to change much as more data fills in. 
 
