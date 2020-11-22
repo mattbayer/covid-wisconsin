@@ -9,11 +9,11 @@ If I write it out loud will I jinx it? There are signs that the case numbers may
 
 In the past week, the 7-day average for the state has flattened out. 
 
-[!State plot](../assets/Cases-Tests-Regional_2020-11-21.png)
+![State plot](../assets/Cases-Tests-Regional_2020-11-21.png)
 
 At the same time, the case positivity rate has also started to decline. This chart from the DHS is tricky because it shows positive/negative by date of test, rather than date reported like the one above, so the last two weeks of data is strictly preliminary. (More tests from those days can get reported later.) But my experience looking at this chart is that while the absolute numbers can change a lot, the positivity rate does not tend to change much as more data fills in. 
 
-[!DHS positivity plot](../assets/PosRate-DHS_2020-11-21.png)
+![DHS positivity plot](../assets/PosRate-DHS_2020-11-21.png)
 
 If confirmed cases are flat or slightly down, and the test positivity rate is also down, then we can be pretty confident the true number of people infected is also going down.
 
@@ -21,7 +21,7 @@ This would be great news, though the trend is fresh and could easily change quic
 
 This case trend is evident in most of the [state's regions](../dashboard-regional.md) as well. Cases in the North Central, Northeast, and Fox Valley are declining. They are flat or declining just slightly in Milwaukee, Madison, and the South Central. But the trend still seems to be increasing in the Northwest, West, and Southeast.
 
-[!Regional plot](../assets/Cases-Tests-Regional_2020-11-21.png)
+![Regional plot](../assets/Cases-Tests-Regional_2020-11-21.png)
 
 If this flattening trend continues, I would attribute it to two things. First, Wisconsinites' activity levels [have been going down gradually since September](2020-11-15-mobility.md), according to Google data, possibly in response to the virus's activity going up. Second, enough of us have now been infected that partial population immunity could be dampening spread.
 
