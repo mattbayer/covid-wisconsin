@@ -110,7 +110,7 @@ pplot(
       include_plotlyjs='cdn',
       )
 fig.write_image(
-    '.\\docs\\assets\\Mobility-Google-WI_2020-11-14.png',
+    '.\\docs\\assets\\Mobility-Google-WI.png',
     width=700,
     height=600,
     engine='kaleido',
@@ -150,7 +150,7 @@ pplot(
       )
 
 fig.write_image(
-    '.\\docs\\assets\\Mobility-Google-3county_2020-11-14.png',
+    '.\\docs\\assets\\Mobility-Google-3county.png',
     width=700,
     height=600,
     engine='kaleido',
