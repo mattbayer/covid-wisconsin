@@ -63,6 +63,15 @@ hosp = reduced.pivot(index='Date', columns='County', values='Hospitalizations')
 hosp_avg = hosp.rolling(window=avg_window, center=False).mean()
 hosp_for_map = hosp_avg.iloc[-1]
 
+# set any negative values to 0
+def zeroneg(x):
+    if x > 0:
+        return x
+    else:
+        return 0
+    
+hosp_for_map = hosp_for_map.apply(zeroneg)
+
 countiesWI['Hospitalizations'] = hosp_for_map
 countiesWI['Hospitalizations per 100K'] = countiesWI['Hospitalizations'] / countiesWI['Population'] * 100000
 
