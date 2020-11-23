@@ -11,7 +11,7 @@ Most data is downloaded from the [State of Wisconsin Department of Health Servic
 
 I have taken some charts and maps from the [Milwaukee County Covid Dashboard](https://www.arcgis.com/apps/opsdashboard/index.html#/018eedbe075046779b8062b5fe1055bf) and the [Journal Sentinel Covid tracking page](https://projects.jsonline.com/topics/coronavirus/tracking/covid-19-cases-testing-and-deaths-in-wisconsin.html).
 
-The code to generate this website was forked from [Lanyon](https://lanyon.getpoole.com), a [Jekyll](http://jekyllrb.com) theme based on [Poole](http://getpoole.com).
+The code to generate this website was forked from [Hyde](https://hyde.getpoole.com), a [Jekyll](http://jekyllrb.com) theme based on [Poole](http://getpoole.com).
 
 
 
