@@ -63,8 +63,8 @@ csv_file_pop = datapath + '\\Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-covid.update_covid_data_wi('tract')
-tract = covid.read_covid_data_wi('tract')
+# covid.update_covid_data_wi('tract')
+covid_tract = covid.read_covid_data_wi('tract')
 
 
 #%% Tract population
@@ -107,16 +107,21 @@ mketracts = mketracts.set_index('GEOID')
 # now that both have same index, get population from tractpop
 mketracts['Population'] = tractpop['Population']
 
-#%%
+#%% Filter and process covid data
+
+# filter on Milwaukee tracts
+covid_tract_mke = covid_tract.loc[covid_tract.GEO=='Census tract']
+covid_tract_mke = covid_tract_mke.loc[covid_tract_mke.GEOID.apply(lambda x: x[0:5]=='55079')]
 
 # add deaths as a column
-latest_date = tract.Date.max()
-select = tract[tract.GEO=='Census tract']
+latest_date = covid_tract.Date.max()
+select = covid_tract[covid_tract.GEO=='Census tract']
 
 total = select[select.Date==latest_date]
 total = total.set_index('GEOID')
 
-delta = 14
+delta = 28
+delta_str = '(' + str(delta) + 'days)'
 total_delta = select[select.Date==(latest_date - datetime.timedelta(days=delta))]
 total_delta = total_delta.set_index('GEOID')
 
@@ -127,20 +132,20 @@ recent = recent - total_delta[col_list]
 recent.POSITIVE = (recent.POSITIVE >=0) * recent.POSITIVE
 recent.HOSP_YES = (recent.HOSP_YES >=0) * recent.HOSP_YES
 
-mketracts['Total Tested'] = total['POSITIVE'] + total['NEGATIVE']
-mketracts['Total Cases'] = total['POSITIVE']
-mketracts['Total Hosp'] = total['HOSP_YES']
-mketracts['Total Deaths'] = total['DEATHS']
-mketracts['Tested (14 days)'] = recent['POSITIVE'] + recent['NEGATIVE']
-mketracts['Cases (14 days)'] = recent['POSITIVE']
-mketracts['Hosp (14 days)'] = recent['HOSP_YES']
-mketracts['Deaths (14 days)'] = recent['DEATHS']
-mketracts['Tested per 10K'] = mketracts['Total Tested'] / mketracts['Population'] * 10000
-mketracts['Cases per 10K'] = mketracts['Total Cases'] / mketracts['Population'] * 10000
-mketracts['Hosp per 10K'] = mketracts['Total Hosp'] / mketracts['Population'] * 10000
-mketracts['Tested per 10K (14 days)'] = mketracts['Tested (14 days)'] / mketracts['Population'] * 10000
-mketracts['Cases per 10K (14 days)'] = mketracts['Cases (14 days)'] / mketracts['Population'] * 10000
-mketracts['Hosp per 10K (14 days)'] = mketracts['Hosp (14 days)'] / mketracts['Population'] * 10000
+mketracts['Tested (Total)'] = total['POSITIVE'] + total['NEGATIVE']
+mketracts['Cases (Total)'] = total['POSITIVE']
+mketracts['Hosp (Total)'] = total['HOSP_YES']
+mketracts['Deaths (Total)'] = total['DEATHS']
+mketracts['Tested '+delta_str] = recent['POSITIVE'] + recent['NEGATIVE']
+mketracts['Cases '+delta_str] = recent['POSITIVE']
+mketracts['Hosp '+delta_str] = recent['HOSP_YES']
+mketracts['Deaths '+delta_str] = recent['DEATHS']
+mketracts['Tested per 10K (Total)'] = mketracts['Tested (Total)'] / mketracts['Population'] * 10000
+mketracts['Cases per 10K (Total)'] = mketracts['Cases (Total)'] / mketracts['Population'] * 10000
+mketracts['Hosp per 10K (Total)'] = mketracts['Hosp (Total)'] / mketracts['Population'] * 10000
+mketracts['Tested per 10K '+delta_str] = mketracts['Tested '+delta_str] / mketracts['Population'] * 10000
+mketracts['Cases per 10K '+delta_str] = mketracts['Cases '+delta_str] / mketracts['Population'] * 10000
+mketracts['Hosp per 10K '+delta_str] = mketracts['Hosp '+delta_str] / mketracts['Population'] * 10000
 
 
 # fill nan
@@ -164,6 +169,12 @@ mketracts.fillna(0, inplace=True)
 
 #%% Color-bubble maps
 
+fig_height = 700
+
+tract_names = ['Tract ' + n[5:] for n in mketracts.index]
+
+
+#%% Plots for recent
 # adjust factor lower for larger bubbles, max lower for more colorful bubbles
 # cases_size_factor = 0.8
 # cases_color_max = 800
@@ -175,25 +186,24 @@ hosp_color_range = [0, cases_color_max*.05]
 tested_size_factor = cases_size_factor * 5 # so that bubbles are the same size if cases = 20% of tested
 tested_color_range = [0, cases_color_max*5]
 
-tract_names = ['Tract ' + n[5:] for n in mketracts.index]
-
 #%% Cases color-bubble
 covid.plotly_colorbubble(
     mketracts,
     # sizecol='Total Cases',
     # colorcol='Cases per 10K',
-    sizecol='Cases (14 days)',
-    colorcol='Cases per 10K (14 days)',
+    sizecol='Cases '+delta_str,
+    colorcol='Cases per 10K '+delta_str,
     size_factor=cases_size_factor,
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=tract_names,
     plotlabels=dict(
-        title='Milwaukee: Cases by Census Tract<br>(14 days)',
+        title='Milwaukee: Cases by Census Tract<br>'+delta_str,
         sizelabel='Number of cases',
         colorlabel='Cases per 10K',
         ),
     savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
+    fig_height=fig_height,
     )
 
 #%% Tests color-bubble
@@ -201,36 +211,109 @@ covid.plotly_colorbubble(
     mketracts,
     # sizecol='Total Cases',
     # colorcol='Cases per 10K',
-    sizecol='Tested (14 days)',
-    colorcol='Tested per 10K (14 days)',
+    sizecol='Tested '+delta_str,
+    colorcol='Tested per 10K '+delta_str,
     size_factor=tested_size_factor,
     color_range=tested_color_range,
     colorscale='Greens',
     location_names=tract_names,
     plotlabels=dict(
-        title='Milwaukee: Tests by Census Tract<br>(14 days)',
+        title='Milwaukee: Tests by Census Tract<br>'+delta_str,
         sizelabel='Number tested',
         colorlabel='Tested per 10K',
         ),
     savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
-    # fig_height=600,
+    fig_height=fig_height,
     )
 
 #%% Hospitalizations color-bubble
 covid.plotly_colorbubble(
     mketracts,
-    # sizecol='Total Hosp',
-    # colorcol='Hosp per 10K',
-    sizecol='Hosp (14 days)',
-    colorcol='Hosp per 10K (14 days)',
+    sizecol='Hosp '+delta_str,
+    colorcol='Hosp per 10K '+delta_str,
     size_factor=hosp_size_factor,
     color_range=hosp_color_range,
     colorscale='Oranges',
     location_names=tract_names,
     plotlabels=dict(
-        title='Milwaukee: Hospitalizations by Census Tract<br>(14 days)',
+        title='Milwaukee: Hospitalizations by Census Tract<br>'+delta_str,
         sizelabel='Number of hosp',
         colorlabel='Hosp per 10K',
         ),
     savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
+    fig_height=fig_height,
+    )
+
+#%% Plots for total
+select_str = '(Total)'
+# adjust factor lower for larger bubbles, max lower for more colorful bubbles
+cases_size_factor = 3
+cases_color_max = 1200
+
+#%% Plots for delta
+select_str = delta_str
+
+
+
+#%% Ranges for hosp and tests plots
+cases_color_range = [0, cases_color_max]
+hosp_size_factor = cases_size_factor * .10   # so that bubbles are same size if hosp = 5% of cases 
+hosp_color_range = [0, cases_color_max*.10]
+tested_size_factor = cases_size_factor * 5 # so that bubbles are the same size if cases = 20% of tested
+tested_color_range = [0, cases_color_max*5]
+
+
+#%% Cases color-bubble
+
+covid.plotly_colorbubble(
+    mketracts,
+    sizecol='Cases '+select_str,
+    colorcol='Cases per 10K '+select_str,
+    size_factor=cases_size_factor,
+    color_range=cases_color_range,
+    colorscale='Blues',
+    location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Cases by Census Tract<br>'+select_str,
+        sizelabel='Number of cases',
+        colorlabel='Cases per 10K',
+        ),
+    savefile='.\\docs\\assets\\plotly\\Map-Cases-Milwaukee.html',
+    fig_height=fig_height,
+    )
+
+#%% Tests color-bubble
+covid.plotly_colorbubble(
+    mketracts,
+    sizecol='Tested '+select_str,
+    colorcol='Tested per 10K '+select_str,
+    size_factor=tested_size_factor,
+    color_range=tested_color_range,
+    colorscale='Greens',
+    location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Tests by Census Tract<br>'+select_str,
+        sizelabel='Number tested',
+        colorlabel='Tested per 10K',
+        ),
+    savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
+    fig_height=fig_height,
+    )
+
+#%% Hospitalizations color-bubble
+covid.plotly_colorbubble(
+    mketracts,
+    sizecol='Hosp '+select_str,
+    colorcol='Hosp per 10K '+select_str,
+    size_factor=hosp_size_factor,
+    color_range=hosp_color_range,
+    colorscale='Oranges',
+    location_names=tract_names,
+    plotlabels=dict(
+        title='Milwaukee: Hospitalizations by Census Tract<br>'+select_str,
+        sizelabel='Number of hosp',
+        colorlabel='Hosp per 10K',
+        ),
+    savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
+    fig_height=fig_height,
     )
