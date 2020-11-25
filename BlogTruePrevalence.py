@@ -155,7 +155,11 @@ est.plot(title='Infection / Case Ratio', y=['Infection / Case Ratio'])
 
 
 
-#%% Improve new infection estimate?
+#%% Improve new infection estimate? 
+# - do a sort of deconvolution for active cases based on duration
+# Results in higher estimates in periods when cases are decreasing
+# But it's not super dramatic, and it's also really noisy at this point, would 
+# need lots more smoothing. Not sure it's very promising.
 
 inf_const = 1/10
 
@@ -184,6 +188,21 @@ est.plot(y=['Detected Cases', 'Estimated infections', 'New Infections 2'], ylim=
         
     
 
+#%% Improve new infection estimate?
+# - revised formula to take account of previously detected cases being taken
+# out of the testing pool
+
+duration = 14
+D = duration
+Npop = 5.8e6
+Ncases = est['Detected Cases']
+Ntests = est['tests']
+
+
+est['Dedup factor'] = 1 + 1/D * (np.sqrt(Npop/Ntests) - 1)
+est['Infections (Dedup)'] = est['Detected Cases'] * est['Dedup factor']
+
+est.plot(y=['Detected Cases', 'Estimated infections', 'Infections (Dedup)'])
 
 
 
