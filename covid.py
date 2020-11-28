@@ -214,6 +214,8 @@ def plotly_colorbubble(
         include_plotlyjs='cdn',
         )      
     os.startfile(savefile)
+    
+    return fig
 
 
 def plotly_casetest(

@@ -256,7 +256,7 @@ for dd, delta_str in enumerate(deltas):
         
     # Cases color-bubble
     
-    covid.plotly_colorbubble(
+    fig = covid.plotly_colorbubble(
         mketracts,
         sizecol='Cases '+select_str,
         colorcol='Cases per 1K '+select_str,
@@ -273,8 +273,15 @@ for dd, delta_str in enumerate(deltas):
         fig_height=fig_height,
         )
     
+    fig.write_image(
+        '.\\docs\\assets\\Map-Cases-Milwaukee-Total_2020-11-27.png',
+        width=700,
+        height=700,
+        engine='kaleido',
+    )
+    
     # Tests color-bubble
-    covid.plotly_colorbubble(
+    fig = covid.plotly_colorbubble(
         mketracts,
         sizecol='Tested '+select_str,
         colorcol='Tested per 1K '+select_str,
@@ -291,8 +298,15 @@ for dd, delta_str in enumerate(deltas):
         fig_height=fig_height,
         )
     
+    fig.write_image(
+        '.\\docs\\assets\\Map-Tested-Milwaukee-Total_2020-11-27.png',
+        width=700,
+        height=700,
+        engine='kaleido',
+    )
+    
     # Hospitalizations color-bubble
-    covid.plotly_colorbubble(
+    fig = covid.plotly_colorbubble(
         mketracts,
         sizecol='Hosp '+select_str,
         colorcol='Hosp per 1K '+select_str,
@@ -308,3 +322,10 @@ for dd, delta_str in enumerate(deltas):
         savefile='.\\docs\\assets\\plotly\\Map-Hosp-Milwaukee.html',
         fig_height=fig_height,
         )
+    
+    fig.write_image(
+        '.\\docs\\assets\\Map-Hosp-Milwaukee-Total_2020-11-27.png',
+        width=700,
+        height=700,
+        engine='kaleido',
+    )
