@@ -7,6 +7,7 @@ import pandas as pd
 import geopandas as gpd
 import datetime
 import numpy as np
+import os
 
 import covid
 
@@ -76,6 +77,81 @@ covid_tract_mke = covid_tract_mke.loc[covid_tract_mke.GEOID.apply(lambda x: x[0:
 #%% County racial stats
 mke = county.loc[county.NAME == 'Milwaukee']
 mke.plot(x='Date', y=['POS_WHT', 'POS_BLK', 'POS_E_HSP'])
+
+#%% County cases / hosp plot
+# reduce and rename at state level
+col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
+mke = mke.rename(columns=col_rename)
+
+savefile = '.\\docs\\assets\\plotly\\Cases-Hosp-Milwaukee_2020_11_29.html'
+
+fig = covid.plotly_twolines(
+    mke,
+    'Hospitalizations',
+    'Cases',
+    plotcolors=['darkorange', 'steelblue', 'burlywood'],
+    secondary_scale=10,
+    plotlabels = {'title': 'Milwaukee Daily Cases and Hospitalizations',
+                  'yaxis': 'Hospitalizations',
+                  'yaxis_secondary': 'Cases',
+                  },
+    column1_bar=True,
+    savefile=savefile,
+    )    
+
+fig.add_annotation(x=datetime.datetime(2020,5,11), y=45, xanchor='right', align='right',
+                   text='950 hospitalizations<br>from prior days<br>reported on May 11<br>(not pictured)')
+
+fig.add_annotation(x=datetime.datetime(2020,5,11), y=-2, xanchor='right', align='right', showarrow=False,
+                   text='Wave 1')
+fig.add_annotation(x=datetime.datetime(2020,6,30), y=-2, xanchor='right', align='right', showarrow=False,
+                   text='Wave 2')
+fig.add_annotation(x=datetime.datetime(2020,8,31), y=-2, xanchor='right', align='right', showarrow=False,
+                   text='Wave 3')
+fig.add_annotation(x=datetime.datetime(2020,10,15), y=-2, xanchor='right', align='right', showarrow=False,
+                   text='Wave 4')
+fig.add_annotation(x=datetime.datetime(2020,11,23), y=-2, xanchor='right', align='right', showarrow=False,
+                   text='Wave 5')
+
+# add dividers
+fig.update_layout(shapes=[
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0=datetime.datetime(2020,5,11), x1=datetime.datetime(2020,5,11)
+    ),
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0=datetime.datetime(2020,6,30), x1=datetime.datetime(2020,6,30)
+    ),
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0=datetime.datetime(2020,8,31), x1=datetime.datetime(2020,8,31)
+    ),
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0=datetime.datetime(2020,10,15), x1=datetime.datetime(2020,10,15)
+    ),    
+])
+
+fig.write_html(
+    file=savefile,
+    # default_height=fig_height,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
+
+save_png = '.\\docs\\assets\\Cases-Hosp-Milwaukee_2020_11_29.png'
+fig.write_image(
+    save_png,
+    width=900,
+    height=600,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 
 #%% Tract population

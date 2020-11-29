@@ -492,7 +492,9 @@ def plotly_twolines(
     # plot and save as html, with plotly JS library loaded from CDN
     plotly.offline.plot(fig, 
           filename = savefile, 
-          include_plotlyjs='cdn')    
+          include_plotlyjs='cdn')  
+    
+    return fig
   
 
 def plot_by_county(datatable, popdata, datatype, n_display=6, county_list=[]):
