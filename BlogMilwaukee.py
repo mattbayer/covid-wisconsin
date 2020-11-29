@@ -83,7 +83,7 @@ mke.plot(x='Date', y=['POS_WHT', 'POS_BLK', 'POS_E_HSP'])
 col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
 mke = mke.rename(columns=col_rename)
 
-savefile = '.\\docs\\assets\\plotly\\Cases-Hosp-Milwaukee_2020_11_29.html'
+savefile = '.\\docs\\assets\\plotly\\Cases-Hosp-Milwaukee.html'
 
 fig = covid.plotly_twolines(
     mke,
@@ -144,7 +144,7 @@ fig.write_html(
     )      
 os.startfile(savefile)
 
-save_png = '.\\docs\\assets\\Cases-Hosp-Milwaukee_2020_11_29.png'
+save_png = '.\\docs\\assets\\Cases-Hosp-Milwaukee.png'
 fig.write_image(
     save_png,
     width=900,
