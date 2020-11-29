@@ -46,10 +46,9 @@ Below, a plot shows the time spans of these waves overlaid on daily cases and ho
 
 One practical lesson from this analysis, I think, is that the majority-Black north side needs better access to testing. Even now, with testing more plentiful, this region has high hospitalizations but relatively low rates of tests and detected cases. 
 
-More broadly, it shows how the virus spread along social networks. Milwaukee is lamentably segregated by race, and the virus often followed the contours of that segregation. I am a white professional, and I personally know relatively few people who have had Covid; but a friend with Hispanic family on the south side saw many of them get the virus over the summer. It has also followed contours of age and occupation, having very different effects on downtown bar-hoppers and nursing home residents, office workers and meat packers. For all of us, our experience of the pandemic has probably depended very much on our demographic and social group - even on our street address. 
+More broadly, it shows how the virus spread along social networks. Milwaukee is lamentably segregated by race, and the virus often followed the contours of that segregation. I am a white professional, and I personally know relatively few people who have had Covid; but a friend with Hispanic family on the south side saw many of them get the virus over the summer. It has also followed contours of age and occupation, having very different effects on downtown bar-hoppers and nursing home residents, office workers and meat packers. 
 
-
-
+For all of us, our experience of the pandemic has probably depended very much on our demographic and social group - even on our street address. 
 
 ----
 [^FullMap]: At their website you can browse the [full map for the country](https://demographics.virginia.edu/DotMap/). A certain kind of person (me) could spend hours happily browsing there.
