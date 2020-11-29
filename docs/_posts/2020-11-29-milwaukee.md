@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Milwaukee"
+title: "Covid in Milwaukee"
 hidden: false
 ---
 
