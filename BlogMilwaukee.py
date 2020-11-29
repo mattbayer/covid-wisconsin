@@ -131,29 +131,40 @@ deltas = list()
 start_dates = list()
 end_dates = list()
 
-# start_dates.append(datetime.datetime(year=2020, month=1, day=1))
-# end_dates.append(datetime.datetime(year=2020, month=5, day=11))
-# deltas.append('(as of 11-May)')
-
-# start_dates.append(datetime.datetime(year=2020, month=5, day=11))
-# end_dates.append(datetime.datetime(year=2020, month=7, day=15))
-# deltas.append('(11-May through 15-July)')
-
-# start_dates.append(datetime.datetime(year=2020, month=7, day=15))
-# end_dates.append(datetime.datetime(year=2020, month=9, day=7))
-# deltas.append('(15-July through 7-Sep)')
-
-# start_dates.append(datetime.datetime(year=2020, month=9, day=7))
-# end_dates.append(datetime.datetime(year=2020, month=10, day=15))
-# deltas.append('(8-Sep through 15-Oct)')
-
-# start_dates.append(datetime.datetime(year=2020, month=10, day=15))
-# end_dates.append(datetime.datetime(year=2020, month=11, day=23))
-# deltas.append('(16-Oct through 23-Nov)')
-
 start_dates.append(datetime.datetime(year=2020, month=1, day=1))
+end_dates.append(datetime.datetime(year=2020, month=5, day=11))
+deltas.append('(as of 11-May)')
+
+
+# for kk in range(1,8):
+#     start_dates.append(end_dates[-1])
+#     end_dates.append(end_dates[-1] + datetime.timedelta(days=28))
+#     deltas.append('('+str(start_dates[-1]) + ' to ' + str(end_dates[-1]) + ')')
+    
+    
+    
+
+
+
+start_dates.append(datetime.datetime(year=2020, month=5, day=11))
+end_dates.append(datetime.datetime(year=2020, month=6, day=30))
+deltas.append('(12-May through 31-June)')
+
+start_dates.append(datetime.datetime(year=2020, month=6, day=30))
+end_dates.append(datetime.datetime(year=2020, month=8, day=31))
+deltas.append('(1-July through 31-Aug)')
+
+start_dates.append(datetime.datetime(year=2020, month=8, day=31))
+end_dates.append(datetime.datetime(year=2020, month=10, day=15))
+deltas.append('(1-Sep through 15-Oct)')
+
+start_dates.append(datetime.datetime(year=2020, month=10, day=15))
 end_dates.append(datetime.datetime(year=2020, month=11, day=23))
-deltas.append('(Total)')
+deltas.append('(16-Oct through 23-Nov)')
+
+# start_dates.append(datetime.datetime(year=2020, month=1, day=1))
+# end_dates.append(datetime.datetime(year=2020, month=11, day=23))
+# deltas.append('(Total)')
 
 
 
@@ -231,15 +242,15 @@ for dd, delta_str in enumerate(deltas):
     
     
     #%% Plots for total
-    select_str = delta_str
-    # adjust factor lower for larger bubbles, max lower for more colorful bubbles
-    cases_size_factor = 2
-    cases_color_max = 120
-    
-    # #%% Plots for timeperiod
     # select_str = delta_str
-    # cases_size_factor = 0.8
-    # cases_color_max = 40
+    # # adjust factor lower for larger bubbles, max lower for more colorful bubbles
+    # cases_size_factor = 2
+    # cases_color_max = 120
+    
+    #%% Plots for timeperiod
+    select_str = delta_str
+    cases_size_factor = 0.8
+    cases_color_max = 40
     
     
     #%% Ranges for hosp and tests plots
@@ -274,36 +285,36 @@ for dd, delta_str in enumerate(deltas):
         )
     
     fig.write_image(
-        '.\\docs\\assets\\Map-Cases-Milwaukee-Total_2020-11-27.png',
-        width=700,
+        '.\\docs\\assets\\Map-Cases-Milwaukee-'+str(dd)+'.png',
+        width=600,
         height=700,
         engine='kaleido',
     )
     
-    # Tests color-bubble
-    fig = covid.plotly_colorbubble(
-        mketracts,
-        sizecol='Tested '+select_str,
-        colorcol='Tested per 1K '+select_str,
-        size_factor=tested_size_factor,
-        color_range=tested_color_range,
-        colorscale='Greens',
-        location_names=tract_names,
-        plotlabels=dict(
-            title='Milwaukee: Tests by Census Tract<br>'+select_str,
-            sizelabel='Number tested',
-            colorlabel='Tested per 1K',
-            ),
-        savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
-        fig_height=fig_height,
-        )
+    # # Tests color-bubble
+    # fig = covid.plotly_colorbubble(
+    #     mketracts,
+    #     sizecol='Tested '+select_str,
+    #     colorcol='Tested per 1K '+select_str,
+    #     size_factor=tested_size_factor,
+    #     color_range=tested_color_range,
+    #     colorscale='Greens',
+    #     location_names=tract_names,
+    #     plotlabels=dict(
+    #         title='Milwaukee: Tests by Census Tract<br>'+select_str,
+    #         sizelabel='Number tested',
+    #         colorlabel='Tested per 1K',
+    #         ),
+    #     savefile='.\\docs\\assets\\plotly\\Map-Tested-Milwaukee.html',
+    #     fig_height=fig_height,
+    #     )
     
-    fig.write_image(
-        '.\\docs\\assets\\Map-Tested-Milwaukee-Total_2020-11-27.png',
-        width=700,
-        height=700,
-        engine='kaleido',
-    )
+    # fig.write_image(
+    #     '.\\docs\\assets\\Map-Tested-Milwaukee-Total_2020-11-27.png',
+    #     width=700,
+    #     height=700,
+    #     engine='kaleido',
+    # )
     
     # Hospitalizations color-bubble
     fig = covid.plotly_colorbubble(
@@ -324,8 +335,8 @@ for dd, delta_str in enumerate(deltas):
         )
     
     fig.write_image(
-        '.\\docs\\assets\\Map-Hosp-Milwaukee-Total_2020-11-27.png',
-        width=700,
+        '.\\docs\\assets\\Map-Hosp-Milwaukee-'+str(dd)+'.png',
+        width=600,
         height=700,
         engine='kaleido',
     )
