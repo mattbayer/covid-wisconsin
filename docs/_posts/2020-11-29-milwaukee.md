@@ -4,7 +4,7 @@ title: "Covid in Milwaukee"
 hidden: false
 ---
 
-Milwaukee County contains one million people, one-sixth of Wisconsin's total. Even within a single county, there are enough people and enough diversity to give Milwaukee's corner of the pandemic its own geography and its own narrative.
+Milwaukee County contains one million people, one-sixth of Wisconsin's total. Within this one county, there are enough people and enough diversity to give Milwaukee's corner of the pandemic its own geography and its own narrative.
 
 ### Pan-geography
 
@@ -29,9 +29,13 @@ More affluent predominantly-white areas such as Wauwatosa and the North Shore su
 By looking at these same maps over time, I think I can identify 5 demographically distinct waves in the pandemic's run through Milwaukee. 
 
 1. Black Milwaukee was struck first and hardest in the spring. Recorded cases are low in this stage because of the lack of testing, but hospitalizations and deaths are high in the Black north side. 
+
 1. Hispanic Milwaukee is hit next. Cases are very concentrated in the Hispanic near south side, although hospitalizations and deaths are more moderate.
+
 1. Students and younger people in the downtown-East Side arc contribute to a wave of cases in the late summer, but are not accompanied by many hospitalizations. Cases rise moderately in the rest of the city, along with hospitalizations. 
+
 1. Early fall continues the pattern of the late summer, but with even more cases at Marquette and UWM campuses.
+
 1. Late fall brings a surge across the whole city, with only the North Shore suburbs and Wauwatosa relatively spared.
 
 Below, a plot shows the time spans of these waves overlaid on daily cases and hospitalizations, and a map animation illustrates their geography for each of these stages. Each frame shows the sum of cases and hospitalizations reported in each wave's time period.
@@ -43,9 +47,6 @@ Below, a plot shows the time spans of these waves overlaid on daily cases and ho
 One practical lesson from this analysis, I think, is that the majority-Black north side needs better access to testing. Even now, with testing more plentiful, this region has high hospitalizations but relatively low rates of tests and detected cases. 
 
 More broadly, it shows how the virus spread along social networks. Milwaukee is lamentably segregated by race, and the virus often followed the contours of that segregation. I am a white professional, and I personally know relatively few people who have had Covid; but a friend with Hispanic family on the south side saw many of them get the virus over the summer. It has also followed contours of age and occupation, having very different effects on downtown bar-hoppers and nursing home residents, office workers and meat packers. For all of us, our experience of the pandemic has probably depended very much on our demographic and social group - even on our street address. 
-
-
-
 
 
 
