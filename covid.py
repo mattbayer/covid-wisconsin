@@ -1036,77 +1036,7 @@ def read_pop_data_wi(csv_file = 'Population-Data-WI.csv'):
     popdata_series = popdata_series.append(pd.Series({'WI': popdata_series.sum()}))
     
     return popdata_series
-    
-    
-def download_covid_wi_tract(tracts, save_path = '.\\data\\tracts'):
-    """Download WI Covid data by census tract, parse, and save to csv file.
-    
-    Only requests select data fields to limit download size; the other 
-    data fields are not currently populated anyway.
-    
-    tracts -- single string or list of strings, where each string is 
-              a 6-digit census tract number for WI
-    
-    save_path -- path name for CSV file to save the results. Inside this
-                 path the file names are hardcoded as 
-                 'Covid-Data-WI-Tract-' + tract + '.csv'
-    """
-    # Check for existence of save_path and create it if it doesn't exist
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
-    
-    # for consistency, if tracts is a single string make it a one-item list
-    if type(tracts) == str:
-        tracts = [tracts]
-        
-    print('Number of tracts:', len(tracts))
-        
-    for tract in tracts:
-        # URL for json request, for specific tract number
-        # requesting through GeoServices API, rather than GeoJSON API which 
-        # appears to be flaky for filtered requests
-        url_root = "https://dhsgis.wi.gov/server/rest/services/DHS_COVID19/COVID19_WI/FeatureServer/10/query?where=GEOID%20%3D%20"
-        url_end = "&outFields=*&outSR=4326&f=json"
-        # add the tract number, with the constant prefix
-        url_tract = url_root + "'55079" + tract + "'" + url_end
-    
-        # make the request from WI DHS, first to temp file then read in
-        # this seems to be more reliable and quicker than going directly to memory
-        file_json = os.path.join(save_path, 'temp.geojson')
-        
-        # urllib.request.urlretrieve(url_tract, file_json)
-        jsondata = pd.read_json(url_tract, typ='series', orient='index')
-          
-        # Parse data into a pandas DataFrame.
-        # The JSON file is arranged a little idiosyncratically.
-        # The reader function parses the data into a pandas Series of 
-        # lists of dictionaries of dictionaries.  The last level of dictionary is 
-        # what contains all the data I want to ultimately put into a DataFrame.
-        # e.g. jsondata.features[0]['properties']['POSITIVE']   
-        # So loop through the useless upper layers of the structure to create a 
-        # list of all records.  Then convert that list into a pandas DataFrame.
-        data_list = list()
-        for record in jsondata.features:
-            # data_list.append(record['properties'])
-            data_list.append(record['attributes'])
-            
-        data_table = pd.DataFrame.from_records(data_list)
-        
-        # Now save that data into a CSV file, which will be much smaller and 
-        # easier for a person to read directly.
-        save_file = os.path.join(save_path, 'Covid-Data-WI-Tract-' + tract + '.csv')
-        data_table.to_csv(save_file, index=False)    
-        
-        # print to screen to display progress
-        print('.', end='')
-        
-    # print new line to screen to end progress tracker
-    print('')
-    
-    # delete temporary file
-    if os.path.exists(file_json):
-        os.remove(file_json)
-    
+      
         
 def download_covid_data_wi(dataset='state'):
     """Download one of the three datasets from WI DHS and return as DataFrame.

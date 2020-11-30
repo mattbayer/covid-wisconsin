@@ -58,17 +58,12 @@ import UpdateGeo
 # Regional plots by importing other script
 import BlogRegionalUpdate
 
-#%% Data update work
-# tractpath = os.path.join(datapath, 'tracts')
+#%% Tract work - UWM and Marquette
 
 # # covid data by census tract
 # UWM = ['007300', '007400', '007800', '007500']
 # Marquette = ['186400', '014600', '014700']
-# # covid.download_covid_wi_tract(UWM + Marquette, tractpath)
-# # data = covid.read_covid_data_wi(data_path='.\\data\\tracts', csv_file='Covid-Data-WI-Tract-007300.csv')
 
-# # update ALL data at once
-# # covid.update_covid_wi_all(datapath)
 
 #%% Plot cases and deaths for the state
 
