@@ -30,9 +30,8 @@ state = state.rename(columns=col_rename)
 
 #%% Plot deaths vs cases
 # contra Trevor Bedford on the national data - this seems to fit better with a 
-# deaths delay of 12 weeks (instead of 21) and a CFR of 1.0% (instead of 1.8%).
+# deaths delay of 12 days (instead of 21) and a CFR of 1.0% (instead of 1.8%).
 
-CFR = 0.010
 delay = 12   # days
 delay_str = 'Deaths (-'+str(delay)+' days)'
 
@@ -44,61 +43,65 @@ state = state.set_index('Date')
 state[delay_str] = deaths
 state = state.reset_index()
 
-
-
-savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
-
-fig = covid.plotly_twolines(
-    state,
-    'Cases',
-    delay_str,
-    plotcolors=['steelblue', 'firebrick'],
-    secondary_scale=CFR,
-    plotlabels = {'title': 'WI Cases and Deaths<br>CFR '+str(CFR*100)+'%',
-                  'yaxis': 'Cases',
-                  'yaxis_secondary': 'Deaths',
-                  },
-    column1_bar=False,
-    savefile=savefile,
-    )    
-
-
-#%% Compile over-30 data
-
+# Compile over-30 data
 over30 = ['POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
 under30 = ['POS_0_9', 'POS_10_19', 'POS_20_29']
 
 state['Cases over 30'] = state[over30].sum(axis=1).diff()
 state['Cases under 30'] = state[under30].sum(axis=1).diff()
 
+
+#%% Plot all cases vs. deaths
+CFR = 1.0
+
+savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
+
 fig = covid.plotly_twolines(
     state,
+    delay_str,
     'Cases',
-    'Cases over 30',
-    plotcolors=['steelblue', 'rebeccapurple'],
-    # secondary_scale=CFR,
-    plotlabels = {'title': 'WI Cases and Deaths',
-                  'yaxis': 'Cases',
-                  # 'yaxis_secondary': 'Deaths',
+    plotcolors=['firebrick', 'steelblue', 'rosybrown'],
+    secondary_scale=1/(CFR/100),
+    plotlabels = {'title': 'WI Deaths and Cases<br>(assuming CFR '+str(CFR)+'%)',
+                  'yaxis': 'Deaths',
+                  'yaxis_secondary': 'Cases',
                   },
-    column1_bar=False,
-    savefile='.\\docs\\assets\\plotly\\Cases-Cases30-WI.html',
-    )  
+    column1_bar=True,
+    savefile=savefile,
+    )    
+
+
+
+#%% Plot cases vs cases-30
+if False:
+    fig = covid.plotly_twolines(
+        state,
+        'Cases',
+        'Cases over 30',
+        plotcolors=['steelblue', 'rebeccapurple'],
+        # secondary_scale=CFR,
+        plotlabels = {'title': 'WI Cases and Cases over 30',
+                      'yaxis': 'Cases',
+                      # 'yaxis_secondary': 'Deaths',
+                      },
+        column1_bar=False,
+        savefile='.\\docs\\assets\\plotly\\Cases-Cases30-WI.html',
+        )  
 
 #%% Cases over 30 vs deaths
+CFR_30 = 1.4
 
-CFR_30 = 0.015
 fig = covid.plotly_twolines(
     state,
-    'Cases over 30',
     delay_str,
-    plotcolors=['rebeccapurple', 'firebrick'],
-    secondary_scale=CFR_30,
-    plotlabels = {'title': 'WI Cases over 30 and Deaths<br>CFR (>30) '+str(CFR_30*100)+'%',
-                  'yaxis': 'Cases',
-                  'yaxis_secondary': 'Deaths',
+   'Cases over 30',
+    plotcolors=['firebrick', 'rebeccapurple', 'rosybrown'],
+    secondary_scale=1/(CFR_30/100),
+    plotlabels = {'title': 'WI Deaths and Cases over 30yr<br>(Assume CFR '+str(CFR_30)+'% for >30yr)',
+                  'yaxis': 'Deaths',
+                  'yaxis_secondary': 'Cases',
                   },
-    column1_bar=False,
+    column1_bar=True,
     savefile='.\\docs\\assets\\plotly\\Cases30-Deaths-WI.html',
     )    
 
