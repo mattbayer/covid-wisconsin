@@ -169,4 +169,6 @@ cdc_ifr.loc['70+', 'Cases'] = total['POS_70_79'] + total['POS_80_89'] + total['P
 IFR = (cdc_ifr['IFR'] * cdc_ifr['Pop %'] / 100).sum()
 Case_IFR = (cdc_ifr['IFR'] * cdc_ifr['Cases']).sum() / cdc_ifr['Cases'].sum()
 
+# Population weighted IFR is 0.8%.  Case-weighted IFR is 0.65%.
+
 
