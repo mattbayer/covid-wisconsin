@@ -180,6 +180,33 @@ covid.plotly_colorbubble(
     fig_height=600,
     )
 
+#%% Total people tested figure
+
+# total tests
+temp = widata.loc[widata.Date == widata.Date.max()]
+temp['People tested'] = temp.POSITIVE + temp.NEGATIVE
+temp = temp.rename(columns={'NAME':'County'})
+tested_for_map = temp.set_index('County')['People tested']
+
+countiesWI['Tested'] = tested_for_map
+countiesWI['Tested %'] = countiesWI['Tested'] / countiesWI['Population'] * 100
+
+covid.plotly_colorbubble(
+    countiesWI,
+    sizecol='Tested',
+    colorcol='Tested %',
+    size_factor=100,
+    color_range=[0, 60],
+    colorscale='Greens',
+    location_names=display_names,
+    plotlabels=dict(
+        title='People Tested by County<br>(Total)',
+        colorlabel='Tested %',
+        ),
+    savefile='.\\docs\\assets\\plotly\\Map-TotalTested-WI.html',
+    fig_height=600,
+    )
+
 #%% Create background to figures
 
 # line_colors = {'land':'darkgrey', 'border':'lightgray', 'marker':'dimgray'}

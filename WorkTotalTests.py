@@ -57,6 +57,7 @@ people = people.set_index('Date')
 people['Cases'] = pd.to_numeric(people['Cases'].str.replace(',',''))
 people['New people tested'] = pd.to_numeric(people['New people tested'].str.replace(',',''))
 
+
 test['New people tested'] = people['New people tested']
 # cumulative sum of tests
 test['Total people tested'] = test['New people tested'].expanding(1).sum()
@@ -65,14 +66,24 @@ test['Total people tested'] = test['New people tested'].expanding(1).sum()
 
 #%% By Report
 
-state = state = covid.read_covid_data_wi('state')
+state = covid.read_covid_data_wi('state')
 state = state.set_index('Date')
 state['Tested'] = state['POSITIVE'] + state['NEGATIVE']
 
 test['Total people tested (reported)'] = state['Tested']
 test['New people tested (reported)'] = test['Total people tested (reported)'].diff(1)
 
-
+# compare cases test date to reported date
+people['Cases (reported)'] = state['POS_NEW']
+people.rolling(7).mean().plot(y=['Cases', 'Cases (reported)'])
+# CAREFUL- I thought it was by TEST date, 
+# but I think it's actually by RESULT date. 
+# The plots LOOK not all that different, but that might be an artifact of just
+# having very similar 7-day patterns. If I average it maybe I would see more
+# of a delay like I would expect.
+# If I do the average, then it looks like something like a 5 day delay.
+# Still not clear to me if that's only between test result and report, or 
+# test date and report.
 
 #%% Plot tests and people
 test.plot(y=['New tests', 'New people tested', 'New people tested (reported)'])
@@ -85,9 +96,12 @@ test['Tests/People'] = test['Total tests'] / test['Total people tested']
 test['New Tests/People'] = test['New tests'] / test['New people tested']
 test['Fraction tested'] = test['Total people tested'] / Npop
 
-k = 3.5
+c = 1.15
+k = 3.3
 test['Model ratio 1'] = 1 / (1 - test['Fraction tested'])
-test['Model ratio 2'] = 1.1 + k*test['Fraction tested']
+test['Model ratio 2'] = c + k*test['Fraction tested']
+
+test['Tests model'] = test['New people tested'] * (c + k*test['Fraction tested'])
 
 test.plot(y=['Tests/People', 'New Tests/People', 'Model ratio 1', 'Model ratio 2'])
 test.plot(x='Fraction tested', y=['New Tests/People', 'Model ratio 1', 'Model ratio 2'])
@@ -99,3 +113,19 @@ test.plot(x='Fraction tested', y=['New Tests/People', 'Model ratio 1', 'Model ra
     # If they tested positive more than once, they are only included once on the date of their first positive test result. People who tested negative and never positive (gray bars) are counted once on the date of their first negative test result. However, if someone tests negative, then positive at a later date, they are removed from the negative count and are now counted as a positive.
 # So could it be the by-date plot removes first negatives if later they're positive, but the reported one doesn't?
 # I also noticed older data was higher in old dates, so that would make sense of that.
+
+#%% Use model to predict Milwaukee
+
+county = covid.read_covid_data_wi('county')
+mke = county[county.NAME=='Milwaukee']
+mke = mke.set_index('Date')
+mke['Total tested'] = mke.POSITIVE + mke.NEGATIVE
+mke['Fraction tested'] = mke['Total tested'] / 9.46e5
+mke = mke.rename(columns={'TEST_NEW': 'New tested'})
+mke['Tests model'] = mke['New tested'] * (c + k*mke['Fraction tested'])
+
+mke.plot(y=['New tested', 'Tests model'])
+
+# ends up overestimating total tests by 10%.  Not too bad.
+# and remember this is tests by report date, which I've already seen are 
+# higher than tests by test date...
