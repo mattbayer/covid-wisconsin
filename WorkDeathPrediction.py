@@ -198,3 +198,7 @@ death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 death.plot(y=['Deaths', 'Deaths (reported)'])
 
 
+# seems like a huge delay in deaths... but if there is such a big delay, then
+# I can't trust the deaths-by-date curve right now either, and you would have
+# to expect continued large numbers of reports coming in for past days.
+
