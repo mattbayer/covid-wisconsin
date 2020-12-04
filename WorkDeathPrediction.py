@@ -175,3 +175,26 @@ Case_IFR = (cdc_ifr['IFR'] * cdc_ifr['Cases']).sum() / cdc_ifr['Cases'].sum()
 # Population weighted IFR is 0.8%.  Case-weighted IFR is 0.65%.
 
 
+#%% Compare with deaths by death date
+
+death_file = '.\\data\\Deaths by day stacked_2020-12-03.csv'
+death_raw = pd.read_csv(death_file)
+# Note: key is to download the file and then re-save it in Excel specifically
+# as csv, otherwise it's actually tab delimited and harder to read in in python
+
+death = death_raw.iloc[:,2:]
+death = death.rename(columns={'Unnamed: 2': 'series'})
+death.iloc[0,0] = 'Date'
+death = death.set_index('series').T.reset_index(drop=True)
+death.columns.name = ''
+
+death['Date'] = pd.to_datetime(death['Date']+'-2020')
+
+death = death.set_index('Date')
+
+death['Deaths'] = pd.to_numeric(death['Confirm + Probable deaths'])
+death['Deaths (reported)'] = state.set_index('Date')['Deaths']
+
+death.plot(y=['Deaths', 'Deaths (reported)'])
+
+
