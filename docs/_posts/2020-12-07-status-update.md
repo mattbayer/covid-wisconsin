@@ -17,7 +17,7 @@ I'm taking the idea for this comparison from [scientist Trevor Bedford](https://
 
 ### Thanksgiving
 
-You may object that the previous plot showed a huge dip in the deaths average right where I claim that it should be peaking. I think this dip is purely a result of delayed data reporting from the Thanksgiving holiday. As reporting catches up, I think the 7-day average will peak during the next week but then decline.
+You may object that the previous plot showed a huge dip in the deaths average right where I claim that it should be peaking. I think this dip is purely a result of delayed data reporting over Thanksgiving weekend. If not for the holiday, the 7-day average of deaths *would have* peaked this past week; instead, it will peak this coming week as the low-reporting days drop out of the average, and then decline.
 
 This holiday delay is a problem that appears in all the tracking data right now. As another example, consider the positivity rate, the percent of tests that come back positive for the virus.
 
