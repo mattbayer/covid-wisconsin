@@ -70,6 +70,14 @@ fig = covid.plotly_twolines(
     savefile=savefile,
     )    
 
+save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
+fig.write_image(
+    save_png,
+    width=900,
+    height=600,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 
 #%% Plot cases vs cases-30
