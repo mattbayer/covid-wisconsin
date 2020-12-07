@@ -3,7 +3,7 @@ layout: post
 title: "Covid WI status update: Dec 7"
 ---
 
-Wisconsin's case load is now declining, and I think deaths have also now peaked. The Thanksgiving weekend is making the data difficult to intepret, but I do not think there is any sign yet of a Thanksgiving surge.
+Wisconsin's case load is now declining, and I think deaths have also now peaked. The Thanksgiving weekend is making the data difficult to interpret, but I do not think there is any sign yet of a Thanksgiving surge.
 
 ### Past the peak
 Two weeks ago I [wrote that Wisconsin's cases had peaked](2020-11-22-status-update.md), and thankfully that has been confirmed by about a 1/3 decline in daily new cases since then. New hospitalizations have also declined. The trend is roughly similar in all regions of the state, although Milwaukee's decline is [slower than the rest](../dashboard-regional.md).
