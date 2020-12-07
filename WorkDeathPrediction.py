@@ -70,7 +70,8 @@ fig = covid.plotly_twolines(
     savefile=savefile,
     )    
 
-save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
+# save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
+save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
 fig.write_image(
     save_png,
     width=900,
