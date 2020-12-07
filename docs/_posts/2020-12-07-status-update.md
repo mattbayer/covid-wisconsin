@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Covid WI status update: Dec 7"
-hidden: true
 ---
 
 Wisconsin's case load is now declining, and I think deaths have also now peaked. The Thanksgiving weekend is making the data difficult to intepret, but I do not think there is any sign yet of a Thanksgiving surge.
@@ -23,15 +22,15 @@ This holiday delay is a problem that appears in all the tracking data right now.
 
 ![DHS positivity new people tested](../assets/Positivity-DHS_2020-12-06.jpg)
 
-I think this is all an artifact of lower testing availability and possibly also delayed reporting on the four days of Thanksgiving weekend. Since many testing locations were closed over the weekend, it's likely that the tests that did occur were more urgent and more likely positive than usual. Once testing returned to its normal availability, the positivity rate begins to return to its previous trend.
+I think this is all an artifact of lower testing availability, and possibly also delayed reporting, on the four days of Thanksgiving weekend. Since many testing locations were closed over the weekend, it's likely that the tests that did occur were more urgent and more likely positive than usual. Once testing returned to its normal availability, the positivity rate begins to return to its previous trend.
 
-A similar artifact appears in the 7-day average case plots. When a single day is an outlier, with unusually low case numbers, the 7-day average unsurprisingly dives downward on that day. It's easy to forget, however, that the 7-day average will then also shoot upward on the day that outlier is removed from the average, 7 days later. 
+An analogous artifact appears in the 7-day average case plots. When a single day is an outlier, with unusually low case numbers, the 7-day average unsurprisingly dives downward on that day. It's easy to forget, however, that the 7-day average will then also shoot upward on the day that outlier is removed from the average, 7 days later. 
 
-To illustrate, I marked two of these instances in the case plot below. The pair on the right is the result of Thanksgiving - the Friday after had very low cases, decreasing the average and creating a mirror-image spike on December 4. That spike was only a quirk of the averaging method, not a sign of a Thanksgiving surge. The very same thing happened in October, when no cases were reported on October 17 due to DHS system maintenance, and the average spiked 7 days later on October 24.
+To illustrate, I marked two of these instances in the case plot below. The pair on the right is the result of Thanksgiving - the Friday after had very low cases, decreasing the average and creating a mirror-image spike on December 4. That spike was not a sign of a Thanksgiving surge, only a quirk of the averaging method. The very same thing happened in October, when no cases were reported on October 17 due to DHS system maintenance, and the average spiked 7 days later on October 24.
 
 ![7-day average artifact](../assets/Cases-7day-artifact.jpg)
 
-All these irregularities make it very difficult to tell if Thanksgiving itself has caused any kind of surge in the virus. Now that all the Thanksgiving weekend days have worked out of the averages, though, next week's trend should be more reliable.
+All these irregularities make it very difficult to tell if Thanksgiving itself has caused any kind of surge in the virus. Now that all the Thanksgiving weekend days have passed out of the averages, though, next week's trend should be more reliable.
 
-My intuition is actually that Thanksgiving will not have a large effect on the numbers. I would guess that most families took a level of precaution about Thanksgiving that was similar to what they were taking in the rest of their lives. And can one day, even a celebratory get-together, really count for so much compared to all the work, school, and social contact that happens over weeks of regular life? But that's just a guess; to find out I'll watch the numbers next week.
+My intuition is actually that Thanksgiving will not have a large effect on the numbers. I would guess that most families took a level of precaution about Thanksgiving that was similar to what they were taking in the rest of their lives. And can one day, even a celebratory get-together, really count for so much compared to all the work, school, and social contact that happens over weeks of regular life? But that is just a guess; to find out I'll watch the numbers next week.
 
