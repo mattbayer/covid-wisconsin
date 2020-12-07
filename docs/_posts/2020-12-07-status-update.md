@@ -14,7 +14,7 @@ As for reported deaths, I believe they may be at their peak right now. Since it 
 
 I'm taking the idea for this comparison from [scientist Trevor Bedford](https://twitter.com/trvrb/status/1331780099490807808), who uses a CFR of 1.8% and delay of 22 days to model the United States as a whole. For Wisconsin, I found that a CFR of 1.0% and delay of 12 days seems to match the data better. This would imply that Wisconsin may be detecting a higher proportion of cases than the country as a whole, and that it has a shorter time period between reporting a case and reporting a death.
 
-### Thanksgiving
+### Thanksgiving data
 
 You may object, however, that the previous plot showed a huge dip in the deaths average right where I claim that it should be peaking. I think this dip is purely a result of delayed data reporting over Thanksgiving weekend. If not for the holiday, the 7-day average of deaths *would have* peaked this past week; instead, it will peak this coming week as the low-reporting days drop out of the average, after which it will start to decline.
 
