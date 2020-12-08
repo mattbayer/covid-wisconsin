@@ -33,15 +33,19 @@ state = state.rename(columns=col_rename)
 # deaths delay of 12 days (instead of 21) and a CFR of 1.0% (instead of 1.8%).
 
 delay = 12   # days
-delay_str = 'Deaths (-'+str(delay)+' days)'
 
-# create delayed death column
-deaths = state[['Date', 'Deaths']]
-deaths.Date = deaths.Date - datetime.timedelta(days=delay)
-deaths = deaths.set_index('Date')
-state = state.set_index('Date')
-state[delay_str] = deaths
-state = state.reset_index()
+def create_delayed_deaths(state, delay):
+    # create delayed death column
+    deaths = state[['Date', 'Deaths']]
+    deaths.Date = deaths.Date - datetime.timedelta(days=delay)
+    deaths = deaths.set_index('Date')
+    state = state.set_index('Date')
+    delay_str = 'Deaths (-'+str(delay)+' days)'
+    state[delay_str] = deaths
+    state = state.reset_index()
+    return state, delay_str
+
+state, delay_str = create_delayed_deaths(state, delay=12)
 
 # Compile over-30 data
 over30 = ['POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
@@ -49,6 +53,13 @@ under30 = ['POS_0_9', 'POS_10_19', 'POS_20_29']
 
 state['Cases over 30'] = state[over30].sum(axis=1).diff()
 state['Cases under 30'] = state[under30].sum(axis=1).diff()
+
+# Compile over-50 data
+over50 = ['POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
+under50 = ['POS_0_9', 'POS_10_19', 'POS_20_29', 'POS_30_39', 'POS_40_49']
+
+state['Cases over 50'] = state[over50].sum(axis=1).diff()
+state['Cases under 50'] = state[under50].sum(axis=1).diff()
 
 
 #%% Plot all cases vs. deaths
@@ -113,6 +124,25 @@ fig = covid.plotly_twolines(
     column1_bar=True,
     savefile='.\\docs\\assets\\plotly\\Cases30-Deaths-WI.html',
     )    
+
+#%% Cases over 50 vs deaths
+CFR_50 = 2.0
+state, delay_str = create_delayed_deaths(state, delay=18)
+
+fig = covid.plotly_twolines(
+    state,
+    delay_str,
+   'Cases over 50',
+    plotcolors=['firebrick', 'rebeccapurple', 'rosybrown'],
+    secondary_scale=1/(CFR_50/100),
+    plotlabels = {'title': 'WI Deaths and Cases over 50yr<br>(Assume CFR '+str(CFR_50)+'% for >50yr)',
+                  'yaxis': 'Deaths',
+                  'yaxis_secondary': 'Cases',
+                  },
+    column1_bar=True,
+    savefile='.\\docs\\assets\\plotly\\Cases50-Deaths-WI.html',
+    )    
+
 
 
 #%% Ages
