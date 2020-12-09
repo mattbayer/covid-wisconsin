@@ -25,9 +25,14 @@ covid.plot_by_age(state)
 col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
 state = state.rename(columns=col_rename)
 
+# total
+total = state.loc[state.Date == state.Date.max()].iloc[0]   # iloc to make it a Series
 
-
-
+age_ranges = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+age_pos   = ['POS_' + s for s in age_ranges]
+age_death = ['DTHS_' + s for s in age_ranges]
+age_hosp  = ['IP_Y_' + s for s in age_ranges]
+age_icu   = ['IC_Y_' + s for s in age_ranges]
 
 
 
@@ -85,7 +90,7 @@ cdc_ifr.loc['50-69', 'Pop %'] = (pop_age.loc['45-54', 'Percent'] / 2
 cdc_ifr.loc['70+', 'Pop %']   = (pop_age.loc['65-74', 'Percent'] / 2 
                                  + pop_age.loc['75+', 'Percent'])
 
-total = state.loc[state.Date == state.Date.max()].iloc[0]   # iloc to make it a Series
+
 cdc_ifr['Cases'] = 0
 cdc_ifr.loc['0-19', 'Cases'] = total['POS_0_9'] + total['POS_10_19']
 cdc_ifr.loc['20-49', 'Cases'] = total['POS_20_29'] + total['POS_30_39'] + total['POS_40_49']
@@ -99,4 +104,28 @@ Case_IFR = (cdc_ifr['IFR'] * cdc_ifr['Cases']).sum() / cdc_ifr['Cases'].sum()
 
 # Population weighted IFR is 0.8%.  Case-weighted IFR is 0.65%.
 
+
+#%% Plots
+
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.offline import plot as pplot
+
+pop_age['Age bin center'] = [2, 11, 21, 29.5, 39.5, 49.5, 59.5, 69.5, 82]
+pop_age['Age bin width']  = pop_age['Year Span']
+
+fig = px.bar(
+    pop_age, 
+    x='Percent', 
+    y='Age bin center', 
+    # width = 'Age bin width', 
+    orientation='h', 
+    title='WI Population by Age Group',
+    )
+
+
+pplot(fig,
+      filename='.\\docs\\assets\\plotly\\Pop-Age.html',
+      include_plotlyjs='cdn',
+      )
 
