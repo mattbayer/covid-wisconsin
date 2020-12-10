@@ -76,6 +76,40 @@ pplot(fig,
 # admitted to ICU lower than proportional to their hospitalization status. I 
 # guess because it's less likely to do them any good.
 
+#%% Better ages data
+demo_csv = '.\\data\\demographics\\ACSST1Y2019.S0101-2020-12-10T154935.csv'
+
+demo_data = pd.read_csv(demo_csv)
+
+pop_age = demo_data.iloc[2:20,0:5]
+
+col_rename = {'Label': 'Age range', 
+              'Wisconsin!!Total!!Estimate': 'Population',
+              'Wisconsin!!Total!!Margin of Error': 'Population Margin of Error',
+              'Wisconsin!!Percent!!Estimate': 'Percent',
+              'Wisconsin!!Percent!!Margin of Error': 'Percent Margin of Error',
+              }
+pop_age = pop_age.rename(columns=col_rename)
+
+# Convert stuff to numeric
+# Pop: take out commas and convert from string
+pop_age['Population'] = pd.to_numeric(pop_age['Population'].str.replace(',',''))
+# Pop margin: take out +/- and commas
+pop_age['Population Margin of Error'] = pd.to_numeric(pop_age['Population Margin of Error'].str.replace(',','').str.replace('±', ''))
+# Percent: take out %
+pop_age['Percent'] = pd.to_numeric(pop_age['Percent'].str.replace('%',''))
+# Percent margin: take out +/-
+pop_age['Percent Margin of Error'] = pd.to_numeric(pop_age['Percent Margin of Error'].str.replace('±', ''))
+
+pop_age.plot(x='Age range', y='Population', kind='bar')
+
+# Sum ranges to match the Covid data
+pop_age_coarse = pop_age[['Population', 'Percent']].rolling(2).sum().iloc[1::2]
+age_ranges = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+']
+pop_age_coarse['Age range'] = age_ranges
+
+pop_age_coarse.plot(x='Age range', y='Percent', kind='bar')
+
 #%% Ages
 
 demo_csv = '.\\data\\demographics\\ACSSPP1Y2018.S0201_data_with_overlays_2020-07-21T153630.csv'
