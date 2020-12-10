@@ -182,6 +182,10 @@ age_covid['Age center'] = range(5,90,10)
 
 # IFR from paper Levin, et al 2020
 # https://link.springer.com/article/10.1007/s10654-020-00698-1
+# other IFR links
+# https://github.com/mbevand/covid19-age-stratified-ifr
+# https://www.imperial.ac.uk/media/imperial-college/medicine/mrc-gida/2020-10-29-COVID19-Report-34.pdf
+# (same as above) http://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-34-ifr/
 def ifr(age):
     log_ifr = -3.27 + 0.0524*age
     return 10**log_ifr
