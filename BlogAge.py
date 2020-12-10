@@ -180,7 +180,8 @@ pplot(fig,
 age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases']*100
 age_covid['Age center'] = range(5,90,10)
 
-# IFR from paper
+# IFR from paper Levin, et al 2020
+# https://link.springer.com/article/10.1007/s10654-020-00698-1
 def ifr(age):
     log_ifr = -3.27 + 0.0524*age
     return 10**log_ifr
