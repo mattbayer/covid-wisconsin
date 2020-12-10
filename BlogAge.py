@@ -13,6 +13,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.offline import plot as pplot
+
 import covid
 
 #%% Load data
@@ -34,7 +38,43 @@ age_death = ['DTHS_' + s for s in age_ranges]
 age_hosp  = ['IP_Y_' + s for s in age_ranges]
 age_icu   = ['IC_Y_' + s for s in age_ranges]
 
+age_data = pd.DataFrame(
+    data={'Age range': age_ranges,
+          'Cases': total[age_pos].to_list(),
+          'Hospitalizations': total[age_hosp].to_list(),
+          'ICU': total[age_icu].to_list(),
+          'Deaths': total[age_death].to_list()},
+    )
 
+age_data = age_data.set_index('Age range')
+
+age_perc = age_data / age_data.sum() * 100
+
+age_perc = age_perc.reset_index()
+age_data = age_data.reset_index()
+
+
+#%% Age data plots
+
+
+fig = px.bar(
+    age_perc, 
+    x='Age range', 
+    # y='Cases',
+    y=['Cases', 'Hospitalizations', 'ICU', 'Deaths'], 
+    barmode='group',
+    title='WI Covid Data by Age Group',
+    )
+# fig.update_traces(marker_color=['steelblue', 'darkorange', 'darkviolet', 'firebrick'])
+
+pplot(fig,
+      filename='.\\docs\\assets\\plotly\\Pop-Age.html',
+      include_plotlyjs='cdn',
+      )
+
+# interesting - ICU admissions are highest for late middle age. Elderly are 
+# admitted to ICU lower than proportional to their hospitalization status. I 
+# guess because it's less likely to do them any good.
 
 #%% Ages
 
@@ -64,6 +104,18 @@ pop_age['Year Span'] = year_span
 pop_age['Percent per year'] = pop_age['Percent'] / pop_age['Year Span']
 
 pop_age.plot(y='Percent per year', kind='bar')
+
+
+pop_age['Age bin center'] = [2, 11, 21, 29.5, 39.5, 49.5, 59.5, 69.5, 82]
+pop_age['Age bin width']  = pop_age['Year Span']
+
+# fig = px.bar(
+#     pop_age, 
+#     x='Percent', 
+#     y=pop_age.index, 
+#     orientation='h', 
+#     title='WI Population by Age Group',
+#     )
 
 
 #%% CDC age ranges
@@ -106,26 +158,4 @@ Case_IFR = (cdc_ifr['IFR'] * cdc_ifr['Cases']).sum() / cdc_ifr['Cases'].sum()
 
 
 #%% Plots
-
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.offline import plot as pplot
-
-pop_age['Age bin center'] = [2, 11, 21, 29.5, 39.5, 49.5, 59.5, 69.5, 82]
-pop_age['Age bin width']  = pop_age['Year Span']
-
-fig = px.bar(
-    pop_age, 
-    x='Percent', 
-    y='Age bin center', 
-    # width = 'Age bin width', 
-    orientation='h', 
-    title='WI Population by Age Group',
-    )
-
-
-pplot(fig,
-      filename='.\\docs\\assets\\plotly\\Pop-Age.html',
-      include_plotlyjs='cdn',
-      )
 
