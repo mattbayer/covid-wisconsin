@@ -19,64 +19,8 @@ from plotly.offline import plot as pplot
 
 import covid
 
-#%% Load data
 
-state = covid.read_covid_data_wi('state')
-
-covid.plot_by_age(state)
-
-# rename
-col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
-state = state.rename(columns=col_rename)
-
-# total
-total = state.loc[state.Date == state.Date.max()].iloc[0]   # iloc to make it a Series
-
-age_ranges = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
-age_pos   = ['POS_' + s for s in age_ranges]
-age_death = ['DTHS_' + s for s in age_ranges]
-age_hosp  = ['IP_Y_' + s for s in age_ranges]
-age_icu   = ['IC_Y_' + s for s in age_ranges]
-
-age_data = pd.DataFrame(
-    data={'Age range': age_ranges,
-          'Cases': total[age_pos].to_list(),
-          'Hospitalizations': total[age_hosp].to_list(),
-          'ICU': total[age_icu].to_list(),
-          'Deaths': total[age_death].to_list()},
-    )
-
-age_data = age_data.set_index('Age range')
-
-age_perc = age_data / age_data.sum() * 100
-
-age_perc = age_perc.reset_index()
-age_data = age_data.reset_index()
-
-
-#%% Age data plots
-
-
-fig = px.bar(
-    age_perc, 
-    x='Age range', 
-    # y='Cases',
-    y=['Cases', 'Hospitalizations', 'ICU', 'Deaths'], 
-    barmode='group',
-    title='WI Covid Data by Age Group',
-    )
-# fig.update_traces(marker_color=['steelblue', 'darkorange', 'darkviolet', 'firebrick'])
-
-pplot(fig,
-      filename='.\\docs\\assets\\plotly\\Pop-Age.html',
-      include_plotlyjs='cdn',
-      )
-
-# interesting - ICU admissions are highest for late middle age. Elderly are 
-# admitted to ICU lower than proportional to their hospitalization status. I 
-# guess because it's less likely to do them any good.
-
-#%% Better ages data
+#%% Age demographic data
 demo_csv = '.\\data\\demographics\\ACSST1Y2019.S0101-2020-12-10T154935.csv'
 
 demo_data = pd.read_csv(demo_csv)
@@ -107,10 +51,165 @@ pop_age.plot(x='Age range', y='Population', kind='bar')
 pop_age_coarse = pop_age[['Population', 'Percent']].rolling(2).sum().iloc[1::2]
 age_ranges = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80+']
 pop_age_coarse['Age range'] = age_ranges
+pop_age_coarse.reset_index(drop=True, inplace=True)
 
 pop_age_coarse.plot(x='Age range', y='Percent', kind='bar')
 
-#%% Ages
+
+
+#%% Parse covid data
+
+state = covid.read_covid_data_wi('state')
+
+covid.plot_by_age(state)
+
+# rename
+col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
+state = state.rename(columns=col_rename)
+
+# total
+total = state.loc[state.Date == state.Date.max()].iloc[0]   # iloc to make it a Series
+
+age_ranges_covid = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+age_pos   = ['POS_' + s for s in age_ranges_covid]
+age_death = ['DTHS_' + s for s in age_ranges_covid]
+age_hosp  = ['IP_Y_' + s for s in age_ranges_covid]
+age_icu   = ['IC_Y_' + s for s in age_ranges_covid]
+
+age_data = pd.DataFrame(
+    data={'Age range': age_ranges_covid,
+          'Cases': total[age_pos].to_list(),
+          'Hospitalizations': total[age_hosp].to_list(),
+          'ICU': total[age_icu].to_list(),
+          'Deaths': total[age_death].to_list()},
+    )
+
+age_data = age_data.set_index('Age range')
+
+age_perc = age_data / age_data.sum() * 100
+
+age_perc = age_perc.reset_index()
+age_data = age_data.reset_index()
+
+#%% Sum up the 80-89 and 90+ rows to match with the demographic data
+
+age_covid = age_data.iloc[0:9, 1:]
+age_covid.iloc[8] = age_data.iloc[8:].sum()
+age_covid.insert(0, 'Age range', age_ranges)
+age_covid.insert(1, 'Population', pop_age_coarse['Population'])
+age_covid.insert(2, 'Population %', pop_age_coarse['Percent'])
+
+temp = age_covid[['Cases', 'Hospitalizations', 'ICU', 'Deaths']]
+temp_perc = temp / temp.sum() * 100
+temp_perc.columns = temp_perc.columns + ' %'
+
+age_covid = age_covid.merge(temp_perc, left_index=True, right_index=True)
+
+
+
+#%% Age data plots
+
+# include ICU - interesting for me, take out for blog for brevity
+# perc_cols = ['Population %', 'Cases %', 'Hospitalizations %', 'ICU %', 'Deaths %']
+# col_colors = ['gray', 'steelblue', 'darkorange', 'darkviolet', 'firebrick']
+perc_cols = ['Population %', 'Cases %', 'Hospitalizations %', 'Deaths %']
+col_colors = ['gray', 'steelblue', 'darkorange', 'firebrick']
+
+# reformat to "long" for use in the bar graph
+age_covid_long = age_covid.melt(id_vars='Age range', value_vars=perc_cols, value_name='Percentage')
+
+# fig = px.bar(
+#     age_covid, 
+#     x='Age range', 
+#     y=['Population %', 'Cases %', 'Hospitalizations %', 'ICU %', 'Deaths %'], 
+#     barmode='group',
+#     title='WI Covid Data by Age Group',
+#     )
+
+# # horizontal layout
+# fig = px.bar(
+#     age_covid_long, 
+#     y='Age range', 
+#     x='Percentage', 
+#     facet_col='variable', 
+#     facet_col_wrap=2,
+#     color='variable',
+#     color_discrete_sequence=col_colors,
+#     orientation='h',
+#     category_orders={'Age range': age_ranges},
+#     labels={'variable': ''},
+#     title='WI Covid Data by Age Group',
+#     width=700,
+#     height=600,
+#     )
+
+# vertical layout
+fig = px.bar(
+    age_covid_long, 
+    x='Age range', 
+    y='Percentage', 
+    facet_col='variable', 
+    facet_col_wrap=2,
+    color='variable',
+    color_discrete_sequence=col_colors,
+    labels={'variable': ''},
+    title='WI Covid Data by Age Group',
+    width=700,
+    height=600,
+    )
+
+
+# take out 'variable=' part of the axis titles
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+# other layout
+fig.update_layout()
+
+# fig.update_traces(marker_color=['gray', 'steelblue', 'darkorange', 'darkviolet', 'firebrick'])
+
+pplot(fig,
+      filename='.\\docs\\assets\\plotly\\Age-Covid.html',
+      include_plotlyjs='cdn',
+      )
+
+# interesting - ICU admissions are highest for late middle age. Elderly are 
+# admitted to ICU lower than proportional to their hospitalization status. I 
+# guess because it's less likely to do them any good.
+
+#%% CFR
+
+age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases']*100
+age_covid['Age center'] = range(5,90,10)
+
+# IFR from paper
+def ifr(age):
+    log_ifr = -3.27 + 0.0524*age
+    return 10**log_ifr
+
+age_covid['IFR'] = ifr(age_covid['Age center'])
+
+fig = px.line(
+    age_covid, 
+    x='Age range', 
+    y=['CFR', 'IFR'], 
+    log_y=True,
+    # line_dash='dash',
+    )
+
+fig.update_traces(mode='markers+lines', line_dash='dot')
+
+pplot(fig,
+      filename='.\\docs\\assets\\plotly\\Age-CFR.html',
+      include_plotlyjs='cdn',
+      )
+
+#%% 
+
+ifrlog10 = -3.27 + 0.0524
+
+#%%
+quit
+
+#%% Ages - coarser data I had found earlier
 
 demo_csv = '.\\data\\demographics\\ACSSPP1Y2018.S0201_data_with_overlays_2020-07-21T153630.csv'
 
@@ -137,7 +236,7 @@ year_span = np.array([5, 13, 7, 10, 10, 10, 10, 10, 10])
 pop_age['Year Span'] = year_span
 pop_age['Percent per year'] = pop_age['Percent'] / pop_age['Year Span']
 
-pop_age.plot(y='Percent per year', kind='bar')
+# pop_age.plot(y='Percent per year', kind='bar')
 
 
 pop_age['Age bin center'] = [2, 11, 21, 29.5, 39.5, 49.5, 59.5, 69.5, 82]
@@ -190,6 +289,4 @@ Case_IFR = (cdc_ifr['IFR'] * cdc_ifr['Cases']).sum() / cdc_ifr['Cases'].sum()
 
 # Population weighted IFR is 0.8%.  Case-weighted IFR is 0.65%.
 
-
-#%% Plots
 
