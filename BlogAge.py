@@ -118,6 +118,16 @@ col_colors = ['gray', 'steelblue', 'darkorange', 'firebrick']
 # reformat to "long" for use in the bar graph
 age_covid_long = age_covid.melt(id_vars='Age range', value_vars=perc_cols, value_name='Percentage')
 
+# create text labels - strings from rounding each percentage value to nearest whole
+def perc_to_text(p):
+    if p < 2:
+        t = '{:0.1f}'.format(p) + '%'
+    else:
+        t = '{:0.0f}'.format(p) + '%'
+    return t
+        
+textlabels = age_covid_long['Percentage'].apply(perc_to_text)
+
 # fig = px.bar(
 #     age_covid, 
 #     x='Age range', 
@@ -148,6 +158,7 @@ fig = px.bar(
     age_covid_long, 
     x='Age range', 
     y='Percentage', 
+    text=textlabels,
     facet_col='variable', 
     facet_col_wrap=2,
     color='variable',
@@ -155,14 +166,23 @@ fig = px.bar(
     labels={'variable': ''},
     title='WI Covid Data by Age Group',
     width=700,
-    height=600,
+    height=700,
     )
 
 
 # take out 'variable=' part of the axis titles
-fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig.for_each_annotation(
+    lambda a: a.update(
+        text=a.text.split("=")[-1],
+        font=dict(size=14),
+        )
+    )
+
+fig.update_traces(textposition='outside')
+
+
 # other layout
-fig.update_layout()
+fig.update_layout(showlegend=False)
 
 # fig.update_traces(marker_color=['gray', 'steelblue', 'darkorange', 'darkviolet', 'firebrick'])
 
@@ -176,6 +196,7 @@ pplot(fig,
 # guess because it's less likely to do them any good.
 
 #%% CFR
+from scipy import stats
 
 age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases']*100
 age_covid['Age center'] = range(5,90,10)
@@ -186,6 +207,14 @@ age_covid['Age center'] = range(5,90,10)
 # https://github.com/mbevand/covid19-age-stratified-ifr
 # https://www.imperial.ac.uk/media/imperial-college/medicine/mrc-gida/2020-10-29-COVID19-Report-34.pdf
 # (same as above) http://www.imperial.ac.uk/mrc-global-infectious-disease-analysis/covid-19/report-34-ifr/
+
+
+ifr_brazeau = pd.Series([0, 0.01, 0.01, 0.02, 0.02, 0.04, 0.06, 0.09, 0.15, 0.23, 0.36, 0.57, 0.89, 1.39, 2.17, 3.39, 5.3, 8.28, 16.19])
+# in 5 year age ranges, so take geometric means to get average over 10-year range
+binned = ifr_brazeau.rolling(2).apply(stats.gmean)[1::2]
+age_covid['IFR Brazeau'] = binned.reset_index(drop=True)
+
+
 def ifr(age):
     log_ifr = -3.27 + 0.0524*age
     return 10**log_ifr
@@ -195,9 +224,12 @@ age_covid['IFR'] = ifr(age_covid['Age center'])
 fig = px.line(
     age_covid, 
     x='Age range', 
-    y=['CFR', 'IFR'], 
+    y=['CFR', 'IFR', 'IFR Brazeau'], 
     log_y=True,
-    # line_dash='dash',
+    title='Fatality rates by age',
+    labels={'value':'Fatality rate (%)'},
+    width=700,
+    height=700,
     )
 
 fig.update_traces(mode='markers+lines', line_dash='dot')
