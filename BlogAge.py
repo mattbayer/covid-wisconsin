@@ -45,7 +45,7 @@ pop_age['Percent'] = pd.to_numeric(pop_age['Percent'].str.replace('%',''))
 # Percent margin: take out +/-
 pop_age['Percent Margin of Error'] = pd.to_numeric(pop_age['Percent Margin of Error'].str.replace('±', ''))
 
-pop_age.plot(x='Age range', y='Population', kind='bar')
+# pop_age.plot(x='Age range', y='Population', kind='bar')
 
 # Sum ranges to match the Covid data
 pop_age_coarse = pop_age[['Population', 'Percent']].rolling(2).sum().iloc[1::2]
@@ -53,7 +53,7 @@ age_ranges = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-7
 pop_age_coarse['Age range'] = age_ranges
 pop_age_coarse.reset_index(drop=True, inplace=True)
 
-pop_age_coarse.plot(x='Age range', y='Percent', kind='bar')
+# pop_age_coarse.plot(x='Age range', y='Percent', kind='bar')
 
 
 
@@ -70,6 +70,9 @@ state = state.rename(columns=col_rename)
 # total
 total = state.loc[state.Date == state.Date.max()].iloc[0]   # iloc to make it a Series
 
+# 14 days ago
+lagged = state.loc[state.Date == (state.Date.max() - datetime.timedelta(days=14))].iloc[0]
+
 age_ranges_covid = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
 age_pos   = ['POS_' + s for s in age_ranges_covid]
 age_death = ['DTHS_' + s for s in age_ranges_covid]
@@ -79,17 +82,12 @@ age_icu   = ['IC_Y_' + s for s in age_ranges_covid]
 age_data = pd.DataFrame(
     data={'Age range': age_ranges_covid,
           'Cases': total[age_pos].to_list(),
+          'Cases (-14 days)': lagged[age_pos].to_list(),
           'Hospitalizations': total[age_hosp].to_list(),
           'ICU': total[age_icu].to_list(),
           'Deaths': total[age_death].to_list()},
     )
 
-age_data = age_data.set_index('Age range')
-
-age_perc = age_data / age_data.sum() * 100
-
-age_perc = age_perc.reset_index()
-age_data = age_data.reset_index()
 
 #%% Sum up the 80-89 and 90+ rows to match with the demographic data
 
@@ -189,7 +187,8 @@ pplot(fig,
       include_plotlyjs='cdn',
       )
 
-save_png = '.\\docs\\assets\\Age-Covid_2020-12-11.png'
+# save_png = '.\\docs\\assets\\Age-Covid_2020-12-11.png'
+save_png = '.\\docs\\assets\\Age-Covid.png'
 fig.write_image(
     save_png,
     width=700,
@@ -205,7 +204,7 @@ os.startfile(save_png)
 #%% CFR
 from scipy import stats
 
-age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases']*100
+age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases (-14 days)']*100
 age_covid['Age center'] = range(5,90,10)
 
 # IFR from paper Levin, et al 2020
