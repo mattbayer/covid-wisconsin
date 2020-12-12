@@ -163,7 +163,7 @@ fig = px.bar(
     facet_col_wrap=2,
     color='variable',
     color_discrete_sequence=col_colors,
-    labels={'variable': ''},
+    labels={'variable': '', 'Percentage':'Percent of total'},
     title='WI Covid Data by Age Group',
     width=700,
     height=700,
@@ -174,7 +174,7 @@ fig = px.bar(
 fig.for_each_annotation(
     lambda a: a.update(
         text=a.text.split("=")[-1],
-        font=dict(size=14),
+        font=dict(size=15),
         )
     )
 
@@ -184,12 +184,19 @@ fig.update_traces(textposition='outside')
 # other layout
 fig.update_layout(showlegend=False)
 
-# fig.update_traces(marker_color=['gray', 'steelblue', 'darkorange', 'darkviolet', 'firebrick'])
-
 pplot(fig,
       filename='.\\docs\\assets\\plotly\\Age-Covid.html',
       include_plotlyjs='cdn',
       )
+
+save_png = '.\\docs\\assets\\Age-Covid_2020-12-11.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=700,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 # interesting - ICU admissions are highest for late middle age. Elderly are 
 # admitted to ICU lower than proportional to their hospitalization status. I 
