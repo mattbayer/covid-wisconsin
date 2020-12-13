@@ -205,7 +205,7 @@ os.startfile(save_png)
 from scipy import stats
 
 age_covid['CFR'] = age_covid['Deaths'] / age_covid['Cases (-14 days)']*100
-age_covid['Age center'] = range(5,90,10)
+age_covid['Age center'] = np.arange(4.5,90,10)
 
 # IFR from paper Levin, et al 2020
 # https://link.springer.com/article/10.1007/s10654-020-00698-1
