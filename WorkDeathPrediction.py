@@ -234,15 +234,20 @@ def read_death_raw(death_file):
 
 death_03 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-03.csv')
 death_04 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-04.csv')
+death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
 
-death = death_04
+death = death_10
 death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
 death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
+death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
 death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 
-death.plot(y=['Deaths 4-Dec', 'Deaths (reported)'])
-death['Difference'] = death['Deaths 4-Dec'] - death['Deaths 3-Dec']
-death.plot(y=['Deaths 3-Dec', 'Deaths 4-Dec', 'Difference'])
+# compare = 'Deaths 4-Dec'
+compare = 'Deaths 10-Dec'
+
+death.plot(y=[compare, 'Deaths (reported)'])
+death['Difference'] = death[compare] - death['Deaths 3-Dec']
+death.plot(y=['Deaths 3-Dec', compare, 'Difference'])
 
 
 # seems like a huge delay in deaths... but if there is such a big delay, then
