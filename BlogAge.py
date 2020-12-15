@@ -227,14 +227,16 @@ def ifr(age):
     return 10**log_ifr
 
 age_covid['IFR'] = ifr(age_covid['Age center'])
+age_covid['IFR (Levin et al)'] = age_covid['IFR']
 
 fig = px.line(
     age_covid, 
     x='Age range', 
-    y=['CFR', 'IFR', 'IFR Brazeau'], 
+    # y=['CFR', 'IFR', 'IFR Brazeau'], 
+    y=['CFR', 'IFR (Levin et al)'], 
     log_y=True,
-    title='Fatality rates by age',
-    labels={'value':'Fatality rate (%)'},
+    title='Wisconsin fatality rates by age',
+    labels={'value':'Fatality rate (%)', 'variable':'Data'},
     width=700,
     height=700,
     )
@@ -246,6 +248,10 @@ pplot(fig,
       include_plotlyjs='cdn',
       )
 
+
+# all IFR
+all_IFR = (age_covid['Cases %'] * age_covid['IFR']).sum()/100
+all_CFR = age_covid['Deaths'].sum() / age_covid['Cases (-14 days)'].sum()*100
 #%% 
 
 
