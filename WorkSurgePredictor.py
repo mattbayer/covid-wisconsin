@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 30 09:03:15 2020
+Created on Dec 15 09:03:15 2020
+Idea for a surge protector 
 
 @author: Matt Bayer
 """
@@ -19,7 +20,6 @@ import covid
 
 state = covid.read_covid_data_wi('state')
 
-covid.plot_by_age(state)
 
 # rename
 col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
@@ -28,66 +28,36 @@ state = state.rename(columns=col_rename)
 
 
 
-#%% Plot deaths vs cases
-# contra Trevor Bedford on the national data - this seems to fit better with a 
-# deaths delay of 12 days (instead of 21) and a CFR of 1.0% (instead of 1.8%).
-
-def create_delayed_deaths(state, delay):
-    # create delayed death column
-    deaths = state[['Date', 'Deaths']]
-    deaths.Date = deaths.Date - datetime.timedelta(days=delay)
-    deaths = deaths.set_index('Date')
-    state = state.set_index('Date')
-    delay_str = 'Deaths (-'+str(delay)+' days)'
-    state[delay_str] = deaths
-    state = state.reset_index()
-    return state, delay_str
-
-state, delay_str = create_delayed_deaths(state, delay=12)
-
-# Compile over-30 data
-over30 = ['POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
-under30 = ['POS_0_9', 'POS_10_19', 'POS_20_29']
-
-state['Cases over 30'] = state[over30].sum(axis=1).diff()
-state['Cases under 30'] = state[under30].sum(axis=1).diff()
-
-# Compile over-50 data
-over50 = ['POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
-under50 = ['POS_0_9', 'POS_10_19', 'POS_20_29', 'POS_30_39', 'POS_40_49']
-
-state['Cases over 50'] = state[over50].sum(axis=1).diff()
-state['Cases under 50'] = state[under50].sum(axis=1).diff()
 
 
 #%% Plot all cases vs. deaths
-CFR = 1.0
 
-savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
+
+savefile = '.\\docs\\assets\\plotly\\Surge-Predictor.html'
 
 fig = covid.plotly_twolines(
     state,
-    delay_str,
     'Cases',
-    plotcolors=['firebrick', 'steelblue', 'rosybrown'],
-    secondary_scale=1/(CFR/100),
-    plotlabels = {'title': 'WI Deaths and Cases<br>(assuming CFR '+str(CFR)+'%)',
-                  'yaxis': 'Deaths',
-                  'yaxis_secondary': 'Cases',
-                  },
+    'Positivity',
+    plotcolors=['steelblue', 'olivedrab'],
+    secondary_scale=1/1e4,
+    # plotlabels = {'title': 'Surge Detector<br>(assuming CFR '+str(CFR)+'%)',
+    #               'yaxis': 'Deaths',
+    #               'yaxis_secondary': 'Cases',
+    #               },
     column1_bar=True,
     savefile=savefile,
     )    
 
-# save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
-save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
-fig.write_image(
-    save_png,
-    width=900,
-    height=600,
-    engine='kaleido',
-)
-os.startfile(save_png)
+# # save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
+# save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
+# fig.write_image(
+#     save_png,
+#     width=900,
+#     height=600,
+#     engine='kaleido',
+# )
+# os.startfile(save_png)
 
 
 #%% Plot cases vs cases-30
