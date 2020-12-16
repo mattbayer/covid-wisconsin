@@ -27,6 +27,24 @@ state = state.rename(columns=col_rename)
 
 
 
+#%% create weekly sums
+weekly = state[col_rename.values()]
+weekly = weekly.set_index('Date')
+weekly = weekly.rolling(7).sum()
+weekly = weekly.reset_index()
+
+# sums ending on Monday, i.e. Tuesday-Monday (because Tuesday is when they 
+# report results from Monday, so this is results from a Monday-Sunday).
+weekly = weekly.loc[weekly.Date.apply(lambda a: a.weekday() == 0)] 
+weekly = weekly.reset_index()
+
+
+weekly['Positivity'] = weekly['Cases'] / weekly['Tests']
+# multiply by 1e5 just so it's on same scale as cases/tests
+weekly['Pos Index'] = weekly['Positivity'] * 1e5
+# arbitrary prevalence measure
+weekly['Prevalence Index'] = np.sqrt(weekly['Cases'] * weekly['Positivity']) * 700
+weekly.plot(x='Date', y=['Cases', 'Tests', 'Pos Index', 'Prevalence Index'])
 
 
 
@@ -37,10 +55,10 @@ savefile = '.\\docs\\assets\\plotly\\Surge-Predictor.html'
 
 fig = covid.plotly_twolines(
     state,
-    'Cases',
     'Positivity',
-    plotcolors=['steelblue', 'olivedrab'],
-    secondary_scale=1/1e4,
+    'Cases',
+    plotcolors=['violet', 'steelblue'],
+    secondary_scale=1e4,
     # plotlabels = {'title': 'Surge Detector<br>(assuming CFR '+str(CFR)+'%)',
     #               'yaxis': 'Deaths',
     #               'yaxis_secondary': 'Cases',
