@@ -44,9 +44,10 @@ weekly['Positivity'] = weekly['Cases'] / weekly['Tests']
 weekly['Pos Index'] = weekly['Positivity'] * 1e5
 # arbitrary prevalence measure
 weekly['Prevalence Index'] = np.sqrt(weekly['Cases'] * weekly['Positivity']) * 700
-weekly.plot(x='Date', y=['Cases', 'Tests', 'Pos Index', 'Prevalence Index'])
+weekly.plot(x='Date', y=['Cases', 'Tests', 'Pos Index', 'Prevalence Index'], marker='.')
 
-
+#%%
+quit()
 
 #%% Plot all cases vs. deaths
 

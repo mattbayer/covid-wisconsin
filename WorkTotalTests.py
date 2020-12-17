@@ -21,20 +21,16 @@ import os
 
 # manually downloaded file - positives and tests
 test_file = "data\\By_Test_Data_data_2020-12-02.csv"
-test = pd.read_csv(test_file)
 
-test = test[test['Measure Names']=='Positive tests']
 
-col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Positives', 'Totals': 'New tests' }
-
-test = test[col_rename.keys()]
-test = test.rename(columns=col_rename)
-test['Date'] = pd.to_datetime(test['Date'])
+# Load file and rearrange some stuff
+test = covid.read_bytest_wi(test_file)
 test = test.set_index('Date')
-test = test.sort_index()
+test = test.rename(columns={'Tests': 'New tests'})
 
 # cumulative sum of tests
 test['Total tests'] = test['New tests'].expanding(1).sum()
+
 
 
 #%% By People
