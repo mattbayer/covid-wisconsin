@@ -87,15 +87,15 @@ covid.plotly_casetest(sourcedata=tests,
 
 
 
-mketests = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-11-09.html', 'Tests')
-mkecases = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html', 'Cases')
-mke = mketests.merge(mkecases)
-mke['Positive Rate'] = mke.Cases / mke.Tests
+# mketests = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-11-09.html', 'Tests')
+# mkecases = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html', 'Cases')
+# mke = mketests.merge(mkecases)
+# mke['Positive Rate'] = mke.Cases / mke.Tests
 
-mke.plot(x='Date', y=['Tests', 'Cases'])
-mke.plot(x='Date', y='Positive Rate')
+# mke.plot(x='Date', y=['Tests', 'Cases'])
+# mke.plot(x='Date', y='Positive Rate')
 
-mkecases2 = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html', 'Cases')
+# mkecases2 = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html')
 
 #%%
 
@@ -110,7 +110,39 @@ html_file2 = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.h
 
 mke_case = covid.read_dashboard_mke(html_cases)
 mke_test = covid.read_dashboard_mke(html_tests)
+mke_test = mke_test.replace(to_replace='7 Day Average', value='Tests 7-day')
 
+mke = mke_case.append(mke_test)
+mke = mke.pivot(index='Date', columns='variable', values='value')
+mke = mke.reset_index()
+
+mke['Weekday'] = mke['Date'].apply(lambda d: d.weekday())
+
+# sum weekly Mon-Sun
+# sum with a rolling weekly window, then keep the results from Sunday
+weekly = mke[['Cases', 'Tests']].rolling(7).sum()
+weekly['Date'] = mke['Date']
+weekly = weekly.loc[mke['Weekday'] == 6]
+
+# sum weekly Mon-Wed only
+# sum with a rolling 3-day window, then keep the results from Wednesday
+monwed = mke[['Cases', 'Tests']].rolling(3).sum()
+monwed['Date'] = mke['Date']
+monwed = monwed.loc[mke['Weekday'] == 2]
+
+
+weekly['Positivity'] = weekly['Cases'] / weekly['Tests']
+
+weekly.plot(x='Date', y='Positivity', marker='.')
+
+fig = px.bar(mke.loc[mke['Date'] >= datetime.datetime(2020,11,1)], 
+             x='Date', y=['Cases', 'Tests'], barmode='overlay', color_discrete_sequence=['navy', 'olivedrab'])
+# fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
+
+# fig = px.line(weekly, x='Date', y=['Cases', 'Tests'])
+# fig.update_traces(mode='markers', marker_size=10)
+
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
     
     
