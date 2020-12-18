@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 30 09:03:15 2020
+Created on Dec 17 2020
+
+1. 
+2. Deaths vs cases 
 
 @author: Matt Bayer
 """

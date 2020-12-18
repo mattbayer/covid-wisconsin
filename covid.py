@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import urllib
 import os
+import re
 import plotly
 import plotly.subplots
 import plotly.express as px
@@ -1296,6 +1297,35 @@ def read_bytest_wi(filename):
     test = test.sort_values('Date')
     
     return test
+
+
+def read_dashboard_mke(html_file):
+    file_obj = open(html_file)
+    file_text = file_obj.read()
+        
+    # regex on three pieces of the label - variable, date, value
+    m = re.findall('aria-label=\"(.*?)(\d+/\d+)(.*?)\"', file_text)
+    
+    textlist = list()
+    datelist = list()
+    valuelist = list()
+    for kk, element in enumerate(m):
+        textstr = element[0]
+        textstr = textstr.strip()
+        textlist.append(textstr)
+        
+        datestr = element[1]
+        date = datetime.datetime(year=2020, month=pd.to_numeric(datestr[0:2]), day=pd.to_numeric(datestr[3:]))
+        datelist.append(date)
+        
+        valuestr = element[2]
+        valuestr = valuestr.strip()
+        valuestr = valuestr.replace(',', '')
+        valuelist.append(pd.to_numeric(valuestr))
+        
+    data = pd.DataFrame(data={'Date': datelist, 'variable': textlist, 'value': valuelist})
+    
+    return data
 
 
 def convert_rawdates(rawdates, discard_time=True):

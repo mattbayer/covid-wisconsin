@@ -55,6 +55,8 @@ pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 fig = px.line(tests, x='Date', y='Positives', color='Weekday')
 pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
+
+
 #%% Plot tests by result date
 
 
@@ -75,6 +77,43 @@ covid.plotly_casetest(sourcedata=tests,
                       )
 
 
+
+#%% Thanksgiving surge for Milwaukee
+
+# get milwaukee test numbers by copying html of the dashboard and scraping it
+# get this originally by doing a browser html inspection of the graph on the Milwaukee county dashboard,
+# then copying it to a text file.  The tooltips of the graph are stored in "aria-label" labels, so
+# I can regex on these labels below.
+
+
+
+mketests = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-11-09.html', 'Tests')
+mkecases = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html', 'Cases')
+mke = mketests.merge(mkecases)
+mke['Positive Rate'] = mke.Cases / mke.Tests
+
+mke.plot(x='Date', y=['Tests', 'Cases'])
+mke.plot(x='Date', y='Positive Rate')
+
+mkecases2 = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html', 'Cases')
+
+#%%
+
+html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html'
+html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-12-17.html'
+html_file2 = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html'
+
+# file_obj = open(html_file)
+# file_text = file_obj.read()
+
+# m = re.findall('aria-label=\"(.*?)(\d+/\d+)(.*?)\"', file_text)
+
+mke_case = covid.read_dashboard_mke(html_cases)
+mke_test = covid.read_dashboard_mke(html_tests)
+
+
+    
+    
 #%% Plot deaths vs cases
 # contra Trevor Bedford on the national data - this seems to fit better with a 
 # deaths delay of 12 days (instead of 21) and a CFR of 1.0% (instead of 1.8%).
