@@ -117,6 +117,7 @@ mke = mke.pivot(index='Date', columns='variable', values='value')
 mke = mke.reset_index()
 
 mke['Weekday'] = mke['Date'].apply(lambda d: d.weekday())
+mke['Positivity'] = mke['Cases'] / mke['Tests']
 
 # sum weekly Mon-Sun
 # sum with a rolling weekly window, then keep the results from Sunday
@@ -137,12 +138,13 @@ weekly.plot(x='Date', y='Positivity', marker='.')
 
 fig = px.bar(mke.loc[mke['Date'] >= datetime.datetime(2020,11,1)], 
              x='Date', y=['Cases', 'Tests'], barmode='overlay', color_discrete_sequence=['navy', 'olivedrab'])
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 # fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
 
-# fig = px.line(weekly, x='Date', y=['Cases', 'Tests'])
-# fig.update_traces(mode='markers', marker_size=10)
-
+fig = px.line(weekly, x='Date', y=['Cases', 'Tests'])
+fig.update_traces(mode='markers', marker_size=10)
 pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+
 
     
     
