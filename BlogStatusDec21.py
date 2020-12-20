@@ -130,16 +130,97 @@ weekly = weekly.loc[mke['Weekday'] == 6]
 monwed = mke[['Cases', 'Tests']].rolling(3).sum()
 monwed['Date'] = mke['Date']
 monwed = monwed.loc[mke['Weekday'] == 2]
+monwed['Positivity'] = monwed['Cases'] / monwed['Tests']
 
 
 weekly['Positivity'] = weekly['Cases'] / weekly['Tests']
 
 weekly.plot(x='Date', y='Positivity', marker='.')
+#%% Overlap bar plot
+if False:
+    
+    fig = px.bar(mke.loc[mke['Date'] >= datetime.datetime(2020,11,9)], 
+                 x='Date', y=['Tests', 'Cases'], barmode='overlay', 
+                 color_discrete_sequence=['olivedrab','navy'], opacity=0.8)
+    
+    
+    
+    # add dividers
+    date = datetime.datetime(2020,11,15,12)
+    delta = datetime.timedelta(days=7)
+    dividers = list()
+    for d in range(0,4):
+        dividers.append(
+            dict(
+                type= 'line', line_color='gray', line_dash='dot',
+                yref= 'paper', y0= 0, y1= 1,
+                xref= 'x', x0=date, x1=date
+            )
+        )
+        date = date + delta
+    
+    fig.update_layout(shapes=dividers)
+    fig.add_annotation(x=datetime.datetime(2020,11,25,22), y=1000, yanchor='bottom', xanchor='center', 
+                       showarrow=False,
+                       text='Thanksgiving', textangle=270)
+    
+    pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
-fig = px.bar(mke.loc[mke['Date'] >= datetime.datetime(2020,11,1)], 
-             x='Date', y=['Cases', 'Tests'], barmode='overlay', color_discrete_sequence=['navy', 'olivedrab'])
+#%% facet bar plot?
+
+temp = mke.loc[mke['Date'] >= datetime.datetime(2020,11,9)]
+temp = temp[['Date', 'Cases', 'Tests']].melt(id_vars='Date')
+
+fig = px.bar(
+    temp, 
+    x='Date', 
+    y='value', 
+    facet_row='variable',
+    color='variable',
+    color_discrete_sequence=['steelblue', 'olivedrab'],    
+    title='Thanksgiving Milwaukee',
+    width=700,
+    height=500,
+    )
+
+fig.for_each_annotation(lambda a: a.update(text=''))
+fig.update_layout(showlegend=False)
+fig.update_yaxes(matches=None)
+fig.update_yaxes(title='Cases')
+fig.update_yaxes(title='Tests', row=1)
+
+
+# add dividers
+date = datetime.datetime(2020,11,15,12)
+delta = datetime.timedelta(days=7)
+dividers = list()
+for d in range(0,4):
+    dividers.append(
+        dict(
+            type= 'line', line_color='gray', line_dash='dot',
+            yref= 'paper', y0= 0, y1= 1,
+            xref= 'x', x0=date, x1=date
+        )
+    )
+    date = date + delta
+
+fig.update_layout(shapes=dividers)
+fig.add_annotation(text='Thanksgiving',
+                   x=datetime.datetime(2020,11,25,22), 
+                   y=1000, 
+                   yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
+                   
+fig.add_annotation(text='Thanksgiving',
+                   x=datetime.datetime(2020,11,25,22), 
+                   y=150, row=0, col=0,
+                   yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
+
 pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
-# fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
+
+
+#%%
+fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
 fig = px.line(weekly, x='Date', y=['Cases', 'Tests'])
 fig.update_traces(mode='markers', marker_size=10)
