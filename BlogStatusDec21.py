@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import datetime
 
+import plotly.subplots
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.offline import plot as pplot
@@ -77,6 +78,65 @@ covid.plotly_casetest(sourcedata=tests,
                       )
 
 
+#%% Cases by test date for Wisconsin
+filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2020-12-20.csv'
+
+wi = pd.read_csv(filename)
+# filter out redundant data
+wi = wi.loc[wi['Measure Names'] == 'Confirmed cases']  
+# rename columns
+col_rename = {'Day of Epi Dt': 'Date', 'Stacked Confirm + Probable cases': 'Cases'}
+wi = wi[col_rename.keys()]
+wi = wi.rename(columns=col_rename)
+wi['Date'] = pd.to_datetime(wi['Date'])
+
+#%% cases bar plot
+
+wi = wi.loc[wi['Date'] >= datetime.datetime(2020,11,9)]
+wi = wi.loc[wi['Date'] <= datetime.datetime(2020,12,13)]
+
+fig = px.bar(
+    wi, 
+    x='Date', 
+    y='Cases', 
+    color_discrete_sequence=['steelblue'],    
+    title='Cases by Symptom/Test Date - Wisconsin',
+    width=700,
+    height=340,
+    )
+
+fig.update_layout(showlegend=False)
+
+# add dividers
+date = datetime.datetime(2020,11,15,12)
+delta = datetime.timedelta(days=7)
+dividers = list()
+for d in range(0,4):
+    dividers.append(
+        dict(
+            type= 'line', line_color='gray', line_dash='dot',
+            yref= 'paper', y0= 0, y1= 1,
+            xref= 'x', x0=date, x1=date
+        )
+    )
+    date = date + delta
+
+fig.update_layout(shapes=dividers)
+fig.add_annotation(text='Thanksgiving',
+                   x=datetime.datetime(2020,11,25,22), 
+                   y=2400, 
+                   yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
+                   
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-WI.html')
+
+save_png = '.\\docs\\assets\\Thanksgiving-WI.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=340,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 #%% Thanksgiving surge for Milwaukee
 
@@ -85,19 +145,6 @@ covid.plotly_casetest(sourcedata=tests,
 # then copying it to a text file.  The tooltips of the graph are stored in "aria-label" labels, so
 # I can regex on these labels below.
 
-
-
-# mketests = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-11-09.html', 'Tests')
-# mkecases = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html', 'Cases')
-# mke = mketests.merge(mkecases)
-# mke['Positive Rate'] = mke.Cases / mke.Tests
-
-# mke.plot(x='Date', y=['Tests', 'Cases'])
-# mke.plot(x='Date', y='Positive Rate')
-
-# mkecases2 = covid.read_dashboard_mke('C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html')
-
-#%%
 
 html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-17.html'
 html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-12-17.html'
@@ -130,7 +177,7 @@ weekly = weekly.loc[mke['Weekday'] == 6]
 monwed = mke[['Cases', 'Tests']].rolling(3).sum()
 monwed['Date'] = mke['Date']
 monwed = monwed.loc[mke['Weekday'] == 2]
-monwed['Positivity'] = monwed['Cases'] / monwed['Tests']
+monwed['Positivity'] = monwed['Cases'] / monwed['Tests'] * 100 # in %
 
 
 weekly['Positivity'] = weekly['Cases'] / weekly['Tests']
@@ -141,6 +188,7 @@ weekly.plot(x='Date', y='Positivity', marker='.')
 #%% facet bar plot?
 
 temp = mke.loc[mke['Date'] >= datetime.datetime(2020,11,9)]
+temp = temp.loc[temp['Date'] <= datetime.datetime(2020,12,13)]
 temp = temp[['Date', 'Cases', 'Tests']].melt(id_vars='Date')
 
 fig = px.bar(
@@ -150,7 +198,7 @@ fig = px.bar(
     facet_row='variable',
     color='variable',
     color_discrete_sequence=['steelblue', 'olivedrab'],    
-    title='Thanksgiving Milwaukee',
+    title='Cases by Test Date - Milwaukee',
     width=700,
     height=500,
     )
@@ -187,19 +235,61 @@ fig.add_annotation(text='Thanksgiving',
                    y=150, row=0, col=0,
                    yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
 
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-Milwaukee.html')
+
+save_png = '.\\docs\\assets\\Thanksgiving-Milwaukee.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=500,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 
 #%%
-fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+# fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
+# pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
-fig = px.line(weekly, x='Date', y=['Cases', 'Tests'])
-fig.update_traces(mode='markers', marker_size=10)
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+plotdata = monwed.iloc[-5:]
 
 
+fig = plotly.subplots.make_subplots(
+    specs=[[{'secondary_y': True}]]
+    )
+
+fig.add_trace(
+    go.Scatter(
+        x=plotdata.Date, 
+        y=plotdata.Cases, 
+        name='Cases', 
+        line_color='steelblue', 
+        ),
+    secondary_y=False,
+    )
+
+# add positivity on secondary axis
+fig.add_trace(
+    go.Scatter(
+        x=plotdata.Date, 
+        y=plotdata.Positivity, 
+        name='Positivity', 
+        line_color='violet', 
+        ),
+    secondary_y=True,
+    )
     
+
+fig.update_layout(title='Milwaukee Mon-Wed averages')
+
+fig.update_traces(mode='lines+markers', marker_size=10, line_dash='dot')
+fig.update_xaxes(title='Week of')
+fig.update_yaxes({'range': [0, 4500]}, title='Cases', secondary_y=False)
+fig.update_yaxes({'range': [0, 20]}, title='Positivity (%)', secondary_y=True)
+
+
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-MonWed-Milwaukee.html')
+
     
 #%% Plot deaths vs cases
 # contra Trevor Bedford on the national data - this seems to fit better with a 
