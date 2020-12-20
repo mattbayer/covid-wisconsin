@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Thanksgiving surge?"
+title: "Was there a Thanksgiving surge?"
 hidden: true
 ---
 
@@ -9,12 +9,12 @@ Cases continue declining in Wisconsin. Deaths numbers are a bit erratic, but I e
 ### Status update: deaths and cases
 Two weeks ago I predicted that [deaths had peaked](2020-12-7-status-update.md). The intervening weeks first seemed to confirm this prediction, but in the last few days the average has swung upward again. It looks like this upswing may be driven by some batch reporting from especially Madison and Milwaukee, which you can see in the [regional plots](../dashboard-regional.md). I still think deaths should continue trending downward overall, but they perhaps won't follow the case curve as closely as I thought.
 
-### Thanksgiving surge?
+### Thanksgiving spurt
 The Thanksgiving weekend [caused delays in the tracking data](2020-12-7-status-update.md), creating dips and spikes in the case curve and the positivity rate that I think are primarly due to changes in reporting and testing, not spread of the virus.
 
 However, while these effects make it difficult to intepret the data, they do not rule out Thanksgiving spread altogether. And as time passes, the data available becomes more complete and we can get around some of these reporting effects. In particular, we can look at complete data by the date of testing, instead of the date of reporting. 
 
-First, here is the [case data from Wisconsin](https://www.dhs.wisconsin.gov/covid-19/county.htm), plotted by the date either of diagnosis or of symptom onset.
+First, here is the [case data from Wisconsin](https://www.dhs.wisconsin.gov/covid-19/county.htm), plotted by the date either of diagnosis or of symptom onset. The lines separate weeks, grouped Monday through Sunday, and Thanksgiving Day is labeled.
 
 ![Cases Wisconsin](../assets/Thanksgiving-WI.png)
 
