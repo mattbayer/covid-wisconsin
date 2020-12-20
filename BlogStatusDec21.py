@@ -290,6 +290,15 @@ fig.update_yaxes({'range': [0, 20]}, title='Positivity (%)', secondary_y=True)
 
 pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-MonWed-Milwaukee.html')
 
+save_png = '.\\docs\\assets\\Thanksgiving-MonWed-Milwaukee.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=400,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
     
 #%% Plot deaths vs cases
 # contra Trevor Bedford on the national data - this seems to fit better with a 
