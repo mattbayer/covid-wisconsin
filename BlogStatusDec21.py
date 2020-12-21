@@ -198,7 +198,7 @@ fig = px.bar(
     facet_row='variable',
     color='variable',
     color_discrete_sequence=['steelblue', 'olivedrab'],    
-    title='Cases by Test Date - Milwaukee',
+    title='Cases and Tests by Test Date - Milwaukee',
     width=700,
     height=500,
     )
