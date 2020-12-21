@@ -251,7 +251,10 @@ os.startfile(save_png)
 # fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
 # pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 
-plotdata = monwed.iloc[-5:]
+monwed['Week of'] = monwed['Date'].apply(lambda d: d.strftime('%b %d'))
+plotdata = monwed.iloc[-5:].reset_index(drop=True)
+plotdata.loc[2,'Week of'] = 'Thanksgiving'
+
 
 
 fig = plotly.subplots.make_subplots(
@@ -260,7 +263,7 @@ fig = plotly.subplots.make_subplots(
 
 fig.add_trace(
     go.Scatter(
-        x=plotdata.Date, 
+        x=plotdata['Week of'], 
         y=plotdata.Cases, 
         name='Cases', 
         line_color='steelblue', 
@@ -271,7 +274,7 @@ fig.add_trace(
 # add positivity on secondary axis
 fig.add_trace(
     go.Scatter(
-        x=plotdata.Date, 
+        x=plotdata['Week of'], 
         y=plotdata.Positivity, 
         name='Positivity', 
         line_color='violet', 
@@ -280,10 +283,10 @@ fig.add_trace(
     )
     
 
-fig.update_layout(title='Milwaukee Mon-Wed averages')
+fig.update_layout(title='Milwaukee Mon-Wed Sums')
 
 fig.update_traces(mode='lines+markers', marker_size=10, line_dash='dot')
-fig.update_xaxes(title='Week of')
+fig.update_xaxes(title='Week of...')
 fig.update_yaxes({'range': [0, 4500]}, title='Cases', secondary_y=False)
 fig.update_yaxes({'range': [0, 20]}, title='Positivity (%)', secondary_y=True)
 
