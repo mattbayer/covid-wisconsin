@@ -3,7 +3,7 @@ layout: post
 title: "Was there a Thanksgiving surge?"
 ---
 
-Thanksgiving celebrations did not reverse the virus's downward trend in Wisconsin, but I think the data shows it did lead to a modest increase in infections.
+Thanksgiving celebrations did not reverse the virus's downward trend in Wisconsin, but I think the data shows it did lead to a small increase in infections.
 
 ### Thanksgiving surge...
 I have been somewhat skeptical of the idea of a Thanksgiving surge, and a first assessment of the data seems to confirm that intuition. Wisconsin's case numbers have continued on their decreasing trend, which at least shows that celebrations did not reverse the virus's trajectory.
