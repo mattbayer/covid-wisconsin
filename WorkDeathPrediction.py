@@ -43,7 +43,6 @@ def create_delayed_deaths(state, delay):
     state = state.reset_index()
     return state, delay_str
 
-state, delay_str = create_delayed_deaths(state, delay=12)
 
 # Compile over-30 data
 over30 = ['POS_30_39', 'POS_40_49', 'POS_50_59', 'POS_60_69', 'POS_70_79', 'POS_80_89', 'POS_90']
@@ -62,6 +61,7 @@ state['Cases under 50'] = state[under50].sum(axis=1).diff()
 
 #%% Plot all cases vs. deaths
 CFR = 1.0
+state, delay_str = create_delayed_deaths(state, delay=12)
 
 savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
 
