@@ -68,7 +68,7 @@ death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 # compare = 'Deaths 4-Dec'
 compare = 'Deaths 22-Dec'
 
-death.plot(y=[compare, 'Deaths (reported)'])
+death.rolling(7).mean().plot(y=[compare, 'Deaths (reported)'])
 death['Difference'] = death[compare] - death['Deaths 21-Dec']
 death.plot(y=['Deaths 21-Dec', compare, 'Difference'])
 
