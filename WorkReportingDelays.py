@@ -57,12 +57,12 @@ death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
 death_21 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-21.csv')
 death_latest = read_death_raw('.\\data\\Deaths by day stacked_2020-12-22.csv')
 
-death = death_10
+death = death_latest
 death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
 death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
 death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
-death['Deaths 21-Dec'] = pd.to_numeric(death_21['Confirm + Probable deaths'])
-death['Deaths 22-Dec'] = pd.to_numeric(death_latest['Confirm + Probable deaths'])
+death['Deaths 21-Dec'] = pd.to_numeric(death_21['Confirmed deaths'])
+death['Deaths 22-Dec'] = pd.to_numeric(death_latest['Confirmed deaths'])
 death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 
 # compare = 'Deaths 4-Dec'
