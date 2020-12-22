@@ -125,7 +125,7 @@ fig = covid.plotly_twolines(
 
 #%% Cases over 50 vs deaths
 # interesting, actually doesn't work that well
-CFR_50 = 2.0
+CFR_50 = 2.5
 state, delay_str = create_delayed_deaths(state, delay=12)
 
 fig = covid.plotly_twolines(
