@@ -18,13 +18,15 @@ import covid
 #%% Load data
 
 state = covid.read_covid_data_wi('state')
+county = covid.read_covid_data_wi('county')
+mke = county[county.NAME == 'Milwaukee']
 
 covid.plot_by_age(state)
 
 # rename
 col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
 state = state.rename(columns=col_rename)
-
+mke = mke.rename(columns=col_rename)
 
 
 
@@ -62,6 +64,8 @@ state['Cases under 50'] = state[under50].sum(axis=1).diff()
 #%% Plot all cases vs. deaths
 CFR = 1.0
 state, delay_str = create_delayed_deaths(state, delay=12)
+
+# state, delay_str = create_delayed_deaths(mke, delay=14)
 
 savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
 
@@ -168,15 +172,17 @@ def read_death_raw(death_file):
 death_03 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-03.csv')
 death_04 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-04.csv')
 death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
+death_latest = read_death_raw('.\\data\\Deaths by day stacked_2020-12-21.csv')
 
 death = death_10
 death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
 death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
 death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
+death['Deaths 21-Dec'] = pd.to_numeric(death_latest['Confirm + Probable deaths'])
 death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 
 # compare = 'Deaths 4-Dec'
-compare = 'Deaths 10-Dec'
+compare = 'Deaths 21-Dec'
 
 death.plot(y=[compare, 'Deaths (reported)'])
 death['Difference'] = death[compare] - death['Deaths 3-Dec']
