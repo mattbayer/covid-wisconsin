@@ -290,21 +290,25 @@ def plotly_twolines(
         groupcolors=None,
         column1_bar=True,
         plotlabels=None,
+        fig_height='100%',
+        showfig = True,
         ):
     """Create interactive plotly figure of two quantities.
     
-    sourcedata -- a DataFrame containing the data to plot
-    column1 -- name of first column to plot
-    column2 -- name of second column to plot
-    date_col -- name of column containing datetime objects as x-axis
-    plotcolors -- colors for the three possible plots, in the order [column1 avg, column2 avg, column1 non-avg]
-    savefile -- full path of file for saving the html of the figure
-    groupby  -- name of column to use for splitting into a plot grid, such as region
-    grouplist -- list of members of groupby to plot. If None then plot first 9.
+    sourcedata  -- a DataFrame containing the data to plot
+    column1     -- name of first column to plot
+    column2     -- name of second column to plot
+    date_col    -- name of column containing datetime objects as x-axis
+    plotcolors  -- colors for the three possible plots, in the order [column1 avg, column2 avg, column1 non-avg]
+    savefile    -- full path of file for saving the html of the figure
+    groupby     -- name of column to use for splitting into a plot grid, such as region
+    grouplist   -- list of members of groupby to plot. If None then plot first 9.
     secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
     groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
     column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
-    plotlabels -- dict containing strings for 'title', 'yaxis', 'yaxis_secondary'
+    plotlabels  -- dict containing strings for 'title', 'yaxis', 'yaxis_secondary'
+    fig_height  -- html tag for height of the figure. Default is to fill the div; could also specify pixels.
+    showfig     -- flag for displaying the figure after it is created
     """
 
     # misc input processing - plotcolors
@@ -490,10 +494,21 @@ def plotly_twolines(
     else:
         fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.18, xanchor="center", x=0.5))     
                            
-    # plot and save as html, with plotly JS library loaded from CDN
-    plotly.offline.plot(fig, 
-          filename = savefile, 
-          include_plotlyjs='cdn')  
+    # # plot and save as html, with plotly JS library loaded from CDN
+    # plotly.offline.plot(fig, 
+    #       filename = savefile, 
+    #       include_plotlyjs='cdn')  
+    
+    # save as html, with plotly JS library loaded from CDN
+    fig.write_html(
+        file=savefile,
+        default_height=fig_height,
+        include_plotlyjs='cdn',
+        )      
+    
+    # show the figure
+    if showfig:
+        os.startfile(savefile)
     
     return fig
   
