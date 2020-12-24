@@ -1,0 +1,37 @@
+name: Update Data from Wisconsin DHS
+
+on: [workflow_dispatch]
+
+jobs:
+  update-data:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+    - name: Install dependencies
+      run: |
+        conda env update --name base pandas numpy os
+    - name: Run update functions
+      run: |
+        python UpdateDataAuto.py
+    - name: Setup git config
+      run: |
+        # setup the username and email. 
+        git config user.name "mattbayer"
+        git config user.email "<>"
+    - name: Commit updates
+      run: |
+        # Stage the file, commit and push
+        git add .\\data\\Covid-Data-WI-State.csv
+        git add .\\data\\Covid-Data-WI-County.csv
+        git commit -m "Data update (auto)"
+        git push origin master
+
