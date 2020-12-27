@@ -34,8 +34,10 @@ jobs:
     - name: Commit updates
       run: |
         # Stage the file, commit and push
-        git add .\\data\\Covid-Data-WI-State.csv
-        git add .\\data\\Covid-Data-WI-County.csv
+        git add data/Covid-Data-WI-State.csv
+        git add data/Covid-Data-WI-County.csv
+        git add docs/assets/plotly/Cases-Tests-WI.html
+        git add docs/assets/plotly/Deaths-Hosp-WI.html       
         git commit -m "Data update (auto)"
         git push origin master
 
