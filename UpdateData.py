@@ -56,7 +56,7 @@ covid.plotly_deadhosp(sourcedata=state,
 import UpdateGeo
 
 # Regional plots by importing other script
-import BlogRegionalUpdate
+import UpdateRegional
 
 #%% Tract work - UWM and Marquette
 

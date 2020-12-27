@@ -32,12 +32,15 @@ def plotly_colorbubble(
         plotlabels=None,
         savefile='.\\temp.html',
         fig_height='100%',
+        showfig = True,
         ):
     """Create interactive plotly map figure, with bubbles that show size and color
     
     geodata     -- GeoPandas DataFrame 
     sizecol     -- Column to use for bubble sizes
     colorcol    -- Column to use for bubble color
+    fig_height  -- html tag for height of the figure. Default is to fill the div; could also specify pixels.
+    showfig     -- flag for displaying the figure after it is created
     """
     # Input process plotlabels
     plotlabels_default = dict(title='Color-Bubble Map',
@@ -214,7 +217,10 @@ def plotly_colorbubble(
         default_height=fig_height,
         include_plotlyjs='cdn',
         )      
-    os.startfile(savefile)
+    
+    # show the figure
+    if showfig:
+        os.startfile(savefile)
     
     return fig
 

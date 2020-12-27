@@ -40,3 +40,9 @@ covid.plotly_deadhosp(sourcedata=state,
                       savefile=plotpath + '\\Deaths-Hosp-WI.html',
                       showfig=False,
                       )
+
+#%% Dashboard - other plots
+
+import UpdateGeo
+
+import UpdateRegional
