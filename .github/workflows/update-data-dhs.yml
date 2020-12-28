@@ -3,8 +3,7 @@ name: Update Data from Wisconsin DHS
 on: 
   workflow_dispatch:
   schedule:
-#    - cron: '20 20 * * *'
-    - cron: '50 22 * * *'
+    - cron: '20 20 * * *'
 
 jobs:
   update-data:
