@@ -1,30 +1,34 @@
 ---
 layout: post
-title: "Status update"
+title: "Covid WI status update: Dec 30"
 hidden: true
 ---
 
-
-Cases continue declining in Wisconsin. Deaths numbers are a bit erratic, but I expect them to decline overall in the future. I expect a temporary spurt of new cases from Christmas and New Year's, but as with Thanksgiving the data will be erratic for a while.
+Cases continue declining in Wisconsin. Deaths numbers plateaued for a while and are a bit erratic, but I expect them to decline overall in the future. As happened with Thanksgiving, I predict a relatively small, temporary spurt of new cases from the Christmas and New Year's holidays.
 
 ### Cases and deaths
-Several weeks ago I predicted that [deaths had peaked](2020-12-7-status-update.md). The intervening weeks have proven this wrong. Here is an update of the graph 
+Several weeks ago I predicted that [deaths had peaked](2020-12-07-status-update.md). The intervening weeks have proven this wrong. Here is an update of the graph overlapping Wisconsin's case and death curves, with about a two week delay.
 
-Clearly the death curve has not followed the case curve, but instead stayed on an erratic plateau. I think this is due not to anything strange with the virus, however, but to increased delays in recording deaths.
+![Cases and deaths](../assets/Cases-Deaths-WI_2020-12-29.png)
 
+Clearly the death curve did not follow the case curve on its downswing, but instead stayed on an erratic plateau for a while. I think this is due not to anything strange with the virus, however, but to increased delays in recording deaths. The [DHS website](https://www.dhs.wisconsin.gov/covid-19/county.htm) does provide data for deaths by date of death. If I compare date of death with date of reporting, I can see that the reporting delay increased during the fall surge. This is probably not surprising - health departments have had a lot more deaths to process.
 
-I still think deaths should continue trending downward overall, but they perhaps won't follow the case curve as closely as I thought.
+![Deaths reporting delay](../assets/Deaths-Delay_2020-12-29.png)
 
-### A lump of covid in our stocking
-Based on what happened with Thanksgiving, I would expect the Christmas holidays to also create a temporary spurt of new cases. I am somewhat more concerned than for Thanksgiving.
-The Christmas season is just a longer period of time, including New Years. It is preceded by more shopping and activity, and in a normal year it involves probably two or three times more get-togethers than for Thanksgiving. Since Thanksgiving did not create a large increase in virus, and we are further from the peak, people may have been less cautious for Christmas. The Google mobility data, indeed, show a larger increase in activity prior to Christmas than it did prior to Thanksgiving.
+Be wary in interpreting this date-of-death curve, because dates from up to 8 weeks ago are not complete yet. Another way of looking at the reporting delay, actually, is to compare the date-of-death curve today with the curve from a week ago. The difference shows when the deaths reported in the last week actually occurred.
 
-![Christmas mobility]
+![Deaths difference](../assets/Deaths-Difference_2020-12-29.png)
 
-On the other hand, I would not expect people's level of caution to change drastically, and it is true that we are at a lower level of virus activity overall. So my prediction would be that Christmas will cause a larger spurt of cases than Thanksgiving, in terms of percentage increase, but that the absolute case rate will not exceed the post-Thanksgiving mini-peak and the effect will still be temporary.
+Note that for this plot I've switched from 7-day averages to daily numbers. It shows that many of the last week's reported deaths are from recent days, but that a substantial number are still coming in from mid-November.
 
+I still think reported deaths should start trending downward soon, but for now the timing is going to depend more on reporting than on the previous weeks' cases.
 
+### The lump of covid in our stocking
+I believe careful analysis shows that [Thanksgiving did cause a small, temporary spurt of cases](2020-12-21-thanksgiving.md). I would expect the Christmas holidays to have a similar, somewhat larger effect.
 
----
+The main reason I am more concerned now than at Thanksgiving is that the Christmas season is just a longer period of time, with New Year's following closely. It is also preceded by more shopping and activity. Furthermore, since Thanksgiving did not create a large increase in virus, and we are further from Wisconsin's peak, people may have been less cautious for Christmas. The [Google mobility data](2020-11-15-mobility.md), indeed, show a much larger increase in visits to retail and recreation locations prior to Christmas than they did prior to Thanksgiving.
 
-The case peak, measured by test date, occurred the second week in November. The peak in tests, interestingly, occurred the following week, while cases fell. Possibly this is because all the close contacts of the past week's positives were seeking testing; possibly it indicates that people were trying to get tested as a precaution before Thanksgiving week.
+![Christmas mobility](../assets/Mobility-Google-Christmas.png)
+
+On the other hand, I would not expect people's level of caution to change drastically, and it is true that we are at a lower level of virus activity overall. So my prediction would be that Christmas will cause a larger percentage increase of cases than Thanksgiving, but that the absolute case rate will not exceed the post-Thanksgiving mini-peak and the effect will still be temporary.
+
