@@ -55,22 +55,22 @@ death_03 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-03.csv')
 death_04 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-04.csv')
 death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
 death_21 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-21.csv')
-death_latest = read_death_raw('.\\data\\Deaths by day stacked_2020-12-26.csv')
+death_latest = read_death_raw('.\\data\\Deaths by day stacked_2020-12-29.csv')
 
 death = death_latest
 death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
 death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
 death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
 death['Deaths 21-Dec'] = pd.to_numeric(death_21['Confirmed deaths'])
-death['Deaths 26-Dec'] = pd.to_numeric(death_latest['Confirmed deaths'])
+death['Deaths 29-Dec'] = pd.to_numeric(death_latest['Confirmed deaths'])
 death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 
 # compare = 'Deaths 4-Dec'
-compare = 'Deaths 26-Dec'
+compare = 'Deaths 29-Dec'
 
-death.rolling(7).mean().plot(y=[compare, 'Deaths (reported)'])
+death.rolling(7).mean().plot(y=[compare, 'Deaths (reported)'], title='Date of Death vs. Report (7-day avg)')
 death['Difference'] = death[compare] - death['Deaths 21-Dec']
-death.plot(y=['Deaths 21-Dec', compare, 'Difference'])
+death.plot(y=['Deaths 21-Dec', compare, 'Difference'], title='Date of Death, Dec 21 vs. 29')
 
 
 # seems like a huge delay in deaths... but if there is such a big delay, then

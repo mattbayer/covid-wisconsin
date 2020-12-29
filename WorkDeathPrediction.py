@@ -62,8 +62,8 @@ state['Cases under 50'] = state[under50].sum(axis=1).diff()
 
 
 #%% Plot all cases vs. deaths
-CFR = 1.2
-state, delay_str = create_delayed_deaths(state, delay=16)
+CFR = 1.0
+state, delay_str = create_delayed_deaths(state, delay=12)
 
 # state, delay_str = create_delayed_deaths(mke, delay=14)
 

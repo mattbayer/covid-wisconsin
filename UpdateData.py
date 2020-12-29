@@ -58,6 +58,9 @@ import UpdateGeo
 # Regional plots by importing other script
 import UpdateRegional
 
+#%%
+
+
 #%% Tract work - UWM and Marquette
 
 # # covid data by census tract
