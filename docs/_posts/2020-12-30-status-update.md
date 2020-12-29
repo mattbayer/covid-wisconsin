@@ -1,14 +1,13 @@
 ---
 layout: post
-title: "Status update"
+title: "Covid WI status update: Dec 30"
 hidden: true
 ---
-
 
 Cases continue declining in Wisconsin. Deaths numbers plateaued for a while and are a bit erratic, but I expect them to decline overall in the future. As happened with Thanksgiving, I predict a relatively small, temporary spurt of new cases from the Christmas and New Year's holidays.
 
 ### Cases and deaths
-Several weeks ago I predicted that [deaths had peaked](2020-12-7-status-update.md). The intervening weeks have proven this wrong. Here is an update of the graph overlapping Wisconsin's case and death curves, with about a two week delay.
+Several weeks ago I predicted that [deaths had peaked](2020-12-07-status-update.md). The intervening weeks have proven this wrong. Here is an update of the graph overlapping Wisconsin's case and death curves, with about a two week delay.
 
 ![Cases and deaths](../assets/Cases-Deaths-WI_2020-12-29.png)
 
@@ -25,7 +24,7 @@ Note that for this plot I've switched from 7-day averages to daily numbers. It s
 I still think reported deaths should start trending downward soon, but for now the timing is going to depend more on reporting than on the previous weeks' cases.
 
 ### The lump of covid in our stocking
-I believe careful analysis shows that [Thanksgiving did cause a small, temporary spurt of cases)[2020-12-21-thanksgiving.md]. I would expect the Christmas holidays to have a similar, somewhat larger effect.
+I believe careful analysis shows that [Thanksgiving did cause a small, temporary spurt of cases](2020-12-21-thanksgiving.md). I would expect the Christmas holidays to have a similar, somewhat larger effect.
 
 The main reason I am more concerned now than at Thanksgiving is that the Christmas season is just a longer period of time, with New Year's following closely. It is also preceded by more shopping and activity. Furthermore, since Thanksgiving did not create a large increase in virus, and we are further from Wisconsin's peak, people may have been less cautious for Christmas. The [Google mobility data](2020-11-15-mobility.md), indeed, show a much larger increase in visits to retail and recreation locations prior to Christmas than they did prior to Thanksgiving.
 
