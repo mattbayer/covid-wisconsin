@@ -27,7 +27,7 @@ I still think reported deaths should start trending downward soon, but for now t
 ### The lump of covid in our stocking
 I believe careful analysis shows that [Thanksgiving did cause a small, temporary spurt of cases)[2020-12-21-thanksgiving.md]. I would expect the Christmas holidays to have a similar, somewhat larger effect.
 
-The main reason I am more concerned now than at Thanksgiving is that the Christmas season is just a longer period of time, with New Year's following closely. It is also preceded by more shopping and activity. Furthermore, since Thanksgiving did not create a large increase in virus, and we are further from Wisconsin's peak, people may have been less cautious for Christmas. The Google mobility data, indeed, show a much larger increase in visits to retail and recreation locations prior to Christmas than they did prior to Thanksgiving.
+The main reason I am more concerned now than at Thanksgiving is that the Christmas season is just a longer period of time, with New Year's following closely. It is also preceded by more shopping and activity. Furthermore, since Thanksgiving did not create a large increase in virus, and we are further from Wisconsin's peak, people may have been less cautious for Christmas. The [Google mobility data](2020-11-15-mobility.md), indeed, show a much larger increase in visits to retail and recreation locations prior to Christmas than they did prior to Thanksgiving.
 
 ![Christmas mobility](../assets/Mobility-Google-Christmas.png)
 
