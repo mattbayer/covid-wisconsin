@@ -116,10 +116,14 @@ a.sidebar-nav-item:focus {
 
 @media (min-width: 48em) {
   .sidebar-sticky {
+    display: flex;
+    align-items: center;
+    /*
     position: absolute;
     right:  1rem;
     bottom: 1rem;
     left:   1rem;
+    /*
   }
 }
 
