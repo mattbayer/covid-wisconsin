@@ -1,7 +1,7 @@
 # Setup
 title:               Covid in Wisconsin
 tagline:             ''
-description:         'A blog for unique analysis of Covid data in Wisconsin.'
+description:         'Amateur analysis of our local Covid data.'
 url:                 https://covid-wisconsin.com
 baseurl:             ''
 paginate:            5
