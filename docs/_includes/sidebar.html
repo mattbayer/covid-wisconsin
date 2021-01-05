@@ -1,9 +1,11 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     
-    <div class="sidebar-logo">
-      <img src='{{"/public/LogoCovidWI.png" | absolute_url}}'>
-    </div>
+    {% if site.logo != null %}
+      <div class="sidebar-logo">
+        <img src='{{ site.logo | absolute_url }}'>
+      </div>
+    {% endif %}
     
     <div class="sidebar-about">
       <h1>
