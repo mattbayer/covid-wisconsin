@@ -2,6 +2,7 @@
 title:               Covid in Wisconsin
 tagline:             ''
 description:         'Amateur analysis of our local Covid data.'
+logo:                '/public/LogoCovidWI.png'
 url:                 https://covid-wisconsin.com
 baseurl:             ''
 paginate:            5
