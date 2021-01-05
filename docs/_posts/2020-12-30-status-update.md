@@ -1,8 +1,6 @@
 ---
 layout: post
-title: |
-  | Covid WI status update: 
-  | Dec 30
+title: "Covid WI status update: Dec 30"
 ---
 
 Cases continue declining in Wisconsin. Deaths numbers plateaued for a while and are a bit erratic, but I expect them to decline overall in the future. As happened with Thanksgiving, I predict a relatively small, temporary spurt of new cases from the Christmas and New Year's holidays.
