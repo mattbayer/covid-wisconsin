@@ -71,6 +71,14 @@ html {
   }
 }
 
+/* Sidebar logo */
+.sidebar-logo img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 8rem;
+}
+
 /* Sidebar links */
 .sidebar a {
   color: #fff;
