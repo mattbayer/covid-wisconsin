@@ -30,7 +30,7 @@ col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW'
 state = state.rename(columns=col_rename)
 
 # tests by result date
-tests = covid.read_bytest_wi("data\\By_Test_Data_data_2020-12-17.csv")
+tests = covid.read_bytest_wi("data\\By_Test_Data_data_2021-01-06.csv")
 
 
 #%% Process tests by result date
@@ -39,43 +39,47 @@ tests['Tests 7-day'] = tests['Tests'].rolling(7).mean()
 tests['Positives 7-day'] = tests['Positives'].rolling(7).mean()
 tests['Positivity 7-day'] = tests['Positives 7-day'] / tests['Tests 7-day']
 tests['Positivity'] = tests['Positives'] / tests['Tests']
-tests['Positivity 7-day x10000'] = tests['Positivity 7-day'] * 10000
+tests['Positivity 7-day x20000'] = tests['Positivity 7-day'] * 20000
 tests['Prevalence Index'] = np.sqrt(tests['Positives 7-day'] * tests['Positivity 7-day']) * 200
 
 tests['Weekday'] = tests.Date.apply(lambda d: d.weekday())
 
-tests.plot(x='Date', y=['Positives 7-day', 'Positivity 7-day x10000', 'Prevalence Index'])
+tests.plot(x='Date', y=['Positives 7-day', 'Positivity 7-day x20000', 'Prevalence Index'])
 
-fig = px.bar(tests, x='Date', y=['Positives', 'Tests'], barmode='group')
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+# Bar plot of tests and positives, like DHS
+# fig = px.bar(tests, x='Date', y=['Positives', 'Tests'], barmode='group')
+# pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp1.html')
 
-fig = px.line(tests, x='Date', y='Positives', color='Weekday')
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
+# Make separate lines for each day of the week
+# fig = px.line(tests, x='Date', y='Positives', color='Weekday')
+# pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp2.html')
 
 
 
 #%% Plot tests by result date
 
-
+# remember below shows 7-day average positivity as average of the positivity, 
+# not more correctly positivity of the averages.
 
 covid.plotly_twolines(
     tests, 
     'Positivity', 
     'Positives', 
-    plotcolors=['violet', 'steelblue'],
-    secondary_scale=1e4,
+    plotcolors=['violet', 'steelblue', 'thistle'],
+    secondary_scale=3e4,
+    savefile=plotpath+'\\Pos-Positivity-ByResult-WI.html',
     )
 
-covid.plotly_casetest(sourcedata=tests, 
-                      case_col='Positives', 
-                      test_col='Tests', 
-                      date_col='Date', 
-                      savefile=plotpath + '\\Pos-Test-ByResult-WI.html',
-                      )
+# covid.plotly_casetest(sourcedata=tests, 
+#                       case_col='Positives', 
+#                       test_col='Tests', 
+#                       date_col='Date', 
+#                       savefile=plotpath + '\\Pos-Test-ByResult-WI.html',
+#                       )
 
 
 #%% Cases by test date for Wisconsin
-filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2020-12-20.csv'
+filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2020-01-06.csv'
 
 wi = pd.read_csv(filename)
 # filter out redundant data
@@ -88,8 +92,8 @@ wi['Date'] = pd.to_datetime(wi['Date'])
 
 #%% cases bar plot
 
-wi = wi.loc[wi['Date'] >= datetime.datetime(2020,11,9)]
-wi = wi.loc[wi['Date'] <= datetime.datetime(2020,12,13)]
+wi = wi.loc[wi['Date'] >= datetime.datetime(2020,12,7)]
+wi = wi.loc[wi['Date'] <= datetime.datetime(2021,1,11)]
 
 fig = px.bar(
     wi, 
@@ -104,7 +108,7 @@ fig = px.bar(
 fig.update_layout(showlegend=False)
 
 # add dividers
-date = datetime.datetime(2020,11,15,12)
+date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
 for d in range(0,4):
@@ -118,14 +122,14 @@ for d in range(0,4):
     date = date + delta
 
 fig.update_layout(shapes=dividers)
-fig.add_annotation(text='Thanksgiving',
-                   x=datetime.datetime(2020,11,25,22), 
-                   y=2400, 
+fig.add_annotation(text='Christmas',
+                   x=datetime.datetime(2020,12,25,0), 
+                   y=1400, 
                    yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
                    
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-WI.html')
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Christmas-WI.html')
 
-save_png = '.\\docs\\assets\\Thanksgiving-WI.png'
+save_png = '.\\docs\\assets\\Christmas-WI.png'
 fig.write_image(
     save_png,
     width=700,
@@ -134,7 +138,7 @@ fig.write_image(
 )
 os.startfile(save_png)
 
-#%% Thanksgiving surge for Milwaukee
+#%% Christmas surge for Milwaukee
 
 # get milwaukee test numbers by copying html of the dashboard and scraping it
 # get this originally by doing a browser html inspection of the graph on the Milwaukee county dashboard,
@@ -142,14 +146,8 @@ os.startfile(save_png)
 # I can regex on these labels below.
 
 
-html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-12-20.html'
-html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-12-20.html'
-html_file2 = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-11-09.html'
-
-# file_obj = open(html_file)
-# file_text = file_obj.read()
-
-# m = re.findall('aria-label=\"(.*?)(\d+/\d+)(.*?)\"', file_text)
+html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-01-06.html'
+html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-01-06.html'
 
 mke_case = covid.read_dashboard_mke(html_cases)
 mke_test = covid.read_dashboard_mke(html_tests)
@@ -183,8 +181,8 @@ weekly.plot(x='Date', y='Positivity', marker='.')
 
 #%% facet bar plot?
 
-temp = mke.loc[mke['Date'] >= datetime.datetime(2020,11,9)]
-temp = temp.loc[temp['Date'] <= datetime.datetime(2020,12,13)]
+temp = mke.loc[mke['Date'] >= datetime.datetime(2020,12,7)]
+temp = temp.loc[temp['Date'] <= datetime.datetime(2021,1,11)]
 temp = temp[['Date', 'Cases', 'Tests']].melt(id_vars='Date')
 
 fig = px.bar(
@@ -207,7 +205,7 @@ fig.update_yaxes(title='Tests', row=1)
 
 
 # add dividers
-date = datetime.datetime(2020,11,15,12)
+date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
 for d in range(0,4):
@@ -221,19 +219,19 @@ for d in range(0,4):
     date = date + delta
 
 fig.update_layout(shapes=dividers)
-fig.add_annotation(text='Thanksgiving',
-                   x=datetime.datetime(2020,11,25,22), 
-                   y=1000, 
+fig.add_annotation(text='Christmas',
+                   x=datetime.datetime(2020,12,24,23), 
+                   y=700, 
                    yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
                    
-fig.add_annotation(text='Thanksgiving',
-                   x=datetime.datetime(2020,11,25,22), 
-                   y=150, row=0, col=0,
+fig.add_annotation(text='Christmas',
+                   x=datetime.datetime(2020,12,24,23), 
+                   y=50, row=0, col=0,
                    yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
 
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-Milwaukee.html')
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Christmas-Milwaukee.html')
 
-save_png = '.\\docs\\assets\\Thanksgiving-Milwaukee.png'
+save_png = '.\\docs\\assets\\Christmas-Milwaukee.png'
 fig.write_image(
     save_png,
     width=700,
@@ -249,7 +247,7 @@ os.startfile(save_png)
 
 monwed['Week of'] = monwed['Date'].apply(lambda d: d.strftime('%b %d'))
 plotdata = monwed.iloc[-5:].reset_index(drop=True)
-plotdata.loc[2,'Week of'] = 'Thanksgiving'
+plotdata.loc[2,'Week of'] = 'Christmas'
 
 
 
@@ -287,9 +285,9 @@ fig.update_yaxes({'range': [0, 4500]}, title='Cases', secondary_y=False)
 fig.update_yaxes({'range': [0, 20]}, title='Positivity (%)', secondary_y=True)
 
 
-pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Thanksgiving-MonWed-Milwaukee.html')
+pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Christmas-MonWed-Milwaukee.html')
 
-save_png = '.\\docs\\assets\\Thanksgiving-MonWed-Milwaukee.png'
+save_png = '.\\docs\\assets\\Christmas-MonWed-Milwaukee.png'
 fig.write_image(
     save_png,
     width=700,
@@ -299,80 +297,4 @@ fig.write_image(
 os.startfile(save_png)
 
     
-#%% Plot deaths vs cases
-# contra Trevor Bedford on the national data - this seems to fit better with a 
-# deaths delay of 12 days (instead of 21) and a CFR of 1.0% (instead of 1.8%).
-delay = 12
-CFR = 1.0
 
-def create_delayed_deaths(state, delay):
-    # create delayed death column
-    deaths = state[['Date', 'Deaths']]
-    deaths.Date = deaths.Date - datetime.timedelta(days=delay)
-    deaths = deaths.set_index('Date')
-    state = state.set_index('Date')
-    delay_str = 'Deaths (-'+str(delay)+' days)'
-    state[delay_str] = deaths
-    state = state.reset_index()
-    return state, delay_str
-
-
-state, delay_str = create_delayed_deaths(state, delay)
-
-
-#%% Plot all cases vs. deaths
-
-savefile = '.\\docs\\assets\\plotly\\Cases-Deaths-WI.html'
-
-fig = covid.plotly_twolines(
-    state,
-    delay_str,
-    'Cases',
-    plotcolors=['firebrick', 'steelblue', 'rosybrown'],
-    secondary_scale=1/(CFR/100),
-    plotlabels = {'title': 'WI Deaths and Cases<br>(assuming CFR '+str(CFR)+'%)',
-                  'yaxis': 'Deaths',
-                  'yaxis_secondary': 'Cases',
-                  },
-    column1_bar=True,
-    savefile=savefile,
-    )    
-
-# save_png = '.\\docs\\assets\\Cases-Deaths-WI_2020-12-06.png'
-save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
-fig.write_image(
-    save_png,
-    width=900,
-    height=600,
-    engine='kaleido',
-)
-os.startfile(save_png)
-
-#%% Overlap bar plot - deciding not to use
-if False:
-    fig = px.bar(mke.loc[mke['Date'] >= datetime.datetime(2020,11,9)], 
-                 x='Date', y=['Tests', 'Cases'], barmode='overlay', 
-                 color_discrete_sequence=['olivedrab','navy'], opacity=0.8)
-    
-    
-    
-    # add dividers
-    date = datetime.datetime(2020,11,15,12)
-    delta = datetime.timedelta(days=7)
-    dividers = list()
-    for d in range(0,4):
-        dividers.append(
-            dict(
-                type= 'line', line_color='gray', line_dash='dot',
-                yref= 'paper', y0= 0, y1= 1,
-                xref= 'x', x0=date, x1=date
-            )
-        )
-        date = date + delta
-    
-    fig.update_layout(shapes=dividers)
-    fig.add_annotation(x=datetime.datetime(2020,11,25,22), y=1000, yanchor='bottom', xanchor='center', 
-                       showarrow=False,
-                       text='Thanksgiving', textangle=270)
-    
-    pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
