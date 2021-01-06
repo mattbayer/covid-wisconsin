@@ -247,7 +247,7 @@ os.startfile(save_png)
 
 monwed['Week of'] = monwed['Date'].apply(lambda d: d.strftime('%b %d'))
 plotdata = monwed.iloc[-5:].reset_index(drop=True)
-plotdata.loc[2,'Week of'] = 'Christmas'
+plotdata.loc[3,'Week of'] = 'Christmas'
 
 
 
