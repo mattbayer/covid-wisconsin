@@ -80,7 +80,7 @@ death.plot(y=['Deaths 21-Dec', compare, 'Difference'], title='Date of Death, Dec
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-filename = '.\data\Cases_with_prob_stacked_data_2020-12-20.csv'
+filename = '.\data\Cases_with_prob_stacked_data_2020-01-06.csv'
 case_latest = 'Cases 20-Dec'
 
 cases = pd.read_csv(filename)
