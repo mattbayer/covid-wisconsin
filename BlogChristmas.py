@@ -79,7 +79,7 @@ covid.plotly_twolines(
 
 
 #%% Cases by test date for Wisconsin
-filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2020-01-06.csv'
+filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2021-01-06.csv'
 
 wi = pd.read_csv(filename)
 # filter out redundant data
@@ -146,8 +146,8 @@ os.startfile(save_png)
 # I can regex on these labels below.
 
 
-html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2020-01-06.html'
-html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2020-01-06.html'
+html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2021-01-06.html'
+html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2021-01-06.html'
 
 mke_case = covid.read_dashboard_mke(html_cases)
 mke_test = covid.read_dashboard_mke(html_tests)
