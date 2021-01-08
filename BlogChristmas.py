@@ -79,7 +79,7 @@ covid.plotly_twolines(
 
 
 #%% Cases by test date for Wisconsin
-filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2021-01-06.csv'
+filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2021-01-08.csv'
 
 wi = pd.read_csv(filename)
 # filter out redundant data
@@ -93,7 +93,7 @@ wi['Date'] = pd.to_datetime(wi['Date'])
 #%% cases bar plot
 
 wi = wi.loc[wi['Date'] >= datetime.datetime(2020,12,7)]
-wi = wi.loc[wi['Date'] <= datetime.datetime(2021,1,11)]
+wi = wi.loc[wi['Date'] <= datetime.datetime(2021,1,3)]
 
 fig = px.bar(
     wi, 
@@ -111,7 +111,7 @@ fig.update_layout(showlegend=False)
 date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
-for d in range(0,4):
+for d in range(0,3):
     dividers.append(
         dict(
             type= 'line', line_color='gray', line_dash='dot',
@@ -146,8 +146,8 @@ os.startfile(save_png)
 # I can regex on these labels below.
 
 
-html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2021-01-06.html'
-html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2021-01-06.html'
+html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2021-01-08.html'
+html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2021-01-08.html'
 
 mke_case = covid.read_dashboard_mke(html_cases)
 mke_test = covid.read_dashboard_mke(html_tests)
@@ -182,7 +182,7 @@ weekly.plot(x='Date', y='Positivity', marker='.')
 #%% facet bar plot?
 
 temp = mke.loc[mke['Date'] >= datetime.datetime(2020,12,7)]
-temp = temp.loc[temp['Date'] <= datetime.datetime(2021,1,11)]
+temp = temp.loc[temp['Date'] <= datetime.datetime(2021,1,3)]
 temp = temp[['Date', 'Cases', 'Tests']].melt(id_vars='Date')
 
 fig = px.bar(
@@ -208,7 +208,7 @@ fig.update_yaxes(title='Tests', row=1)
 date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
-for d in range(0,4):
+for d in range(0,3):
     dividers.append(
         dict(
             type= 'line', line_color='gray', line_dash='dot',
@@ -241,7 +241,7 @@ fig.write_image(
 os.startfile(save_png)
 
 
-#%%
+#%% Mon-Wed line plot
 # fig = px.bar(weekly, x='Date', y=['Cases', 'Tests'], barmode='group')
 # pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\temp.html')
 

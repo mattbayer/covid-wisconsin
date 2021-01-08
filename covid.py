@@ -1268,7 +1268,14 @@ def read_dashboard_mke(html_file):
         textlist.append(textstr)
         
         datestr = element[1]
-        date = datetime.datetime(year=2020, month=pd.to_numeric(datestr[0:2]), day=pd.to_numeric(datestr[3:]))
+        # hack for year because the dashboard doesn't include it; assume any
+        # Jan-Feb are 2021
+        month=pd.to_numeric(datestr[0:2])
+        if month < 3:
+            year = 2021
+        else:
+            year = 2020
+        date = datetime.datetime(year=year, month=month, day=pd.to_numeric(datestr[3:]))
         datelist.append(date)
         
         valuestr = element[2]
