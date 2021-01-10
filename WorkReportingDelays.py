@@ -37,12 +37,16 @@ def read_death_raw(death_file):
     
     death = death_raw.iloc[:,2:]
     death = death.rename(columns={'Unnamed: 2': 'series'})
-    death.iloc[0,0] = 'Date'
+    death.iloc[0,0] = 'datestring'
     death = death.set_index('series').T.reset_index(drop=True)
     death.columns.name = ''
     
-    death['Date'] = pd.to_datetime(death['Date']+'-2020')
+    # hack because the date string does not include the year
+    death.loc[0:344, 'datestring'] = death.loc[0:344, 'datestring'] + '-2020'
+    death.loc[345:, 'datestring'] = death.loc[345:, 'datestring'] + '-2021'
     
+    death['Date'] = pd.to_datetime(death['datestring'])
+        
     death = death.set_index('Date')
     
     return death
@@ -68,7 +72,7 @@ death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 # compare = 'Deaths 4-Dec'
 compare = 'Deaths 29-Dec'
 
-death.rolling(7).mean().plot(y=[compare, 'Deaths (reported)'], title='Date of Death vs. Report (7-day avg)')
+death.rolling(7).mean().plot(y=[latest, 'Deaths (reported)'], title='Date of Death vs. Report (7-day avg)')
 death['Difference'] = death[latest] - death[compare]
 death.plot(y=[compare, latest, 'Difference'], title='Date of Death, '+compare+' vs. '+latest)
 
@@ -80,8 +84,9 @@ death.plot(y=[compare, latest, 'Difference'], title='Date of Death, '+compare+' 
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-filename = '.\data\Cases_with_prob_stacked_data_2020-01-08.csv'
+filename = '.\data\Cases_with_prob_stacked_data_2021-01-08.csv'
 case_latest = 'Cases 20-Dec'
+death_latest = latest;
 
 cases = pd.read_csv(filename)
 # filter out redundant data
@@ -97,13 +102,13 @@ cases = cases.set_index('Date')
 cases['Cases (reported)'] = state.set_index('Date').Cases
 
 death2 = death.reset_index(drop=False)
-death2['Date'] = death2['Date'] - datetime.timedelta(days=21)
-cases[compare] = death2.set_index('Date')[compare] / 0.013
+death2['Date'] = death2['Date'] - datetime.timedelta(days=18)
+cases[death_latest] = death2.set_index('Date')[death_latest] / 0.012
 cases = cases.reset_index(drop=False)
 
 cases.plot(x='Date', y=[case_latest, 'Cases (reported)'])
 
-cases.plot(x='Date', y=[case_latest, compare])
+cases.plot(x='Date', y=[case_latest, death_latest])
 
 
 
