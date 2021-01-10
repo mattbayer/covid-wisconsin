@@ -21,14 +21,10 @@ state = covid.read_covid_data_wi('state')
 county = covid.read_covid_data_wi('county')
 mke = county[county.NAME == 'Milwaukee']
 
-covid.plot_by_age(state)
-
 # rename
 col_rename = {'Date': 'Date', 'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}
 state = state.rename(columns=col_rename)
 mke = mke.rename(columns=col_rename)
-
-
 
 
 
@@ -55,22 +51,26 @@ death_03 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-03.csv')
 death_04 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-04.csv')
 death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
 death_21 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-21.csv')
-death_latest = read_death_raw('.\\data\\Deaths by day stacked_2020-12-29.csv')
+death_29 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-29.csv')
+death_latest = read_death_raw('.\\data\\Deaths by day stacked_2021-01-08.csv')
+
+latest = 'Deaths 08-Jan'
 
 death = death_latest
 death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
 death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
 death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
 death['Deaths 21-Dec'] = pd.to_numeric(death_21['Confirmed deaths'])
-death['Deaths 29-Dec'] = pd.to_numeric(death_latest['Confirmed deaths'])
+death['Deaths 29-Dec'] = pd.to_numeric(death_29['Confirmed deaths'])
+death[latest] = pd.to_numeric(death_latest['Confirmed deaths'])
 death['Deaths (reported)'] = state.set_index('Date')['Deaths']
 
 # compare = 'Deaths 4-Dec'
 compare = 'Deaths 29-Dec'
 
 death.rolling(7).mean().plot(y=[compare, 'Deaths (reported)'], title='Date of Death vs. Report (7-day avg)')
-death['Difference'] = death[compare] - death['Deaths 21-Dec']
-death.plot(y=['Deaths 21-Dec', compare, 'Difference'], title='Date of Death, Dec 21 vs. 29')
+death['Difference'] = death[latest] - death[compare]
+death.plot(y=[compare, latest, 'Difference'], title='Date of Death, '+compare+' vs. '+latest)
 
 
 # seems like a huge delay in deaths... but if there is such a big delay, then
@@ -80,7 +80,7 @@ death.plot(y=['Deaths 21-Dec', compare, 'Difference'], title='Date of Death, Dec
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-filename = '.\data\Cases_with_prob_stacked_data_2020-01-06.csv'
+filename = '.\data\Cases_with_prob_stacked_data_2020-01-08.csv'
 case_latest = 'Cases 20-Dec'
 
 cases = pd.read_csv(filename)
