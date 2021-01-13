@@ -69,15 +69,12 @@ def plotly_colorbubble(
         geojson=geoJS,
         locations=geodata.index,
         color_discrete_sequence=[line_colors['land']],
-        # width=600,
-        # height=600,
         projection='mercator',
         )
     
     # turn off hover tooltips for this layer - have to set both of these because
     # hovertemplate is set automatically and it supersedes hoverinfo.
-    # Also take out legend because it's not very useful right now; I could add
-    # a fancier custom legend later.
+    # Also take out legend because I add a fancier custom legend later.
     fig.update_traces(
         hovertemplate=None, 
         hoverinfo='skip', 
@@ -158,8 +155,8 @@ def plotly_colorbubble(
     for ss in range(len(sizes_pixel)):
         fig.add_trace(
             go.Scattergeo(
-                lon=[dummy_lon], #[geodata.plotlon[0]],   # just dummy locations
-                lat=[dummy_lat] , #[geodata.plotlat[0]],
+                lon=[dummy_lon],    # just dummy locations
+                lat=[dummy_lat],
                 name=sizes_names[ss],
                 # visible='legendonly',
                 marker=dict(
