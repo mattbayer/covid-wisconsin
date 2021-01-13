@@ -1,38 +1,38 @@
-﻿Name,Design capacity,Total population,DAI,DCC,Sex,Security,Type,Positive Tests,Negative Tests,Total Tests,Released Positive Cases,Active Positive Cases,Inactive Positive Cases,Deaths,Notes,% infected
-Black River Correctional Center,66,52,52,0,Male,Minimum,Center,42,315,357,3,0,39,0,,81%
-Drug Abuse Correctional Center,125,165,165,0,Male,Minimum,Center,64,729,793,8,2,54,0,,39%
-Felmers O. Chaney Correctional Center,100,54,54,0,Male,Minimum,Center,19,207,226,1,0,18,0,,35%
-Flambeau Correctional Center,50,35,35,0,Male,Minimum,Center,14,206,220,0,0,14,0,,40%
-Gordon Correctional Center,52,63,63,0,Male,Minimum,Center,48,150,198,0,0,48,0,,76%
-John C. Burke Correctional Center,186,201,201,0,Male,Minimum,Center,35,309,344,1,3,31,0,,17%
-Kenosha Correctional Center,60,68,68,0,Male,Minimum,Center,0,114,114,0,0,0,0,,0%
-Marshall E. Sherrer Correctional Center,32,38,38,0,Male,Minimum,Center,9,149,158,1,0,8,0,,24%
-McNaughton Correctional Center,55,98,98,0,Male,Minimum,Center,69,170,239,3,0,66,0,,70%
-Oregon Correctional Center,78,96,96,0,Male,Minimum,Center,1,251,252,0,0,1,0,,1%
-Sanger B. Powers Correctional Center,60,92,92,0,Male,Minimum,Center,63,220,283,3,0,60,0,,68%
-St. Croix Correctional Center,94,48,48,0,Male,Minimum,Center,1,130,131,0,0,1,0,"There is also capacity for female prisoners, but current population is 0.",2%
-Thompson Correctional Center,118,107,107,0,Male,Minimum,Center,34,317,351,2,0,32,0,,32%
-Winnebago Correctional Center,210,195,195,0,Male,Minimum,Center,78,844,922,6,0,72,0,,40%
-Chippewa Valley Correctional Treatment Facility,450,352,352,0,Male,Minimum,Institution,293,1120,1413,22,0,271,0,,83%
-Columbia Correctional Institution,541,742,742,0,Male,Maximum,Institution,279,1928,2207,2,1,276,0,,38%
-Dodge Correctional Institution,1165,1353,1350,3,Male,Maximum,Institution,724,10057,10781,2,6,716,2,,54%
-Fox Lake Correctional Institution,979,1234,1234,0,Male,Medium,Institution,893,3258,4151,6,0,887,2,,72%
-Green Bay Correctional Institution,749,985,985,0,Male,Maximum,Institution,481,3862,4343,6,1,474,1,,49%
-Jackson Correctional Institution,837,905,905,0,Male,Medium,Institution,592,3109,3701,9,1,582,0,,65%
-Kettle Moraine Correctional Institution,783,1048,1048,0,Male,Medium,Institution,873,3952,4825,9,0,864,1,,83%
-Milwaukee Womens Correctional Center,42,52,52,0,Female,Minimum,Institution,30,319,349,1,0,29,0,,58%
-New Lisbon Correctional Institution,950,976,976,0,Male,Medium,Institution,548,3147,3695,4,0,544,0,,56%
-Oakhill Correctional Institution,344,649,649,0,Male,Minimum,Institution,397,2320,2717,5,44,348,1,,61%
-Oshkosh Correctional Institution,1494,1859,1859,0,Male,Medium,Institution,1029,7961,8990,31,5,993,4,,55%
-Prairie du Chien Correctional Institution,326,501,501,0,Male,Medium,Institution,413,1055,1468,4,0,409,1,,82%
-Racine Correctional Institution/Sturtevant Transitional Facility,1321,1621,1621,0,Male,Medium/Minimum,Institution,1168,8077,9245,18,68,1082,2,"This combines Racine Correctional and Sturtevant Transitional, which in the population data are broken out separately.  Most population is Racine, Sturtevant is 117 inmates.",72%
-Racine Youthful Offender Correctional Facility,400,340,340,0,Male,Medium,Institution,22,572,594,0,6,16,0,,6%
-Redgranite Correctional Institution,990,950,950,0,Male,Medium,Institution,360,2159,2519,7,0,353,3,,38%
-Robert E. Ellsworth Correctional Center,230,311,311,0,Female,Minimum,Institution,239,1440,1679,4,0,235,0,,77%
-Stanley Correctional Institution,1500,1419,1419,0,Male,Medium,Institution,365,3697,4062,2,1,362,3,,26%
-Taycheedah Correctional Institution,653,845,845,0,Female,,Institution,469,2947,3416,5,6,458,1,,56%
-Waupun Correctional Institution,882,1071,1071,0,Male,Maximum,Institution,719,2524,3243,1,0,718,4,,67%
-Wisconsin Secure Program Facility,501,443,443,0,Male,Maximum,Institution,3,554,557,0,0,3,0,,1%
-Milwaukee Secure Detention Facility,460,330,330,0,Male,,MSDF,145,3362,3507,17,2,126,0,"There is also 1 female prisoner, not included in the total.",44%
-Grow Academy,12,4,,,Male,,Juvenile,0,2,2,0,0,0,0,,0%
-Copper Lake School/Lincoln Hills School,548,65,,,Coed,,Juvenile,24,185,209,1,0,23,0,"Majority male, 84/5.",37%
+﻿Name,Latitude,Longitude,Design capacity,Total population,DAI,DCC,Sex,Security,Type,Positive Tests,Negative Tests,Total Tests,Released Positive Cases,Active Positive Cases,Inactive Positive Cases,Deaths,Notes,% infected,% crowded
+Black River Correctional Center,44.35798492,-90.6521839,66,52,52,0,Male,Minimum,Center,42,315,357,3,0,39,0,,81%,79%
+Chippewa Valley Correctional Treatment Facility,44.9287,-91.35,450,352,352,0,Male,Minimum,Institution,293,1120,1413,22,0,271,0,,83%,78%
+Columbia Correctional Institution,43.5664,-89.4906,541,742,742,0,Male,Maximum,Institution,279,1928,2207,2,1,276,0,,38%,137%
+Copper Lake School/Lincoln Hills School,45.45059019,-89.67918769,548,65,,,Coed,,Juvenile,24,185,209,1,0,23,0,,37%,12%
+Dodge Correctional Institution,43.6244347,-88.7397654,1165,1353,1350,3,Male,Maximum,Institution,724,10057,10781,2,6,716,2,,54%,116%
+Drug Abuse Correctional Center,44.07952673,-88.51504916,125,165,165,0,Male,Minimum,Center,64,729,793,8,2,54,0,,39%,132%
+Felmers O. Chaney Correctional Center,43.07034359,-87.95188733,100,54,54,0,Male,Minimum,Center,19,207,226,1,0,18,0,,35%,54%
+Flambeau Correctional Center,45.65678595,-90.74096719,50,35,35,0,Male,Minimum,Center,14,206,220,0,0,14,0,,40%,70%
+Fox Lake Correctional Institution,43.615,-88.913,979,1234,1234,0,Male,Medium,Institution,893,3258,4151,6,0,887,2,,72%,126%
+Gordon Correctional Center,46.23261066,-91.7540128,52,63,63,0,Male,Minimum,Center,48,150,198,0,0,48,0,,76%,121%
+Green Bay Correctional Institution,44.4705,-88.0372,749,985,985,0,Male,Maximum,Institution,481,3862,4343,6,1,474,1,,49%,132%
+Grow Academy,42.95108733,-89.38424939,12,4,,,Male,,Juvenile,0,2,2,0,0,0,0,"There is also capacity for female prisoners, but current population is 0.",0%,33%
+Jackson Correctional Institution,44.3054,-90.7906,837,905,905,0,Male,Medium,Institution,592,3109,3701,9,1,582,0,,65%,108%
+John C. Burke Correctional Center,43.62095678,-88.73618787,186,201,201,0,Male,Minimum,Center,35,309,344,1,3,31,0,,17%,108%
+Kenosha Correctional Center,42.57638629,-87.82645113,60,68,68,0,Male,Minimum,Center,0,114,114,0,0,0,0,,0%,113%
+Kettle Moraine Correctional Institution,43.7235,-88.1491,783,1048,1048,0,Male,Medium,Institution,873,3952,4825,9,0,864,1,,83%,134%
+Marshall E. Sherrer Correctional Center,43.04774955,-87.9295683,32,38,38,0,Male,Minimum,Center,9,149,158,1,0,8,0,,24%,119%
+McNaughton Correctional Center,45.80072285,-89.63093876,55,98,98,0,Male,Minimum,Center,69,170,239,3,0,66,0,,70%,178%
+Milwaukee Secure Detention Facility,43.04380606,-87.92484503,460,330,330,0,Male,,MSDF,145,3362,3507,17,2,126,0,,44%,72%
+Milwaukee Womens Correctional Center,43.08166155,-87.91885149,42,52,52,0,Female,Minimum,Institution,30,319,349,1,0,29,0,,58%,124%
+New Lisbon Correctional Institution,43.88135551,-90.13179646,950,976,976,0,Male,Medium,Institution,548,3147,3695,4,0,544,0,,56%,103%
+Oakhill Correctional Institution,42.9613,-89.3946,344,649,649,0,Male,Minimum,Institution,397,2320,2717,5,44,348,1,,61%,189%
+Oregon Correctional Center,42.9513382,-89.39766086,78,96,96,0,Male,Minimum,Center,1,251,252,0,0,1,0,,1%,123%
+Oshkosh Correctional Institution,44.0693,-88.5615,1494,1859,1859,0,Male,Medium,Institution,1029,7961,8990,31,5,993,4,,55%,124%
+Prairie du Chien Correctional Institution,43.03442955,-91.14099987,326,501,501,0,Male,Medium,Institution,413,1055,1468,4,0,409,1,,82%,154%
+Racine Correctional Institution/Sturtevant Transitional Facility,42.7131,-87.8987,1321,1621,1621,0,Male,Medium/Minimum,Institution,1168,8077,9245,18,68,1082,2,,72%,123%
+Racine Youthful Offender Correctional Facility,42.737,-87.7993,400,340,340,0,Male,Medium,Institution,22,572,594,0,6,16,0,"This combines Racine Correctional and Sturtevant Transitional, which in the population data are broken out separately.  Most population is Racine, Sturtevant is 117 inmates.",6%,85%
+Redgranite Correctional Institution,44.05397959,-89.10762807,990,950,950,0,Male,Medium,Institution,360,2159,2519,7,0,353,3,,38%,96%
+Robert E. Ellsworth Correctional Center,42.69687649,-88.08052039,230,311,311,0,Female,Minimum,Institution,239,1440,1679,4,0,235,0,,77%,135%
+Sanger B. Powers Correctional Center,44.54101711,-88.19173114,60,92,92,0,Male,Minimum,Center,63,220,283,3,0,60,0,,68%,153%
+St. Croix Correctional Center,45.13069605,-92.57064513,94,48,48,0,Male,Minimum,Center,1,130,131,0,0,1,0,,2%,51%
+Stanley Correctional Institution,44.94804645,-90.95179624,1500,1419,1419,0,Male,Medium,Institution,365,3697,4062,2,1,362,3,,26%,95%
+Taycheedah Correctional Institution,43.7983841,-88.38837733,653,845,845,0,Female,,Institution,469,2947,3416,5,6,458,1,,56%,129%
+Thompson Correctional Center,43.02463549,-89.04489219,118,107,107,0,Male,Minimum,Center,34,317,351,2,0,32,0,,32%,91%
+Waupun Correctional Institution,43.6297,-88.7316,882,1071,1071,0,Male,Maximum,Institution,719,2524,3243,1,0,718,4,"There is also 1 female prisoner, not included in the total.",67%,121%
+Winnebago Correctional Center,44.06512368,-88.51334682,210,195,195,0,Male,Minimum,Center,78,844,922,6,0,72,0,,40%,93%
+Wisconsin Secure Program Facility,43.14334942,-90.68298373,501,443,443,0,Male,Maximum,Institution,3,554,557,0,0,3,0,"Majority male, 84/5.",1%,88%
