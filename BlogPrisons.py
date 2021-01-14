@@ -301,6 +301,80 @@ def plotly_colorbubble2(
     
     return fig
 
+# function for adding bubble legened
+# still needs work to make it an independent function... need to be able 
+# to pull marker colors from the fig somehow so I don't have to pass
+# them in?
+def plotly_add_bubblelegend(fig, sizeref, dummy_lon, dummy_lat, fill_color, line_color, legendgroup=None):
+    # Add artificial traces to create a legend
+    
+    # Max size in pixels from web search and experiment; 
+    # then convert to sizes in the units of the bubble plot
+    legend_marker_pixel_max = 16    # diameter
+    legend_marker_size_max = (legend_marker_pixel_max)**2 * sizeref / 2   
+    sizes_marker = np.array([1, 0.25]) * legend_marker_size_max
+    # round to nearest first significant digit
+    power10 = 10**np.floor(np.log10(sizes_marker))
+    sizes_marker = np.round(sizes_marker / power10) * power10
+    # round up to whole integer in case lowest is < 1
+    sizes_marker = np.ceil(sizes_marker)
+    # convert to pixel diameter scale
+    sizes_pixel = np.round(np.sqrt(sizes_marker/sizeref*2))
+    # create text labels
+    sizes_names = [str(int(s)) for s in sizes_marker]
+    
+    if legendgroup is not None:
+        # create dummy trace with group title
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[dummy_lon],    # just dummy locations
+                lat=[dummy_lat],
+                name='<br>'+legendgroup,
+                marker=dict(size=0, opacity=0),
+                showlegend=True,
+                legendgroup=legendgroup,
+                hovertemplate=None, 
+                hoverinfo='skip', 
+                )
+            )
+            
+    # create dummy bubbles with the sizes required
+    for ss in range(len(sizes_pixel)):
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[dummy_lon],    # just dummy locations
+                lat=[dummy_lat],
+                name=sizes_names[ss],
+                # visible='legendonly',
+                marker=dict(
+                    size=sizes_pixel[ss],
+                    sizemode='area',
+                    color=fill_color,
+                    # opacity=0.5,
+                    line=dict(color=line_color, width=1),
+                    ),
+                showlegend=True,
+                legendgroup=legendgroup,
+                hovertemplate=None, 
+                hoverinfo='skip', 
+                )
+            )
+    # plot a white marker over the top to hide them
+    fig.add_trace(
+        go.Scattergeo(
+            lon=[dummy_lon],
+            lat=[dummy_lat],
+            marker=dict(
+                size=legend_marker_pixel_max+3,
+                color='white',  
+                opacity=1,
+                ),
+            showlegend=False,
+            legendgroup='camouflage',
+            hovertemplate=None, 
+            hoverinfo='skip', 
+            ),
+        )     
 
 def plotly_fillbubble(
         geo_background,
@@ -406,73 +480,44 @@ def plotly_fillbubble(
             legendgroup=innercol,
             )
         )
+
+    # add bubble legends
     
-    # Add artificial traces to create a legend
-    # Max size in pixels from web search and experiment; 
-    # then convert to sizes in the units of the sizecol
-    legend_marker_pixel_max = 16    # diameter
-    legend_marker_outercol_max = (legend_marker_pixel_max)**2 * size_factor / 2   
-    sizes_outercol = np.array([1, 0.25]) * legend_marker_outercol_max
-    # round to nearest first significant digit
-    power10 = 10**np.floor(np.log10(sizes_outercol))
-    sizes_outercol = np.round(sizes_outercol / power10) * power10
-    # round up to whole integer in case lowest is < 1
-    sizes_outercol = np.ceil(sizes_outercol)
-    # convert to pixel diameter scale
-    sizes_pixel = np.round(np.sqrt(sizes_outercol/size_factor*2))
-    # create text labels
-    sizes_names = [str(int(s)) for s in sizes_outercol]
-    
-    # find dummy locations - put outside the map and hide with a white circle
+    # first find dummy locations for bubble legend dummy markers - put outside the map and hide with a white circle
     lon_range = np.abs(geodata[loncol].max() - geodata[loncol].min())
     idx = geodata[loncol].idxmax()   
     dummy_lon = geodata[loncol][idx] + 0.1*lon_range
     dummy_lat = geodata[latcol][idx]
+        
+    # bubble legend for outer bubble
+    plotly_add_bubblelegend(
+        fig, 
+        sizeref=size_factor, 
+        dummy_lon=dummy_lon, 
+        dummy_lat=dummy_lat, 
+        fill_color=line_colors['outer'],
+        line_color=line_colors['marker'],
+        legendgroup=outercol,
+        )
     
-    for ss in range(len(sizes_pixel)):
-        fig.add_trace(
-            go.Scattergeo(
-                lon=[dummy_lon],    # just dummy locations
-                lat=[dummy_lat],
-                name=sizes_names[ss],
-                # visible='legendonly',
-                marker=dict(
-                    size=sizes_pixel[ss],
-                    sizemode='area',
-                    color=line_colors['outer'],
-                    # opacity=0.5,
-                    line=dict(color=line_colors['marker'], width=1),
-                    ),
-                showlegend=True,
-                legendgroup=outercol,
-                hovertemplate=None, 
-                hoverinfo='skip', 
-                )
-            )
-    # plot a white marker over the top to hide them
-    fig.add_trace(
-        go.Scattergeo(
-            lon=[dummy_lon],
-            lat=[dummy_lat],
-            marker=dict(
-                size=legend_marker_pixel_max+3,
-                color='white',  
-                opacity=1,
-                ),
-            showlegend=False,
-            legendgroup='camouflage',
-            hovertemplate=None, 
-            hoverinfo='skip', 
-            ),
+    # bubble legend for inner bubble
+    plotly_add_bubblelegend(
+        fig, 
+        sizeref=size_factor, 
+        dummy_lon=dummy_lon, 
+        dummy_lat=dummy_lat, 
+        fill_color=line_colors['inner'],
+        line_color=line_colors['marker'],
+        legendgroup=innercol,
         )
         
         
-    # Title
-    fig.update_layout(
-        legend_title_text=plotlabels['outerlabel'], 
-        legend_itemclick=False,
-        legend_itemdoubleclick=False,
-        )
+    # # Legend Title
+    # fig.update_layout(
+    #     legend_title_text=plotlabels['outerlabel'], 
+    #     # legend_itemclick=False,
+    #     # legend_itemdoubleclick=False,
+    #     )
     
     fig.update_layout(legend_itemsizing='trace')
     
