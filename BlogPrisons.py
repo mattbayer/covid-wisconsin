@@ -96,7 +96,6 @@ def plotly_colorbubble2(
         colorcol,
         latcol,
         loncol,
-        popcol='Population',
         size_factor=1,
         color_range=[0, 600],
         colorscale=None,
@@ -178,7 +177,6 @@ def plotly_colorbubble2(
             lon=geodata[loncol],
             lat=geodata[latcol],
             text=location_names,
-            customdata=geodata[popcol],
             marker=dict(
                 # symbol='line-ns',
                 size=geodata[sizecol], 
@@ -383,10 +381,7 @@ def plotly_fillbubble(
         innercol,
         latcol,
         loncol,
-        popcol='Population',
         size_factor=1,
-        color_range=[0, 600],
-        colorscale=None,
         location_names=None,
         plotlabels=None,
         savefile='.\\temp.html',
@@ -430,56 +425,63 @@ def plotly_fillbubble(
     # Create display names for tooltip
     if location_names is None:
         location_names = geodata.index
-    
-    # Create the outer bubble figure
-    fig.add_trace(
-        go.Scattergeo(
-            lon=geodata[loncol],
-            lat=geodata[latcol],
-            text=location_names,
-            customdata=geodata[innercol],
-            marker=dict(
-                size=geodata[outercol], 
-                sizeref=size_factor,
-                sizemode='area',
-                color=line_colors['outer'],
-                # opacity=1,
-                ),
-            line=dict(color=line_colors['marker']),
-            hovertemplate=
-                '<b>%{text}</b><br>' +
-                plotlabels['outerlabel']  + ' : %{marker.size:.0f}<br>' + 
-                plotlabels['innerlabel'] + ' : %{customdata:.0f}'+
-                '<extra></extra>',
-            name=outercol,
-            showlegend=False,
-            legendgroup=outercol,
+    if isinstance(location_names, pd.Series):
+        location_names = location_names.to_list()
+        
+    # create inner and outer bubbles for each data point
+    # this is a hack to get the bubbles to overlap correctly - otherwise the 
+    # outer bubbles all draw and overlap, then all the inner bubbles draw and 
+    # overlap all of those.  I want outer and inner to be drawn and overlap 
+    # together.
+    geodata = geodata.reset_index()
+    for index, row in geodata.iterrows():
+        # Create the outer bubble figure
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[row[loncol]],
+                lat=[row[latcol]],
+                text=[location_names[index]],
+                customdata=[row[innercol]],
+                marker=dict(
+                    size=[row[outercol]], 
+                    sizeref=size_factor,
+                    sizemode='area',
+                    color=line_colors['outer'],
+                    # opacity=1,
+                    ),
+                line=dict(color=line_colors['marker']),
+                hovertemplate=
+                    '<b>%{text}</b><br>' +
+                    plotlabels['outerlabel']  + ' : %{marker.size:.0f}<br>' + 
+                    plotlabels['innerlabel'] + ' : %{customdata:.0f}'+
+                    '<extra></extra>',
+                name=outercol,
+                showlegend=False,
+                legendgroup=outercol,
+                )
             )
-        )
-    
-    # Create the inner bubble figure
-    fig.add_trace(
-        go.Scattergeo(
-            lon=geodata[loncol],
-            lat=geodata[latcol],
-            text=location_names,
-            customdata=geodata[popcol],
-            marker=dict(
-                size=geodata[innercol], 
-                sizeref=size_factor,
-                sizemode='area',
-                color=line_colors['inner'],
-                # opacity=1,
-                ),
-            # line=dict(color=line_colors['marker']),
-            # No hover info, it was included in the outer bubble
-            hovertemplate=None, 
-            hoverinfo='skip', 
-            name=innercol,
-            showlegend=False,
-            legendgroup=innercol,
+        
+        # Create the inner bubble figure
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[row[loncol]],
+                lat=[row[latcol]],
+                marker=dict(
+                    size=[row[innercol]], 
+                    sizeref=size_factor,
+                    sizemode='area',
+                    color=line_colors['inner'],
+                    # opacity=1,
+                    ),
+                # line=dict(color=line_colors['marker']),
+                # No hover info, it was included in the outer bubble
+                hovertemplate=None, 
+                hoverinfo='skip', 
+                name=innercol,
+                showlegend=False,
+                legendgroup=innercol,
+                )
             )
-        )
 
     # add bubble legends
     
@@ -507,7 +509,7 @@ def plotly_fillbubble(
         dummy_lon=dummy_lon, 
         dummy_lat=dummy_lat, 
         fill_color=line_colors['inner'],
-        line_color=line_colors['marker'],
+        line_color='white',
         legendgroup=innercol,
         )
         
@@ -570,8 +572,6 @@ plotly_fillbubble(
     innercol='Positive Tests',
     loncol='Longitude',
     latcol='Latitude',
-    popcol='Total population',
-    color_range=[0,1],
-    colorscale='BuPu',
     location_names=prisons.Name,
+    plotlabels=dict(title='Prison Populations and Infections'),
     )
