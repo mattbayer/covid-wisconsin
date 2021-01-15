@@ -110,6 +110,14 @@ a.sidebar-nav-item:focus {
   font-weight: bold;
 }
 
+/* Dashboard nav */
+.dashboard-nav-item {
+  font-size: 1.1rem;
+}
+.dashboard-nav-item.active {
+  font-weight: bold;
+}
+
 /* Sticky sidebar
  *
  * Add the `sidebar-sticky` class to the sidebar's container to affix it the
