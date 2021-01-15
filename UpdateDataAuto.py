@@ -17,7 +17,7 @@ state = covid.read_covid_data_wi('state')
 
 
 #%% Dashboard - state line plots
-plotpath = '.\\docs\\assets\\plotly'
+plotpath = '.\\docs\\_includes\\plotly'
 
 # reduce and rename at state level
 col_rename = {'POS_NEW': 'Cases', 'TEST_NEW': 'Tests', 'DTH_NEW': 'Deaths', 'HOSP_NEW': 'Hospitalizations'}

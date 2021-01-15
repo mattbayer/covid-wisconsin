@@ -72,7 +72,7 @@ capita[datacols] = regiondata[datacols].div(regiondata['RegionPop'], axis=0) * 1
 
 
 #%% Region names and colors
-plotpath = '.\\docs\\assets\\plotly'
+plotpath = '.\\docs\\_includes\\plotly'
 
 regiondata['NAME'] = regiondata['Region']
 region_ordered = ['Northwest', 'North Central', 'Northeast', 

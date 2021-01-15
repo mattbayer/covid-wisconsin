@@ -108,7 +108,7 @@ covid.plotly_colorbubble(
     colorscale='Blues',
     location_names=display_names,
     plotlabels=dict(title='Cases by County<br>(Daily, 7-day avg)'),
-    savefile='.\\docs\\assets\\plotly\\Map-Cases-WI.html',
+    savefile='.\\docs\\_includes\\plotly\\Map-Cases-WI.html',
     fig_height=600,
     showfig=False,
     )
@@ -126,7 +126,7 @@ covid.plotly_colorbubble(
         title='Hospitalizations by County<br>(Daily, 7-day avg)',
         colorlabel='Hosp per 100K',
         ),
-    savefile='.\\docs\\assets\\plotly\\Map-Hosp-WI.html',
+    savefile='.\\docs\\_includes\\plotly\\Map-Hosp-WI.html',
     fig_height=600,
     showfig=False,
     )
