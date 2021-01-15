@@ -32,8 +32,10 @@ fig = px.scatter(
     x='% crowded',
     y='% infected',
     title='Infection % vs Crowding',
-    # text='Name',
+    # text='Short Name',    
     )
+
+# fig.update_traces(textposition='middle right')
 
 pplot(fig, 
       filename='.\\docs\\assets\\plotly\\Prisons-Crowded.html',
@@ -46,8 +48,10 @@ fig = px.scatter(
     x='Total population',
     y='% infected',
     title='Infection % vs Population',
-    # text='Name',
+    # text='Short Name',
     )
+
+# fig.update_traces(textposition='middle right')
 
 pplot(fig, 
       filename='.\\docs\\assets\\plotly\\Prisons-Population.html',
