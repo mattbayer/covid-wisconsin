@@ -39,12 +39,6 @@ jobs:
         # Stage the file, commit and push
         git add data/Covid-Data-WI-State.csv
         git add data/Covid-Data-WI-County.csv
-        git add docs/assets/plotly/Cases-Tests-WI.html
-        git add docs/assets/plotly/Deaths-Hosp-WI.html
-        git add docs/assets/plotly/Map-Cases-WI.html
-        git add docs/assets/plotly/Map-Hosp-WI.html
-        git add docs/assets/plotly/Cases-Tests-Region.html
-        git add docs/assets/plotly/Deaths-Hosp-Region.html
+        git add docs/_includes/plotly
         git commit -m "Data update (auto)"
         git push origin master
-
