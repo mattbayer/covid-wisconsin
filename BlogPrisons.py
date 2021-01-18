@@ -320,8 +320,7 @@ countiesWI = countiesUSA[countiesUSA.STATEFP == '55']
 prisons['Fraction infected'] = prisons['Positive Tests'] / prisons['Total population']
 prisons = prisons.sort_values('Total population', ascending=False)
 
-
-plotly_fillbubble(
+fig = plotly_fillbubble(
     countiesWI,
     prisons,
     outercol='Total population',
@@ -337,9 +336,18 @@ plotly_fillbubble(
         innerlabel='Positive',
         outerlabel='Population',
         ),
-    savefile='.\\docs\\_includes\\plotly\\Prisons-WI.html',   
+    savefile='.\\docs\\_includes\\plotly\\Map-Prisons-WI.html',   
     fig_height=700,
     )
+
+save_png = '.\\docs\\assets\\Map-Prisons-WI.png'
+fig.write_image(
+    save_png,
+    width=900,
+    height=700,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 
 #%% Color bubble modified
