@@ -204,6 +204,14 @@ def plotly_colorbubble(
     return fig
 
 def plotly_backmap(geodata):
+    """Helper function for creating a background map.
+    
+    The background map figure can then be used as the base layer of 
+    plotly.graph_objects.Scattergeo plots.
+    
+    geodata     --  GeoPandas GeoDataFrame object that contains the geometry
+                    of the map to be drawn.
+    """
     # Plotly needs a JSON format string for plotting arbitrary shapes, so -
     # convert geodata to JSON format string, then decode to dictionary with json.loads()
     geoJS = json.loads(geodata.to_json())
@@ -235,6 +243,104 @@ def plotly_backmap(geodata):
 
     return fig
 
+
+def plotly_add_bubblelegend(fig, sizeref, dummy_lon, dummy_lat, fill_color, line_color, legendgroup=None):
+    """ Helper function to create a bubble map legend using dummy traces.
+    
+    In plotly, bubble map legends do not show different sizes of bubbles 
+    with their quantities. This function uses a hack to create such a legend
+    by plotting separate dummy bubble traces with set sizes, but that match
+    the desired style, sizeref, and legendgroup of the real plot, and 
+    creating a legend for these dummy traces.
+    
+    The biggest limitation to the hack is that the dummy bubbles need to 
+    really exist and be plotted, so they need to be placed in a dummy 
+    longitude/latitude location where they can be covered up by a blank white
+    marker without interfering with anything else in the plot.
+    
+    Areas for improvement: pull marker colors from the figure; get around
+    needing dummy lon/lat values.
+    
+    fig     --  Existing figure in which to create the legend.
+    sizeref --  The same sizeref parameter used for the real bubble plot.
+    dummy_lon,  --  Longitude/latitude values at which to plot the dummy bubbles.
+      dummy_lat   
+    fill_color  --  Fill color of the bubble markers.
+    line_color  --  Line color of the bubble markers.
+    legendgroup --  Legend group name. If you want the legend to properly 
+        toggle on/off the real bubble plot, it needs to have the same 
+        legendgroup name as the real plot.    
+    """
+    
+    # Max size in pixels from web search and experiment; 
+    # then convert to sizes in the units of the bubble plot
+    legend_marker_pixel_max = 16    # diameter
+    legend_marker_size_max = (legend_marker_pixel_max)**2 * sizeref / 2   
+    sizes_marker = np.array([1, 0.25]) * legend_marker_size_max
+    # round to nearest first significant digit
+    power10 = 10**np.floor(np.log10(sizes_marker))
+    sizes_marker = np.round(sizes_marker / power10) * power10
+    # round up to whole integer in case lowest is < 1
+    sizes_marker = np.ceil(sizes_marker)
+    # convert to pixel diameter scale
+    sizes_pixel = np.round(np.sqrt(sizes_marker/sizeref*2))
+    # create text labels
+    sizes_names = [str(int(s)) for s in sizes_marker]
+    
+    if legendgroup is not None:
+        # create dummy trace with group title
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[dummy_lon],    # just dummy locations
+                lat=[dummy_lat],
+                name='<br>'+legendgroup,
+                marker=dict(size=0, opacity=0),
+                showlegend=True,
+                legendgroup=legendgroup,
+                hovertemplate=None, 
+                hoverinfo='skip', 
+                )
+            )
+        
+    # create dummy bubbles with the sizes required
+    for ss in range(len(sizes_pixel)):
+        fig.add_trace(
+            go.Scattergeo(
+                lon=[dummy_lon],    # just dummy locations
+                lat=[dummy_lat],
+                name=sizes_names[ss],
+                # visible='legendonly',
+                marker=dict(
+                    size=sizes_pixel[ss],
+                    sizemode='area',
+                    color=fill_color,
+                    # opacity=0.5,
+                    line=dict(color=line_color, width=1),
+                    ),
+                showlegend=True,
+                legendgroup=legendgroup,
+                hovertemplate=None, 
+                hoverinfo='skip', 
+                )
+            )
+        
+    # plot a white marker over the top to hide them
+    fig.add_trace(
+        go.Scattergeo(
+            lon=[dummy_lon],
+            lat=[dummy_lat],
+            marker=dict(
+                size=legend_marker_pixel_max+3,
+                color='white',  
+                opacity=1,
+                ),
+            showlegend=False,
+            legendgroup='camouflage',
+            hovertemplate=None, 
+            hoverinfo='skip', 
+            ),
+        )     
+    
 
 def plotly_casetest(
         sourcedata,
