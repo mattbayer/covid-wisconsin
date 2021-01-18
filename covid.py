@@ -112,70 +112,25 @@ def plotly_colorbubble(
             )
         )
     
-    # Add artificial traces to create a legend
-    # Max size in pixels from web search and experiment; 
-    # then convert to sizes in the units of the sizecol
-    legend_marker_pixel_max = 16    # diameter
-    legend_marker_sizecol_max = (legend_marker_pixel_max)**2 * size_factor / 2   
-    sizes_sizecol = np.array([1, 0.25]) * legend_marker_sizecol_max
-    # round to nearest first significant digit
-    power10 = 10**np.floor(np.log10(sizes_sizecol))
-    sizes_sizecol = np.round(sizes_sizecol / power10) * power10
-    # round up to whole integer in case lowest is < 1
-    sizes_sizecol = np.ceil(sizes_sizecol)
-    # convert to pixel diameter scale
-    sizes_pixel = np.round(np.sqrt(sizes_sizecol/size_factor*2))
-    # create text labels
-    sizes_names = [str(int(s)) for s in sizes_sizecol]
-    
+    # Add bubble legend (using dummy traces)  
     # find dummy locations - put outside the map and hide with a white circle
     lon_range = np.abs(geodata.plotlon.max() - geodata.plotlon.min())
     idx = geodata.plotlon.idxmax()   
     dummy_lon = geodata.plotlon[idx] + 0.1*lon_range
     dummy_lat = geodata.plotlat[idx]
     
-    for ss in range(len(sizes_pixel)):
-        fig.add_trace(
-            go.Scattergeo(
-                lon=[dummy_lon],    # just dummy locations
-                lat=[dummy_lat],
-                name=sizes_names[ss],
-                # visible='legendonly',
-                marker=dict(
-                    size=sizes_pixel[ss],
-                    sizemode='area',
-                    color=[(color_range[0]+color_range[1])/2],  # enclose in list so it interprets as data not literal color
-                    cmin=color_range[0],
-                    cmax=color_range[1],
-                    colorscale=colorscale,
-                    # opacity=0.5,
-                    line=dict(color=line_colors['marker'], width=1),
-                    ),
-                showlegend=True,
-                legendgroup=sizecol,
-                hovertemplate=None, 
-                hoverinfo='skip', 
-                )
-            )
-    # plot a white marker over the top to hide them
-    fig.add_trace(
-        go.Scattergeo(
-            lon=[dummy_lon],
-            lat=[dummy_lat],
-            marker=dict(
-                size=legend_marker_pixel_max+3,
-                color='white',  
-                opacity=1,
-                ),
-            showlegend=False,
-            legendgroup='camouflage',
-            hovertemplate=None, 
-            hoverinfo='skip', 
-            ),
-        )
+    # Bubble legend 
+    plotly_add_bubblelegend(
+        fig, 
+        sizeref=size_factor, 
+        dummy_lon=dummy_lon, 
+        dummy_lat=dummy_lat, 
+        colorscale=colorscale,
+        line_color=line_colors['marker'],
+        legendgroup=None,
+        )     
         
-        
-    # Title
+    # Legend title
     fig.update_layout(
         legend_title_text=plotlabels['sizelabel'], 
         legend_itemclick=False,
@@ -202,6 +157,7 @@ def plotly_colorbubble(
         os.startfile(savefile)
     
     return fig
+
 
 def plotly_backmap(geodata):
     """Helper function for creating a background map.
@@ -244,7 +200,15 @@ def plotly_backmap(geodata):
     return fig
 
 
-def plotly_add_bubblelegend(fig, sizeref, dummy_lon, dummy_lat, fill_color, line_color, legendgroup=None):
+def plotly_add_bubblelegend(
+        fig, 
+        sizeref, 
+        dummy_lon, 
+        dummy_lat, 
+        colorscale=None,
+        fill_color=[1], 
+        line_color='dimgray', 
+        legendgroup=None):
     """ Helper function to create a bubble map legend using dummy traces.
     
     In plotly, bubble map legends do not show different sizes of bubbles 
@@ -265,11 +229,14 @@ def plotly_add_bubblelegend(fig, sizeref, dummy_lon, dummy_lat, fill_color, line
     sizeref --  The same sizeref parameter used for the real bubble plot.
     dummy_lon,  --  Longitude/latitude values at which to plot the dummy bubbles.
       dummy_lat   
-    fill_color  --  Fill color of the bubble markers.
+    colorscale  --  Named colorscale used for real bubble map, if needed.
+    fill_color  --  Fill color of the bubble markers. Default [1] makes it the 
+                    middle of colorscale.
     line_color  --  Line color of the bubble markers.
     legendgroup --  Legend group name. If you want the legend to properly 
         toggle on/off the real bubble plot, it needs to have the same 
-        legendgroup name as the real plot.    
+        legendgroup name as the real plot. If not None, then the function
+        will insert a title into the legend for this legendgroup.
     """
     
     # Max size in pixels from web search and experiment; 
@@ -309,12 +276,11 @@ def plotly_add_bubblelegend(fig, sizeref, dummy_lon, dummy_lat, fill_color, line
                 lon=[dummy_lon],    # just dummy locations
                 lat=[dummy_lat],
                 name=sizes_names[ss],
-                # visible='legendonly',
                 marker=dict(
                     size=sizes_pixel[ss],
                     sizemode='area',
+                    colorscale=colorscale,
                     color=fill_color,
-                    # opacity=0.5,
                     line=dict(color=line_color, width=1),
                     ),
                 showlegend=True,
