@@ -56,32 +56,14 @@ def plotly_colorbubble(
     # then overwrite
     plotlabels = plotlabels_default
     
-    # Plotly needs a JSON format string for plotting arbitrary shapes, so -
-    # convert geodata to JSON format string, then decode to dictionary with json.loads()
-    geoJS = json.loads(geodata.to_json())
 
-    # Colors for the background map
+    # Colors for the background map (not used) and marker lines
     line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
     
-    # Background map
-    fig = px.choropleth(
-        geodata, 
-        geojson=geoJS,
-        locations=geodata.index,
-        color_discrete_sequence=[line_colors['land']],
-        projection='mercator',
-        )
     
-    # turn off hover tooltips for this layer - have to set both of these because
-    # hovertemplate is set automatically and it supersedes hoverinfo.
-    # Also take out legend because I add a fancier custom legend later.
-    fig.update_traces(
-        hovertemplate=None, 
-        hoverinfo='skip', 
-        marker_line_color=line_colors['border'],
-        showlegend=False,
-        )
-
+    # Background map
+    fig = plotly_backmap(geodata)
+    
     fig.update_layout(title=plotlabels['title'])
     
     
@@ -219,6 +201,38 @@ def plotly_colorbubble(
     if showfig:
         os.startfile(savefile)
     
+    return fig
+
+def plotly_backmap(geodata):
+    # Plotly needs a JSON format string for plotting arbitrary shapes, so -
+    # convert geodata to JSON format string, then decode to dictionary with json.loads()
+    geoJS = json.loads(geodata.to_json())
+
+    # Colors for the background map
+    line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
+    
+    # Background map
+    fig = px.choropleth(
+        geodata, 
+        geojson=geoJS,
+        locations=geodata.index,
+        color_discrete_sequence=[line_colors['land']],
+        projection='mercator',
+        )
+
+    # turn off hover tooltips for this layer - have to set both of these because
+    # hovertemplate is set automatically and it supersedes hoverinfo.
+    # Also take out legend, change border color.
+    fig.update_traces(
+        hovertemplate=None, 
+        hoverinfo='skip', 
+        marker_line_color=line_colors['border'],
+        showlegend=False,
+        )
+    
+    # Only display this specific geography, not whole world
+    fig.update_geos(fitbounds='locations', visible=False)
+
     return fig
 
 
