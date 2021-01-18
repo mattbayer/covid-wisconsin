@@ -261,6 +261,8 @@ def plotly_fillbubble(
         loncol,
         size_factor=1,
         location_names=None,
+        location_names_short=None,
+        textposition='bottom center',
         plotlabels=None,
         savefile='.\\temp.html',
         fig_height='100%',
@@ -329,11 +331,26 @@ def plotly_fillbubble(
         legendgroup=innercol,
         )
 
-    # Create display names for tooltip
+    # Create display names for tooltip / labels
     if location_names is None:
         location_names = geodata.index
-    if isinstance(location_names, pd.Series):
+    elif isinstance(location_names, pd.Series):
         location_names = location_names.to_list()
+        
+    if location_names_short is None:
+        # make equal to location_names, but don't show them
+        location_names_short = location_names
+        textmode = 'markers'
+    else:
+        textmode = 'markers+text'
+        if isinstance(location_names_short, pd.Series):
+            location_names_short = location_names_short.to_list()
+            
+    # expand textposition if needed
+    if isinstance(textposition, str):
+        textposition = [textposition] * len(geodata.index)
+    elif isinstance(textposition, pd.Series):
+        textposition = textposition.to_list()
         
     # create inner and outer bubbles for each data point
     # this is a hack to get the bubbles to overlap correctly - otherwise the 
@@ -343,12 +360,13 @@ def plotly_fillbubble(
     geodata = geodata.reset_index()
     for index, row in geodata.iterrows():
         # Create the outer bubble figure
+        customdata = [[location_names[index], row[innercol]]]
         fig.add_trace(
             go.Scattergeo(
                 lon=[row[loncol]],
                 lat=[row[latcol]],
-                customdata=[row[innercol]],
-                text=[row['Name']],
+                customdata=customdata,
+                text=[location_names_short[index]],
                 marker=dict(
                     size=[row[outercol]], 
                     sizeref=size_factor,
@@ -356,12 +374,13 @@ def plotly_fillbubble(
                     color=line_colors['outer'],
                     # opacity=1,
                     ),
-                mode='markers',
+                mode=textmode,
+                textposition=textposition[index],
                 line=dict(color=line_colors['marker']),
                 hovertemplate=
-                    '<b>%{text}</b><br>' +
-                    plotlabels['outerlabel']  + ' : %{marker.size:.0f}<br>' + 
-                    plotlabels['innerlabel'] + ' : %{customdata:.0f}'+
+                    '<b>%{customdata[0]}</b><br>' +
+                    plotlabels['innerlabel'] + ' / ' + plotlabels['outerlabel']  + 
+                    ' : %{customdata[1]:.0f} / %{marker.size:.0f}<br>' + 
                     '<extra></extra>',
                 name=outercol,
                 showlegend=False,
@@ -374,7 +393,6 @@ def plotly_fillbubble(
             go.Scattergeo(
                 lon=[row[loncol]],
                 lat=[row[latcol]],
-                text=[location_names[index]],
                 marker=dict(
                     size=[row[innercol]], 
                     sizeref=size_factor,
@@ -382,8 +400,6 @@ def plotly_fillbubble(
                     color=line_colors['inner'],
                     # opacity=1,
                     ),
-                mode='markers+text',
-                textposition='middle right',
                 # line=dict(color=line_colors['marker']),
                 # No hover info, it was included in the outer bubble
                 hovertemplate=None, 
@@ -393,9 +409,6 @@ def plotly_fillbubble(
                 legendgroup=innercol,
                 )
             )
-
-
-        
         
     # # Legend Title
     # fig.update_layout(
@@ -425,7 +438,45 @@ def plotly_fillbubble(
     
     return fig
 
+
 #%% Plot map
+
+# Modify prisons data for plotting purposes
+prisons['Display Name'] = prisons['Short Name']
+prisons = prisons.set_index('Short Name')
+
+blanklist = ['Grow Academy', 'Racine Youthful', 'Drug Abuse', 'Oregon', 
+             'Milwaukee Womens', 'Felmers O. Chaney', 'Marshall E. Sherrer',
+             'Kenosha', 'Winnebago', 'John C. Burke', 
+             'Sanger B. Powers', 'Black River', 'Thompson', 'Robert E. Ellsworth',
+             ]
+prisons.loc[blanklist, 'Display Name'] = ''
+prisons.loc['Milwaukee Detention', 'Display Name'] = 'Milwaukee<br>Detention'
+prisons.loc['Chippewa Valley', 'Display Name'] = 'Chippewa<br>Valley'
+
+# hack to make these three close prisons' labels readable
+prisons.loc[['Fox Lake', 'Dodge', 'Waupun'], 'Display Name'] = ['', 'Fox Lake  Dodge  Waupun', '']
+
+# Adjust longitude of close prisons for better viewing
+prisons.loc['Waupun', 'Longitude'] = prisons.loc['Dodge', 'Longitude'] + 0.2
+prisons.loc['Fox Lake', 'Longitude'] = prisons.loc['Dodge', 'Longitude'] - 0.2
+
+# custom text positions
+prisons['textposition'] = 'bottom center'
+changelist = ['Thompson', 'Sanger B. Powers', 'Green Bay', 'Stanley', 'Oshkosh',
+              'Black River', 'Kettle Moraine', 'Taycheedah', 'Redgranite',
+              'Jackson', 'New Lisbon', 'Columbia', 'Milwaukee Detention',
+              'Fox Lake', 'Dodge', 'Waupun']
+tolist =    ['middle right', 'middle left', 'middle right', 'middle right', 'middle right',
+             'middle right', 'middle right', 'middle right', 'top center',
+             'middle left', 'middle left', 'middle left', 'middle right',
+             'bottom left', 'bottom center', 'bottom right']
+
+prisons.loc[changelist, 'textposition'] = tolist
+
+prisons = prisons.reset_index()
+
+# county map for background
 # read shapefile of all USA counties
 countiesUSA = gpd.read_file('data\\geo\\cb_2019_us_county_500k.shp')
 # filter on wisconsin
@@ -433,6 +484,27 @@ countiesWI = countiesUSA[countiesUSA.STATEFP == '55']
 
 prisons['Fraction infected'] = prisons['Positive Tests'] / prisons['Total population']
 prisons = prisons.sort_values('Total population', ascending=False)
+
+
+plotly_fillbubble(
+    countiesWI,
+    prisons,
+    outercol='Total population',
+    innercol='Positive Tests',
+    size_factor=1.5,
+    loncol='Longitude',
+    latcol='Latitude',
+    location_names=prisons['Name'],
+    location_names_short=prisons['Display Name'],
+    textposition=prisons.textposition,
+    plotlabels=dict(
+        title='Prison Populations and Infections',
+        innerlabel='Positive',
+        outerlabel='Population',
+        ),
+    fig_height=700,
+    )
+
 
 # plotly_colorbubble2(
 #     countiesWI,
@@ -446,14 +518,3 @@ prisons = prisons.sort_values('Total population', ascending=False)
 #     colorscale='BuPu',
 #     location_names=prisons.Name,
 #     )
-
-plotly_fillbubble(
-    countiesWI,
-    prisons,
-    outercol='Total population',
-    innercol='Positive Tests',
-    loncol='Longitude',
-    latcol='Latitude',
-    location_names=prisons['Short Name'],
-    plotlabels=dict(title='Prison Populations and Infections'),
-    )
