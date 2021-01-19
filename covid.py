@@ -75,6 +75,9 @@ def plotly_colorbubble(
     # Create display names for tooltip
     if location_names is None:
         location_names = geodata.index
+        
+    # Set any values < 0 to 0
+    geodata[sizecol] = geodata[sizecol].apply(lambda x: max(x,0))
     
     # Create the bubble figure
     fig.add_trace(
