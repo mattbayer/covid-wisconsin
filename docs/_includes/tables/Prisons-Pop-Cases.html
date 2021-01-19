@@ -28,11 +28,6 @@
 </tbody>
 </table>
 
-<script>
-  $('table.display').DataTable()
-</script>
-
-
 <table class="display">
   {% for row in site.data.prisons %}
     {% if forloop.first %}
@@ -50,3 +45,10 @@
     {% endtablerow %}
   {% endfor %}
 </table>
+
+
+<script>
+  $('table.display').DataTable()
+</script>
+
+
