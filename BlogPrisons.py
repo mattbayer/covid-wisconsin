@@ -287,7 +287,8 @@ def plotly_fillbubble(
     #     # legend_itemdoubleclick=False,
     #     )
     
-    fig.update_layout(legend_itemsizing='trace')
+    fig.update_layout(legend_itemsizing='trace',
+                      legend=dict(yanchor='top', xanchor='right'))
     
     # change margins to smaller than default to get map to be bigger
     fig.update_layout(margin=dict(l=30,b=20))
@@ -343,7 +344,7 @@ fig = plotly_fillbubble(
 save_png = '.\\docs\\assets\\Map-Prisons-WI.png'
 fig.write_image(
     save_png,
-    width=900,
+    width=800,
     height=700,
     engine='kaleido',
 )
