@@ -4,9 +4,15 @@
   <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
   
   <style>
+   /* Adjust header dimensions, for mobile and then non-mobile */
     table.dataTable thead th.dt-head-left {
       padding: 4px 4px;
+      font-size: 0.6rem;
     }  
+    @media (min-width: 48em) {
+      table.dataTable thead th.dt-head-left {
+        font-size: 0.7rem;
+      }  
   </style>
 </head>
 
