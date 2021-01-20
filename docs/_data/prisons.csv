@@ -1,38 +1,38 @@
-﻿Name,Capacity,Population,Cases,Tests,Deaths,Case %,Crowding
-Black River Correctional Center,66,52,42,357,0,81%,79%
-Chippewa Valley Correctional Treatment Facility,450,352,293,1413,0,83%,78%
-Columbia Correctional Institution,541,742,279,2207,0,38%,137%
-Copper Lake School/Lincoln Hills School,548,65,24,209,0,37%,12%
-Dodge Correctional Institution,1165,1353,724,10781,2,54%,116%
-Drug Abuse Correctional Center,125,165,64,793,0,39%,132%
-Felmers O. Chaney Correctional Center,100,54,19,226,0,35%,54%
-Flambeau Correctional Center,50,35,14,220,0,40%,70%
-Fox Lake Correctional Institution,979,1234,893,4151,2,72%,126%
-Gordon Correctional Center,52,63,48,198,0,76%,121%
-Green Bay Correctional Institution,749,985,481,4343,1,49%,132%
-Grow Academy,12,4,0,2,0,0%,33%
-Jackson Correctional Institution,837,905,592,3701,0,65%,108%
-John C. Burke Correctional Center,186,201,35,344,0,17%,108%
-Kenosha Correctional Center,60,68,0,114,0,0%,113%
-Kettle Moraine Correctional Institution,783,1048,873,4825,1,83%,134%
-Marshall E. Sherrer Correctional Center,32,38,9,158,0,24%,119%
-McNaughton Correctional Center,55,98,69,239,0,70%,178%
-Milwaukee Secure Detention Facility,460,330,145,3507,0,44%,72%
-Milwaukee Womens Correctional Center,42,52,30,349,0,58%,124%
-New Lisbon Correctional Institution,950,976,548,3695,0,56%,103%
-Oakhill Correctional Institution,344,649,397,2717,1,61%,189%
-Oregon Correctional Center,78,96,1,252,0,1%,123%
-Oshkosh Correctional Institution,1494,1859,1029,8990,4,55%,124%
-Prairie du Chien Correctional Institution,326,501,413,1468,1,82%,154%
-Racine Correctional Institution/Sturtevant Transitional Facility,1321,1621,1168,9245,2,72%,123%
-Racine Youthful Offender Correctional Facility,400,340,22,594,0,6%,85%
-Redgranite Correctional Institution,990,950,360,2519,3,38%,96%
-Robert E. Ellsworth Correctional Center,230,311,239,1679,0,77%,135%
-Sanger B. Powers Correctional Center,60,92,63,283,0,68%,153%
-St. Croix Correctional Center,94,48,1,131,0,2%,51%
-Stanley Correctional Institution,1500,1419,365,4062,3,26%,95%
-Taycheedah Correctional Institution,653,845,469,3416,1,56%,129%
-Thompson Correctional Center,118,107,34,351,0,32%,91%
-Waupun Correctional Institution,882,1071,719,3243,4,67%,121%
-Winnebago Correctional Center,210,195,78,922,0,40%,93%
-Wisconsin Secure Program Facility,501,443,3,557,0,1%,88%
+﻿Name,Population,Cases,Deaths,Case %,Crowding,Tests,Capacity
+Black River Correctional Center,52,42,0,81%,79%,357,66
+Chippewa Valley Correctional Treatment Facility,352,293,0,83%,78%,1413,450
+Columbia Correctional Institution,742,279,0,38%,137%,2207,541
+Copper Lake School/Lincoln Hills School,65,24,0,37%,12%,209,548
+Dodge Correctional Institution,1353,724,2,54%,116%,10781,1165
+Drug Abuse Correctional Center,165,64,0,39%,132%,793,125
+Felmers O. Chaney Correctional Center,54,19,0,35%,54%,226,100
+Flambeau Correctional Center,35,14,0,40%,70%,220,50
+Fox Lake Correctional Institution,1234,893,2,72%,126%,4151,979
+Gordon Correctional Center,63,48,0,76%,121%,198,52
+Green Bay Correctional Institution,985,481,1,49%,132%,4343,749
+Grow Academy,4,0,0,0%,33%,2,12
+Jackson Correctional Institution,905,592,0,65%,108%,3701,837
+John C. Burke Correctional Center,201,35,0,17%,108%,344,186
+Kenosha Correctional Center,68,0,0,0%,113%,114,60
+Kettle Moraine Correctional Institution,1048,873,1,83%,134%,4825,783
+Marshall E. Sherrer Correctional Center,38,9,0,24%,119%,158,32
+McNaughton Correctional Center,98,69,0,70%,178%,239,55
+Milwaukee Secure Detention Facility,330,145,0,44%,72%,3507,460
+Milwaukee Womens Correctional Center,52,30,0,58%,124%,349,42
+New Lisbon Correctional Institution,976,548,0,56%,103%,3695,950
+Oakhill Correctional Institution,649,397,1,61%,189%,2717,344
+Oregon Correctional Center,96,1,0,1%,123%,252,78
+Oshkosh Correctional Institution,1859,1029,4,55%,124%,8990,1494
+Prairie du Chien Correctional Institution,501,413,1,82%,154%,1468,326
+Racine Correctional Institution/Sturtevant Transitional Facility,1621,1168,2,72%,123%,9245,1321
+Racine Youthful Offender Correctional Facility,340,22,0,6%,85%,594,400
+Redgranite Correctional Institution,950,360,3,38%,96%,2519,990
+Robert E. Ellsworth Correctional Center,311,239,0,77%,135%,1679,230
+Sanger B. Powers Correctional Center,92,63,0,68%,153%,283,60
+St. Croix Correctional Center,48,1,0,2%,51%,131,94
+Stanley Correctional Institution,1419,365,3,26%,95%,4062,1500
+Taycheedah Correctional Institution,845,469,1,56%,129%,3416,653
+Thompson Correctional Center,107,34,0,32%,91%,351,118
+Waupun Correctional Institution,1071,719,4,67%,121%,3243,882
+Winnebago Correctional Center,195,78,0,40%,93%,922,210
+Wisconsin Secure Program Facility,443,3,0,1%,88%,557,501
