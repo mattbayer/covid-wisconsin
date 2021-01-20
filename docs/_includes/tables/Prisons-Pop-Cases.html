@@ -2,6 +2,10 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  
+  <style>
+    
+  </style>
 </head>
 
 <table class="display compact nowrap" style="font-size:0.6rem">
@@ -10,7 +14,7 @@
     <thead>
       <tr>
         {% for pair in row %}
-          <th style="text-align:left">{{ pair[0] }}</th>
+          <th>{{ pair[0] }}</th>
         {% endfor %}
       </tr>
     </thead>
@@ -26,7 +30,10 @@
 <script>
   $('table.display').DataTable( {
     paging: false,
-    scrollX: true
+    columnDefs: [
+    { className: "dt-head-left", targets: "_all" }
+    ],  
+    <!--scrollX: true-->
   } )
 </script>
 
