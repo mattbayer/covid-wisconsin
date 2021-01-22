@@ -1323,8 +1323,14 @@ def read_bytest_wi(filename):
     """    
     test = pd.read_csv(filename)
     
-    # filter on the right data type
-    test = test[test['Measure Names']=='Positive tests']
+    # get rid of duplicates
+    # they keep changing formatting so I keep having to change the method for
+    # doing this
+    # # filter on the right data type
+    # test = test[test['Measure Names']=='Positive tests']
+    # only keep rows where this column is not empty
+    test = test[test['Encounter_7day_avg'].apply(lambda x: not np.isnan(x))]
+    test = test.reset_index(drop=True)
     
     # trim and rename columns
     col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Positives', 'Totals': 'Tests' }
@@ -1335,6 +1341,13 @@ def read_bytest_wi(filename):
     test['Date'] = pd.to_datetime(test['Date'])
     test = test.sort_values('Date')
     
+    # convert columns to numeric if needed
+    if isinstance(test['Positives'].iloc[0], str):
+        # take out commas, convert to numeric
+        test['Positives'] = pd.to_numeric(test['Positives'].apply(lambda x: x.replace(',','')))
+    if isinstance(test['Tests'].iloc[0], str):
+        test['Tests'] = pd.to_numeric(test['Tests'].apply(lambda x: x.replace(',','')))
+        
     return test
 
 
