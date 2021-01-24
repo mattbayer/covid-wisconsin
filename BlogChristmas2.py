@@ -65,7 +65,7 @@ covid.plotly_twolines(
 
 
 #%% Cases by test date for Wisconsin
-filename = 'C:\dev\covid-wisconsin\data\Cases_with_prob_stacked_data_2021-01-22.csv'
+filename = 'data\\Cases_with_prob_stacked_data_2021-01-22.csv'
 
 wi = pd.read_csv(filename)
 # filter out redundant data
@@ -97,7 +97,7 @@ fig.update_layout(showlegend=False)
 date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
-for d in range(0,3):
+for d in range(0,5):
     dividers.append(
         dict(
             type= 'line', line_color='gray', line_dash='dot',
@@ -110,7 +110,12 @@ for d in range(0,3):
 fig.update_layout(shapes=dividers)
 fig.add_annotation(text='Christmas',
                    x=datetime.datetime(2020,12,25,0), 
-                   y=1500, 
+                   y=1600, 
+                   yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
+
+fig.add_annotation(text="New Year's Day",
+                   x=datetime.datetime(2020,12,31,23), 
+                   y=2100, 
                    yanchor='bottom', xanchor='center', showarrow=False, textangle=270)
                    
 pplot(fig, include_plotlyjs='cdn', filename=plotpath+'\\Christmas2-WI.html')
@@ -132,8 +137,8 @@ os.startfile(save_png)
 # I can regex on these labels below.
 
 
-html_cases = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Cases_2021-01-22.html'
-html_tests = 'C:\dev\covid-wisconsin\data\Dashboard-Milwaukee-Tests_2021-01-22.html'
+html_cases = 'data\\Dashboard-Milwaukee-Cases_2021-01-22.html'
+html_tests = 'data\\Dashboard-Milwaukee-Tests_2021-01-22.html'
 
 mke_case = covid.read_dashboard_mke(html_cases)
 mke_test = covid.read_dashboard_mke(html_tests)
@@ -194,7 +199,7 @@ fig.update_yaxes(title='Tests', row=1)
 date = datetime.datetime(2020,12,13,12)
 delta = datetime.timedelta(days=7)
 dividers = list()
-for d in range(0,3):
+for d in range(0,5):
     dividers.append(
         dict(
             type= 'line', line_color='gray', line_dash='dot',
