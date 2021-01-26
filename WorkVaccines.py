@@ -106,13 +106,25 @@ vaccine_region =    {'Northwest': 28443,
                       'Milwaukee': 46190,
                       'WI': 339858
                      }
-
-# dis-aggregate Milwaukee and Madison
-vaccine_region['Southeast'] = vaccine_region['Southeast'] - vaccine_region['Milwaukee']
-vaccine_region['South Central'] = vaccine_region['South Central'] - vaccine_region['Madison']
-
 vaccine_region = pd.Series(vaccine_region)
 
-# per-capita vaccinations
+# harmonize region naming
+pop_region['Outer Southeast'] = pop_region['Southeast']
+pop_region['Total Southeast'] = pop_region['Southeast'] + pop_region['Milwaukee']
 
+vaccine_region['Outer Southeast'] = vaccine_region['Southeast'] - vaccine_region['Milwaukee']
+vaccine_region['Total Southeast'] = vaccine_region['Southeast']
+
+pop_region['Outer South Central'] = pop_region['South Central']
+pop_region['Total South Central'] = pop_region['South Central'] + pop_region['Madison']
+
+vaccine_region['Outer South Central'] = vaccine_region['South Central'] - vaccine_region['Madison']
+vaccine_region['Total South Central'] = vaccine_region['South Central']
+
+# drop these labels as now inconsistent
+vaccine_region = vaccine_region.drop(['Southeast', 'South Central'])
+pop_region = pop_region.drop(['Southeast', 'South Central'])
+
+# per-capita vaccinations
 vaccine_capita = vaccine_region / pop_region
+
