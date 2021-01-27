@@ -42,7 +42,7 @@ html {
 }
 @media (min-width: 58em) {
   html {
-    font-size: 19px;
+    font-size: 18px;
   }
 }
 
@@ -100,7 +100,8 @@ html {
 }
 .sidebar-nav-item {
   display: block;
-  line-height: 1.75;
+  line-height: 1.65;
+  font-size: 1.15rem;
 }
 a.sidebar-nav-item:hover,
 a.sidebar-nav-item:focus {
