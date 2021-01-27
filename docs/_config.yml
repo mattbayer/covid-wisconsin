@@ -12,13 +12,14 @@ markdown:            kramdown
 # About/contact
 author:
   name:              Matt Bayer
-  url:               https://twitter.com/MattBayer3
+  twitter:           MattBayerWI
   email:             
 
 # Gems
 plugins:
   - jekyll-paginate
   - jekyll-relative-links
+  - jekyll-seo-tag
   
 # Google Analytics
 google_analytics: G-G84CM55HBV
