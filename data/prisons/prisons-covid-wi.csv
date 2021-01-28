@@ -1,38 +1,38 @@
-﻿Name,Short Name,Latitude,Longitude,Design capacity,Total population,Sex,Security,Type,Positive Tests,Negative Tests,Total Tests,Released Positive Cases,Active Positive Cases,Inactive Positive Cases,Deaths,,,
-Black River Correctional Center,Black River,44.35798492,-90.6521839,66,56,Male,Minimum,Center,42,315,357,3,0,39,0,,,
-Chippewa Valley Correctional Treatment Facility,Chippewa Valley,44.9287,-91.35,450,338,Male,Minimum,Institution,293,1124,1417,22,0,271,0,,,
-Columbia Correctional Institution,Columbia,43.5664,-89.4906,541,747,Male,Maximum,Institution,281,2388,2669,2,0,279,0,,,
-Copper Lake School/Lincoln Hills School,Lincoln Hills,45.45059019,-89.67918769,548,64,Coed,,Juvenile,24,186,210,1,0,23,0,,,
-Dodge Correctional Institution,Dodge,43.6244347,-88.7397654,1165,1313,Male,Maximum,Institution,726,10421,11147,2,3,721,2,,,
-Drug Abuse Correctional Center,Drug Abuse,44.07952673,-88.51504916,125,156,Male,Minimum,Center,81,811,892,8,17,56,0,,,
-Felmers O. Chaney Correctional Center,Felmers O. Chaney,43.07034359,-87.95188733,100,57,Male,Minimum,Center,22,208,230,2,2,18,0,,,
-Flambeau Correctional Center,Flambeau,45.65678595,-90.74096719,50,34,Male,Minimum,Center,14,206,220,0,0,14,0,,,
-Fox Lake Correctional Institution,Fox Lake,43.615,-88.913,979,1225,Male,Medium,Institution,893,3265,4158,6,0,887,2,,,
-Gordon Correctional Center,Gordon,46.23261066,-91.7540128,52,64,Male,Minimum,Center,48,150,198,0,0,48,0,,,
-Green Bay Correctional Institution,Green Bay,44.4705,-88.0372,749,982,Male,Maximum,Institution,481,4648,5129,6,0,475,1,,,
-Grow Academy,Grow Academy,42.95108733,-89.38424939,12,3,Male,,Juvenile,0,2,2,0,0,0,0,,,
-Jackson Correctional Institution,Jackson,44.3054,-90.7906,837,895,Male,Medium,Institution,592,3122,3714,9,0,583,0,,,
-John C. Burke Correctional Center,John C. Burke,43.62095678,-88.73618787,186,201,Male,Minimum,Center,39,458,497,1,3,35,0,,,
-Kenosha Correctional Center,Kenosha,42.57638629,-87.82645113,60,70,Male,Minimum,Center,2,117,119,0,2,0,0,,,
-Kettle Moraine Correctional Institution,Kettle Moraine,43.7235,-88.1491,783,1054,Male,Medium,Institution,881,4083,4964,9,7,865,1,,,
-Marshall E. Sherrer Correctional Center,Marshall E. Sherrer,43.04774955,-87.9295683,32,39,Male,Minimum,Center,9,151,160,1,0,8,0,,,
-McNaughton Correctional Center,McNaughton,45.80072285,-89.63093876,55,93,Male,Minimum,Center,70,170,240,3,1,66,0,,,
-Milwaukee Secure Detention Facility,Milwaukee Detention,43.04380606,-87.92484503,462,339,Coed,,MSDF,146,3475,3621,17,1,128,0,,,
-Milwaukee Womens Correctional Center,Milwaukee Womens,43.08166155,-87.91885149,42,56,Female,Minimum,Institution,30,332,362,1,0,29,0,,,
-New Lisbon Correctional Institution,New Lisbon,43.88135551,-90.13179646,950,956,Male,Medium,Institution,551,3157,3708,4,2,545,0,,,
-Oakhill Correctional Institution,Oakhill,42.9613,-89.3946,344,644,Male,Minimum,Institution,421,2800,3221,7,5,409,1,,,
-Oregon Correctional Center,Oregon,42.9513382,-89.39766086,78,102,Male,Minimum,Center,1,342,343,0,0,1,0,,,
-Oshkosh Correctional Institution,Oshkosh,44.0693,-88.5615,1494,1856,Male,Medium,Institution,1029,7982,9011,31,0,998,4,,,
-Prairie du Chien Correctional Institution,Prairie du Chien,43.03442955,-91.14099987,326,478,Male,Medium,Institution,413,1061,1474,4,0,409,1,,,
-Racine Correctional Institution/Sturtevant Transitional Facility,Racine/Sturtevant,42.7131,-87.8987,1321,1682,Male,Medium/Minimum,Institution,1168,8085,9253,18,0,1150,2,,,
-Racine Youthful Offender Correctional Facility,Racine Youthful,42.737,-87.7993,400,345,Male,Medium,Institution,122,820,942,0,104,18,0,,,
-Redgranite Correctional Institution,Redgranite,44.05397959,-89.10762807,990,950,Male,Medium,Institution,360,2201,2561,7,0,353,3,,,
-Robert E. Ellsworth Correctional Center,Robert E. Ellsworth,42.69687649,-88.08052039,230,328,Female,Minimum,Institution,239,1447,1686,4,0,235,0,,,
-Sanger B. Powers Correctional Center,Sanger B. Powers,44.54101711,-88.19173114,60,90,Male,Minimum,Center,63,221,284,3,0,60,0,,,
-St. Croix Correctional Center,St. Croix,45.13069605,-92.57064513,94,44,Male,Minimum,Center,1,130,131,0,0,1,0,,,
-Stanley Correctional Institution,Stanley,44.94804645,-90.95179624,1500,1396,Male,Medium,Institution,393,3763,4156,2,0,391,3,,,
-Taycheedah Correctional Institution,Taycheedah,43.7983841,-88.38837733,653,829,Female,,Institution,473,3283,3756,5,3,465,1,,,
-Thompson Correctional Center,Thompson,43.02463549,-89.04489219,118,110,Male,Minimum,Center,35,321,356,3,0,32,0,,,
-Waupun Correctional Institution,Waupun,43.6297,-88.7316,882,1028,Male,Maximum,Institution,721,2577,3298,1,1,719,4,,,
-Winnebago Correctional Center,Winnebago,44.06512368,-88.51334682,210,210,Male,Minimum,Center,78,849,927,6,0,72,0,,,
-Wisconsin Secure Program Facility,WSPF,43.14334942,-90.68298373,501,437,Male,Maximum,Institution,3,554,557,0,0,3,0,,,
+﻿Name,Short Name,Latitude,Longitude,Design capacity,Total population,Sex,Security,Type,Positive Tests,Negative Tests,Total Tests,Released Positive Cases,Active Positive Cases,Inactive Positive Cases,Deaths
+Black River Correctional Center,Black River,44.35798492,-90.6521839,66,56,Male,Minimum,Center,42,315,357,3,0,39,0
+Chippewa Valley Correctional Treatment Facility,Chippewa Valley,44.9287,-91.35,450,338,Male,Minimum,Institution,293,1124,1417,22,0,271,0
+Columbia Correctional Institution,Columbia,43.5664,-89.4906,541,747,Male,Maximum,Institution,281,2388,2669,2,0,279,0
+Copper Lake School/Lincoln Hills School,Lincoln Hills,45.45059019,-89.67918769,548,64,Coed,,Juvenile,24,186,210,1,0,23,0
+Dodge Correctional Institution,Dodge,43.6244347,-88.7397654,1165,1313,Male,Maximum,Institution,726,10421,11147,2,3,721,2
+Drug Abuse Correctional Center,Drug Abuse,44.07952673,-88.51504916,125,156,Male,Minimum,Center,81,811,892,8,17,56,0
+Felmers O. Chaney Correctional Center,Felmers O. Chaney,43.07034359,-87.95188733,100,57,Male,Minimum,Center,22,208,230,2,2,18,0
+Flambeau Correctional Center,Flambeau,45.65678595,-90.74096719,50,34,Male,Minimum,Center,14,206,220,0,0,14,0
+Fox Lake Correctional Institution,Fox Lake,43.615,-88.913,979,1225,Male,Medium,Institution,893,3265,4158,6,0,887,2
+Gordon Correctional Center,Gordon,46.23261066,-91.7540128,52,64,Male,Minimum,Center,48,150,198,0,0,48,0
+Green Bay Correctional Institution,Green Bay,44.4705,-88.0372,749,982,Male,Maximum,Institution,481,4648,5129,6,0,475,1
+Grow Academy,Grow Academy,42.95108733,-89.38424939,12,3,Male,,Juvenile,0,2,2,0,0,0,0
+Jackson Correctional Institution,Jackson,44.3054,-90.7906,837,895,Male,Medium,Institution,592,3122,3714,9,0,583,0
+John C. Burke Correctional Center,John C. Burke,43.62095678,-88.73618787,186,201,Male,Minimum,Center,39,458,497,1,3,35,0
+Kenosha Correctional Center,Kenosha,42.57638629,-87.82645113,60,70,Male,Minimum,Center,2,117,119,0,2,0,0
+Kettle Moraine Correctional Institution,Kettle Moraine,43.7235,-88.1491,783,1054,Male,Medium,Institution,881,4083,4964,9,7,865,1
+Marshall E. Sherrer Correctional Center,Marshall E. Sherrer,43.04774955,-87.9295683,32,39,Male,Minimum,Center,9,151,160,1,0,8,0
+McNaughton Correctional Center,McNaughton,45.80072285,-89.63093876,55,93,Male,Minimum,Center,70,170,240,3,1,66,0
+Milwaukee Secure Detention Facility,Milwaukee Detention,43.04380606,-87.92484503,462,339,Coed,,MSDF,146,3475,3621,17,1,128,0
+Milwaukee Womens Correctional Center,Milwaukee Womens,43.08166155,-87.91885149,42,56,Female,Minimum,Institution,30,332,362,1,0,29,0
+New Lisbon Correctional Institution,New Lisbon,43.88135551,-90.13179646,950,956,Male,Medium,Institution,551,3157,3708,4,2,545,0
+Oakhill Correctional Institution,Oakhill,42.9613,-89.3946,344,644,Male,Minimum,Institution,421,2800,3221,7,5,409,1
+Oregon Correctional Center,Oregon,42.9513382,-89.39766086,78,102,Male,Minimum,Center,1,342,343,0,0,1,0
+Oshkosh Correctional Institution,Oshkosh,44.0693,-88.5615,1494,1856,Male,Medium,Institution,1029,7982,9011,31,0,998,4
+Prairie du Chien Correctional Institution,Prairie du Chien,43.03442955,-91.14099987,326,478,Male,Medium,Institution,413,1061,1474,4,0,409,1
+Racine Correctional Institution/Sturtevant Transitional Facility,Racine/Sturtevant,42.7131,-87.8987,1321,1682,Male,Medium/Minimum,Institution,1168,8085,9253,18,0,1150,2
+Racine Youthful Offender Correctional Facility,Racine Youthful,42.737,-87.7993,400,345,Male,Medium,Institution,122,820,942,0,104,18,0
+Redgranite Correctional Institution,Redgranite,44.05397959,-89.10762807,990,950,Male,Medium,Institution,360,2201,2561,7,0,353,3
+Robert E. Ellsworth Correctional Center,Robert E. Ellsworth,42.69687649,-88.08052039,230,328,Female,Minimum,Institution,239,1447,1686,4,0,235,0
+Sanger B. Powers Correctional Center,Sanger B. Powers,44.54101711,-88.19173114,60,90,Male,Minimum,Center,63,221,284,3,0,60,0
+St. Croix Correctional Center,St. Croix,45.13069605,-92.57064513,94,44,Male,Minimum,Center,1,130,131,0,0,1,0
+Stanley Correctional Institution,Stanley,44.94804645,-90.95179624,1500,1396,Male,Medium,Institution,393,3763,4156,2,0,391,3
+Taycheedah Correctional Institution,Taycheedah,43.7983841,-88.38837733,653,829,Female,,Institution,473,3283,3756,5,3,465,1
+Thompson Correctional Center,Thompson,43.02463549,-89.04489219,118,110,Male,Minimum,Center,35,321,356,3,0,32,0
+Waupun Correctional Institution,Waupun,43.6297,-88.7316,882,1028,Male,Maximum,Institution,721,2577,3298,1,1,719,4
+Winnebago Correctional Center,Winnebago,44.06512368,-88.51334682,210,210,Male,Minimum,Center,78,849,927,6,0,72,0
+Wisconsin Secure Program Facility,WSPF,43.14334942,-90.68298373,501,437,Male,Maximum,Institution,3,554,557,0,0,3,0

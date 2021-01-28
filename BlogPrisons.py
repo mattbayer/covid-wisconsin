@@ -68,6 +68,11 @@ prisons.loc[changelist, 'textposition'] = tolist
 
 prisons = prisons.reset_index()
 
+#%% Derived data
+prisons['% crowded'] = prisons['Total population'] / prisons['Design capacity'] * 100
+prisons['Present Positive Cases'] = prisons['Positive Tests'] - prisons['Released Positive Cases']
+prisons['% infected'] = prisons['Present Positive Cases'] / prisons['Total population'] * 100
+
 #%% Scatter plots
 
 # Infection % vs overcrowding
@@ -338,14 +343,14 @@ fig = plotly_fillbubble(
         outerlabel='Population',
         ),
     savefile='.\\docs\\_includes\\plotly\\Map-Prisons-WI.html',   
-    fig_height=700,
+    fig_height=650,
     )
 
 save_png = '.\\docs\\assets\\Map-Prisons-WI.png'
 fig.write_image(
     save_png,
-    width=800,
-    height=700,
+    width=700,
+    height=650,
     engine='kaleido',
 )
 os.startfile(save_png)
