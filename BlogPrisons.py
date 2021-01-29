@@ -355,6 +355,26 @@ fig.write_image(
 )
 os.startfile(save_png)
 
+#%% Create smaller data table for display on the site
+col_list = {'Short Name': 'Facility',
+            'Present Positive Cases': 'Cases',
+            'Deaths': 'Deaths',
+            'Total population': 'Prisoners',
+            'Design capacity': 'Capacity',
+            '% infected': 'Case %',
+            '% crowded': 'Crowding'}
+
+
+
+table = prisons[col_list.keys()]
+table = table.rename(columns=col_list)
+# sort by facility name, case-insensitive
+table = table.sort_values('Facility', key=lambda col: col.str.lower())
+
+table['Case %'] = table['Case %'].apply(lambda p: '{0:.0f}%'.format(p))
+table['Crowding'] = table['Crowding'].apply(lambda p: '{0:.0f}%'.format(p))
+
+table.to_csv('.\\docs\\_data\\prisons.csv', index=False)
 
 #%% Color bubble modified
 
