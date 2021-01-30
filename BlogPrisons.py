@@ -58,29 +58,34 @@ prisons['textposition'] = 'bottom center'
 changelist = ['Thompson', 'Sanger B. Powers', 'Green Bay', 'Stanley', 'Oshkosh',
               'Black River', 'Kettle Moraine', 'Taycheedah', 'Redgranite',
               'Jackson', 'New Lisbon', 'Columbia', 'Milwaukee Detention',
-              'Fox Lake', 'Dodge', 'Waupun']
+              'Fox Lake', 'Dodge', 'Waupun', 'WSPF']
 tolist =    ['middle right', 'middle left', 'middle right', 'middle right', 'middle right',
              'middle right', 'middle right', 'middle right', 'top center',
              'middle left', 'middle left', 'middle left', 'middle right',
-             'bottom left', 'bottom center', 'bottom right']
+             'bottom left', 'bottom center', 'bottom right', 'middle right']
 
 prisons.loc[changelist, 'textposition'] = tolist
 
 prisons = prisons.reset_index()
 
 #%% Derived data
-prisons['% crowded'] = prisons['Total population'] / prisons['Design capacity'] * 100
+prisons['Crowding %'] = prisons['Total population'] / prisons['Design capacity'] * 100
 prisons['Present Positive Cases'] = prisons['Positive Tests'] - prisons['Released Positive Cases']
-prisons['% infected'] = prisons['Present Positive Cases'] / prisons['Total population'] * 100
+prisons['Case %'] = prisons['Present Positive Cases'] / prisons['Total population'] * 100
+prisons['% positive'] = prisons['Positive Tests'] / prisons['Total Tests']
+
+# aliases
+prisons['Cases'] = prisons['Present Positive Cases']
+prisons['Population'] = prisons['Total population']
 
 #%% Scatter plots
 
-# Infection % vs overcrowding
+# Case % vs overcrowding
 fig = px.scatter(
     prisons,
-    x='% crowded',
-    y='% infected',
-    title='Infection % vs Crowding',
+    x='Crowding %',
+    y='Case %',
+    title='Case % vs Crowding',
     text='Scatter Name',    
     )
 
@@ -100,12 +105,12 @@ fig.write_image(
 )
 os.startfile(save_png)
 
-# Infection % vs size
+# Case % vs size
 fig = px.scatter(
     prisons,
-    x='Total population',
-    y='% infected',
-    title='Infection % vs Population',
+    x='Population',
+    y='Case %',
+    title='Case % vs Population',
     text='Scatter Name',
     )
 
@@ -323,14 +328,15 @@ countiesUSA = gpd.read_file('data\\geo\\cb_2019_us_county_500k.shp')
 # filter on wisconsin
 countiesWI = countiesUSA[countiesUSA.STATEFP == '55']
 
-prisons['Fraction infected'] = prisons['Positive Tests'] / prisons['Total population']
 prisons = prisons.sort_values('Total population', ascending=False)
+
+
 
 fig = plotly_fillbubble(
     countiesWI,
     prisons,
-    outercol='Total population',
-    innercol='Positive Tests',
+    outercol='Population',
+    innercol='Cases',
     size_factor=1.5,
     loncol='Longitude',
     latcol='Latitude',
@@ -338,7 +344,7 @@ fig = plotly_fillbubble(
     location_names_short=prisons['Display Name'],
     textposition=prisons.textposition,
     plotlabels=dict(
-        title='Prison Populations and Infections',
+        title='Prison Populations and Cases',
         innerlabel='Positive',
         outerlabel='Population',
         ),
@@ -361,8 +367,8 @@ col_list = {'Short Name': 'Facility',
             'Deaths': 'Deaths',
             'Total population': 'Prisoners',
             'Design capacity': 'Capacity',
-            '% infected': 'Case %',
-            '% crowded': 'Crowding'}
+            'Case %': 'Case %',
+            'Crowding %': 'Crowding'}
 
 
 
