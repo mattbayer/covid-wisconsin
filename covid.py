@@ -5,6 +5,7 @@ Created on Wed May 27 20:57:44 2020
 @author: Matt Bayer
 """
 import datetime
+import dateutil.parser
 import numpy as np
 import pandas as pd
 
@@ -1234,13 +1235,17 @@ def update_covid_data_wi(dataset='state', save_path='.\\data'):
     # Some places also have -999 values, also replace those with NaN
     # More data cleaning is done in read_covid_data_wi, which makes it more 
     # accessible for analysis
+    data_update = data_update.reset_index(drop=True)
     data_update = data_update.fillna(value=np.nan)
     data_update = data_update.replace(to_replace=-999, value=np.nan)
-
+    # convert date string to standard datetime object, discard time component
+    data_update['DATE'] = convert_rawdates(data_update['DATE'])
+    
     # Load the historical data, as long as it exists
     path_file = os.path.join(save_path, filenames[dataset])
     if os.path.exists(path_file):
         data_saved = pd.read_csv(path_file) 
+        data_saved['DATE'] = convert_rawdates(data_saved['DATE'])
         
         # Merge with the update. 
         # First use update() to overwrite any updated data. Need to reindex first.
@@ -1286,19 +1291,16 @@ def read_covid_data_wi(dataset='county', data_path = '.\\data', csv_file = None)
     path_file = os.path.join(data_path, csv_file)
     covid_data = pd.read_csv(path_file) 
     
-    # Add new column with converted dates
-    # LoadDttm contains hour/minute information, the conversion discards that
-    covid_data['Date'] = convert_rawdates(covid_data.DATE)
-    
     # Make a list of only useful columns
-    remove_list = ['OBJECTID','DATE']
+    remove_list = ['OBJECTID']
     col_list = covid_data.columns.tolist()
     for s in remove_list:
         col_list.remove(s)
-    # Take Date from the back and put it on the front
-    col_list.insert(0,col_list.pop())   
-    # Re-order according to the new list
     covid_data = covid_data[col_list]
+    
+    # Convert DATE to datetime objects and rename DATE to expected 'Date'
+    covid_data['DATE'] = pd.to_datetime(covid_data.DATE)
+    covid_data = covid_data.rename(columns={'DATE':'Date'})
 
     # Create new hospitalizations column by taking difference of HOSP_YES
     if 'HOSP_YES' in col_list:
@@ -1397,11 +1399,10 @@ def convert_rawdates(rawdates, discard_time=True):
     dobj = list()
 
     if type(rawdates[0]) is str:
-        format_str = "%Y/%m/%d %H:%M:%S+00"
         for dstr in rawdates:
-            d = datetime.datetime.strptime(dstr, format_str)
+            d = dateutil.parser.parse(dstr)
             if discard_time:
-                d = d.replace(hour=0, minute=0, second=0)
+                d = d.replace(hour=0, minute=0, second=0, tzinfo=None)
             dobj.append(d)
     else:          
         for dint in rawdates:
