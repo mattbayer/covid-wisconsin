@@ -5,7 +5,8 @@ Update plots for regional vaccine allocation
 
 import pandas as pd
 import datetime
-
+from plotly.offline import plot as pplot
+import plotly.express as px
 import covid
 
 #%% Get the data
@@ -127,4 +128,78 @@ pop_region = pop_region.drop(['Southeast', 'South Central'])
 
 # per-capita vaccinations
 vaccine_capita = vaccine_region / pop_region
+
+# Data frame with all relevant data
+vaccine_region = pd.DataFrame({'Vaccines': vaccine_region, 'Population': pop_region}, index=pop_region.index)
+vaccine_region['Per Capita %'] = vaccine_region['Vaccines'] / vaccine_region['Population'] * 100
+
+
+#%% Shares of vaccine/population.
+share_region = vaccine_region / vaccine_region.loc['WI']
+share_region.Vaccines = pd.to_numeric(share_region.Vaccines)
+share_region.Population = pd.to_numeric(share_region.Population)
+share_region = share_region.drop(['WI', 'Total Southeast', 'Total South Central'], axis=0)
+share_region = share_region.reset_index()
+
+#%% Plots
+
+plot_region = vaccine_region.loc[['Madison', 'Outer South Central', 'Milwaukee', 'Outer Southeast', 
+                                'Fox Valley', 'Northeast', 'North Central', 'Northwest', 'Western']]
+plot_region = plot_region.reset_index()
+
+fig = px.bar(
+    plot_region,
+    x='Region',
+    y='Per Capita %',
+    color='Region',
+    title='Vaccinated by region',
+    color_discrete_map=color_dict,
+    )
+
+# # vertical layout
+# fig = px.bar(
+#     share_region,
+#     x='Region', 
+#     y=['Vaccines', 'Population'], 
+#     # text=textlabels,
+#     # facet_col='variable', 
+#     # facet_col_wrap=2,
+#     # color='variable',
+#     # color_discrete_sequence=col_colors,
+#     # labels={'variable': '', 'Percentage':'Percent of total'},
+#     barmode='group',
+#     title='WI Vaccine Share by Region',
+#     width=700,
+#     height=700,
+#     )
+
+
+# # take out 'variable=' part of the axis titles
+# fig.for_each_annotation(
+#     lambda a: a.update(
+#         text=a.text.split("=")[-1],
+#         font=dict(size=15),
+#         )
+# #     )
+
+# fig.update_traces(textposition='outside')
+fig.update_traces(marker_line_color='gray')
+
+# other layout
+# fig.update_layout(showlegend=False)
+
+pplot(fig,
+      filename='.\\docs\\assets\\plotly\\Vaccine-Share.html',
+      include_plotlyjs='cdn',
+      )
+
+# # save_png = '.\\docs\\assets\\Age-Covid_2020-12-11.png'
+# save_png = '.\\docs\\assets\\Age-Covid.png'
+# fig.write_image(
+#     save_png,
+#     width=700,
+#     height=700,
+#     engine='kaleido',
+# )
+# os.startfile(save_png)
 
