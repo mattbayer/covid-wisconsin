@@ -95,18 +95,32 @@ colors = [color_dict[r] for r in region_ordered]
 
 
 #%% Vaccine numbers
-# 25-Jan
-vaccine_region =    {'Northwest': 28443, 
-                      'North Central': 25285, 
-                      'Northeast': 30578,
-                      'Western': 17984,   
-                      'Fox Valley':23719,    
-                      'Southeast':116672,
-                      'South Central':89329, 
-                      'Madison': 49644, 
-                      'Milwaukee': 46190,
-                      'WI': 339858
-                     }
+# # 25-Jan
+# vaccine_region =    {'Northwest': 28443, 
+#                       'North Central': 25285, 
+#                       'Northeast': 30578,
+#                       'Western': 17984,   
+#                       'Fox Valley':23719,    
+#                       'Southeast':116672,
+#                       'South Central':89329, 
+#                       'Madison': 49644, 
+#                       'Milwaukee': 46190,
+#                       'WI': 339858
+#                      }
+
+# 6-Feb
+vaccine_region =     {'Northwest': 62911, 
+                      'North Central': 55091, 
+                      'Northeast': 64064,
+                      'Western': 39936,   
+                      'Fox Valley':58512,    
+                      'Southeast':247299,
+                      'South Central':184981, 
+                      'Madison': 91797, 
+                      'Milwaukee': 91308,
+                      'WI': 728724
+                      }
+
 vaccine_region = pd.Series(vaccine_region)
 
 # harmonize region naming
@@ -131,7 +145,7 @@ vaccine_capita = vaccine_region / pop_region
 
 # Data frame with all relevant data
 vaccine_region = pd.DataFrame({'Vaccines': vaccine_region, 'Population': pop_region}, index=pop_region.index)
-vaccine_region['Per Capita %'] = vaccine_region['Vaccines'] / vaccine_region['Population'] * 100
+vaccine_region['Vaccinated %'] = vaccine_region['Vaccines'] / vaccine_region['Population'] * 100
 
 
 #%% Shares of vaccine/population.
@@ -147,16 +161,29 @@ plot_region = vaccine_region.loc[['Madison', 'Outer South Central', 'Milwaukee',
                                 'Fox Valley', 'Northeast', 'North Central', 'Northwest', 'Western']]
 plot_region = plot_region.reset_index()
 
+def perc_to_text(p):
+    return '{:0.0f}'.format(p) + '%'
+        
+textlabels = plot_region['Vaccinated %'].apply(perc_to_text)
+
+
+
 fig = px.bar(
     plot_region,
     x='Region',
-    y='Per Capita %',
+    y='Vaccinated %',
+    text=textlabels,
     color='Region',
     title='Vaccinated by region',
     color_discrete_map=color_dict,
+    width=700,
+    height=500,
     )
 
-# # vertical layout
+fig.update_traces(textposition='outside')
+
+
+# # vaccine share vs. population share
 # fig = px.bar(
 #     share_region,
 #     x='Region', 
