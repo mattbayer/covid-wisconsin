@@ -118,7 +118,10 @@ vaccine_region =     {'Northwest': 62911,
                       'South Central':184981, 
                       'Madison': 91797, 
                       'Milwaukee': 91308,
-                      'WI': 728724
+                      'WI': 728724,
+                      'Waukesha': 54696,
+                      'Washington': 16126,
+                      'Ozaukee': 13441
                       }
 
 vaccine_region = pd.Series(vaccine_region)
@@ -145,7 +148,7 @@ vaccine_capita = vaccine_region / pop_region
 
 # Data frame with all relevant data
 vaccine_region = pd.DataFrame({'Vaccines': vaccine_region, 'Population': pop_region}, index=pop_region.index)
-vaccine_region['Vaccinated %'] = vaccine_region['Vaccines'] / vaccine_region['Population'] * 100
+vaccine_region['Vaccinations per 100 people'] = vaccine_region['Vaccines'] / vaccine_region['Population'] * 100
 
 
 #%% Shares of vaccine/population.
@@ -162,16 +165,16 @@ plot_region = vaccine_region.loc[['Madison', 'Outer South Central', 'Milwaukee',
 plot_region = plot_region.reset_index()
 
 def perc_to_text(p):
-    return '{:0.0f}'.format(p) + '%'
+    return '{:0.0f}'.format(p)
         
-textlabels = plot_region['Vaccinated %'].apply(perc_to_text)
+textlabels = plot_region['Vaccinations per 100 people'].apply(perc_to_text)
 
 
 
 fig = px.bar(
     plot_region,
     x='Region',
-    y='Vaccinated %',
+    y='Vaccinations per 100 people',
     text=textlabels,
     color='Region',
     title='Vaccinated by region',
