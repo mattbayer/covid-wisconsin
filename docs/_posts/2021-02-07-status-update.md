@@ -22,8 +22,16 @@ Vaccine distribution is going slower than we'd like to see, but I have been enco
 
 [DHS vaccination plot]
 
-The proportion of people 65 and over who have received at least one dose is now XX%. 
+The proportion of people 65 and over who have received at least one dose is now XX%. Really that's pretty good progress, at this rate we would see 75% vaccination for 65+ by the end of the month.
 
 [DHS vaccinations by age]
 
-There are still areas
+What I do not like right now is that Milwaukee County has administered fewer doses than Dane County, despite having almost twice as many people! Here is a bar graph of all the regions in Wisconsin and their vaccinations per capita.
+
+[Vaccinations per capita by region]
+
+Madison (Dane County) is the best and Milwaukee County is the worst; other regions are in between. The fact that Madison ranks first makes me worry that Madison vaccinators may be getting more favorable vaccine allocations due to their closeness to the state machinery and perhaps better knowledge and communication with the distribution bureaucracy. But the fact that Milwaukee ranks last behind the other regions makes me worry that Milwaukee's governance and organization is at fault. 
+
+Other possibilities are that it relates to the demographics of the regions; perhaps Madison has more health care workers, the first prioritized population, than other areas of the state. But I would have thought the same was true of Milwaukee. Perhaps more of the Milwaukee metro's health care workers and older people live in suburbs in the surrounding counties. 
+
+
