@@ -19,11 +19,13 @@ I am concerned, however, that Milwaukee County has administered fewer doses than
 
 ![Vaccinations per capita by region](../assets/Vaccination-Region.png)
 
-Madison (Dane County) is the best and Milwaukee County is the worst; other regions are in between. The fact that Dane County ranks first makes me wonder if Madison vaccinators may be getting more favorable vaccine allocations due to better knowledge and communication with the state distribution bureaucracy. But the fact that Milwaukee ranks last makes me suspect Milwaukee's distribution efficiency. The DHS does not publish data on the allocation per county, unfortunately, so I can't do more than speculate.
+Madison (Dane County) is the best and Milwaukee County is the worst; other regions are in between. The fact that Dane County ranks first makes me wonder if Madison vaccinators may be getting more favorable vaccine allocations due to better knowledge and communication with the state bureaucracy. But the fact that Milwaukee ranks last makes me suspect Milwaukee's distribution efficiency. The DHS does not publish data on the allocation per county, unfortunately, so I can't do more than speculate.
 
 A more benign possibility is that the discrepancy relates to the demographics of the regions; I would expect the vaccine numbers to be higher in regions with more health care workers and people over 65. But I don't think that solves the Madison-Milwaukee dichotomy, because I would think that both counties have more health care workers but fewer older people, per capita, than the rest of the state. 
 
 Part of the explanation could be that more of the Milwaukee metro area's health care workers and older people live in suburbs in the surrounding counties. If I include the suburban WOW counties (Waukesha, Ozaukee, Washington) with Milwaukee, the metro area as a whole comes up to 11.4 vaccinations per 100 people, more in line with other areas of the state. But this still does not explain Dane County's over-performance.
+
+I hope to figure out a more complete explanation, or better yet, that the discrepancy eventually evens out.
 
 ### Infections
 Cases and positivity rate continue their steady decrease, looking the very picture of exponential decrease. (Meaning that if infections decrease x% every week, the curve will start out steep and flatten over time as it approaches 0; the opposite of exponential growth that starts out flat but quickly accelerates.)
