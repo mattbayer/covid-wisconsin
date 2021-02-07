@@ -2,7 +2,7 @@
 layout: post
 title: "Covid WI status update: Feb&nbsp;7"
 hidden: true
---\
+---
  
 Cases and positivity rate continue their steady decrease, looking the very picture of exponential decrease. (Meaning that if infections decrease x% every week, the curve will start out steep and flatten over time as it approaches 0; the opposite of exponential growth that starts out flat but quickly accelerates.)
 
