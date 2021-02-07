@@ -128,6 +128,9 @@ vaccine_region = pd.Series(vaccine_region)
 
 wow_counties = vaccine_region[['Waukesha', 'Washington', 'Ozaukee']] / popdata[['Waukesha', 'Washington', 'Ozaukee']]
 wow_sum = vaccine_region[['Waukesha', 'Washington', 'Ozaukee']].sum() / popdata[['Waukesha', 'Washington', 'Ozaukee']].sum()
+metro_sum = vaccine_region[['Milwaukee', 'Waukesha', 'Washington', 'Ozaukee']].sum() / popdata[['Milwaukee', 'Waukesha', 'Washington', 'Ozaukee']].sum()
+
+
 
 # harmonize region naming
 pop_region['Outer Southeast'] = pop_region['Southeast']
