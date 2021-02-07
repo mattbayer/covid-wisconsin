@@ -4,7 +4,7 @@ title: "Covid WI status update: Feb&nbsp;7"
 hidden: true
 ---
  
-Vaccine administration has started picking up, reaching a substantial fraction of people over 65; but I'm concerned about uneven distribution between regions of the state. Cases continue steadily decreasing, 
+Indicators are good! Vaccine administration has started picking up, reaching a substantial fraction of people over 65. Though I am concerned about uneven distribution between regions of the state. Cases and positivity rate continue steadily decreasing, making me optimistic despite the Covid variants abroad.
 
 ### Vaccines
 I wish vaccine distribution was going faster, but I have been encouraged that in the last two weeks (since the 65+ group was given the green light), rates of vaccination have gone way up.
@@ -15,7 +15,7 @@ This data comes from the [DHS vaccination page](https://www.dhs.wisconsin.gov/co
 
 ![DHS vaccinations by age](../assets/DHS-Vaccination-Age_2021-02-07.png)
 
-What I did not like to see was that Milwaukee County has administered fewer doses than Dane County, despite having almost twice as many people! Here is a bar graph of all the regions in Wisconsin and their number of vaccinations per 100 people. (This is not the same as percentage of people vaccinated - some of these vaccinations are second doses.)
+What I did not like to see was that Milwaukee County has administered fewer doses than Dane County, despite having almost twice as many people! Here is a bar graph of all the regions in Wisconsin and their number of vaccinations per 100 people. (For definitions of these regions see the bottom of the [regional dashboard](../dashboard/regional.md).) This is not the same as percentage of people vaccinated, since some of these vaccinations are second doses.
 
 ![Vaccinations per capita by region](../assets/Vaccination-Region.png)
 
@@ -25,18 +25,17 @@ A more benign possibility is that the discrepancy relates to the demographics of
 
 Part of the explanation could be that more of the Milwaukee metro area's health care workers and older people live in suburbs in the surrounding counties. If I include the suburban WOW counties (Waukesha, Ozaukee, Washington) with Milwaukee, the metro area as a whole comes up to 11.4 vaccinations per 100 people, more in line with other areas of the state. But this still does not explain Dane County's over-performance.
 
-### Outlook
+### Infections
 Cases and positivity rate continue their steady decrease, looking the very picture of exponential decrease. (Meaning that if infections decrease x% every week, the curve will start out steep and flatten over time as it approaches 0; the opposite of exponential growth that starts out flat but quickly accelerates.)
 
-[Dual plot of cases and positivity from DHS]
+![Cases](../assets/Cases-Tests-WI_2021-02-06.png)
+
+![DHS positivity rate](../assets/DHS-Positivity_2021-02-06.png)
 
 Some authorities warn that we're not testing enough, but I think that's unfounded. Testing numbers are going down, but I think at this point that's a natural part of the surge cycle. Once infections are decreasing, there are fewer people with symptoms and contacts who need to get tested, so demand for testing goes down as well. As long as the test positivity rate is also going down or at least remaining steady and low, it doesn't seem worrisome to me.
 
-A side benefit of the lower testing demand is that it appears that response times have improved. I was tested several weeks ago and got the results by the end of the next day; the Milwukee County dashboard indicates that nearly 100% of tests are returned within 48 hours.
+A side benefit of the lower testing demand is that response times have improved. I was tested several weeks ago and got the results by the end of the next day; the [Milwaukee County dashboard](https://mcoem.maps.arcgis.com/apps/opsdashboard/index.html#/018eedbe075046779b8062b5fe1055bf) indicates that [nearly 100% of tests are returned within 48 hours](../assets/MkeCounty-TestReturn_2021-02-05.png).
 
-[Milwaukee County test return]
+Extrapolating the current case and positivity declines forward to the end of the month would bring the state about back to *status quo ante* where we were before the fall surge, at the beginning of September.
 
-Extrapolating the current case and positivity declines forward to the end of the month would bring the state about back to where we were before the fall surge, at the beginning of September. 
-I think it behooves us to remain cautious and vigilant for now, but I am fundamentally still optimistic about beating the virus by the summer. 
-
-
+The coronavirus variants are out there, so I think it behooves us to remain cautious and vigilant. But indicators are pretty good right now, and I am still optimistic about beating the virus by the summer. 
