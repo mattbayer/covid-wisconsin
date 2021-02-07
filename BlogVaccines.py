@@ -7,6 +7,8 @@ import pandas as pd
 import datetime
 from plotly.offline import plot as pplot
 import plotly.express as px
+import os
+
 import covid
 
 #%% Get the data
@@ -86,7 +88,9 @@ color_dict = {'Northwest':     'thistle',
               'Western':       'sandybrown',
               'Fox Valley':    'yellowgreen',
               'Southeast': 'lightsteelblue',
+              'Outer Southeast': 'lightsteelblue',
               'South Central': 'pink',
+              'Outer South Central': 'pink',
               'Madison':       'red',
               'Milwaukee':     'navy'}
 
@@ -108,20 +112,36 @@ colors = [color_dict[r] for r in region_ordered]
 #                       'WI': 339858
 #                      }
 
-# 6-Feb
-vaccine_region =     {'Northwest': 62911, 
-                      'North Central': 55091, 
-                      'Northeast': 64064,
-                      'Western': 39936,   
-                      'Fox Valley':58512,    
-                      'Southeast':247299,
-                      'South Central':184981, 
-                      'Madison': 91797, 
-                      'Milwaukee': 91308,
-                      'WI': 728724,
-                      'Waukesha': 54696,
-                      'Washington': 16126,
-                      'Ozaukee': 13441
+# # 6-Feb
+# vaccine_region =     {'Northwest': 62911, 
+#                       'North Central': 55091, 
+#                       'Northeast': 64064,
+#                       'Western': 39936,   
+#                       'Fox Valley':58512,    
+#                       'Southeast':247299,
+#                       'South Central':184981, 
+#                       'Madison': 91797, 
+#                       'Milwaukee': 91308,
+#                       'WI': 728724,
+#                       'Waukesha': 54696,
+#                       'Washington': 16126,
+#                       'Ozaukee': 13441
+#                       }
+
+# 7-Feb
+vaccine_region =     {'Northwest': 64127, 
+                      'North Central': 57117, 
+                      'Northeast': 65698,
+                      'Western': 40317,   
+                      'Fox Valley':61100,    
+                      'Southeast':254563,
+                      'South Central':189785, 
+                      'Madison': 94405, 
+                      'Milwaukee': 93985,
+                      'WI': 749223,
+                      'Waukesha': 55759,
+                      'Washington': 16622,
+                      'Ozaukee': 13815
                       }
 
 vaccine_region = pd.Series(vaccine_region)
@@ -171,7 +191,7 @@ plot_region = vaccine_region.loc[['Madison', 'Outer South Central', 'Milwaukee',
 plot_region = plot_region.reset_index()
 
 def perc_to_text(p):
-    return '{:0.0f}'.format(p)
+    return '{:0.1f}'.format(p)
         
 textlabels = plot_region['Vaccinations per 100 people'].apply(perc_to_text)
 
@@ -225,17 +245,16 @@ fig.update_traces(marker_line_color='gray')
 # fig.update_layout(showlegend=False)
 
 pplot(fig,
-      filename='.\\docs\\assets\\plotly\\Vaccine-Share.html',
+      filename='.\\docs\\assets\\plotly\\Vaccination-Region.html',
       include_plotlyjs='cdn',
       )
 
-# # save_png = '.\\docs\\assets\\Age-Covid_2020-12-11.png'
-# save_png = '.\\docs\\assets\\Age-Covid.png'
-# fig.write_image(
-#     save_png,
-#     width=700,
-#     height=700,
-#     engine='kaleido',
-# )
-# os.startfile(save_png)
+save_png = '.\\docs\\assets\\Vaccination-Region.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=500,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
