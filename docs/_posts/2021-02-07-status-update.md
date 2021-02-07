@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Covid WI status update: Feb&nbsp;7"
-hidden: true
 ---
  
 Indicators are pretty good! Vaccine administration has started picking up, reaching a substantial fraction of people over 65. I am concerned about uneven distribution between regions of the state, though. Cases and positivity rate continue steadily decreasing, making me optimistic despite the Covid variants abroad.
@@ -28,7 +27,7 @@ Part of the explanation could be that more of the Milwaukee metro area's health 
 I hope to figure out a more complete explanation, or better yet, that the discrepancy eventually evens out.
 
 ### Infections
-Cases and positivity rate continue their steady decrease, looking the very picture of exponential decrease. (Meaning that if infections decrease x% every week, the curve will start out steep and flatten over time as it approaches 0; the opposite of exponential growth that starts out flat but quickly accelerates.)
+Cases and positivity rate continue their steady downslope, looking the very picture of exponential decrease. (Meaning that if infections decrease, say, 15% every week, the curve will start out steep and flatten over time as it approaches 0; the opposite of exponential growth that starts out flat but quickly accelerates.)
 
 ![Cases](../assets/Cases-Tests-WI_2021-02-06.png)
 
@@ -38,6 +37,6 @@ Some authorities warn that we're not testing enough, but I think that's unfounde
 
 A side benefit of the lower testing demand is that response times have improved. I was tested several weeks ago and got the results by the end of the next day; the [Milwaukee County dashboard](https://mcoem.maps.arcgis.com/apps/opsdashboard/index.html#/018eedbe075046779b8062b5fe1055bf) indicates that [nearly 100% of tests are returned within 48 hours](../assets/MkeCounty-TestReturn_2021-02-05.png).
 
-Extrapolating the current case and positivity declines forward to the end of the month would bring the state about back to *status quo ante* where we were before the fall surge, at the beginning of September.
+Extrapolating the current case and positivity declines forward to the end of the month would bring the state about back to where we were before the fall surge, at the beginning of September.
 
 The coronavirus variants are out there, so I think it behooves us to remain cautious and vigilant. But indicators are pretty good right now, and I am still optimistic about beating the virus by the summer. 
