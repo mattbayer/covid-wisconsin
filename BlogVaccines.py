@@ -206,7 +206,7 @@ fig = px.bar(
     title='Vaccinated by region',
     color_discrete_map=color_dict,
     width=700,
-    height=500,
+    height=550,
     )
 
 fig.update_traces(textposition='outside')
@@ -253,7 +253,7 @@ save_png = '.\\docs\\assets\\Vaccination-Region.png'
 fig.write_image(
     save_png,
     width=700,
-    height=500,
+    height=550,
     engine='kaleido',
 )
 os.startfile(save_png)
