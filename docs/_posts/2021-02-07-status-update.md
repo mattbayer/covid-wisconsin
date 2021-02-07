@@ -5,7 +5,7 @@ title: "Covid WI status update: Feb&nbsp;7"
  
 Indicators are pretty good! Vaccine administration has started picking up, reaching a substantial fraction of people over 65. I am concerned about uneven distribution between regions of the state, though. Cases and positivity rate continue steadily decreasing, making me optimistic despite the Covid variants abroad.
 
-### Vaccines
+### Vaccinations
 I wish vaccine distribution was going faster, but I have been encouraged that in the last two weeks (since the 65+ group was given the green light), rates of vaccination have gone way up.
 
 ![DHS vaccination plot](../assets/DHS-Vaccination-Date_2021-02-07.png)
