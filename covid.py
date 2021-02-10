@@ -1352,6 +1352,25 @@ def read_bytest_wi(filename):
         
     return test
 
+def read_deathdate_wi(death_file):
+    death_raw = pd.read_csv(death_file)
+    # Note: key is to download the file and then re-save it in Excel specifically
+    # as csv, otherwise it's actually tab delimited and harder to read in in python
+    
+    death = death_raw.iloc[:,2:]
+    death = death.rename(columns={'Unnamed: 2': 'series'})
+    death.iloc[0,0] = 'datestring'
+    death = death.set_index('series').T.reset_index(drop=True)
+    death.columns.name = ''
+    
+    # hack because the date string does not include the year
+    death.loc[0:344, 'datestring'] = death.loc[0:344, 'datestring'] + '-2020'
+    death.loc[345:, 'datestring'] = death.loc[345:, 'datestring'] + '-2021'
+    
+    death.insert(0, 'Date', pd.to_datetime(death['datestring']))
+    death = death.drop(labels='datestring', axis=1)
+    
+    return death
 
 def read_dashboard_mke(html_file):
     file_obj = open(html_file)
