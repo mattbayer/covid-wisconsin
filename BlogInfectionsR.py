@@ -60,7 +60,15 @@ alldata.plot(y=['Deaths', 'Deaths Reported'])
 alldata['Deaths smoothed'] = alldata['Deaths'].rolling(window=7, center=True, win_type=None).mean()
 alldata['Positives smoothed'] = alldata['Positives'].rolling(window=7, center=True, win_type=None).mean()
 alldata['Tests smoothed'] = alldata['Tests'].rolling(window=7, center=True, win_type=None).mean()
-alldata['Deaths x200'] = alldata['Deaths smoothed'] * 200
+
+#%% Create an aligned deaths column
+IFR = 0.0025
+lag = 12
+deaths_aligned = alldata['Deaths smoothed'] / IFR
+deaths_aligned = deaths_aligned.reset_index()
+deaths_aligned.Date = deaths_aligned.Date - datetime.timedelta(days=lag)
+deaths_aligned = deaths_aligned.set_index('Date')
+alldata['Deaths aligned'] = deaths_aligned
 
 #%% Estimate infections
 inf_const = 1/10
@@ -70,7 +78,7 @@ alldata['Infections'] = inf_const * alldata['Positives smoothed'] * np.power(pop
 
 #%% Plot cases/deaths on log scale
 
-alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths x200'], logy=True)
+alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths aligned'], logy=True)
 # alldata.plot(y='Deaths smoothed', logy=False)
 
 #%% Estimate true new cases
