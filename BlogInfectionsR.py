@@ -33,12 +33,8 @@ widata = covid.read_covid_data_wi('state')
 test_file = "data\\By_Test_Data_data_2021-01-22.csv"
 
 test = covid.read_bytest_wi(test_file)
-test = pd.read_csv(test_file)
 
 test = test.set_index('Date')
-
-# test.plot(y=['Positives','Tests'])
-
 
 
 #%% Deaths by death date
@@ -51,13 +47,31 @@ deaths = deaths.set_index('Date')
 
 #%% Compare cases, tests, deaths by date to as-reported
 
-people['Cases Reported'] = widata.set_index('Date').POS_NEW
-people['Tests Reported'] = widata.set_index('Date').TEST_NEW
-deaths['Reported'] = widata.set_index('Date').DTH_NEW
+alldata = test
+alldata['Deaths'] = deaths['Confirmed deaths']
+alldata['Cases Reported'] = widata.set_index('Date').POS_NEW
+alldata['Deaths Reported'] = widata.set_index('Date').DTH_NEW
+ 
+alldata.plot(y=['Positives', 'Cases Reported'])
+alldata.plot(y=['Deaths', 'Deaths Reported'])
 
-people.plot(y=['Cases', 'Cases Reported'])
-people.plot(y=['New people tested', 'Tests Reported'])
-deaths.plot(y=['Deaths', 'Reported'])
+
+#%% Smoothed data
+alldata['Deaths smoothed'] = alldata['Deaths'].rolling(window=7, center=True, win_type=None).mean()
+alldata['Positives smoothed'] = alldata['Positives'].rolling(window=7, center=True, win_type=None).mean()
+alldata['Tests smoothed'] = alldata['Tests'].rolling(window=7, center=True, win_type=None).mean()
+alldata['Deaths x200'] = alldata['Deaths smoothed'] * 200
+
+#%% Estimate infections
+inf_const = 1/10
+alpha = 0.4
+
+alldata['Infections'] = inf_const * alldata['Positives smoothed'] * np.power(popdata['WI'] / alldata['Tests smoothed'], 1-alpha)
+
+#%% Plot cases/deaths on log scale
+
+alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths x200'], logy=True)
+# alldata.plot(y='Deaths smoothed', logy=False)
 
 #%% Estimate true new cases
 
@@ -70,11 +84,6 @@ test.plot(y=['PosAvg', 'TestAvg'])
 
 est = pd.DataFrame({'cases': people.CaseAvg, 'positives': test.PosAvg, 'tests': test.TestAvg, 'deaths': deaths.DeathAvg})
 
-inf_const = 1/10
-
-est['infections'] = inf_const * est['cases'] * np.sqrt(popdata['WI'] / est['tests'])
-
-est.plot(y=['cases','infections'])
 
 
 
@@ -119,41 +128,7 @@ est['Infection / Case Ratio'] = est['infections'] / est['cases']
 est.plot(title='Daily True Infection Estimate', y=['Detected Cases', 'Estimated infections'])
 est.plot(title='Infection / Case Ratio', y=['Infection / Case Ratio'])
 
-
-
-
-
-#%% Improve new infection estimate? 
-# - do a sort of deconvolution for active cases based on duration
-# Results in higher estimates in periods when cases are decreasing
-# But it's not super dramatic, and it's also really noisy at this point, would 
-# need lots more smoothing. Not sure it's very promising.
-
-inf_const = 1/10
-
-est['Current Infections'] = est['cases'] * np.sqrt(popdata['WI'] / est['tests'])
-
-est['New Infections 2'] = 0 * est['Current Infections']
-
-duration = 14
-
-# fill NaN with zeroes or the loop below won't work
-est = est.fillna(value=0)
-
-for kk in range(len(est['Current Infections'])):
-    if kk >= duration:
-        est['New Infections 2'].iloc[kk] = (est['Current Infections'].iloc[kk] 
-                                            - est['Current Infections'].iloc[kk-1] 
-                                            + est['New Infections 2'].iloc[kk-duration])
-    elif kk > 0:
-        est['New Infections 2'].iloc[kk] = (est['Current Infections'].iloc[kk] 
-                                            - est['Current Infections'].iloc[kk-1])
-    else:
-        est['New Infections 2'].iloc[kk] = est['Current Infections'].iloc[kk]
-    
-
-est.plot(y=['Detected Cases', 'Estimated infections', 'New Infections 2'], ylim=[0, 5000])
-        
+      
     
 
 #%% Improve new infection estimate?

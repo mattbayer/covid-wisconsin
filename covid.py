@@ -1370,6 +1370,9 @@ def read_deathdate_wi(death_file):
     death.insert(0, 'Date', pd.to_datetime(death['datestring']))
     death = death.drop(labels='datestring', axis=1)
     
+    # make sure everything numeric
+    death = death.set_index('Date').apply(pd.to_numeric, axis=1).reset_index()
+    
     return death
 
 def read_dashboard_mke(html_file):
