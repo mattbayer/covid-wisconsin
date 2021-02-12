@@ -61,38 +61,76 @@ alldata['Deaths smoothed'] = alldata['Deaths'].rolling(window=7, center=True, wi
 alldata['Positives smoothed'] = alldata['Positives'].rolling(window=7, center=True, win_type=None).mean()
 alldata['Tests smoothed'] = alldata['Tests'].rolling(window=7, center=True, win_type=None).mean()
 
-#%% Create an aligned deaths column
-IFR = 0.0025
-lag = 12
+#%% Estimate infections
+Npop = popdata['WI']
+Npos = alldata['Positives smoothed']
+Ntests = alldata['Tests smoothed']
+
+D1 = 3
+alpha = 0.6
+
+alldata['Infections (Power)'] = 1/D1 * alldata['Positives smoothed'] * np.power(Npop/Ntests, 1-alpha)
+
+# revised formula to take account of previously detected cases being taken
+# out of the testing pool
+
+D2 = 15
+alpha = 0.4
+alldata['Dedup factor'] = 1 + 1/D2 * (np.power(Npop/Ntests, 1-alpha) - 1)
+alldata['Infections (Dedup)'] = Npos * alldata['Dedup factor']
+
+
+alldata.plot(y=['Positives smoothed', 'Infections (Power)', 'Infections (Dedup)'])
+alldata.plot(y=['Positives smoothed', 'Infections (Power)', 'Infections (Dedup)'], logy=True)
+
+alldata['Infections'] = alldata['Infections (Dedup)']
+
+# to an extent I may be overfitting
+# D=3, alpha=0.6 on Power is very close to D=15,alpha=0.4 for Dedup.  So to an 
+# extent these formulas are not unique.
+# However, given that D actually means something, supposedly, Dedup is better
+# because it gives good results at reasonable D (the length that someone is PCR
+# positive).  Then the only changeable parameter is alpha, instead of two 
+# changeable parameters.
+
+#%% Cumulative 
+
+alldata['Total Infected % (Dedup)'] = alldata['Infections (Dedup)'].sort_index().cumsum()/Npop*100
+alldata['Total Infected % (Power)'] = alldata['Infections (Power)'].sort_index().cumsum()/Npop*100
+alldata['Total Positive %'] = alldata['Positives'].sort_index().cumsum()/Npop*100
+
+antibody_dates = [datetime.datetime(2020, 6, 30, 0, 0), datetime.datetime(2020, 11, 1, 0, 0)]
+antibody_perc  = [1.6, 7.0]
+
+antibody = pd.DataFrame(data={'Antibody survey': antibody_perc}, index=antibody_dates)
+antibody['Antibody survey x2'] = antibody['Antibody survey'] * 2
+
+alldata.plot(y=['Total Infected % (Dedup)', 'Total Infected % (Power)', 'Total Positive %'])
+
+plt.plot(antibody.index, antibody['Antibody survey'], label='Antibody survey')   
+plt.plot(antibody.index, antibody['Antibody survey x2'], label='Antibody survey x2')   
+
+
+#%% Compare with deaths
+
+# Create an aligned deaths column
+IFR = 0.0045
+lag = 10
 deaths_aligned = alldata['Deaths smoothed'] / IFR
 deaths_aligned = deaths_aligned.reset_index()
 deaths_aligned.Date = deaths_aligned.Date - datetime.timedelta(days=lag)
 deaths_aligned = deaths_aligned.set_index('Date')
 alldata['Deaths aligned'] = deaths_aligned
 
-#%% Estimate infections
-inf_const = 1/10
-alpha = 0.4
-
-alldata['Infections'] = inf_const * alldata['Positives smoothed'] * np.power(popdata['WI'] / alldata['Tests smoothed'], 1-alpha)
-
-#%% Plot cases/deaths on log scale
-
 alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths aligned'], logy=True)
+alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths aligned'], logy=False)
 # alldata.plot(y='Deaths smoothed', logy=False)
 
-#%% Estimate true new cases
-
-people['CaseAvg'] = people.Cases.rolling(window=7, center=False).mean()
-test['PosAvg'] = test.Positives.rolling(window=7, center=False).mean()
-test['TestAvg'] = test.Tests.rolling(window=7, center=False).mean()
-deaths['DeathAvg'] = deaths.Deaths.rolling(window=7, center=False).mean()
-
-test.plot(y=['PosAvg', 'TestAvg'])
-
-est = pd.DataFrame({'cases': people.CaseAvg, 'positives': test.PosAvg, 'tests': test.TestAvg, 'deaths': deaths.DeathAvg})
 
 
+
+#%%
+return
 
 
 #%% Compare to Youyang Gu's WI estimate
@@ -122,38 +160,10 @@ est[name] = deaths_temp / ifr * 100
 
 est.plot(title='Wisconsin New Infection Estimates', y=['cases', 'infections', name])
 
-#%% Cumulative 
-
-plt.figure()
-plt.plot(people['Cases'].sort_index().cumsum())
-plt.plot(est['infections'].cumsum())
-plt.plot(datetime.datetime(2020, 6, 30, 0, 0), 93000,'o')
-
-est['Detected cases'] = est['cases']
-est['Estimated infections'] = est['infections']
-est['Infection / Case Ratio'] = est['infections'] / est['cases']
-
-est.plot(title='Daily True Infection Estimate', y=['Detected Cases', 'Estimated infections'])
-est.plot(title='Infection / Case Ratio', y=['Infection / Case Ratio'])
 
       
     
 
-#%% Improve new infection estimate?
-# - revised formula to take account of previously detected cases being taken
-# out of the testing pool
-
-duration = 14
-D = duration
-Npop = 5.8e6
-Ncases = est['Detected Cases']
-Ntests = est['tests']
-
-
-est['Dedup factor'] = 1 + 1/D * (np.sqrt(Npop/Ntests) - 1)
-est['Infections (Dedup)'] = est['Detected Cases'] * est['Dedup factor']
-
-est.plot(y=['Detected Cases', 'Estimated infections', 'Infections (Dedup)'])
 
 
 
