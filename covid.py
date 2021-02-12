@@ -1329,15 +1329,17 @@ def read_bytest_wi(filename):
     # they keep changing formatting so I keep having to change the method for
     # doing this
     # # filter on the right data type
-    # test = test[test['Measure Names']=='Positive tests']
+    test = test[test['Measure Names']=='Positive tests']
     # only keep rows where this column is not empty
-    test = test[test['Encounter_7day_avg'].apply(lambda x: not np.isnan(x))]
+    # test = test[test['Encounter_7day_avg'].apply(lambda x: not np.isnan(x))]
     test = test.reset_index(drop=True)
     
     # trim and rename columns
-    col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Positives', 'Totals': 'Tests' }
+    # col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Positives', 'Totals': 'Tests' }
+    col_rename = {'Day of Encounter Date': 'Date', 'Number of Positives': 'Positives', 'Number of Negatives': 'Negatives' }
     test = test[col_rename.keys()]
     test = test.rename(columns=col_rename)
+    test['Tests'] = test['Positives'] + test['Negatives']
     
     # convert to datetime objects and sort by date
     test['Date'] = pd.to_datetime(test['Date'])

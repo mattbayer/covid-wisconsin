@@ -30,7 +30,7 @@ widata = covid.read_covid_data_wi('state')
 #%% By Test
 
 # manually downloaded file - positives and tests
-test_file = "data\\By_Test_Data_data_2021-01-22.csv"
+test_file = "data\\By_Test_Data_data_2021-02-12.csv"
 
 test = covid.read_bytest_wi(test_file)
 
@@ -130,7 +130,7 @@ alldata.plot(y=['Deaths smoothed', 'Positives smoothed', 'Infections', 'Deaths a
 
 
 #%%
-return
+quit
 
 
 #%% Compare to Youyang Gu's WI estimate
