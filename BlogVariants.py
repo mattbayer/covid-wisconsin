@@ -34,23 +34,24 @@ plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
 
 N = len(plotdata)
 
-R1 = 0.8
+R1 = 0.81
 R2 = R1*1.4
 s = 5
 d = np.arange(0,N)
 
 start = 2900
 frac2 = 0.02 / 4    # 2% at Jan 31; start at Jan 10 is two fraction doubling times
+# frac2 = 0.001 / 4     # 0.1% at Jan 31; based on 5 positives / ~5000 sequenced
 
 v1 = start * np.exp((R1-1)*d/s)
 v2 = frac2 * start * np.exp((R2-1)*d/s)
 
-plt.figure()
-plt.plot(v1+v2)
-plt.plot(v2)
+# plt.figure()
+# plt.plot(v1+v2)
+# plt.plot(v2)
 
-plt.figure()
-plt.plot(v2/(v1+v2))
+# plt.figure()
+# plt.plot(v2/(v1+v2))
 
 plotdata['Classic trend'] = v1
 plotdata['B.1.1.7 trend'] = v2
@@ -65,7 +66,7 @@ fig = px.area(
     y=['B.1.1.7 trend', 'Classic trend'], 
     color_discrete_sequence=['orange', 'lightsteelblue'],
     title='<i><b>Possible</i></b> B.1.1.7 variant trend in WI',
-    labels={'index':'Date', 'value': 'Cases'}
+    labels={'index':'Date', 'value': 'Cases / day'}
     )
 
 fig.add_trace(
