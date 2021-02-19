@@ -28,63 +28,44 @@ mke = mke.rename(columns=col_rename)
 
 
 
-#%% Compare with deaths by death date
+#%% Read in all death-by-date data
 
-def read_death_raw(death_file):
-    death_raw = pd.read_csv(death_file)
-    # Note: key is to download the file and then re-save it in Excel specifically
-    # as csv, otherwise it's actually tab delimited and harder to read in in python
-    
-    death = death_raw.iloc[:,2:]
-    death = death.rename(columns={'Unnamed: 2': 'series'})
-    death.iloc[0,0] = 'datestring'
-    death = death.set_index('series').T.reset_index(drop=True)
-    death.columns.name = ''
-    
-    # hack because the date string does not include the year
-    death.loc[0:344, 'datestring'] = death.loc[0:344, 'datestring'] + '-2020'
-    death.loc[345:, 'datestring'] = death.loc[345:, 'datestring'] + '-2021'
-    
-    death['Date'] = pd.to_datetime(death['datestring'])
+# get all death by date files
+file_dates = list()
+file_names = list()
+deaths = pd.DataFrame({'Date': pd.date_range(start='2020-03-01', end=datetime.date.today())})
+deaths = deaths.set_index('Date')
+
+path = 'data'
+for file in os.listdir(path):
+    if file.startswith('Deaths by day stacked_'):
+        name = os.path.join(path, file)
+        date = pd.to_datetime(file[-14:-4])
+
+        file_names.append(name)
+        file_dates.append(date)
+
+        # read Confirmed deaths, add as column to DataFrame
+        temp_deaths = covid.read_deathdate_wi(name).set_index('Date')
+        col_name = date.strftime('%#d-%b')        
+        deaths[col_name] = temp_deaths['Confirmed deaths']
+
+col_names = deaths.columns
+latest = col_names[-1]
+compare = col_names[-2]
+
+#%% Plots death by date comparisons
+
+# latest deaths by date and the difference between them
+deaths['Latest difference'] = deaths[latest] - deaths[compare]
+deaths.plot(y=[latest, compare, 'Latest difference'],
+            title='Date of Death, '+latest+' vs. '+compare)
+
+# deaths by date vs deaths by report - big delay here
+deaths['Reported'] = state.set_index('Date')['Deaths']
+deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. Report (7-day avg)')
+
         
-    death = death.set_index('Date')
-    
-    return death
-
-death_03 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-03.csv')
-death_04 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-04.csv')
-death_10 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-10.csv')
-death_21 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-21.csv')
-death_29 = read_death_raw('.\\data\\Deaths by day stacked_2020-12-29.csv')
-death_0108 = read_death_raw('.\\data\\Deaths by day stacked_2021-01-08.csv')
-death_0115 = read_death_raw('.\\data\\Deaths by day stacked_2021-01-15.csv')
-death_latest = read_death_raw('.\\data\\Deaths by day stacked_2021-01-17.csv')
-
-latest = 'Deaths 17-Jan'
-
-death = death_latest
-death['Deaths 3-Dec'] = pd.to_numeric(death_03['Confirm + Probable deaths'])
-death['Deaths 4-Dec'] = pd.to_numeric(death_04['Confirm + Probable deaths'])
-death['Deaths 10-Dec'] = pd.to_numeric(death_10['Confirm + Probable deaths'])
-death['Deaths 21-Dec'] = pd.to_numeric(death_21['Confirmed deaths'])
-death['Deaths 29-Dec'] = pd.to_numeric(death_29['Confirmed deaths'])
-death['Deaths 08-Jan'] = pd.to_numeric(death_0108['Confirmed deaths'])
-death['Deaths 15-Jan'] = pd.to_numeric(death_0115['Confirmed deaths'])
-death[latest] = pd.to_numeric(death_latest['Confirmed deaths'])
-death['Deaths (reported)'] = state.set_index('Date')['Deaths']
-
-# compare = 'Deaths 4-Dec'
-# compare = 'Deaths 29-Dec'
-compare = 'Deaths 15-Jan'
-
-death.rolling(7).mean().plot(y=[latest, 'Deaths (reported)'], title='Date of Death vs. Report (7-day avg)')
-death['Difference'] = death[latest] - death[compare]
-death.plot(y=[compare, latest, 'Difference'], title='Date of Death, '+compare+' vs. '+latest)
-
-
-# seems like a huge delay in deaths... but if there is such a big delay, then
-# I can't trust the deaths-by-date curve right now either, and you would have
-# to expect continued large numbers of reports coming in for past days.
 
 #%% Plot delay in cases
 
@@ -106,7 +87,7 @@ cases['Date'] = pd.to_datetime(cases['Date'])
 cases = cases.set_index('Date')
 cases['Cases (reported)'] = state.set_index('Date').Cases
 
-death2 = death.reset_index(drop=False)
+death2 = deaths.reset_index(drop=False)
 death2['Date'] = death2['Date'] - datetime.timedelta(days=18)
 cases[death_latest] = death2.set_index('Date')[death_latest] / 0.012
 cases = cases.reset_index(drop=False)

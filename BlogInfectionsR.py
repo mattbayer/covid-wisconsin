@@ -38,7 +38,7 @@ test = test.set_index('Date')
 
 
 #%% Deaths by death date
-deaths_file = "data\\Deaths by day stacked_2021-02-09.csv"
+deaths_file = "data\\Deaths by day stacked_2021-02-18.csv"
 deaths= covid.read_deathdate_wi(deaths_file)
 
 deaths = deaths.set_index('Date')
