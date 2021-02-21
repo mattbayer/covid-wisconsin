@@ -970,14 +970,16 @@ def plot_by_age(datatable):
     # The data provided is cumulative cases
     # So make new columns for *new* cases in age brackets
     age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
-    case_cumul_cols = ['POS_' + sfx for sfx in age_suffix]  
+    case_cumul_cols  = ['POS_' + sfx for sfx in age_suffix]  
     death_cumul_cols = ['DTHS_' + sfx for sfx in age_suffix]
-    cumul_cols = case_cumul_cols + death_cumul_cols
+    hosp_cumul_cols  = ['IP_Y_' + sfx for sfx in age_suffix]
+    cumul_cols = case_cumul_cols + death_cumul_cols + hosp_cumul_cols
     
     # new names for daily data
-    case_new_cols = ['POS_NEW_' + sfx for sfx in age_suffix]
+    case_new_cols  = ['POS_NEW_' + sfx for sfx in age_suffix]
     death_new_cols = ['DTH_NEW_' + sfx for sfx in age_suffix]
-    new_cols = case_new_cols + death_new_cols
+    hosp_new_cols = ['HOSP_NEW_' + sfx for sfx in age_suffix]
+    new_cols = case_new_cols + death_new_cols + hosp_new_cols
         
     # get cumulative data and compute new-case data
     select = select_data(datatable, 'WI', cumul_cols)
@@ -988,11 +990,14 @@ def plot_by_age(datatable):
     
     case_relabels = ['Cases ' + sfx for sfx in relabel_suffix] 
     death_relabels = ['Deaths ' + sfx for sfx in relabel_suffix] 
+    hosp_relabels = ['Hosp ' + sfx for sfx in relabel_suffix]
 
     select[case_relabels[0:-1]] = select[case_new_cols[0:-3]]
     select[death_relabels[0:-1]] = select[death_new_cols[0:-3]]
+    select[hosp_relabels[0:-1]] = select[hosp_new_cols[0:-3]]
     select['Cases 70+'] = select['POS_NEW_70_79'] + select['POS_NEW_80_89'] + select['POS_NEW_90']
     select['Deaths 70+'] = select['DTH_NEW_70_79'] + select['DTH_NEW_80_89'] + select['DTH_NEW_90']
+    select['Hosp 70+'] = select['HOSP_NEW_70_79'] + select['HOSP_NEW_80_89'] + select['HOSP_NEW_90']
     
     # first 7-day boxcar average for weekly effects, 
     # then 5-day hamming to smooth more
@@ -1007,7 +1012,9 @@ def plot_by_age(datatable):
     ax = avg.plot(y=death_relabels, title='WI smoothed daily deaths by age')
     ax.set_ylabel('Deaths')
     
-    
+    # Create hospitalizations line plot.  Pretty busy, trying to think of better format...
+    ax = avg.plot(y=hosp_relabels, title='WI smoothed daily hospitalizations by age')
+    ax.set_ylabel('New hospitalizations')    
 
 def plot_cases_deaths(datatable, location):
     """Create line plot comparing cases and deaths over time.
