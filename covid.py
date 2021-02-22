@@ -960,6 +960,39 @@ def plot_cases_posrate(datatable, locations, per_capita=False, popdata=None):
     plt.show()
     
     
+def new_by_age_wi(datatable):
+    """Create a table of new deaths, hospitalizations, cases by age and date.
+    
+    datatable -- WI DHS style data
+    """
+    
+    # construct prefixes and suffixes for WI DHS data    
+    age_suffix = ['0_9', '10_19', '20_29', '30_39', '40_49', '50_59', '60_69', '70_79', '80_89', '90']
+    age_min = np.arange(0,100,10)
+    age_max = np.arange(9,100,10.0)
+    age_max[-1] = np.inf
+    data_prefix = ['POS_', 'IP_Y_', 'DTHS_']
+    data_type = ['Cases', 'Hospitalizations', 'Deaths']
+    
+    agedata = pd.DataFrame()
+    for pp, pfx in enumerate(data_prefix):
+        for ss, sfx in enumerate(age_suffix):
+            colname = pfx + sfx
+            temp = pd.DataFrame(
+                {'Date': datatable['Date'], 
+                 'Data type': data_type[pp],
+                 'Age bracket min': age_min[ss],
+                 'value': datatable[colname]
+                }
+            )
+            agedata = agedata.append(temp)
+    
+    # The data provided is cumulative, so need to take difference for new
+    agedata = agedata.pivot(index = 'Date', columns=['Data type', 'Age bracket min'], values='value')
+    agedata = agedata.diff()
+    
+    return agedata
+    
 def plot_by_age(datatable):
     """Plot cases and deaths in different age brackets.
     
