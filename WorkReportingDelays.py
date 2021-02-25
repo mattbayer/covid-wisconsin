@@ -38,7 +38,7 @@ deaths = deaths.set_index('Date')
 
 path = 'data'
 for file in os.listdir(path):
-    if file.startswith('Deaths by day stacked_'):
+    if file.startswith('Deaths by day stacked_20'):
         name = os.path.join(path, file)
         date = pd.to_datetime(file[-14:-4])
 
@@ -70,11 +70,14 @@ deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. R
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-filename = '.\data\Cases_with_prob_stacked_data_2021-01-08.csv'
-case_latest = 'Cases 20-Dec'
-death_latest = latest;
+cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-24.csv'
+death_filename = '.\data\Deaths by day stacked_2021-02-24.csv'
+# cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
+# death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
+case_latest = 'Cases 24-Feb'
+death_latest = 'Deaths 24-Feb';
 
-cases = pd.read_csv(filename)
+cases = pd.read_csv(cases_filename)
 # filter out redundant data
 cases = cases.loc[cases['Measure Names'] == 'Confirmed cases']  
 # rename columns
@@ -83,13 +86,21 @@ cases = cases[col_rename.keys()]
 cases = cases.rename(columns=col_rename)
 cases['Date'] = pd.to_datetime(cases['Date'])
 
-# add reported cases and deaths; set index as date temporarily so they merge correctly
+# add deaths; set index as date temporarily so they merge correctly
 cases = cases.set_index('Date')
+temp_deaths = covid.read_deathdate_wi(death_filename).set_index('Date')
+cases[death_latest] = temp_deaths['Confirm + Probable deaths']
+
+# add reported cases
 cases['Cases (reported)'] = state.set_index('Date').Cases
 
-death2 = deaths.reset_index(drop=False)
-death2['Date'] = death2['Date'] - datetime.timedelta(days=18)
-cases[death_latest] = death2.set_index('Date')[death_latest] / 0.012
+lag = 16
+cfr = 0.01
+death2 = cases[death_latest].reset_index(drop=False)
+death2['Date'] = death2['Date'] - datetime.timedelta(days=lag)
+cases[death_latest] = death2.set_index('Date')[death_latest] / cfr
+
+cases = cases.rolling(7).mean()
 cases = cases.reset_index(drop=False)
 
 cases.plot(x='Date', y=[case_latest, 'Cases (reported)'])

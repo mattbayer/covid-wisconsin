@@ -38,7 +38,7 @@ test = test.set_index('Date')
 
 
 #%% Deaths by death date
-deaths_file = "data\\Deaths by day stacked_2021-02-18.csv"
+deaths_file = "data\\Deaths by day stacked_2021-02-24.csv"
 deaths= covid.read_deathdate_wi(deaths_file)
 
 deaths = deaths.set_index('Date')
@@ -115,7 +115,7 @@ plt.plot(antibody.index, antibody['Antibody survey x2'], label='Antibody survey 
 
 # Create an aligned deaths column
 IFR = 0.0045
-lag = 10
+lag = 15
 deaths_aligned = alldata['Deaths smoothed'] / IFR
 deaths_aligned = deaths_aligned.reset_index()
 deaths_aligned.Date = deaths_aligned.Date - datetime.timedelta(days=lag)
