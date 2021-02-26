@@ -70,12 +70,12 @@ deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. R
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-24.csv'
-death_filename = '.\data\Deaths by day stacked_2021-02-24.csv'
-# cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
-# death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
-case_latest = 'Cases 24-Feb'
-death_latest = 'Deaths 24-Feb';
+# cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-25.csv'
+# death_filename = '.\data\Deaths by day stacked_2021-02-25.csv'
+cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
+death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
+case_latest = 'Cases 25-Feb'
+death_latest = 'Deaths 25-Feb';
 
 cases = pd.read_csv(cases_filename)
 # filter out redundant data
@@ -94,8 +94,14 @@ cases[death_latest] = temp_deaths['Confirm + Probable deaths']
 # add reported cases
 cases['Cases (reported)'] = state.set_index('Date').Cases
 
+# state
+# lag = 14
+# cfr = 0.011
+
+# Milwaukee
 lag = 16
 cfr = 0.01
+
 death2 = cases[death_latest].reset_index(drop=False)
 death2['Date'] = death2['Date'] - datetime.timedelta(days=lag)
 cases[death_latest] = death2.set_index('Date')[death_latest] / cfr
