@@ -16,4 +16,9 @@ Over the last two weeks there has been a small spurt of cases at UW-Madison. I h
 
 At the broader state level, the number of daily cases flattened and even blipped upwards for the first time in a while. I do not think this is cause for alarm at this point though. An unusually high number of negative tests was reported at the same time, so there may be some catch-up reporting going on. The statewide test positivity rate has also continued decreasing. If cases are flat but positivity is still going down, I think that is still a positive trend - though of course we'd like to see both continue going down.
 
+### Deaths are out of order
+If you aren't a Covid data junkie and run your own blog, you may see the erratic daily death reports and be concerned. If cases are so low, why are we getting 35 deaths on a single day? The reason is that death reports are very delayed - the 35 deaths reported (Wednesday?) came from up to (three?) weeks ago. Reported cases have their own delays, but are generally much more current than deaths.
+
+If instead I take DHS's data on cases by date of test (or symptom onset), and deaths by date of death, the trends look very comparable. The plot below overlaps the two, with deaths moved up by (16?) days and the scales matched to imply a 1-to-100 ratio of deaths to cases. The match is not perfect, but it's close enough to give me confidence that the downward trend in cases is also leading to a downward trend in deaths. We just may not *know about* every death until a few weeks after they happen.
+
  
