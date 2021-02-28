@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
+import plotly.express as px
 
 import covid
 
@@ -70,12 +71,14 @@ deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. R
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-# cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-25.csv'
-# death_filename = '.\data\Deaths by day stacked_2021-02-25.csv'
-cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
-death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
-case_latest = 'Cases 25-Feb'
-death_latest = 'Deaths 25-Feb';
+cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-27.csv'
+death_filename = '.\data\Deaths by day stacked_2021-02-27.csv'
+# cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
+# death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
+# case_latest = 'Cases as of 27-Feb'
+# death_latest = 'Deaths as of 27-Feb';
+case_latest = 'Cases'
+death_latest = 'Deaths, lagged<br>and scaled';
 
 cases = pd.read_csv(cases_filename)
 # filter out redundant data
@@ -95,12 +98,12 @@ cases[death_latest] = temp_deaths['Confirm + Probable deaths']
 cases['Cases (reported)'] = state.set_index('Date').Cases
 
 # state
-# lag = 14
-# cfr = 0.011
+lag = 14
+cfr = 0.012
 
-# Milwaukee
-lag = 16
-cfr = 0.01
+# # Milwaukee
+# lag = 16
+# cfr = 0.01
 
 death2 = cases[death_latest].reset_index(drop=False)
 death2['Date'] = death2['Date'] - datetime.timedelta(days=lag)
@@ -109,9 +112,28 @@ cases[death_latest] = death2.set_index('Date')[death_latest] / cfr
 cases = cases.rolling(7).mean()
 cases = cases.reset_index(drop=False)
 
-cases.plot(x='Date', y=[case_latest, 'Cases (reported)'])
+# cases.plot(x='Date', y=[case_latest, 'Cases (reported)'])
 
-cases.plot(x='Date', y=[case_latest, death_latest])
+# cases.plot(x='Date', y=[case_latest, death_latest])
 
 
+fig = px.line(
+    cases, 
+    x='Date',
+    y=[case_latest, death_latest], 
+    color_discrete_sequence=['steelblue', 'firebrick'],
+    title='Cases by test date vs Deaths by death date<br>'
+          +'(7-day avg, 14-day lag, CFR 1.2%)',
+    labels={'value': 'Cases / day'}
+    )
+fig.update_layout(legend_title='')
+
+pngfile = 'docs\\assets\\Cases-Deaths-Match_2021-02-27.png'
+fig.write_image(
+    pngfile,
+    width=700,
+    height=500,
+    engine='kaleido',
+    )
+os.startfile(pngfile)
 
