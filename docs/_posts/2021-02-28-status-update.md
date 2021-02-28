@@ -3,7 +3,7 @@ layout: post
 title: "Covid WI status update: Feb&nbsp;28"
 ---
 
-Vaccination is progressing well. Case numbers seemed to stop decreasing this week, but I don't think it's cause for alarm at this point. Finally, while reported death numbers continue to be erratic, when you look at actual dates of death they follow the case trajectory pretty closely. 
+Vaccination is progressing well. Case numbers stopped decreasing this week, but I don't think it's cause for alarm at this point. Finally, while reported death numbers continue to be erratic, when you look at actual dates of death they follow the case trajectory pretty closely. 
 
 ### Vaccine progress
 The [DHS vaccination dashboard](https://www.dhs.wisconsin.gov/covid-19/vaccine-data.htm) is quite good, so I direct you there for looking at the data by week and by county. Below is a screen grab showing what percentage of the population has had at least one dose.
