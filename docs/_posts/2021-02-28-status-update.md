@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Covid WI status update: Feb&nbsp;28"
-hidden: true
 ---
 
 Vaccination is progressing well. Case numbers seemed to stop decreasing this week, but I don't think it's cause for alarm at this point. Finally, while reported death numbers continue to be erratic, when you look at actual dates of death they follow the case trajectory pretty closely. 
