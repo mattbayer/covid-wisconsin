@@ -35,6 +35,8 @@ gisaid_all = pd.DataFrame({'Virus name': cols[0],
                            'Collection date': pd.to_datetime(cols[2])})
 
 
+
+
 #%% Plot sequences by collection dates
 # gisaid_all['Week'] = gisaid_all['Collection date'].apply(lambda x: x.isocalendar()[1])
 
