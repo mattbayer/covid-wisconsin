@@ -4,3 +4,4 @@ __pycache__/covid.cpython-37.pyc
 *.geojson
 *.pyc
 docs/graphics-work/~$CovidWI.pptx
+*.fasta
