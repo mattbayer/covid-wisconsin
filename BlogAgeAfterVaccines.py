@@ -10,6 +10,7 @@ import covid
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import os
 
 #%% Get data and smooth
 
@@ -54,3 +55,64 @@ age_bymax = larger / larger.max()
 
 for dtype in data_types:
     age_bymax[dtype].plot(title=dtype)
+    
+    
+#%% Cases by age data
+
+cases_age_file = 'data\\Cases-by-age-weekly_2021-03-12.csv'
+cases_age = pd.read_csv(cases_age_file)
+cases_age.columns = cases_age.loc[0,:]
+cases_age = cases_age.loc[1:,:]
+as_of = cases_age.loc[1, 'Day of DATE']
+cases_age = cases_age.drop(['Day of DATE', 'Measure toggle for title'], axis=1)
+cases_age = cases_age.rename(
+    columns = {np.nan:'Count/Rate',
+               'New Age Groups': 'Age group',
+               })
+cases_age = cases_age[cases_age['Count/Rate'] != 'Measure toggle']
+cases_age = cases_age.melt(id_vars=['Age group', 'Count/Rate'])
+cases_age = cases_age.rename(columns = {0: 'Week of'})
+cases_age.loc[cases_age['Count/Rate']=='Distinct count of Incident ID', 'Count/Rate'] = 'Count'
+cases_age.loc[cases_age['Count/Rate']=='case rate by age for 100K ', 'Count/Rate'] = 'Rate'
+
+count_age = cases_age[cases_age['Count/Rate']=='Count'].drop('Count/Rate', axis=1)
+rate_age = cases_age[cases_age['Count/Rate']=='Rate'].drop('Count/Rate', axis=1)
+
+perc_age = count_age.pivot(index='Week of',columns='Age group', values='value').loc[count_age['Week of'].drop_duplicates(),:]
+for col in perc_age.columns:
+    perc_age[col] = pd.to_numeric(perc_age[col].str.replace(',',''))
+
+
+# divide by peak
+perc_age = perc_age / perc_age.max()
+
+
+#%% Plot
+
+# divide by certain date
+# 65+ first eligible the week of 24-Jan, so start measuring at end of January?
+perc_age = perc_age / perc_age.loc['7-Feb',:]
+plotdata = perc_age.melt(ignore_index=False).reset_index()
+
+# plotdata = rate_age
+
+
+fig = px.line(
+    plotdata, 
+    x='Week of',
+    y='value',
+    color='Age group',
+    # color_discrete_sequence=['orange', 'lightsteelblue'],
+    title='Cases by age group',
+    # labels={'index':'Date', 'value': 'Cases / day'}
+    )
+
+# save as html, with plotly JS library loaded from CDN
+htmlfile='docs\\assets\\plotly\\Vaccine-Cases.html'
+fig.write_html(
+    file=htmlfile,
+    default_height=500,
+    include_plotlyjs='cdn',
+    )   
+
+os.startfile(htmlfile)
