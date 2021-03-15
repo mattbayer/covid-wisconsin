@@ -84,17 +84,35 @@ for col in perc_age.columns:
 
 
 # divide by peak
-perc_age = perc_age / perc_age.max()
+# perc_age = perc_age / perc_age.max()
+
+# divide by certain date
+# 65+ first eligible the week of 24-Jan, so start measuring at end of January?
+perc_age = perc_age / perc_age.loc['24-Jan',:]
+
+# divide by average over first 4 weeks of January
+# jan = perc_age.loc[['3-Jan','10-Jan','17-Jan','24-Jan'],:]
+# perc_age = perc_age / jan.mean()
 
 
 #%% Plot
 
-# divide by certain date
-# 65+ first eligible the week of 24-Jan, so start measuring at end of January?
-perc_age = perc_age / perc_age.loc['7-Feb',:]
-plotdata = perc_age.melt(ignore_index=False).reset_index()
+colorset = {'<18': 'deepskyblue',
+            '18-24': 'green',
+            '25-34': 'firebrick',
+            '35-44': 'mediumorchid',
+            '45-54': 'orangered',
+            '55-64': 'darkslategrey',
+            '65+': 'gold'}
+
+# get correct order
+perc_age = perc_age[colorset.keys()]
+# limit dates, melt to long format
+plotdata = perc_age.loc['10-Jan':'7-Mar',:].melt(ignore_index=False).reset_index()
+
 
 # plotdata = rate_age
+
 
 
 fig = px.line(
@@ -102,8 +120,9 @@ fig = px.line(
     x='Week of',
     y='value',
     color='Age group',
-    # color_discrete_sequence=['orange', 'lightsteelblue'],
+    color_discrete_map=colorset,
     title='Cases by age group',
+    range_x=['10-Jan', '28-Feb']
     # labels={'index':'Date', 'value': 'Cases / day'}
     )
 
