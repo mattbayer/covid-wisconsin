@@ -24,6 +24,9 @@ data_types = ['Cases', 'Hospitalizations', 'Deaths']
 age_smooth = agedata.rolling(14).mean()
 age_smooth = age_smooth.rolling(window=5, win_type='hamming').mean()
 
+age_weekly = agedata.rolling(7).sum()
+age_weekly = age_weekly[age_weekly.index.weekday==6]
+
 # sum up larger age brackets
 def larger_brackets(age_min):
     if age_min < 30:
@@ -37,7 +40,7 @@ def larger_brackets(age_min):
     else:
         return '60+'
     
-larger = age_smooth.melt(ignore_index=False)
+larger = age_weekly.melt(ignore_index=False)
 larger['Larger bracket'] = larger['Age bracket min'].apply(larger_brackets)
 larger = larger.groupby(['Date', 'Data type', 'Larger bracket']).sum()
 larger = larger.drop(columns='Age bracket min')
@@ -75,20 +78,27 @@ cases_age = cases_age.rename(columns = {0: 'Week of'})
 cases_age.loc[cases_age['Count/Rate']=='Distinct count of Incident ID', 'Count/Rate'] = 'Count'
 cases_age.loc[cases_age['Count/Rate']=='case rate by age for 100K ', 'Count/Rate'] = 'Rate'
 
-count_age = cases_age[cases_age['Count/Rate']=='Count'].drop('Count/Rate', axis=1)
-rate_age = cases_age[cases_age['Count/Rate']=='Rate'].drop('Count/Rate', axis=1)
+cases_age.value = pd.to_numeric(cases_age.value.str.replace(',',''))
 
-perc_age = count_age.pivot(index='Week of',columns='Age group', values='value').loc[count_age['Week of'].drop_duplicates(),:]
-for col in perc_age.columns:
-    perc_age[col] = pd.to_numeric(perc_age[col].str.replace(',',''))
+count_age = cases_age[cases_age['Count/Rate']=='Count'].drop('Count/Rate', axis=1)
+count_age = count_age.pivot(index='Week of', columns='Age group', values = 'value').loc[count_age['Week of'].drop_duplicates(),:]
+
+rate_age = cases_age[cases_age['Count/Rate']=='Rate'].drop('Count/Rate', axis=1)
+rate_age = rate_age.pivot(index='Week of', columns='Age group', values = 'value').loc[rate_age['Week of'].drop_duplicates(),:]
+
+share_age = count_age.divide(count_age.sum(axis=1), axis=0)
+
+perc_age = count_age.copy()
+# for col in perc_age.columns:
+#     perc_age[col] = pd.to_numeric(perc_age[col].str.replace(',',''))
 
 
 # divide by peak
-# perc_age = perc_age / perc_age.max()
+perc_age = perc_age / perc_age.max()
 
 # divide by certain date
 # 65+ first eligible the week of 24-Jan, so start measuring at end of January?
-perc_age = perc_age / perc_age.loc['24-Jan',:]
+# perc_age = perc_age / perc_age.loc['24-Jan',:]
 
 # divide by average over first 4 weeks of January
 # jan = perc_age.loc[['3-Jan','10-Jan','17-Jan','24-Jan'],:]
@@ -107,11 +117,15 @@ colorset = {'<18': 'deepskyblue',
 
 # get correct order
 perc_age = perc_age[colorset.keys()]
+share_age = share_age[colorset.keys()]
 # limit dates, melt to long format
-plotdata = perc_age.loc['10-Jan':'7-Mar',:].melt(ignore_index=False).reset_index()
+# plotdata = perc_age.loc['10-Jan':'7-Mar',:].melt(ignore_index=False).reset_index()
+plotdata = perc_age.melt(ignore_index=False).reset_index()
 
 
 # plotdata = rate_age
+
+plotdata = share_age.loc['4-Oct':'7-Mar',:].melt(ignore_index=False).reset_index()
 
 
 
@@ -121,10 +135,13 @@ fig = px.line(
     y='value',
     color='Age group',
     color_discrete_map=colorset,
-    title='Cases by age group',
-    range_x=['10-Jan', '28-Feb']
-    # labels={'index':'Date', 'value': 'Cases / day'}
+    title='Share of cases by age group',
+    labels={'value': 'Share'}
     )
+
+fig.update_traces(line_width=4,
+                  selector=dict(line_color='gold'))
+fig.update_layout(yaxis=dict(tickformat=".0%"))
 
 # save as html, with plotly JS library loaded from CDN
 htmlfile='docs\\assets\\plotly\\Vaccine-Cases.html'
