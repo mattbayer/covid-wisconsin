@@ -20,16 +20,14 @@ Recently, the over-65 age group has had the lowest case rate, a fact that [the M
 
 To be more sensitive to this kind of change, I downloaded DHS's data and made the plot below, which may require some explanation. First I took each age group's rate of cases per 100,000 population, just as shown in the DHS plot. Then I compared those rates against the average case rate for the ages 25-64. I think these age groups represents a sort of baseline for the course of the pandemic, because their case rates tend to move up and down together. In contrast, the 18-24 group has very different pattern due to college outbreaks, and the over-65 group is the one we want to study. The under-18 group is also interesting on its own, so I exclude it from the average as well.
 
-So the plot below shows the weekly case rate (per population) for each age group, divided by the average case rate for everyone ages 25-65. It therefore does not show the overall peaks and valleys of the pandemic; it only shows changes in how the different age groups are affected, relative to the baseline 25-64 average. So what does it show? Saving the best for last - 
+![Relative case rate by age group](../assets/CaseRateRelative-Age-Vaccine_2021-03-20.png)
+
+So this plot shows the weekly case rate (per population) for each age group, divided by the average case rate for everyone ages 25-65. It therefore does not show the overall peaks and valleys of the pandemic; it only shows changes in how the different age groups are affected, relative to the baseline 25-64 average. So what does it show? Saving the best for last - 
 
 - Older age groups have generally had lower case rates; 65+ has a lower rate (its line is lower on the plot) than 55-64, which is lower than 45-54, etc.
 - The 18-24 group had a mini-surge in mid-February, which I would link to [college campuses](https://covid-wisconsin.com/2021/02/28/status-update/#a-blip-in-cases).
 - The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher 
 
-
-To look more closely, I downloaded this data and normalized each age group's rate to 100% as of January 25. This way we can see how much each age group's case rate has declined since over-65 eligibility opened.
-
-![Since Jan 25]
 
 This plot shows that cases in the over-65 group have in fact decreased faster than other age groups. Moreover, it looks like this divergence started after the week of February 7, two weeks after eligibility. The vaccine clinical trials indicate that their effectiveness begins [two weeks after the first dose].
 
