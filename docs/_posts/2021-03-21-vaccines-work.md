@@ -24,18 +24,17 @@ So this plot allows us to look at each age group's case rate compared to everyon
 
 ![Relative case rate by age group](../assets/CaseRateRelative-Age-Vaccine_2021-03-20.png)
 
-It shows that the vaccines work: cases in the over-65 group have in fact decreased faster than other age groups in recent weeks. Moreover, this divergence starts in the week of February 7, two weeks after eligibility - which is telling, because the vaccine clinical trials indicated that their effectiveness begins [two weeks after the first dose].
+It shows that the vaccines work: cases in the over-65 group have in fact decreased faster than other age groups in recent weeks. Moreover, this divergence starts in the week of February 7, two weeks after eligibility - which is telling, because the vaccine clinical trials indicated that high effectiveness begins [two weeks after the first dose](https://twitter.com/zeynep/status/1338875611360735232).
 
 The plot also illuminates a few other points:
 
 - Older age groups have generally had lower case rates; 65+ has a lower rate (its line is lower on the plot) than 55-64, which is lower than 45-54, etc.
 - The 18-24 group had a mini-surge in mid-February, which I would link to [college campuses](https://covid-wisconsin.com/2021/02/28/status-update/#a-blip-in-cases).
-- The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher share of cases in this group.
+- The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher share of cases in this younger group.
 
 But the headline is that people over-65 are increasingly protected, and that is very good news.
 
 ---
 
 [^Plot]: First I took each age group's weekly rate of cases per 100,000 population, downloaded from the DHS plot. Then I divided those rates by the average case rate for the ages 25-64. I think these middle age groups provide a good baseline for the course of the pandemic. Their case rates tend to move up and down together. In contrast, the 18-24 group has a very different pattern due to college outbreaks, and the over-65 group is the one I want to study. The under-18 group is also interesting on its own, so I exclude it from the average as well. 
-
 An easier alternative would have been to divide by the average of everyone - but that has the disadvantage that large spikes in one age group, such as 18-24, then create an artifact in the relative rates for all the other age groups. Using the least-interesting 25-64 group as a baseline avoids this effect.
