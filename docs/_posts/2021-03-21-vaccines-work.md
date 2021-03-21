@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "The vaccines are working"
-hidden: true
 ---
 
 The high vaccination rate of those over 65 is now causing cases to decline faster in that age group. The vaccines are working.
@@ -24,7 +23,7 @@ So this plot allows us to look at each age group's case rate compared to everyon
 
 ![Relative case rate by age group](../assets/CaseRateRelative-Age-Vaccine_2021-03-20.png)
 
-It shows that the vaccines work: cases in the over-65 group have in fact decreased faster than other age groups in recent weeks. Moreover, this divergence starts in the week of February 7, two weeks after eligibility - which is telling, because the vaccine clinical trials indicated that high effectiveness begins [two weeks after the first dose](https://twitter.com/zeynep/status/1338875611360735232).
+It shows that the vaccines work: the yellow line for cases in the over-65 group has decreased and diverged from other age groups. Moreover, this divergence starts in the week of February 7, two weeks after eligibility - which is telling, because the vaccine clinical trials indicated that high effectiveness begins [two weeks after the first dose](https://twitter.com/zeynep/status/1338875611360735232).
 
 The plot also illuminates a few other points:
 
