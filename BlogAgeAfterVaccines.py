@@ -62,7 +62,7 @@ for dtype in data_types:
     
 #%% Cases by age data
 
-cases_age_file = 'data\\Cases-by-age-weekly_2021-03-12.csv'
+cases_age_file = 'data\\Cases-by-age-weekly_2021-03-20.csv'
 cases_age = pd.read_csv(cases_age_file)
 cases_age.columns = cases_age.loc[0,:]
 cases_age = cases_age.loc[1:,:]
@@ -87,6 +87,12 @@ rate_age = cases_age[cases_age['Count/Rate']=='Rate'].drop('Count/Rate', axis=1)
 rate_age = rate_age.pivot(index='Week of', columns='Age group', values = 'value').loc[rate_age['Week of'].drop_duplicates(),:]
 
 share_age = count_age.divide(count_age.sum(axis=1), axis=0)
+
+pop_age = count_age.divide(rate_age, axis=0).mean() * 100e3
+sum_list = ['25-34', '35-44', '45-54', '55-64']
+relative_rate_sum = count_age[sum_list].sum(axis=1)
+relative_rate_avg = relative_rate_sum / pop_age[sum_list].sum() * 100e3
+relative_rate = rate_age.divide(relative_rate_avg, axis=0)
 
 perc_age = count_age.copy()
 # for col in perc_age.columns:
@@ -118,14 +124,17 @@ colorset = {'<18': 'deepskyblue',
 # get correct order
 perc_age = perc_age[colorset.keys()]
 share_age = share_age[colorset.keys()]
+count_age = count_age[colorset.keys()]
+rate_age = rate_age[colorset.keys()]
+relative_rate = relative_rate[colorset.keys()]
 # limit dates, melt to long format
 # plotdata = perc_age.loc['10-Jan':'7-Mar',:].melt(ignore_index=False).reset_index()
 plotdata = perc_age.melt(ignore_index=False).reset_index()
 
 
-# plotdata = rate_age
+# plotdata = rate_age.melt(ignore_index=False).reset_index()
 
-plotdata = share_age.loc['4-Oct':'7-Mar',:].melt(ignore_index=False).reset_index()
+plotdata = relative_rate.loc['4-Oct':'14-Mar',:].melt(ignore_index=False).reset_index()
 
 
 
@@ -135,16 +144,38 @@ fig = px.line(
     y='value',
     color='Age group',
     color_discrete_map=colorset,
-    title='Share of cases by age group',
-    labels={'value': 'Share'}
+    title='Case rate per population by age group<br>(relative to average rate for ages 25-64)',
+    labels={'value': 'Relative case rate'}
     )
 
 fig.update_traces(line_width=4,
                   selector=dict(line_color='gold'))
-fig.update_layout(yaxis=dict(tickformat=".0%"))
+
+# fig.update_layout(yaxis=dict(tickformat=".0%"))
+
+
+# add markers
+fig.update_layout(shapes=[
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0='24-Jan', x1='24-Jan',
+    ),
+    dict(
+      type= 'line', line_color='gray', line_dash='dash',
+      yref= 'paper', y0= 0, y1= 1,
+      xref= 'x', x0='1-Nov', x1='1-Nov',
+    ),
+    ]
+)
+fig.add_annotation(x='24-Jan', y=0, xanchor='left', align='left', showarrow=False,
+                   text='65+ vaccine eligible')
+fig.add_annotation(x='1-Nov', y=0, xanchor='left', align='left', showarrow=False,
+                   text='Peak in number of cases')
+    
 
 # save as html, with plotly JS library loaded from CDN
-htmlfile='docs\\assets\\plotly\\Vaccine-Cases.html'
+htmlfile='docs\\assets\\plotly\\CaseRateRelative-Age-Vaccine.html'
 fig.write_html(
     file=htmlfile,
     default_height=500,
@@ -152,3 +183,13 @@ fig.write_html(
     )   
 
 os.startfile(htmlfile)
+
+
+save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine.png'
+fig.write_image(
+    save_png,
+    width=900,
+    height=600,
+    engine='kaleido',
+)
+os.startfile(save_png)
