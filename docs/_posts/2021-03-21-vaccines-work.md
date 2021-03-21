@@ -31,7 +31,7 @@ The plot also illuminates a few other points:
 - The 18-24 group had a mini-surge in mid-February, which I would link to [college campuses](https://covid-wisconsin.com/2021/02/28/status-update/#a-blip-in-cases).
 - The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher share of cases in this younger group.
 
-But the headline is that people over-65 are increasingly protected, and that is very good news.
+But the headline is that people over 65 are increasingly protected, and that is very good news.
 
 ---
 
