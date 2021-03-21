@@ -179,17 +179,18 @@ htmlfile='docs\\assets\\plotly\\CaseRateRelative-Age-Vaccine.html'
 fig.write_html(
     file=htmlfile,
     default_height=500,
+    default_width=700,
     include_plotlyjs='cdn',
     )   
 
 os.startfile(htmlfile)
 
 
-save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine.png'
+save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine_2021-03-20.png'
 fig.write_image(
     save_png,
-    width=900,
-    height=600,
+    width=700,
+    height=500,
     engine='kaleido',
 )
 os.startfile(save_png)
