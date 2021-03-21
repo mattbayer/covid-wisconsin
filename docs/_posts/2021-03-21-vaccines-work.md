@@ -18,26 +18,16 @@ The best data to use for this is DHS's plot of weekly cases, by age group, by da
 
 Recently, the over-65 age group has had the lowest case rate, a fact that [the Milwaukee Journal Sentinel has linked to their high vaccination rate](https://www.jsonline.com/story/news/2021/03/19/wisconsin-residents-65-hold-lowest-level-covid-19-cases/4768868001/?utm_campaign=snd-autopilot&cid=twitter_journalsentinel). I don't think that fact alone shows much, however, beca7se this age group already7 had the second-lowest rate throughout most of the pandemic. And because the case rates for all age groups have been going down since November, it's difficult to pick out whether a particular age group has been going down faster than the others.
 
-To be more sensitive to this kind of change, I downloaded DHS's data and made the plot below, which may require some explanation. First I took each age group's rate of cases per 100,000 population, just as shown in the DHS plot. Then I compared those rates against the average case rate for the ages 25-64. I think these age groups represents a sort of baseline for the course of the pandemic, because their case rates tend to move up and down together. In contrast, the 18-24 group has very different pattern due to college outbreaks, and the over-65 group is the one we want to study. The under-18 group is also interesting on its own, so I exclude it from the average as well.
+To be more sensitive to this kind of change, I used DHS's data and tried to normalize out the overall peaks and valleys of the pandemic. The details require some explanation,[^Plot] but the result is the plot below. It shows each age group's per-population weekly case rate, divided by an "average" case rate for everyone ages 25-65.  If an age group's value is at 1, then its case rate is equal to the average; if it is above or below, then it is higher or lower than the average. So what does it show? 
 
 ![Relative case rate by age group](../assets/CaseRateRelative-Age-Vaccine_2021-03-20.png)
 
-So this plot shows the weekly case rate (per population) for each age group, divided by the average case rate for everyone ages 25-65. It therefore does not show the overall peaks and valleys of the pandemic; it only shows changes in how the different age groups are affected, relative to the baseline 25-64 average. So what does it show? Saving the best for last - 
+It shows that the vaccines work - cases in the over-65 group have in fact decreased faster than other age groups in recent weeks. Moreover, this divergence starts after the week of February 7, two weeks after eligibility - which is telling, because the vaccine clinical trials indicated that their effectiveness begins [two weeks after the first dose].
 
 - Older age groups have generally had lower case rates; 65+ has a lower rate (its line is lower on the plot) than 55-64, which is lower than 45-54, etc.
 - The 18-24 group had a mini-surge in mid-February, which I would link to [college campuses](https://covid-wisconsin.com/2021/02/28/status-update/#a-blip-in-cases).
-- The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher 
+- The under-18 case rate, while low, has gradually increased relative to the other age groups since the fall. I could guess at several possible reasons for this, including school openings; higher availability of tests making it more common to test mild-symptom cases in kids; or buildup of natural immunity in the other age groups leading to a higher share of cases in this group.
 
 
-This plot shows that cases in the over-65 group have in fact decreased faster than other age groups. Moreover, it looks like this divergence started after the week of February 7, two weeks after eligibility. The vaccine clinical trials indicate that their effectiveness begins [two weeks after the first dose].
-
-Another data point to look at would be hospitalizations by age. They are a more important outcome than cases in themselves. And we know that the vaccines are probably even more effective at preventing hospitalization and death than they are at preventing transmission. 
-
-Unfortunately, the only death-by-age data that is publicly available is deaths by date of report, which has recently been particularly unreliable. When you add up the two weeks for the vaccines to begin working, the three or more weeks to proceed from infection to death, and then the unknown number of weeks for a death to be recorded, it seems unlikely that death data will show anything useful yet.
-
-
-I would guess that their overall lower case rate is because of typically lower numbers of social contacts - likely retired, not going to parties - and perhaps stricter personal precautions due to being at higher personal risk.
-
-In contrast, the under-18 rate, while still decreasing, appears to have decreased less quickly than all other age groups. I would speculate this is due to a lower level of natural immunity - since their case rates have been much lower all through the pandemic - and perhaps because many schools went more virtual during the fall surge but returned to in-person later.
-
-
+---
+[^Plot]: First I took each age group's rate of cases per 100,000 population, just as shown in the DHS plot. Then I compared those rates against the average case rate for the ages 25-64. I think these age groups represents a sort of baseline for the course of the pandemic, because their case rates tend to move up and down together. In contrast, the 18-24 group has a very different pattern due to college outbreaks, and the over-65 group is the one we want to study. The under-18 group is also interesting on its own, so I exclude it from the average as well.
