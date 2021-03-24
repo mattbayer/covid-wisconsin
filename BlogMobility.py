@@ -32,16 +32,20 @@ if update:
     
     with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
         zip_ref.extract('2020_US_Region_Mobility_Report.csv', path=mobility_dir)
+        zip_ref.extract('2021_US_Region_Mobility_Report.csv', path=mobility_dir)
         
     # remove temp zip file
     os.remove(zip_filename)
 
 #%%
 apple_file = '.\\data\\mobility\\applemobilitytrends-2020-11-08.csv'
-google_file = '.\\data\\mobility\\2020_US_Region_Mobility_Report.csv'
+google_file_2020 = '.\\data\\mobility\\2020_US_Region_Mobility_Report.csv'
+google_file_2021 = '.\\data\\mobility\\2021_US_Region_Mobility_Report.csv'
 
 apple_csv = pd.read_csv(apple_file)
-google_csv = pd.read_csv(google_file)
+google_csv_2020 = pd.read_csv(google_file_2020)
+google_csv_2021 = pd.read_csv(google_file_2021)
+google_csv = google_csv_2020.append(google_csv_2021)
 
 #%% Google processing
 
