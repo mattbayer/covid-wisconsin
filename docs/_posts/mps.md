@@ -1,3 +1,9 @@
+---
+layout: post
+title: MPS school board
+hidden: true
+---
+
 I am listening to the MPS board meeting tonight, where they will (eventually - it's been going since 5:30) vote on the district's reopening plan.
 
 My opinion is at this stage in the pandemic, they should reopen schools for in-person learning, with appropriate precautions.
