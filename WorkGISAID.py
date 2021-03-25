@@ -11,31 +11,47 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import datetime
+import os
 
 from Bio import SeqIO
 
 #%% Load GISAID fasta file
 
-input_file = 'data\\sequences\\gisaid_hcov-19_wisconsin_2021_03_11_17.fasta'
+fasta_all = 'data\\sequences\\gisaid_hcov-19_wisconsin-all_2021_03_24_21.fasta'
+fasta_b117 = 'data\\sequences\\gisaid_hcov-19_wisconsin-b117_2021_03_24_21.fasta'
 
-fasta_sequences = SeqIO.parse(open(input_file),'fasta')
+# fasta_all = 'data\\sequences\\gisaid_hcov-19_michigan-all_2021_03_24_22.fasta'
+# fasta_b117 = 'data\\sequences\\gisaid_hcov-19_michigan-b117_2021_03_24_22.fasta'
 
-
-cols = [[], [], []]
-
-for seq_record in fasta_sequences:
-    record_id = seq_record.id
-    components = record_id.split('|')
-    cols[0].append(components[0])
-    cols[1].append(components[1])
-    cols[2].append(components[2])
+def parse_fasta(fasta_file):    
+    fasta_sequences = SeqIO.parse(open(fasta_file),'fasta')  
+    cols = [[], [], []]
     
-gisaid_all = pd.DataFrame({'Virus name': cols[0],
-                           'Accession ID': cols[1],
-                           'Collection date': pd.to_datetime(cols[2])})
+    # get only the metadata, discard the sequences
+    for seq_record in fasta_sequences:
+        record_id = seq_record.id
+        components = record_id.split('|')
+        cols[0].append(components[0])
+        cols[1].append(components[1])
+        cols[2].append(components[2])
+        
+    fasta_data = pd.DataFrame({'Virus name': cols[0],
+                               'Accession ID': cols[1],
+                               'Collection date': pd.to_datetime(cols[2])})
+    
+    return fasta_data
 
+    
+gisaid_all = parse_fasta(fasta_all)
+gisaid_variants = parse_fasta(fasta_b117)
 
+#%% Manual file
 
+# gisaid_variants_file = 'data\\sequences\\gisaid_b117_manual_2021-03-11.csv'
+# gisaid_variants = pd.read_csv(gisaid_variants_file)
+# gisaid_variants['Collection date'] = pd.to_datetime(gisaid_variants['Collection date'])
+
+ 
 
 #%% Plot sequences by collection dates
 # gisaid_all['Week'] = gisaid_all['Collection date'].apply(lambda x: x.isocalendar()[1])
@@ -54,18 +70,42 @@ def count_by_week(gisaid_data):
 seq_count = count_by_week(gisaid_all)
 
 seq_count.plot(x='Week of', y='Sequence count', kind='bar')    
-    
-#%% Manual file
-
-gisaid_variants_file = 'data\\sequences\\gisaid_b117_manual_2021-03-11.csv'
-gisaid_variants = pd.read_csv(gisaid_variants_file)
-gisaid_variants['Collection date'] = pd.to_datetime(gisaid_variants['Collection date'])
 
 var_count = count_by_week(gisaid_variants)
-var_count.plot(x='Week of', y='Sequence count', kind='bar')    
+var_count.plot(x='Week of', y='Sequence count', kind='bar')   
+    
+
 
 #%% Percentage
 
-var_frac = var_count.set_index('Week of') / seq_count.set_index('Week of')
+var_count = var_count.set_index('Week of')
+var_count['Total'] = seq_count.set_index('Week of')
+var_count['Variants'] = var_count['Sequence count']
+var_count['Variant fraction'] = var_count['Variants'] / var_count['Total']
+# var_count['95% CI'] =  #hard!
+var_count = var_count.reset_index()
+
+fig = px.line(var_count,
+              x='Week of',
+              y='Variant fraction',
+              )
 
 
+# save as html, with plotly JS library loaded from CDN
+htmlfile='docs\\assets\\plotly\\Variant-Fraction-GISAID.html'
+fig.write_html(
+    file=htmlfile,
+    default_height=500,
+    include_plotlyjs='cdn',
+    )      
+
+pngfile = 'docs\\assets\\Variant-Fraction-GISAID.png'
+fig.write_image(
+    pngfile,
+    width=700,
+    height=500,
+    engine='kaleido',
+    )
+
+os.startfile(htmlfile)
+os.startfile(pngfile)
