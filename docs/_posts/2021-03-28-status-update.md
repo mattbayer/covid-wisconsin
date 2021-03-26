@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Covid WI status update: Mar&nbsp;28 
+title: "Covid WI status update: Mar&nbsp;28"
 hidden: true
 ---
 
