@@ -9,11 +9,11 @@ Unfortunately, infections have started trending upwards again, I believe because
 ### Dammit
 Cases are trending upwards again. DHS has been doing some data cleaning in the last several weeks, so there have been a couple bumps in reported cases over the last month that I didn't think had any larger significance. Over the last week, however, more indicators have lined up to show that there is a small increase going on. First, there is the test positivity rate:
 
-![DHS test positivity](../assets/DHS-Positivity_2021-03-28.png)
+![DHS test positivity](../assets/DHS-Positivity_2021-03-27.png)
 
 Second, the cases by date of test are just perceptibly trending upwards. This plot is always incomplete for the most recent days, so as data fills in it the upward trend will become more clear.
 
-![DHS cases](../assets/DHS-Cases_2021-03-28.png)
+![DHS cases](../assets/DHS-Cases_2021-03-27.png)
 
 ### What's the cause?
 My best guess for the cause of the uptick is a combination of people somewhat lowering their personal precautions (laying no blame, I have done it too), and the more transmissible B.1.1.7 variant gaining a foothold.
@@ -31,15 +31,15 @@ The second item is the B.1.1.7 variant, which experts expect to gradually spread
 The B.1.1.7 variant is increasing in frequency, as would be predicted from having higher transmissibility. The data only goes up to early March, but it's an easy guess that the trend would continue. So the B.1.1.7 variant could make up more than 20% of cases in Wisconsin right now. I think that is enough to start having an effect on our infection numbers, though not enough to be dominant. As it becomes dominant, the overall virus transmissibility will gradually get higher in the state.
 
 ### But let's not freak out
-I had really hoped we would not see another wave before this was truly over, so this is discouraging. I'm particularly concerned for central Milwaukee, which has already seen a lot of Covid and now is lagging in vaccinations. And our neighboring states Minnesota and Michigan show that this wave could certainly get worse.
+I had really hoped we would not see another wave before this was truly over, so this is discouraging. I'm particularly concerned for central Milwaukee, which has already seen a lot of Covid and now is lagging in vaccinations. And our neighboring states [Minnesota](https://twitter.com/dhmontgomery/status/1376206617264316416?s=20) and [Michigan](https://www.michigan.gov/coronavirus/0,9753,7-406-98163_98173---,00.html) show that this wave could certainly get worse.
 
 On the other hand, our advantages over the virus have not gone away. We still have vaccination progressing well overall, a mass of people with natural immunity, and the oncoming summer season working in our favor. *And* many of the most vulnerable people have already been vaccinated. So I would still expect this last wave to be small, and to have a lower incidence of death and other bad outcomes.
 
-Think about it this way. If we're the Packers, and Covid is the...Seahawks...we're up five points with two minutes left. We've got this, we've just got to execute.
+Think about it this way. If we're the Packers, and Covid is...the Seahawks...we're up five points with two minutes left. We've got this, we've just got to execute.
 
 ![Onside kick](../assets/onsidekick.gif)
 
-(Sorry, I know the pain is still raw.) The point is, let's not do that.
+Sorry, the pain is still raw I know. The point is, let's not do that.
 
 ---
 
