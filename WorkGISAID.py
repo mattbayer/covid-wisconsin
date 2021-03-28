@@ -85,11 +85,16 @@ var_count['Variant fraction'] = var_count['Variants'] / var_count['Total']
 # var_count['95% CI'] =  #hard!
 var_count = var_count.reset_index()
 
+var_count = var_count[var_count['Week of'] > datetime.datetime(2021, 1, 1)]
+
 fig = px.line(var_count,
               x='Week of',
               y='Variant fraction',
+              # color_discrete_sequence='orange',
               )
 
+fig.update_layout(yaxis=dict(tickformat=".2%", range=[0, 0.2]), xaxis_range=[datetime.datetime(2021,1,17), datetime.datetime(2021, 3, 28)])
+fig.update_traces(mode='lines+markers', line_color='orange', marker_color='orange', marker_symbol='cross')
 
 # save as html, with plotly JS library loaded from CDN
 htmlfile='docs\\assets\\plotly\\Variant-Fraction-GISAID.html'
