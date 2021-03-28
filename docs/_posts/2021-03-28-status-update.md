@@ -37,7 +37,7 @@ On the other hand, our advantages over the virus have not gone away. We still ha
 
 Think about it this way. If we're the Packers, and Covid is...the Seahawks...we're up five points with two minutes left. We've got this, we've just got to -
 
-![Onside kick](../assets/onsidekick.gif) {:style="display: block; margin: 0 auto"}
+![Onside kick](../assets/onsidekick.gif){:style="display:block;margin-left:auto;margin-right=auto"}
 
 Sorry, the pain is still raw I know. The point is, let's not do that.
 
