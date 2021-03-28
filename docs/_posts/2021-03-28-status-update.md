@@ -6,7 +6,7 @@ title: "Covid WI status update: Mar&nbsp;28"
 Unfortunately, infections have started trending upwards again, I believe because of a combination of the B.1.1.7 variant and gradually relaxing precautions. But I am still optimistic that vaccinations will keep this last wave small.
 
 ### Dangit
-Cases are trending upwards again. DHS has been doing some data cleaning in the last several weeks, so there have been a couple bumps in reported cases over the last month that I didn't think had any larger significance. Over the last week, however, more indicators have lined up to show that there is a small increase going on. First, there is the test positivity rate:
+DHS had been doing some data cleaning in the last several weeks, so there have been a couple bumps in reported cases over the last month that I didn't think had any larger significance. Over the last week, however, more indicators have lined up to show that there is actually a small increase going on. First, there is the test positivity rate:
 
 ![DHS test positivity](../assets/DHS-Positivity_2021-03-27.png)
 
