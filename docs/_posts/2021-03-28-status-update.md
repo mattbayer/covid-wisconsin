@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Covid WI status update: Mar&nbsp;28"
-hidden: true
 ---
 
 Unfortunately, infections have started trending upwards again, I believe because of a combination of the B.1.1.7 variant and gradually relaxing precautions. But I am still optimistic that vaccinations will keep this last wave small.
@@ -37,7 +36,7 @@ On the other hand, our advantages over the virus have not gone away. We still ha
 
 Think about it this way. If we're the Packers, and Covid is...the Seahawks...we're up five points with two minutes left. We've got this, we've just got to -
 
-![Onside kick](../assets/onsidekick.gif){:style="display:block;margin-left:auto;margin-right=auto"}
+![Onside kick](../assets/onsidekick.gif){:style="display:block;margin-left:auto;margin-right:auto"}
 
 Sorry, the pain is still raw I know. The point is, let's not do that.
 
