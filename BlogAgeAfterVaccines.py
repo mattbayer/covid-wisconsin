@@ -31,14 +31,16 @@ age_weekly = age_weekly[age_weekly.index.weekday==6]
 def larger_brackets(age_min):
     if age_min < 30:
         return '0-29'
-    elif age_min < 60:
-        return '30-59'
+    elif age_min < 50:
+        return '30-49'
+    elif age_min < 70:
+        return '50-70'
     # elif age_min < 80:
     #     return '60-79'
     # else:
     #     return '80+'
     else:
-        return '60+'
+        return '70+'
     
 larger = age_weekly.melt(ignore_index=False)
 larger['Larger bracket'] = larger['Age bracket min'].apply(larger_brackets)
@@ -53,16 +55,18 @@ larger = larger.pivot(index='Date', columns=['Data type', 'Larger bracket'], val
 # percentage from max
 age_bymax = larger / larger.max()
 
+plotdata = age_smooth.loc[:,(slice(None), [50,60,70,80,90])]
+
 
 # plot
 
 for dtype in data_types:
-    age_bymax[dtype].plot(title=dtype)
+    plotdata[dtype].plot(title=dtype)
     
     
 #%% Cases by age data
 
-cases_age_file = 'data\\Cases-by-age-weekly_2021-03-20.csv'
+cases_age_file = 'data\\Cases-by-age-weekly_2021-04-07.csv'
 cases_age = pd.read_csv(cases_age_file)
 cases_age.columns = cases_age.loc[0,:]
 cases_age = cases_age.loc[1:,:]
@@ -90,6 +94,7 @@ share_age = count_age.divide(count_age.sum(axis=1), axis=0)
 
 pop_age = count_age.divide(rate_age, axis=0).mean() * 100e3
 sum_list = ['25-34', '35-44', '45-54', '55-64']
+# sum_list = ['25-34', '35-44', '45-54']
 relative_rate_sum = count_age[sum_list].sum(axis=1)
 relative_rate_avg = relative_rate_sum / pop_age[sum_list].sum() * 100e3
 relative_rate = rate_age.divide(relative_rate_avg, axis=0)
@@ -132,11 +137,9 @@ relative_rate = relative_rate[colorset.keys()]
 plotdata = perc_age.melt(ignore_index=False).reset_index()
 
 
-# plotdata = rate_age.melt(ignore_index=False).reset_index()
+plotdata = relative_rate.loc['4-Oct':'28-Mar',:].melt(ignore_index=False).reset_index()
 
-plotdata = relative_rate.loc['4-Oct':'14-Mar',:].melt(ignore_index=False).reset_index()
-
-
+# plotdata = rate_age.loc['4-Oct':'28-Mar',:].melt(ignore_index=False).reset_index()
 
 fig = px.line(
     plotdata, 
@@ -186,7 +189,7 @@ fig.write_html(
 os.startfile(htmlfile)
 
 
-save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine_2021-03-20.png'
+save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine.png'
 fig.write_image(
     save_png,
     width=700,
