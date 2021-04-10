@@ -8,6 +8,15 @@ Wisconsin is in the beginnings of a surge in Covid cases, although it is not too
 
 At the risk of oversimplifying, I think the trends in these states can basically be attributed to the proportion of the B.1.1.7 variant.
 
+### 
+Below is a plot of average cases per day for these four states, using [data from the New York Times](https://github.com/nytimes/covid-19-data). From this it is easy to rank these in order of severity with Michigan the worst, then Minnesota, Illinois, and last Wisconsin. Since no state has peaked so far, it's still possible they might end up similar in the end. Because of vaccinations, however, I would expect that a later start to a surge will lead to a better outcome overall.
+
+![Plot of states]
+
+This order of severity seems to match the prevalence of B.1.1.7 in these states, suggesting that the spread of this more transmissible variant may be sufficient to explain the differences. 
+
+Other states outside the Midwest also have higher B.1.1.7 prevalence and are not exploding like Michigan. For these states, including Florida and Texas, I would speculate that more favorable climate at this time of year is offsetting the B.1.1.7 effect.
+
 ### Variant
 
 It is difficult to get good data on the prevalence of these variants. The Wisconsin DHS has [a page on variants](https://www.dhs.wisconsin.gov/covid-19/variants.htm), but its data is not terribly useful because it only shows overall totals, with no indication of how prevalence is changing over time. We don't really care how common B.1.1.7 was three months ago (not very), we care about how common it is now.
