@@ -39,7 +39,7 @@ p = p.diff(periods=7)
 plotdata = p.melt(value_name='Cases per million', ignore_index=False).reset_index()
 
 # Limit dates
-plotdata = plotdata[plotdata.Date > datetime.datetime(2020, 7, 1)]
+plotdata = plotdata[plotdata.Date > datetime.datetime(2020, 8, 1)]
 
 
 #%% Plot
@@ -50,7 +50,7 @@ fig = px.line(
     y='Cases per million',
     color='State',
     color_discrete_map={'Illinois':'#13294B', 'Michigan':'#FFCB05', 'Minnesota':'#862334', 'Wisconsin':'#C4012F'},
-    title='Covid cases for IL/MI/MN/WI<br>(7-day avg, per pop.)'
+    title='Covid cases for IL/MI/MN/WI<br>(7-day avg., per pop.)'
     )
 
 pngfile = 'docs\\assets\\Cases-Midwest-States-2021-04-10.png'
