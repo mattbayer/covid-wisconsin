@@ -30,29 +30,19 @@ A contrary data point is that other states outside the Midwest, Florida in parti
 
 Returning to the Midwest, another possibility suggested by the plot above is that the states with relatively lighter fall waves are the ones that are now surging higher; Michigan's fall appears to have been the easiest and Wisconsin's the hardest. Perhaps as a result Wisconsin had more built-up natural immunity, or more entrenched cautionary behavior coming out of the fall wave, and therefore was more resistant in the spring.
 
-### A note on data sources
+### Messy data sources
 I have searched for corroborating evidence for the state prevalence numbers above, but I have not found any source with good data on variant prevalence, over time, by state. 
 
 The Wisconsin DHS has [a page on variants](https://www.dhs.wisconsin.gov/covid-19/variants.htm), but it only shows overall totals. Same with the [CDC's main variant tracker page](https://www.cdc.gov/coronavirus/2019-ncov/transmission/variant-cases.html). I don't find these very helpful; I don't really care about the absolute number of cases or how common B.1.1.7 was over the last nine months (not very), I care about how common it is now.
 
 The testing company Helix has been doing public analyses of its data, including [reporting in the New York Times](https://www.nytimes.com/interactive/2021/04/06/us/variants-cases-spread.html). So far this looks like the best data on the variants in the United States. But while the company has estimates for Michigan, Minnesota, and Illinois that comport with the numbers above, it doesn't do enough testing in Wisconsin to make estimates for our state.
 
-Another source is the GISAID database, which [I have used to plot Wisconsin](https://covid-wisconsin.com/2021/03/28/status-update/#whats-the-cause) and which can visualized by state on the site [outbreak.info](https://outbreak.info/location-reports?loc=USA_US-WI). Its data for [the](https://outbreak.info/location-reports?loc=USA_US-MI) [other](https://outbreak.info/location-reports?loc=USA_US-MN) [states](https://outbreak.info/location-reports?loc=USA_US-IL) are pretty erratic as a function of time, though, although when averaged out they also track with the CDC's estimate pretty well.
+Another source is the GISAID database, which [I have used to plot Wisconsin](https://covid-wisconsin.com/2021/03/28/status-update/#whats-the-cause) and which can visualized by state on the site [outbreak.info](https://outbreak.info/location-reports?loc=USA_US-WI). Its data for [the](https://outbreak.info/location-reports?loc=USA_US-MI) [other](https://outbreak.info/location-reports?loc=USA_US-MN) [states](https://outbreak.info/location-reports?loc=USA_US-IL) are pretty noisy as a function of time, though, although when averaged out they also track with the CDC's estimate pretty well.
 
 ### Wisconsin's B.1.1.7 trend
-I wanted to revisit my toy model from my [first variants post](https://covid-wisconsin.com/2021/02/20/variants/#an-uffish-thought), to see how it has matched the real data. Not too well, it turns out.
+The GISAID data is all I have for Wisconsin, though, so I used it to revisit my toy model from my [first variants post](https://covid-wisconsin.com/2021/02/20/variants/#an-uffish-thought) and see how it has matched the subsequent real data. Not too well, it turns out.
 
 ![Model check](../assets/Variant-Estimate_2021-04-10.png)
 
-Cases have risen faster than I had thought, and at the same time B.1.1.7 appears to be a lesser contributor than I had thought. My best guess for cases is that people have eased up on their Covid precautions enough to contribute to some spread above what I assumed in the model. And my best guess for B.1.1.7 is that the GISAID data I am using for Wisconsin prevlance is too noisy and delayed 
-The GISAID data for Wisconsin's B.1.1.7 prevalence is now kind of plateauing. Whether that will change, or shows the data is not the best, or does really show that B.1.1.7 is not spreading so fast here, I don't know.
-
-I have looked at the state of B.1.1.7 in Wisconsin before
-
-
-
-
-
-
-
+Cases have risen faster than I had thought, and at the same time B.1.1.7 appears to be a lesser contributor than I had thought. My best guess for cases is that people have been doing more activities in the spring, enough to contribute to some spread above what I assumed in the model. And my best guess for B.1.1.7 is that the GISAID data I am using for Wisconsin prevalence is too noisy and delayed to show continued increase right now, but that future weeks will see its share continue to go up as it has in other states. But as usual there's a lot of uncertainty, and we'll have to wait and see.
 
