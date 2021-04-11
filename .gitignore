@@ -5,3 +5,4 @@ __pycache__/covid.cpython-37.pyc
 *.pyc
 docs/graphics-work/~$CovidWI.pptx
 *.fasta
+*.xz
