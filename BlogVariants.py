@@ -57,6 +57,29 @@ plotdata['Classic trend'] = v1
 plotdata['B.1.1.7 trend'] = v2
 plotdata['Model total'] = v1 + v2
 
+plotdata.index.name = 'Date'
+
+
+#%% Load gisaid estimates
+
+gisaid_all = pd.read_csv('data\\sequences\\gisaid-all-WI.csv')
+gisaid_b117 = pd.read_csv('data\\sequences\\gisaid-b117-WI.csv')
+
+variants = gisaid_all.groupby('Collection date').count()
+variants['All'] = variants['Accession ID']
+variants = variants.drop(['Virus name', 'Accession ID'], axis=1)
+variants['B117'] = gisaid_b117.groupby('Collection date').count()['Accession ID']
+variants = variants.fillna(0)
+
+var_smooth = variants.rolling(7).sum()
+variants['B117 fraction'] = var_smooth['B117'] / var_smooth['All']
+
+variants.index.name = 'Date'
+variants.index = pd.to_datetime(variants.index)
+variants = variants.loc[datetime.datetime(2021,1,1):datetime.datetime(2021,3,27)]
+
+plotdata['B117 estimate'] = plotdata['Cases 7-day'] * variants['B117 fraction']
+
 
 #%% Plot
 
@@ -75,6 +98,16 @@ fig.add_trace(
         y=plotdata['Cases 7-day'],
         name='Cases (7-day avg)',
         marker_color='steelblue',
+        )
+    )
+
+fig.add_trace(
+    go.Scatter(
+        x=plotdata.index,
+        y=plotdata['B117 estimate'],
+        name='B117 estimate',
+        marker_color='saddlebrown',
+        line_dash='dot'
         )
     )
 
