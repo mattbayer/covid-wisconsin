@@ -1405,9 +1405,10 @@ def read_deathdate_wi(death_file):
     death = death.set_index('series').T.reset_index(drop=True)
     death.columns.name = ''
     
-    # hack because the date string does not include the year
-    death.loc[0:344, 'datestring'] = death.loc[0:344, 'datestring'] + '-2020'
-    death.loc[345:, 'datestring'] = death.loc[345:, 'datestring'] + '-2021'
+    # hack because the date string in some file versions does not include the year
+    if '202' not in death.loc[0, 'datestring']:
+        death.loc[0:344, 'datestring'] = death.loc[0:344, 'datestring'] + '-2020'
+        death.loc[345:, 'datestring'] = death.loc[345:, 'datestring'] + '-2021'
     
     death.insert(0, 'Date', pd.to_datetime(death['datestring']))
     death = death.drop(labels='datestring', axis=1)
