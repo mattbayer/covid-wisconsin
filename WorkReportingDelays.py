@@ -71,8 +71,8 @@ deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. R
 #%% Plot delay in cases
 
 # Cases by test date for Wisconsin
-cases_filename = '.\data\Cases_with_prob_stacked_data_2021-04-15.csv'
-death_filename = '.\data\Deaths by day stacked_2021-04-15.csv'
+cases_filename = '.\data\Cases_with_prob_stacked_data_2021-02-27.csv'
+death_filename = '.\data\Deaths by day stacked_2021-02-27.csv'
 # cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
 # death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
 # case_latest = 'Cases as of 27-Feb'
@@ -82,14 +82,12 @@ death_latest = 'Deaths, lagged<br>and scaled';
 
 cases = pd.read_csv(cases_filename)
 # filter out redundant data
-# cases = cases.loc[cases['Measure Names'] == 'Confirmed cases']  # deprecated after file format change
-cases = cases.iloc[0::3,:]  # every data point is reproduced three times
+cases = cases.loc[cases['Measure Names'] == 'Confirmed cases']  
 # rename columns
 col_rename = {'Day of Epi Dt': 'Date', 'Stacked Confirm + Probable cases': case_latest}
 cases = cases[col_rename.keys()]
 cases = cases.rename(columns=col_rename)
 cases['Date'] = pd.to_datetime(cases['Date'])
-cases[case_latest] = pd.to_numeric(cases[case_latest].apply(lambda s: s.replace(',', '')))
 
 # add deaths; set index as date temporarily so they merge correctly
 cases = cases.set_index('Date')
@@ -98,11 +96,6 @@ cases[death_latest] = temp_deaths['Confirm + Probable deaths']
 
 # add reported cases
 cases['Cases (reported)'] = state.set_index('Date').Cases
-cases['Deaths (reported)'] = state.set_index('Date').Deaths
-
-# # switch to reported
-# case_latest = 'Cases (reported)'
-# death_latest = 'Deaths (reported)'
 
 # state
 lag = 14
@@ -124,7 +117,6 @@ cases = cases.reset_index(drop=False)
 # cases.plot(x='Date', y=[case_latest, death_latest])
 
 
-
 fig = px.line(
     cases, 
     x='Date',
@@ -136,7 +128,7 @@ fig = px.line(
     )
 fig.update_layout(legend_title='')
 
-pngfile = 'docs\\assets\\Cases-Deaths-Match_2021-04-15.png'
+pngfile = 'docs\\assets\\Cases-Deaths-Match_2021-02-27.png'
 fig.write_image(
     pngfile,
     width=700,
