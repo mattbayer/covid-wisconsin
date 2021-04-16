@@ -29,20 +29,25 @@ age_weekly = age_weekly[age_weekly.index.weekday==6]
 
 # sum up larger age brackets
 def larger_brackets(age_min):
-    if age_min < 30:
-        return '0-29'
+    # if age_min < 60:
+    #     return '  0-59'
+    if age_min < 20:
+        return '  0-19'
     elif age_min < 50:
-        return '30-49'
+        return '20-49'
+    elif age_min < 60:
+        return '50-59'
     elif age_min < 70:
-        return '50-70'
-    # elif age_min < 80:
-    #     return '60-79'
-    # else:
-    #     return '80+'
+        return '60-69'
+    elif age_min < 80:
+        return '70-79'
+
     else:
-        return '70+'
+        return '80+'
     
-larger = age_weekly.melt(ignore_index=False)
+    
+    
+larger = age_smooth.melt(ignore_index=False)
 larger['Larger bracket'] = larger['Age bracket min'].apply(larger_brackets)
 larger = larger.groupby(['Date', 'Data type', 'Larger bracket']).sum()
 larger = larger.drop(columns='Age bracket min')
@@ -55,12 +60,16 @@ larger = larger.pivot(index='Date', columns=['Data type', 'Larger bracket'], val
 # percentage from max
 age_bymax = larger / larger.max()
 
-plotdata = age_smooth.loc[:,(slice(None), [50,60,70,80,90])]
+plotdata = age_smooth.loc[:,(slice(None), [40,50,60,70,80,90])]
+plotdata = age_smooth
+plotdata = larger
+# plotdata = age_smooth / age_smooth.max()
 
 
 # plot
 
-for dtype in data_types:
+# for dtype in data_types:
+for dtype in ['Hospitalizations']:
     plotdata[dtype].plot(title=dtype)
     
     
