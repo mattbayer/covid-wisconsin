@@ -87,7 +87,7 @@ avg = select
 # avg.plot(y=['HOSP_YES', 'HOSP_NO', 'HOSP_UNK'])
 
 avg.plot(y=['DTH_NEW', 'New Hospitalizations', 'New Hosp Estimate', 'Cases / 10'])
-avg.plot(y=['Percent Hosp', 'Percent Not Hosp', 'Percent Hosp Unknown'], kind='area')
+avg.plot(y=['Percent Hosp', 'Percent Not Hosp', 'Percent Hosp Unknown'])
 avg.plot(y=['Percent Hosp', 'Percent Hosp of Known', 'Percent Not Hosp', 'Percent Not of Known', 'Percent Hosp Known'])
 #
 

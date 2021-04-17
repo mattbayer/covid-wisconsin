@@ -29,14 +29,14 @@ age_weekly = age_weekly[age_weekly.index.weekday==6]
 
 # sum up larger age brackets
 def larger_brackets(age_min):
-    # if age_min < 60:
-    #     return '  0-59'
-    if age_min < 20:
-        return '  0-19'
-    elif age_min < 50:
-        return '20-49'
-    elif age_min < 60:
-        return '50-59'
+    if age_min < 60:
+        return '  0-59'
+    # if age_min < 20:
+    #     return '  0-19'
+    # elif age_min < 50:
+    #     return '20-49'
+    # elif age_min < 60:
+    #     return '50-59'
     elif age_min < 70:
         return '60-69'
     elif age_min < 80:
@@ -236,3 +236,19 @@ fig.write_image(
     engine='kaleido',
 )
 os.startfile(save_png)
+
+
+
+#%% Compare cases and hospitalizations?
+covid.plotly_twolines(
+    state,
+    'POS_NEW',
+    'HOSP_NEW',
+    plotcolors=['steelblue', 'darkorange'],
+    secondary_scale=0.05,
+    plotlabels=dict(title='WI Daily Cases and Hospitalizations',
+                    yaxis='Cases',
+                    yaxis_secondary='Hospitalizations',
+                    ),
+    savefile='docs\\assets\\plotly\\Cases-Hosp-WI.html',
+    )    
