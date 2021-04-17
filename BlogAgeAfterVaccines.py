@@ -75,7 +75,7 @@ for dtype in ['Hospitalizations']:
     
 #%% Cases by age data
 
-cases_age_file = 'data\\Cases-by-age-weekly_2021-04-07.csv'
+cases_age_file = 'data\\Cases-by-age-weekly_2021-04-16.csv'
 cases_age = pd.read_csv(cases_age_file)
 cases_age.columns = cases_age.loc[0,:]
 cases_age = cases_age.loc[1:,:]
@@ -146,19 +146,41 @@ relative_rate = relative_rate[colorset.keys()]
 plotdata = perc_age.melt(ignore_index=False).reset_index()
 
 
-plotdata = relative_rate.loc['4-Oct':'28-Mar',:].melt(ignore_index=False).reset_index()
+plot_type = 'relative'
+# plot_type = 'absolute'
 
-# plotdata = rate_age.loc['4-Oct':'28-Mar',:].melt(ignore_index=False).reset_index()
+if plot_type == 'relative':
 
-fig = px.line(
-    plotdata, 
-    x='Week of',
-    y='value',
-    color='Age group',
-    color_discrete_map=colorset,
-    title='Case rate per population by age group<br>(relative to average rate for ages 25-64)',
-    labels={'value': 'Relative case rate'}
-    )
+    plotdata = relative_rate.loc['4-Oct':'4-Apr',:].melt(ignore_index=False).reset_index()
+    htmlfile='docs\\assets\\plotly\\CaseRateRelative-Age-Vaccine.html'
+    save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine.png'
+    
+    fig = px.line(
+        plotdata, 
+        x='Week of',
+        y='value',
+        color='Age group',
+        color_discrete_map=colorset,
+        title='Case rate per population by age group<br>(relative to average rate for ages 25-64)',
+        labels={'value': 'Relative case rate'}
+        )
+    
+else:
+
+    plotdata = rate_age.loc['10-Jan':'4-Apr',:].melt(ignore_index=False).reset_index()
+    htmlfile='docs\\assets\\plotly\\CaseRate-Age-Vaccine.html'
+    save_png = '.\\docs\\assets\\CaseRate-Age-Vaccine.png'
+     
+    fig = px.line(
+        plotdata, 
+        x='Week of',
+        y='value',
+        color='Age group',
+        color_discrete_map=colorset,
+        title='Case rate per population by age group',
+        labels={'value': 'Cases per 100K'}
+        )
+
 
 fig.update_traces(line_width=4,
                   selector=dict(line_color='gold'))
@@ -167,27 +189,35 @@ fig.update_traces(line_width=4,
 
 
 # add markers
+fig.add_annotation(x='24-Jan', y=0, xanchor='left', align='left', showarrow=False,
+                   text='65+ vaccine eligible')
 fig.update_layout(shapes=[
     dict(
       type= 'line', line_color='gray', line_dash='dash',
       yref= 'paper', y0= 0, y1= 1,
       xref= 'x', x0='24-Jan', x1='24-Jan',
     ),
-    dict(
-      type= 'line', line_color='gray', line_dash='dash',
-      yref= 'paper', y0= 0, y1= 1,
-      xref= 'x', x0='1-Nov', x1='1-Nov',
-    ),
     ]
 )
-fig.add_annotation(x='24-Jan', y=0, xanchor='left', align='left', showarrow=False,
-                   text='65+ vaccine eligible')
-fig.add_annotation(x='1-Nov', y=0, xanchor='left', align='left', showarrow=False,
-                   text='Peak in number of cases')
-    
+
+if plot_type == 'relative':
+    fig.add_annotation(x='1-Nov', y=0, xanchor='left', align='left', showarrow=False,
+                       text='Peak in number of cases')
+    fig.update_layout(shapes=[
+        dict(
+          type= 'line', line_color='gray', line_dash='dash',
+          yref= 'paper', y0= 0, y1= 1,
+          xref= 'x', x0='24-Jan', x1='24-Jan',
+        ),
+        dict(
+          type= 'line', line_color='gray', line_dash='dash',
+          yref= 'paper', y0= 0, y1= 1,
+          xref= 'x', x0='1-Nov', x1='1-Nov',
+        ),
+        ]
+    )    
 
 # save as html, with plotly JS library loaded from CDN
-htmlfile='docs\\assets\\plotly\\CaseRateRelative-Age-Vaccine.html'
 fig.write_html(
     file=htmlfile,
     default_height=500,
@@ -198,7 +228,7 @@ fig.write_html(
 os.startfile(htmlfile)
 
 
-save_png = '.\\docs\\assets\\CaseRateRelative-Age-Vaccine.png'
+
 fig.write_image(
     save_png,
     width=700,
