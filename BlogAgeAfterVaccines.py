@@ -146,8 +146,8 @@ relative_rate = relative_rate[colorset.keys()]
 plotdata = perc_age.melt(ignore_index=False).reset_index()
 
 
-plot_type = 'relative'
-# plot_type = 'absolute'
+# plot_type = 'relative'
+plot_type = 'absolute'
 
 if plot_type == 'relative':
 
