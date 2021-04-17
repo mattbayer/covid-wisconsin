@@ -92,10 +92,10 @@ display_names = [n + ' County' for n in countiesWI.index]
 # set scales for sizes of bubbles
 popscale = 300
 
-cases_size_factor = 0.3
-hosp_size_factor = cases_size_factor*.05   # so that bubbles are same size if hosp = 5% of cases 
+cases_size_factor = 0.15
+hosp_size_factor = cases_size_factor*.10   # so that bubbles are same size if hosp = 10% of cases 
 
-cases_color_range = [0, 140]
+cases_color_range = [0, 70]
 hosp_color_range=[0, 7]
 
 #%% Cases figure

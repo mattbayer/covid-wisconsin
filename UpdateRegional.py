@@ -93,7 +93,7 @@ colors = [color_dict[r] for r in region_ordered]
 
 #%% Facet plot - Cases/Tests
 
-covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)],  
+covid.plotly_casetest(sourcedata=capita,  
                       case_col='Cases', 
                       test_col='Tests', 
                       date_col='Date',
@@ -101,6 +101,8 @@ covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=20
                       grouplist=region_ordered, 
                       groupcolors=colors,
                       savefile=plotpath + '\\Cases-Tests-Region.html',
+                      range_max=160,
+                      date_min=datetime.datetime(2020,9,1),
                       plotlabels=dict(title='Regional Cases and New People Tested<br>(per 100K population)',
                                       yaxis='Cases per 100K',
                                       yaxis_secondary='Tested per 100K',
@@ -113,7 +115,7 @@ covid.plotly_casetest(sourcedata=capita[capita.Date >= datetime.datetime(year=20
 # Individual county data has a big spike when they first started recording 
 # hospitalizations.  For now, just filter on dates after the summer.
 
-covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=2020, month=7, day=1)], 
+covid.plotly_deadhosp(sourcedata=capita, 
                       dead_col='Deaths', 
                       hosp_col='Hospitalizations', 
                       date_col='Date',
@@ -121,6 +123,8 @@ covid.plotly_deadhosp(sourcedata=capita[capita.Date >= datetime.datetime(year=20
                       grouplist=region_ordered, 
                       groupcolors=colors,
                       savefile=plotpath + '\\Deaths-Hosp-Region.html',
+                      range_max=6,
+                      date_min=datetime.datetime(2020,9,1),
                       plotlabels=dict(title='Regional Deaths and Hospitalizations<br>(per 100K population)',
                                       yaxis='Deaths and Hosp per 100K',
                                       ),

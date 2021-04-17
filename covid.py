@@ -380,6 +380,8 @@ def plotly_twolines(
         groupby=None,
         grouplist=None,
         secondary_scale=1,
+        range_max=None,
+        date_min=None,
         groupcolors=None,
         column1_bar=True,
         plotlabels=None,
@@ -397,6 +399,8 @@ def plotly_twolines(
     groupby     -- name of column to use for splitting into a plot grid, such as region
     grouplist   -- list of members of groupby to plot. If None then plot first 9.
     secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
+    range_max   -- max for primary y scale. Actual max will be padded by 5%. If None, then auto-calculate.
+    date_min    -- min date for x axis. If None then use all.
     groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
     column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
     plotlabels  -- dict containing strings for 'title', 'yaxis', 'yaxis_secondary'
@@ -541,18 +545,21 @@ def plotly_twolines(
             secondary_y=secondary_y,
             )
     
-    # compute y axis range - to_numpy to make robust to multiple columns
-    # want secondary to be on a scale exactly 10x primary
-    avg1_max = avg1.to_numpy(na_value=0).max()
-    avg2_max = avg2.to_numpy(na_value=0).max();
-    range_max = max(avg1_max, avg2_max/secondary_scale)
-    if column1_bar:
-        data1_max = data1.to_numpy(na_value=0).max();
-        range_max = max(range_max, data1_max)
+    if range_max is None:
+        # compute y axis range - to_numpy to make robust to multiple columns
+        # want secondary to be on a scale exactly 10x primary
+        avg1_max = avg1.to_numpy(na_value=0).max()
+        avg2_max = avg2.to_numpy(na_value=0).max();
+        range_max = max(avg1_max, avg2_max/secondary_scale)
+        if column1_bar:
+            data1_max = data1.to_numpy(na_value=0).max();
+            range_max = max(range_max, data1_max)
+        
     range_y = np.array([-range_max * 0.05, 1.05*range_max])
     
     # compute x axis range - want to extend past the latest date just for viewing niceness
-    date_min = avg1.index.min()
+    if date_min is None:
+        date_min = avg1.index.min()
     date_max = avg2.index.max() + datetime.timedelta(days=5)
     range_dates = [date_min, date_max]
 
@@ -586,11 +593,6 @@ def plotly_twolines(
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
         fig.update_layout(legend=dict(orientation='h', yanchor="top", y=-0.18, xanchor="center", x=0.5))     
-                           
-    # # plot and save as html, with plotly JS library loaded from CDN
-    # plotly.offline.plot(fig, 
-    #       filename = savefile, 
-    #       include_plotlyjs='cdn')  
     
     # save as html, with plotly JS library loaded from CDN
     fig.write_html(
