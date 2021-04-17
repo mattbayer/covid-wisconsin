@@ -29,6 +29,7 @@ covid.plotly_casetest(sourcedata=state,
                       test_col='Tests', 
                       date_col='Date', 
                       savefile=plotpath + '\\Cases-Tests-WI.html',
+                      range_max=7000,
                       showfig=False,
                       )
 
