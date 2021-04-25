@@ -4,8 +4,10 @@ title: "Covid WI status update: Apr&nbsp;25"
 hidden: true
 ---
 
+The spring wave has crested for Wisconsin, though not yet in Milwaukee.
+
 ### Wisconsin spring
-The spring wave has clearly crested, thankfully long before it got bad at all. Both reported cases and test positivity rate are now declining. 
+The spring wave has clearly peaked, thankfully long before it got bad at all. Both reported cases and test positivity rate are now declining. 
 
 ![Cases](../assets/DHS-Cases-Reported_2021-04-24.png)
 
@@ -26,12 +28,8 @@ A big part of the reason, I think, is the failure to get more vaccines to the ce
 
 ![Map of Vaccines/Cases in Milwaukee](../assets/Milwaukee-Map-Vaccines-Cases_2021-04-24.png)
 
-
-### Vaccinations
+### Vaccinating pace
 Wisconsin has now vaccinated more than 50% of adults and more than 40% of the entire population. The number of doses being administered per week has started to decline, however, which has two causes. The first is the pause in administering the Johnson & Johnson vaccine; the week of April 4 had XX J&J vaccines, while the following week had XX; that is almost enough to account for the entire difference.
 
 The second cause is that vaccine demand is probably slackening. If true this dismays me - we're only at 40% of the population! - but it's also probably shouldn't be surprising. More than half of everyone eligible has received at least one dose; it's only natural that the fewer people remain, the lower demand will be. 
-
-
-
 
