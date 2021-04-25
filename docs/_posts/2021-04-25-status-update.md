@@ -24,7 +24,7 @@ Unfortunately, Milwaukee appears to be an unfortunate exception here. While case
 
 A big part of the reason, I think, is the failure to get more vaccines to the central city.  Below are two maps, the first showing percentage of people vaccinated, and the right showing new Covid cases in the last 30 days. The largely Black north side, not coincidentally, has both the lowest vaccination rates and the highest recent Covid rates.
 
-![Map of Vaccines/Cases in Milwaukee](../assets/Milwaukee-Vaccines-Cases_2021-04-24.png)
+![Map of Vaccines/Cases in Milwaukee](../assets/Milwaukee-Map-Vaccines-Cases_2021-04-24.png)
 
 
 ### Vaccinations
