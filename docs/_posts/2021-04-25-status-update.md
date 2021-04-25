@@ -15,7 +15,7 @@ The spring wave has clearly peaked, thankfully long before it got bad at all. Bo
 
 In terms of cases, this spring wave (in Wisconsin) turned out even smaller than the late summer wave from last year. It also hardly touched the largely vaccinated over-65 age group, so I would expect a relatively small number of deaths as a result - possibly not even detectable as a wave in the death data.
 
-Interestingly, all [four midwestern states](2021-04-11-variants-midwest.md) with spring waves peaked this same week, even though the severity was much different in each state. The synchronicity makes me think there must be common factors at work - I would guess vaccination and seasonality, since both vaccination pace and climate are quite similar among these states.
+Interestingly, all [four midwestern states](2021-04-11-variants-midwest.md) with spring waves peaked this same week, even though the severity was much different in each state. My guess is that the common factors here are vaccinations and seasonality, since both vaccination pace and climate are quite similar among these states.
 
 ![Cases in 4 midwest states](../assets/Cases-Midwest-States_2021-04-23.png)
 
