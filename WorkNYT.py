@@ -15,9 +15,13 @@ import os
 
 #%% Load NYT data by state
 
-states_csv = '..\\covid-19-data-nyt\\us-states.csv'
+# If I download from my fork
+# states_csv = '..\\covid-19-data-nyt\\us-states.csv'
+# states_df = pd.read_csv(states_csv)
 
-states_df = pd.read_csv(states_csv)
+# Just download right from the original github repository
+states_csv_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
+states_df = pd.read_csv(states_csv_url)
 
 state_selection = ['Illinois', 'Michigan', 'Minnesota', 'Wisconsin']
 population = {'Illinois' : 12.7e6, 
@@ -53,7 +57,7 @@ fig = px.line(
     title='Covid cases for IL/MI/MN/WI<br>(7-day avg., per pop.)'
     )
 
-pngfile = 'docs\\assets\\Cases-Midwest-States-2021-04-10.png'
+pngfile = 'docs\\assets\\Cases-Midwest-States.png'
 fig.write_image(
     pngfile,
     width=700,
