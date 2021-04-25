@@ -31,7 +31,7 @@ A big part of the reason, I think, is the failure to get more vaccines to the ce
 ### Vaccination pace
 Wisconsin has now vaccinated more than 50% of adults and more than 40% of the entire population. The number of doses being administered per week has started to decline, however. Vaccination rate peaked the week of April 4 - the week that eligibility opened to everybody - and has moderately declined since. Note that in the graphic below the vaccine bar for this week is not fully reported yet, so it will rise further.
 
-![Vaccine progress](../assets/DHS-VaccineProgress_2021-04-24.png)
+![Vaccine progress](../assets/DHS-VaccineProgress_2021-04-25.png)
 
 The [AP has a good story on the causes for the decline](https://apnews.com/article/health-coronavirus-ee7363d012f472d5e8c703bf230a4356). In short, it's a combination of the pause in administering the Johnson & Johnson vaccine (which has now been lifted), and slackening of demand now that everyone is eligible and the people most eager to get vaccinated have had their chance.
 
