@@ -11,6 +11,8 @@ Below is a plot of average cases per day for these four states, using [data from
 
 ![Plot of states](../assets/Cases-Midwest-States-2021-04-10.png)
 
+*Note: a previous version of this plot had an incorrect y-axis scale. Data includes probable as well as confirmed cases.*
+
 For the current wave, it is easy to rank these states in order of severity. Michigan is the worst, followed by Minnesota, Illinois, and last Wisconsin. It is still possible that Wisconsin will follow the same trajectory as Michigan, but with ongoing vaccination and maybe more favorable seasonality coming on, I would expect our later start to the wave to lead to a better outcome overall.
 
 But why the different trajectories in the different states? My guess is that the driving force is the prevalence of the B.1.1.7 variant.
