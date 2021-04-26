@@ -44,6 +44,7 @@ plotdata = p.melt(value_name='Cases per million', ignore_index=False).reset_inde
 
 # Limit dates
 plotdata = plotdata[plotdata.Date > datetime.datetime(2020, 8, 1)]
+# plotdata = plotdata[plotdata.Date < datetime.datetime(2021, 4, 10)]
 
 
 #%% Plot
