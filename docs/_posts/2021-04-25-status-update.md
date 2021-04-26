@@ -17,7 +17,9 @@ In terms of cases, this spring wave (in Wisconsin) turned out even smaller than 
 
 Interestingly, all [four midwestern states](2021-04-11-variants-midwest.md) with spring waves peaked this same week, even though the severity was much different in each state. My guess is that the common factors here are vaccinations and seasonality, since both vaccination pace and climate are quite similar among these states.
 
-![Cases in 4 midwest states](../assets/Cases-Midwest-States_2021-04-23.png)
+![Cases in 4 midwest states](../assets/Cases-Midwest-States_2021-04-25.png)
+
+*Note: a previous version of this plot had an incorrect y-axis scale. Data includes probable as well as confirmed cases.*
 
 ### Milwaukee
 Unfortunately, Milwaukee appears to be an unfortunate exception here. While cases in Wisconsin as a whole have tipped downwards, in Milwaukee they are steady or even slowly rising.
