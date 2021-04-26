@@ -32,12 +32,12 @@ population = {'Illinois' : 12.7e6,
 selection = states_df[states_df.state.isin(state_selection)].copy()
 selection.loc[:,'date'] = pd.to_datetime(selection.date)
 selection = selection.rename(columns={'date':'Date', 'state':'State', 'cases':'Cases', 'deaths':'Deaths'})
-selection['Cases per million'] = selection.apply(lambda row: row.Cases / population[row.State], axis=1)
+selection['Cases per million'] = selection.apply(lambda row: row.Cases / population[row.State] * 1e6, axis=1)
 
 # pivot so can do date-based processing
 # 7-day average of daily numbers is equal to 7-day diff of cumulative numbers
 p = selection.pivot(index='Date', columns='State', values='Cases per million')
-p = p.diff(periods=7) 
+p = p.diff(periods=7)/7
 
 # Melt to the right format for px.line
 plotdata = p.melt(value_name='Cases per million', ignore_index=False).reset_index()
