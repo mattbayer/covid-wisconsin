@@ -38,10 +38,51 @@ url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16
 ts.loads(url)
 vax_dash = ts.getWorkbook()
 
+for t in vax_dash.worksheets:
+    #show worksheet name
+    print(f"WORKSHEET NAME : {t.name}")
+    #show dataframe for this worksheet
+    print(t.data)
 
 datafile = 'data\\vaccinations\\vax-dashboards_2021-04-27.pkl'
 with open(datafile, 'wb') as f:
     pickle.dump([allocation_dash, vax_dash], f)
+    
+    
+#%% load vaccine dash and process
+
+datafile = 'data\\vaccinations\\vax-dashboards_2021-04-26.pkl'
+with open(datafile, 'rb') as f:
+    allocation_dash, vax_dash = pickle.load(f)
+    
+#%% data cleaning
+    
+admin = allocation_dash.worksheets[0].data
+col_rename = {'SUM(Immunization Count)-value': 'Immunizations', 
+              'SUM(Immunization Count)-alias': 'Immunizations 7-day',
+              'DAY(Vaccination Date)-value': 'Date'
+              }
+admin = admin[col_rename.keys()]
+admin = admin.rename(columns=col_rename)
+admin.Date = pd.to_datetime(admin.Date.copy())
+admin['Immunizations 7-day'] = pd.to_numeric(admin['Immunizations 7-day'].apply(lambda s: s.replace(',', '')))
+    
+#%% manufacturer counts
+manufacturer = allocation_dash.worksheets[1].data
+col_rename = {'Trade Name-value': 'Trade Name',
+              'SUM(Immunization Count)-alias': 'Count'}
+manufacturer = manufacturer[col_rename.keys()]
+manufacturer = manufacturer.rename(columns=col_rename)
+manufacturer.Count = pd.to_numeric(manufacturer.Count.copy())
+manufacturer = manufacturer.set_index('Trade Name').T
+
+# Will not necessarily match the sum of all the trade names
+manufacturer['All'] = allocation_dash.worksheets[2].data.iloc[0,1]
+manufacturer['Reporting date'] = pd.to_datetime(allocation_dash.worksheets[2].data.iloc[0,2])
+
+# Rename stuff
+manufacturer = manufacturer.reset_index(drop=True)
+manufacturer.columns.name = ''
 
     
 #%% Get positives/tests
