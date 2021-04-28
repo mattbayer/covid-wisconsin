@@ -26,34 +26,41 @@ ts = TS()
 ts.loads(url)
 allocation_dash = ts.getWorkbook()
 
-for t in allocation_dash.worksheets:
-    #show worksheet name
-    print(f"WORKSHEET NAME : {t.name}")
-    #show dataframe for this worksheet
-    print(t.data)
+# for t in allocation_dash.worksheets:
+#     #show worksheet name
+#     print(f"WORKSHEET NAME : {t.name}")
+#     #show dataframe for this worksheet
+#     print(t.data)
     
     
 # Vaccine by county and age
 url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16129838459350/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 ts.loads(url)
 vax_dash = ts.getWorkbook()
+vax_complete = vax_dash.setParameter('Initiation or Completion', 'Residents who have completed the vaccine series')
 
-for t in vax_dash.worksheets:
-    #show worksheet name
-    print(f"WORKSHEET NAME : {t.name}")
-    #show dataframe for this worksheet
-    print(t.data)
 
-datafile = 'data\\vaccinations\\vax-dashboards_2021-04-27.pkl'
+# for t in vax_dash.worksheets:
+#     #show worksheet name
+#     print(f"WORKSHEET NAME : {t.name}")
+#     #show dataframe for this worksheet
+#     print(t.data)
+
+datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
 with open(datafile, 'wb') as f:
-    pickle.dump([allocation_dash, vax_dash], f)
+    pickle.dump([allocation_dash, vax_dash, vax_complete], f)
     
-    
-#%% load vaccine dash and process
 
-datafile = 'data\\vaccinations\\vax-dashboards_2021-04-26.pkl'
-with open(datafile, 'rb') as f:
-    allocation_dash, vax_dash = pickle.load(f)
+# ws = vax_dash.worksheets[1]
+# dashboard = ws.select("ATTR(Player)", "Vinicius Júnior")
+
+    
+    
+#%% load previously saved vaccine dash
+
+# datafile = 'data\\vaccinations\\vax-dashboards_2021-04-26.pkl'
+# with open(datafile, 'rb') as f:
+#     allocation_dash, vax_dash = pickle.load(f)
     
 #%% data cleaning
     
@@ -84,7 +91,7 @@ manufacturer['Reporting date'] = pd.to_datetime(allocation_dash.worksheets[2].da
 manufacturer = manufacturer.reset_index(drop=True)
 manufacturer.columns.name = ''
 
-#%% county
+#%% Extract data for vaccines by county
 
 # vax_dash.worksheets[0].data.to_csv('data\\temp.csv')
 
@@ -96,7 +103,8 @@ col_rename = {'Region-value': 'Region',
 county = vax_dash.worksheets[0].data[col_rename.keys()]
 county = county.rename(columns=col_rename)
 
-#%% Age
+
+#%% Extract data for vaccines by age group
 
 col_rename = {'Age-value': 'Age group',
               'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
@@ -105,6 +113,39 @@ col_rename = {'Age-value': 'Age group',
 
 vax_age = vax_dash.worksheets[1].data[col_rename.keys()]
 vax_age = vax_age.rename(columns=col_rename)
+
+col_rename = {'Age-value': 'Age group',
+              'SUM(Initiation or completed count for TT)-alias': 'Completed #',
+              'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+              }
+
+vax_age_complete = vax_complete.worksheets[8].data[col_rename.keys()]
+vax_age_complete = vax_age_complete.rename(columns=col_rename)
+
+# merge the initiated and completed data
+vax_age = vax_age.merge(vax_age_complete)
+
+# add date
+vax_age.insert(0, 'Reporting date', pd.to_datetime(vax_dash.worksheets[14].data.iloc[0,0]))
+
+
+#%% Update age group file
+
+# load csv file of previous data
+vax_age_file = 'data\\vaccinations\\Vax-Age-WI.csv'
+vax_age_compiled = pd.read_csv(vax_age_file, converters={'Reporting date': pd.to_datetime})
+
+# set indices for both previous and updated data
+vax_age_updated = vax_age_compiled.set_index(['Reporting date', 'Age group'])
+vax_age_new = vax_age.set_index(['Reporting date', 'Age group'])
+# add or replace data at the indices in vax_age_new
+vax_age_updated.loc[vax_age_new.index] = vax_age_new
+# reset index
+vax_age_updated = vax_age_updated.reset_index()
+
+# save updated file
+vax_age_updated.to_csv(vax_age_file, index=False)
+
     
 #%% Get positives/tests
 
@@ -138,3 +179,13 @@ col_rename = {'SUM(Number of Positives)': 'Positive',
 
 pos_df = pos_df[col_rename.keys()]
 pos_df = pos_df.rename(columns=col_rename)
+
+
+#%% Get county-level cases
+
+ccase_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirmedandprobable/Stackedcasesbyday?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+
+ts.loads(ccase_url)
+ccase_dash = ts.getWorkbook()
+
+

@@ -1,0 +1,8 @@
+,Age-value,Age-alias,SUM(Initiation or completed count for TT)-alias,AGG(min(1))-value,AGG(min(1))-alias,ATTR(initiation or completed text for TT)-alias,AGG(Geography TT)-alias,AGG(Calc- Initiation or Full Coverage)-alias,Measure Names-alias
+0,65+,65+,756717,1,1,have completed the vaccine series,Wisconsin,0.7438901029547512,min(1)
+1,55-64,55-64,352371,1,1,have completed the vaccine series,Wisconsin,0.428144949442175,min(1)
+2,45-54,45-54,243414,1,1,have completed the vaccine series,Wisconsin,0.3403396769335957,min(1)
+3,35-44,35-44,231725,1,1,have completed the vaccine series,Wisconsin,0.3249658170599166,min(1)
+4,25-34,25-34,193033,1,1,have completed the vaccine series,Wisconsin,0.2604253516490337,min(1)
+5,18-24,18-24,101347,1,1,have completed the vaccine series,Wisconsin,0.1855934220887432,min(1)
+6,16-17,16-17,10435,1,1,have completed the vaccine series,Wisconsin,0.0707146003456104,min(1)
