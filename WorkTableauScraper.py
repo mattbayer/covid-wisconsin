@@ -84,6 +84,27 @@ manufacturer['Reporting date'] = pd.to_datetime(allocation_dash.worksheets[2].da
 manufacturer = manufacturer.reset_index(drop=True)
 manufacturer.columns.name = ''
 
+#%% county
+
+# vax_dash.worksheets[0].data.to_csv('data\\temp.csv')
+
+col_rename = {'Region-value': 'Region',
+              'County-value': 'County',
+              'Measure Names-alias': 'Measure',
+              'Measure Values-alias': 'value'}
+
+county = vax_dash.worksheets[0].data[col_rename.keys()]
+county = county.rename(columns=col_rename)
+
+#%% Age
+
+col_rename = {'Age-value': 'Age group',
+              'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
+              'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+              }
+
+vax_age = vax_dash.worksheets[1].data[col_rename.keys()]
+vax_age = vax_age.rename(columns=col_rename)
     
 #%% Get positives/tests
 
