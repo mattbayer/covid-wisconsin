@@ -58,9 +58,10 @@ with open(datafile, 'wb') as f:
     
 #%% load previously saved vaccine dash
 
-# datafile = 'data\\vaccinations\\vax-dashboards_2021-04-26.pkl'
-# with open(datafile, 'rb') as f:
-#     allocation_dash, vax_dash = pickle.load(f)
+datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
+with open(datafile, 'rb') as f:
+    # allocation_dash, vax_dash = pickle.load(f)
+    allocation_dash, vax_dash, vax_complete = pickle.load(f)
     
 #%% data cleaning
     
@@ -85,11 +86,37 @@ manufacturer = manufacturer.set_index('Trade Name').T
 
 # Will not necessarily match the sum of all the trade names
 manufacturer['All'] = allocation_dash.worksheets[2].data.iloc[0,1]
-manufacturer['Reporting date'] = pd.to_datetime(allocation_dash.worksheets[2].data.iloc[0,2])
+# manufacturer.insert(0, 'Reporting date', pd.to_datetime(allocation_dash.worksheets[2].data.iloc[0,2]))
+manufacturer.insert(0, 'Reporting date', allocation_dash.worksheets[2].data.iloc[0,2])
 
 # Rename stuff
 manufacturer = manufacturer.reset_index(drop=True)
 manufacturer.columns.name = ''
+
+#%% Update manufacturer file
+
+def update_file(filename, update, on):
+    # load file of previous data
+    compiled = pd.read_csv(filename)
+        
+    # first update any overlapping data
+    # set indices to the "on" columns, for both previous and updated data
+    compiled = compiled.set_index(on)
+    update = update.set_index(on)
+    compiled.update(update)
+    
+    # then reset indices and do a merge to add new data
+    compiled = compiled.reset_index()
+    update = update.reset_index()
+    compiled = pd.merge(compiled, update, how='outer')
+        
+    # save updated file
+    compiled.to_csv(filename, index=False)   
+
+man_file = 'data\\vaccinations\\Vax-Manuf-WI.csv'
+
+update_file(man_file, manufacturer, on='Reporting date')
+
 
 #%% Extract data for vaccines by county
 
@@ -126,13 +153,19 @@ vax_age_complete = vax_age_complete.rename(columns=col_rename)
 vax_age = vax_age.merge(vax_age_complete)
 
 # add date
-vax_age.insert(0, 'Reporting date', pd.to_datetime(vax_dash.worksheets[14].data.iloc[0,0]))
+vax_age.insert(0, 'Reporting date', vax_dash.worksheets[14].data.iloc[0,0])
 
 
 #%% Update age group file
 
-# load csv file of previous data
 vax_age_file = 'data\\vaccinations\\Vax-Age-WI.csv'
+
+update_file(vax_age_file, vax_age, on=['Reporting date', 'Age group'])
+
+# load csv file of previous data
+
+
+
 vax_age_compiled = pd.read_csv(vax_age_file, converters={'Reporting date': pd.to_datetime})
 
 # set indices for both previous and updated data
@@ -189,3 +222,17 @@ ts.loads(ccase_url)
 ccase_dash = ts.getWorkbook()
 
 
+
+#%% Get county-level deaths
+
+cdeath_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable/Stackeddeathsbyday?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+
+ts.loads(cdeath_url)
+cdeath_dash = ts.getWorkbook()
+
+update_date = cdeath_dash.worksheets[0].data.iloc[0,-1]
+update_date = update_date.replace('/', '-')
+
+death_data = cdeath_dash.worksheets[1].data
+death_file = 'data\\Deaths by day auto_' + update_date + '.csv'
+death_data.to_csv(death_file)
