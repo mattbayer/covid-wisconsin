@@ -46,7 +46,7 @@ vax_complete = vax_dash.setParameter('Initiation or Completion', 'Residents who 
 #     #show dataframe for this worksheet
 #     print(t.data)
 
-datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
+datafile = 'data\\vaccinations\\vax-dashboards_2021-04-29.pkl'
 with open(datafile, 'wb') as f:
     pickle.dump([allocation_dash, vax_dash, vax_complete], f)
     
@@ -58,10 +58,10 @@ with open(datafile, 'wb') as f:
     
 #%% load previously saved vaccine dash
 
-datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
-with open(datafile, 'rb') as f:
-    # allocation_dash, vax_dash = pickle.load(f)
-    allocation_dash, vax_dash, vax_complete = pickle.load(f)
+# datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
+# with open(datafile, 'rb') as f:
+#     # allocation_dash, vax_dash = pickle.load(f)
+#     allocation_dash, vax_dash, vax_complete = pickle.load(f)
     
 #%% data cleaning
     
@@ -146,7 +146,7 @@ col_rename = {'Age-value': 'Age group',
               'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
               }
 
-vax_age_complete = vax_complete.worksheets[8].data[col_rename.keys()]
+vax_age_complete = vax_complete.worksheets[12].data[col_rename.keys()]
 vax_age_complete = vax_age_complete.rename(columns=col_rename)
 
 # merge the initiated and completed data
@@ -162,22 +162,7 @@ vax_age_file = 'data\\vaccinations\\Vax-Age-WI.csv'
 
 update_file(vax_age_file, vax_age, on=['Reporting date', 'Age group'])
 
-# load csv file of previous data
 
-
-
-vax_age_compiled = pd.read_csv(vax_age_file, converters={'Reporting date': pd.to_datetime})
-
-# set indices for both previous and updated data
-vax_age_updated = vax_age_compiled.set_index(['Reporting date', 'Age group'])
-vax_age_new = vax_age.set_index(['Reporting date', 'Age group'])
-# add or replace data at the indices in vax_age_new
-vax_age_updated.loc[vax_age_new.index] = vax_age_new
-# reset index
-vax_age_updated = vax_age_updated.reset_index()
-
-# save updated file
-vax_age_updated.to_csv(vax_age_file, index=False)
 
     
 #%% Get positives/tests
