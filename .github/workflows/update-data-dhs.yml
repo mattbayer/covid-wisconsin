@@ -26,6 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         conda install pandas geopandas numpy matplotlib plotly
+        pip install TableauScraper
     - name: Run update functions
       run: |
         python UpdateDataAuto.py
