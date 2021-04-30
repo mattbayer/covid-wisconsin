@@ -30,6 +30,7 @@ jobs:
     - name: Run update functions
       run: |
         python UpdateDataAuto.py
+        python UpdateTableauScraping.py
     - name: Setup git config
       run: |
         # setup the username and email. 
