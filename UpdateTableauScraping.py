@@ -31,7 +31,7 @@ ts = TS()
 ts.loads(url)
 allocation_dash = ts.getWorkbook()
 
-    
+#%% 
 # Vaccine by county and age
 url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16129838459350/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 ts.loads(url)
