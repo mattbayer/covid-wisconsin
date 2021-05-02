@@ -1,6 +1,6 @@
 ---
 layout: post
-title: What I know about the vaccines
+title: I like the mRNA vaccines
 hidden: true
 ---
 
@@ -46,7 +46,7 @@ But certainly that has to be even more true of Covid?
 
 Which is more likely to have unknown long term effects? A dose of mRNA that makes your body produce some spike protein one day in your shoulder muscle? Or a virus that delivers the same mRNA, plus other genes, kills your cells, wildly replicates throughout your respiratory tract over the course of at least a week, and even kills a percentage of its hosts?
 
-![https://xkcd.com/2397/](https://imgs.xkcd.com/comics/i_just_dont_trust_them.png)
+![https://xkcd.com/2397/](https://imgs.xkcd.com/comics/i_just_dont_trust_them.png){:style="display:block;margin-left:auto;margin-right:auto"}
 
 
 
