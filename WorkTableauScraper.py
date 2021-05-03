@@ -58,10 +58,10 @@ with open(datafile, 'wb') as f:
     
 #%% load previously saved vaccine dash
 
-# datafile = 'data\\vaccinations\\vax-dashboards_2021-04-28.pkl'
-# with open(datafile, 'rb') as f:
-#     # allocation_dash, vax_dash = pickle.load(f)
-#     allocation_dash, vax_dash, vax_complete = pickle.load(f)
+datafile = 'data\\vaccinations\\vax-dashboards_2021-05-02.pkl'
+with open(datafile, 'rb') as f:
+    # allocation_dash, vax_dash = pickle.load(f)
+    allocation_dash, vax_dash, vax_complete = pickle.load(f)
     
 #%% data cleaning
     
@@ -162,7 +162,51 @@ vax_age_file = 'data\\vaccinations\\Vax-Age-WI.csv'
 
 update_file(vax_age_file, vax_age, on=['Reporting date', 'Age group'])
 
+#%% Extract data for vaccines by race & ethnicity
 
+# first doses ----
+
+race_rename = {'Race-alias': 'Race',
+               'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
+               'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+               }
+ethn_rename = {'Ethnicity-value': 'Ethnicity',
+               'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
+               'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+               }
+
+# get worksheets by name
+vax_race = vax_dash.getWorksheet('Race vax/unvax county').data[race_rename.keys()]
+vax_ethn = vax_dash.getWorksheet('Ethnicity vax/unvax county').data[ethn_rename.keys()]
+
+# rename columns
+vax_race = vax_race.rename(columns=race_rename)
+vax_ethn = vax_ethn.rename(columns=ethn_rename)
+
+# second doses ----
+
+race_rename = {'Race-alias': 'Race',
+               'SUM(Initiation or completed count for TT)-alias': 'Completed #',
+               'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+               }
+ethn_rename = {'Ethnicity-value': 'Ethnicity',
+               'SUM(Initiation or completed count for TT)-alias': 'Completed #',
+               'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+               }
+
+vax_race_complete = vax_complete.getWorksheet('Race vax/unvax county').data[race_rename.keys()]
+vax_ethn_complete = vax_complete.getWorksheet('Ethnicity vax/unvax county').data[ethn_rename.keys()]
+vax_race = vax_race.rename(columns=race_rename)
+vax_ethn = vax_ethn.rename(columns=ethn_rename)
+
+# merge the initiated and completed data
+vax_race = vax_race.merge(vax_race_complete)
+vax_ethn = vax_ethn.merge(vax_ethn_complete)
+
+# add date
+repdate = vax_dash.worksheets[14].data.iloc[0,0]
+vax_race.insert(0, 'Reporting date', repdate)
+vax_ethn.insert(0, 'Reporting date', repdate)
 
     
 #%% Get positives/tests
