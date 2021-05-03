@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Covid WI status update: May&nbsp;2"
-hidden: true
+hidden: false
 ---
 
 The Wisconsin Covid data are sending some mixed signals this week. Infections are probably flat or slightly down, hospitalizations still up from the recent small wave, and deaths flat. Cases in high schoolers may be up slightly, which is something to watch going forward.
@@ -25,3 +25,4 @@ And finally, there was a larger than usual number of deaths reported this week, 
 ![Deaths reported](../assets/DHS-Deaths-Reported_2021-05-02.png)
 ![Deaths by date of death](../assets/DHS-Deaths-Occurred_2021-05-02.png)
 
+Overall it's been a wait-and-see week.
