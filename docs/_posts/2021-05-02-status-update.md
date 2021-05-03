@@ -1,15 +1,12 @@
 ---
 layout: post
-title: Status update
+title: Covid WI status update: May&nbsp;2"
 hidden: true
 ---
 
-Mixed signals in the data this week. The case decline seemed to stall out , with a specific increase among high schoolers.
+The Wisconsin Covid data are sending some mixed signals this week. Infections are probably flat or slightly down, hospitalizations still up from the recent small wave, and deaths flat. Cases in high schoolers may be up slightly, which is something to watch going forward.
 
-
-The WI data are giving some mixed signals this week.
-
-Reported cases ticked back up a bit, but positivity rate was flat and cases by date of diagnosis seem to still be decreasing slightly. Overall my guess is that infections are still decreasing slightly.
+The first mixed signal comes in cases and infections. Reported cases ticked back up a bit, but positivity rate was flat and cases by date of diagnosis seem to still be decreasing slightly. Overall my guess is that infections are still decreasing slightly.
 
 ![Reported cases](DHS-Cases-Reported_2021-05-02.png)
 ![Positivity rate](DHS-Positivity_2021-05-02.png)
@@ -19,7 +16,7 @@ Looking at cases by age group, there's a hint that cases in the 14-17 group migh
 
 ![Cases by youth age group](DHS-Cases-Age-Youth_2021-05-02.png)
 
-Now rounding out the other metrics - the number of current people hospitalized is still elevated, but that's to be expected since this metric lags cases. (Because it takes some time to get out of the hospital after you go in and get diagnosed.)
+The number of current people hospitalized is still elevated, but that's to be expected since this metric lags cases. (Because it takes some time to get out of the hospital after you go in and get diagnosed.)
 
 ![Current people hospitalized](DHS-CurrentHosp_2021-05-02.png)
 
