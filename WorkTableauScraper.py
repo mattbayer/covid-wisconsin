@@ -17,6 +17,26 @@ import covid
 
 from tableauscraper import TableauScraper as TS
 
+#%% Helper function for updating a file
+
+def update_file(filename, update, on):
+    # load file of previous data
+    compiled = pd.read_csv(filename)
+        
+    # first update any overlapping data
+    # set indices to the "on" columns, for both previous and updated data
+    compiled = compiled.set_index(on)
+    update = update.set_index(on)
+    compiled.update(update)
+    
+    # then reset indices and do a merge to add new data
+    compiled = compiled.reset_index()
+    update = update.reset_index()
+    compiled = pd.merge(compiled, update, how='outer')
+        
+    # save updated file
+    compiled.to_csv(filename, index=False)   
+
 #%% vaccine allocation
 
 url = 'https://bi.wisconsin.gov/t/DHS/views/VaccineDistribution/Allocated?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
@@ -46,7 +66,7 @@ vax_complete = vax_dash.setParameter('Initiation or Completion', 'Residents who 
 #     #show dataframe for this worksheet
 #     print(t.data)
 
-datafile = 'data\\vaccinations\\vax-dashboards_2021-04-29.pkl'
+datafile = 'data\\vaccinations\\vax-dashboards_latest.pkl'
 with open(datafile, 'wb') as f:
     pickle.dump([allocation_dash, vax_dash, vax_complete], f)
     
@@ -93,25 +113,9 @@ manufacturer.insert(0, 'Reporting date', allocation_dash.worksheets[2].data.iloc
 manufacturer = manufacturer.reset_index(drop=True)
 manufacturer.columns.name = ''
 
-#%% Update manufacturer file
 
-def update_file(filename, update, on):
-    # load file of previous data
-    compiled = pd.read_csv(filename)
-        
-    # first update any overlapping data
-    # set indices to the "on" columns, for both previous and updated data
-    compiled = compiled.set_index(on)
-    update = update.set_index(on)
-    compiled.update(update)
-    
-    # then reset indices and do a merge to add new data
-    compiled = compiled.reset_index()
-    update = update.reset_index()
-    compiled = pd.merge(compiled, update, how='outer')
-        
-    # save updated file
-    compiled.to_csv(filename, index=False)   
+
+#%% Update manufacturer file
 
 man_file = 'data\\vaccinations\\Vax-Manuf-WI.csv'
 
@@ -196,8 +200,8 @@ ethn_rename = {'Ethnicity-value': 'Ethnicity',
 
 vax_race_complete = vax_complete.getWorksheet('Race vax/unvax county').data[race_rename.keys()]
 vax_ethn_complete = vax_complete.getWorksheet('Ethnicity vax/unvax county').data[ethn_rename.keys()]
-vax_race = vax_race.rename(columns=race_rename)
-vax_ethn = vax_ethn.rename(columns=ethn_rename)
+vax_race_complete = vax_race_complete.rename(columns=race_rename)
+vax_ethn_complete = vax_ethn_complete.rename(columns=ethn_rename)
 
 # merge the initiated and completed data
 vax_race = vax_race.merge(vax_race_complete)
@@ -208,6 +212,13 @@ repdate = vax_dash.worksheets[14].data.iloc[0,0]
 vax_race.insert(0, 'Reporting date', repdate)
 vax_ethn.insert(0, 'Reporting date', repdate)
 
+#%% Update race/ethnicity files
+
+vax_race_file = 'data\\vaccinations\\Vax-Race-WI.csv'
+vax_ethn_file = 'data\\vaccinations\\Vax-Ethnicity-WI.csv'
+
+update_file(vax_race_file, vax_race, on=['Reporting date', 'Race'])
+update_file(vax_ethn_file, vax_ethn, on=['Reporting date', 'Ethnicity'])
     
 #%% Get positives/tests
 
