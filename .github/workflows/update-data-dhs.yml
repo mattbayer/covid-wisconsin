@@ -42,5 +42,7 @@ jobs:
         git add data/Covid-Data-WI-State.csv
         git add data/Covid-Data-WI-County.csv
         git add docs/_includes/plotly
+        git add data/deaths
+        git add data/vaccinations
         git commit -m "Data update (auto)"
         git push origin master
