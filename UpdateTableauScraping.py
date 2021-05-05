@@ -190,5 +190,5 @@ cdeath_dash = ts.getWorkbook()
 update_date = format_date(cdeath_dash.worksheets[0].data.iloc[0,-1])
 
 death_data = cdeath_dash.worksheets[1].data
-death_file = 'data\\Deaths by day auto_' + update_date + '.csv'
+death_file = 'data\\deaths\\Deaths by day auto_' + update_date + '.csv'
 death_data.to_csv(death_file)
