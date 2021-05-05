@@ -1,20 +1,22 @@
 ---
 layout: post
-title: I like the mRNA vaccines
+title: Mmm, RNA
 hidden: true
 ---
 
-There's some understandable hesitation about the new technology behind the mRNA vaccines. Here's what I've learned and why I like them.
+Despite the new technology involved, I have no worries about the mRNA vaccines. Here's why I like them.
 
 ### Wikipedia ahead
+First, a caveat. I am not a vaccinologist or anything close, so this is just the thinking of someone who reads too much Wikipedia. But hey, that's all of us this year, so maybe it's still useful. I welcome any corrections.
 
-I am not a biologist, so this is just the result of my amateur research. I welcome correction.
-
-His blog is exceptionally helpful, accessible, and frank. I'll be linking to several of his posts.
+Actually my favorite source on vaccine development is not Wikipedia, but [Derek Lowe's blog](). He is a scientist who has worked on drug discovery for many years. His blog is exceptionally helpful, accessible, and frank. I'll be linking to several of his posts.
 
 The mRNA vaccines work by delivering mRNA molecules, along with some fats, into your cells. Recalling from high school biology, mRNA is short for messenger RNA, and its normal purpose is to transfer instructions for making proteins from the permanent DNA in the nucleus to a cell's ribosomes, where the mRNA is translated into the correct sequence of molecules to build a specific protein. In the vaccine's case, the mRNA codes for the coronavirus "spike" protein, which is the spiky bit in the virus cartoons that you see, and helps it enter our cells.
 
-[My logo with arrow pointing to spike protein.]
+[Covid WI spike protein.](../assets/spike-protein.png)
+
+References:
+- [Derek Lowe on types of vaccines](https://blogs.sciencemag.org/pipeline/archives/2020/04/15/coronavirus-vaccine-prospects). 
 
 ### mmm, RNA?
 
@@ -54,7 +56,7 @@ Which is more likely to have unknown long term effects? A dose of mRNA that make
 
 ---
 
-[Blog post by Derek Lowe on types of vaccines](https://blogs.sciencemag.org/pipeline/archives/2020/04/15/coronavirus-vaccine-prospects). He is a scientist who has worked on drug discovery for many years; his blog has been my best source on vaccine development.
+
 
 [Derek Lowe's post on getting vaccinated](https://blogs.sciencemag.org/pipeline/archives/2021/04/07/getting-vaccinated). "For people who are honestly wondering about real immunological issues, though, I wanted to say that as someone who’s been doing drug discovery work for over 30 years now, and who has been covering the vaccine developments in detail with great interest during the entire pandemic, that I had no hesitation about rolling up my sleeve."
 
