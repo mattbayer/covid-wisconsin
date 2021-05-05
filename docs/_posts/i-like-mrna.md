@@ -13,7 +13,7 @@ Actually my favorite source on vaccine development is not Wikipedia, but [Derek 
 
 The mRNA vaccines work by delivering mRNA molecules, along with some fats, into your cells. Recalling from high school biology, mRNA is short for messenger RNA, and its normal purpose is to transfer instructions for making proteins from the permanent DNA in the nucleus to a cell's ribosomes, where the mRNA is translated into the correct sequence of molecules to build a specific protein. In the vaccine's case, the mRNA codes for the coronavirus "spike" protein, which is the spiky bit in the virus cartoons that you see, and helps it enter our cells.
 
-[Covid WI spike protein.](../assets/spike-protein.png)
+![Covid WI spike protein.](../assets/spike-protein.png)
 
 References:
 - [Derek Lowe on types of vaccines](https://blogs.sciencemag.org/pipeline/archives/2020/04/15/coronavirus-vaccine-prospects). 
