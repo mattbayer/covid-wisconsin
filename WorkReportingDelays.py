@@ -72,7 +72,7 @@ deaths.rolling(7).mean().plot(y=[latest, 'Reported'], title='Date of Death vs. R
 
 # Cases by test date for Wisconsin
 cases_filename = '.\data\Cases_with_prob_stacked_data_2021-04-15.csv'
-death_filename = '.\data\Deaths by day stacked_2021-04-15.csv'
+death_filename = '.\data\Deaths by day stacked_2021-05-05.csv'
 # cases_filename = '.\data\Cases_with_prob_stacked_data_Milwaukee_2021-02-24.csv'
 # death_filename = '.\data\Deaths by day stacked_Milwaukee_2021-02-24.csv'
 # case_latest = 'Cases as of 27-Feb'
