@@ -44,6 +44,12 @@ covid.plotly_deadhosp(sourcedata=state,
 
 #%% Dashboard - other plots
 
-import UpdateGeo
-
-import UpdateRegional
+try:
+    import UpdateGeo
+except:
+    pass
+        
+try:
+    import UpdateRegional
+except:
+    pass
