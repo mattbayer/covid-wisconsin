@@ -32,6 +32,7 @@ avg7 = daily.rolling(7).mean()
 
 vax_wi.plot(x='date', y=['total_distributed', 'total_vaccinations'])
 vax_wi.plot(x='date', y='share_doses_used')
+vax_wi.plot(x='date', y=['people_fully_vaccinated_per_hundred', 'people_vaccinated_per_hundred'])
 
 daily.plot(y=['total_distributed', 'total_vaccinations'])
 

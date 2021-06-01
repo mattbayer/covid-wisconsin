@@ -92,8 +92,8 @@ age_data = pd.DataFrame(
 #%% Sum up the 80-89 and 90+ rows to match with the demographic data
 
 age_covid = age_data.iloc[0:9, 1:]
-age_covid.iloc[8] = age_data.iloc[8:].sum()
 age_covid.insert(0, 'Age range', age_ranges)
+age_covid.iloc[8] = age_data.iloc[8:].sum()
 age_covid.insert(1, 'Population', pop_age_coarse['Population'])
 age_covid.insert(2, 'Population %', pop_age_coarse['Percent'])
 

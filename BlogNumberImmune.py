@@ -111,7 +111,106 @@ cdc_factor = vax_cdc.people_vaccinated / age_total['Vaccinated #'].sum()
 
 
 # Estimate total immunity by age group
-age_total['Immune %'] = age_total['Vaccinated %'] + (100-age_total['Vaccinated %']) * age_total['Est Infected %']/100
+age_total['Vax+Inf %'] = age_total['Vaccinated %'] * age_total['Est Infected %']/100
+age_total['Vax only %'] = age_total['Vaccinated %'] - age_total['Vax+Inf %']
+age_total['Inf only %'] = (100-age_total['Vaccinated %']) * age_total['Est Infected %']/100
+age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf Only %']
+
+
+#%% Bar plots for age groups
+
+
+# perc_cols = ['Vaccinated %','Immune %', 'Est Infected %']
+# perc_cols = ['Vaccinated %', 'Est Infected %', 'Immune %']
+perc_cols = ['Vax only %', 'Vax+Inf %', 'Inf Only %']
+col_colors = ['seagreen', 'darkslategray', 'steelblue']
+
+# reformat to "long" for use in the bar graph
+age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
+age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
+
+# create text labels - strings from rounding each percentage value to nearest whole
+def perc_to_text(p):
+    if p < 2:
+        t = '{:0.1f}'.format(p) + '%'
+    else:
+        t = '{:0.0f}'.format(p) + '%'
+    return t
+
+age_long['Label'] = ''
+age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text)
+
+
+
+# # horizontal layout
+# fig = px.bar(
+#     age_covid_long, 
+#     y='Age range', 
+#     x='Percentage', 
+#     facet_col='variable', 
+#     facet_col_wrap=2,
+#     color='variable',
+#     color_discrete_sequence=col_colors,
+#     orientation='h',
+#     category_orders={'Age range': age_ranges},
+#     labels={'variable': ''},
+#     title='WI Covid Data by Age Group',
+#     width=700,
+#     height=600,
+#     )
+
+# vertical layout
+fig = px.bar(
+    age_long, 
+    x='Age group', 
+    y='Percentage', 
+    text='Label',
+    # facet_col='variable', 
+    # facet_col_wrap=2,
+    color='variable',
+    color_discrete_sequence=col_colors,
+    # barmode='overlay',
+    labels={'variable': '', 'Percentage':'Percent of total'},
+    title='Estimated Immunity by Age Group',
+    width=700,
+    height=700,
+    )
+
+
+# take out 'variable=' part of the axis titles
+fig.for_each_annotation(
+    lambda a: a.update(
+        text=a.text.split("=")[-1],
+        font=dict(size=15),
+        )
+    )
+
+fig.update_traces(textposition='outside')
+
+
+# other layout
+fig.update_layout(showlegend=True)
+
+save_html='.\\docs\\assets\\plotly\\Immune-Age.html'
+fig.write_html(
+    file=save_html,
+    default_height=700,
+    default_width=700,
+    include_plotlyjs='cdn',
+)
+os.startfile(save_html)
+
+save_png = '.\\docs\\assets\\Immune-Age.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=700,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
+
+
 
 #%% Estimate total 
 
@@ -150,6 +249,6 @@ vax_county = vax_county[col_rename.keys()]
 vax_county = vax_county.rename(columns=col_rename)
 
 # remove 'County' from the end of every county name
-vax_county.County.apply(lambda s: s.replace())
+# vax_county.County.apply(lambda s: s.replace())
 
 # update_date = format_date(allocation_dash.worksheets[2].data.iloc[0,2])
