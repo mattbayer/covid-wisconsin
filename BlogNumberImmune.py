@@ -114,7 +114,7 @@ cdc_factor = vax_cdc.people_vaccinated / age_total['Vaccinated #'].sum()
 age_total['Vax+Inf %'] = age_total['Vaccinated %'] * age_total['Est Infected %']/100
 age_total['Vax only %'] = age_total['Vaccinated %'] - age_total['Vax+Inf %']
 age_total['Inf only %'] = (100-age_total['Vaccinated %']) * age_total['Est Infected %']/100
-age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf Only %']
+age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf only %']
 
 
 #%% Bar plots for age groups
@@ -122,7 +122,7 @@ age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf Only %']
 
 # perc_cols = ['Vaccinated %','Immune %', 'Est Infected %']
 # perc_cols = ['Vaccinated %', 'Est Infected %', 'Immune %']
-perc_cols = ['Vax only %', 'Vax+Inf %', 'Inf Only %']
+perc_cols = ['Vax only %', 'Vax+Inf %', 'Inf only %']
 col_colors = ['seagreen', 'darkslategray', 'steelblue']
 
 # reformat to "long" for use in the bar graph
@@ -137,40 +137,19 @@ def perc_to_text(p):
         t = '{:0.0f}'.format(p) + '%'
     return t
 
-age_long['Label'] = ''
+age_long['ImmuneLabel'] = ''
 age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text)
-
-
-
-# # horizontal layout
-# fig = px.bar(
-#     age_covid_long, 
-#     y='Age range', 
-#     x='Percentage', 
-#     facet_col='variable', 
-#     facet_col_wrap=2,
-#     color='variable',
-#     color_discrete_sequence=col_colors,
-#     orientation='h',
-#     category_orders={'Age range': age_ranges},
-#     labels={'variable': ''},
-#     title='WI Covid Data by Age Group',
-#     width=700,
-#     height=600,
-#     )
 
 # vertical layout
 fig = px.bar(
     age_long, 
     x='Age group', 
     y='Percentage', 
-    text='Label',
-    # facet_col='variable', 
-    # facet_col_wrap=2,
+    text='ImmuneLabel',
     color='variable',
     color_discrete_sequence=col_colors,
     # barmode='overlay',
-    labels={'variable': '', 'Percentage':'Percent of total'},
+    labels={'variable': '', 'Percentage':'Immune %'},
     title='Estimated Immunity by Age Group',
     width=700,
     height=700,
@@ -191,10 +170,68 @@ fig.update_traces(textposition='outside')
 # other layout
 fig.update_layout(showlegend=True)
 
+
+#%% Alternative bar plot
+perc_cols = ['Vaccinated %', 'Est Infected %']
+col_colors = ['seagreen', 'steelblue']
+
+# reformat to "long" for use in the bar graph
+age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
+age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
+
+# create text labels - strings from rounding each percentage value to nearest whole
+def perc_to_text(p):
+    if p < 2:
+        t = '{:0.1f}'.format(p) + '%'
+    else:
+        t = '{:0.0f}'.format(p) + '%'
+    return t
+
+age_long['ImmuneLabel'] = ''
+age_long.iloc[7:,-1] = age_total['Immune %'].apply(perc_to_text)
+
+# create elevated base for the Infected bar
+age_long['Base'] = 0
+age_long.iloc[7:,-1] = age_total['Vax only %']
+
+# vertical layout
+fig = px.bar(
+    age_long, 
+    x='Age group', 
+    y='Percentage', 
+    text='ImmuneLabel',
+    color='variable',
+    base='Base',
+    color_discrete_sequence=col_colors,
+    barmode='overlay',
+    labels={'variable': '', 'Percentage':'Immune %'},
+    title='Estimated Immunity by Age Group',
+    width=700,
+    height=700,
+    )
+
+
+# take out 'variable=' part of the axis titles
+fig.for_each_annotation(
+    lambda a: a.update(
+        text=a.text.split("=")[-1],
+        font=dict(size=15),
+        )
+    )
+
+fig.update_traces(textposition='outside')
+
+
+# other layout
+fig.update_layout(showlegend=True)
+
+
+#%% Save and display bar plot
+
 save_html='.\\docs\\assets\\plotly\\Immune-Age.html'
 fig.write_html(
     file=save_html,
-    default_height=700,
+    default_height=550,
     default_width=700,
     include_plotlyjs='cdn',
 )
@@ -204,7 +241,7 @@ save_png = '.\\docs\\assets\\Immune-Age.png'
 fig.write_image(
     save_png,
     width=700,
-    height=700,
+    height=550,
     engine='kaleido',
 )
 os.startfile(save_png)
