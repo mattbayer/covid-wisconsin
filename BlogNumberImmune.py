@@ -89,11 +89,18 @@ vax_cdc = vax_cdc[vax_cdc.date == vax_cdc.date.max()]
 
 #%% Do estimates
 # Note that populations for vax and cases differ by up to ~3.5%
+# Looks like vax might be more accurate - Google says 5.822 million, cases sum to 5.78 million
+
+# infection multiplier - 30% infected from CDC / 10.5% cases, round up to 3
 infection_factor = 3
+
+# Increase in estimate from CDC data
+cdc_factor = vax_cdc.people_vaccinated.iloc[0] / vax_age['Initiated #'].sum()
 
 # derived and estimates
 age_total['Population'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
 age_total['Est Infected %'] = age_total['Cases per 100K'] / 1000 * infection_factor
+
 
 # create <18 index for vax_age
 vax_age['Population'] = vax_age['Initiated #'] / vax_age['Initiated %']
@@ -102,12 +109,10 @@ vax_age.loc['<18','Initiated #'] = vax_age.loc['16-17':'12-15','Initiated #'].su
 vax_age.loc['<18','Completed #'] = vax_age.loc['16-17':'12-15','Completed #'].sum()
 # no need for other columns at the moment
 
-# add initiated # to age_total
-age_total['Vaccinated #'] = vax_age['Initiated #']
-age_total['Vaccinated %'] = age_total['Vaccinated #'] / age_total['Population'] * 100
 
-# Increase in estimate from CDC data
-cdc_factor = vax_cdc.people_vaccinated / age_total['Vaccinated #'].sum()
+# add initiated # to age_total, adjusted by CDC factor
+age_total['Vaccinated #'] = vax_age['Initiated #']*cdc_factor
+age_total['Vaccinated %'] = age_total['Vaccinated #'] / age_total['Population'] * 100
 
 
 # Estimate total immunity by age group
@@ -117,7 +122,7 @@ age_total['Inf only %'] = (100-age_total['Vaccinated %']) * age_total['Est Infec
 age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf only %']
 
 
-#%% Bar plots for age groups
+#%% Bar plots for age groups - explicit three categories
 
 
 # perc_cols = ['Vaccinated %','Immune %', 'Est Infected %']
@@ -171,7 +176,7 @@ fig.update_traces(textposition='outside')
 fig.update_layout(showlegend=True)
 
 
-#%% Alternative bar plot
+#%% Alternative bar plot - overlapping
 perc_cols = ['Vaccinated %', 'Est Infected %']
 col_colors = ['seagreen', 'steelblue']
 
