@@ -72,6 +72,40 @@ vax_age = vax_age.drop('Reporting date', axis=1)
 # set age group to index
 vax_age = vax_age.set_index('Age group')
 
+
+#%% Get population by age group, from Census
+demo_csv = '.\\data\\demographics\\ACSSPP1Y2018.S0201_data_with_overlays_2020-07-21T153630.csv'
+
+demo_data = pd.read_csv(demo_csv).T
+
+# manually pick out the index codes for the age population estimates
+age_indices = {'S0201_009E': '<5', 
+               'S0201_010E': '5-17', 
+               'S0201_011E': '18-24',
+               'S0201_012E': '25-34', 
+               'S0201_013E': '35-44', 
+               'S0201_014E': '45-54', 
+               'S0201_015E': '55-64', 
+               'S0201_016E': '65-74',
+               'S0201_017E': '75+',
+               }
+pop_age = demo_data.loc[age_indices.keys(), 1]
+pop_age = pop_age.rename(age_indices)
+pop_age = pd.to_numeric(pop_age)
+pop_age = pd.Series(pop_age)
+
+# consolidate groups
+pop_age['<18'] = pop_age['<5'] + pop_age['5-17']
+pop_age['65+'] = pop_age['65-74'] + pop_age['75+']
+pop_age = pop_age.drop(['<5', '5-17', '65-74', '75+'])
+
+# convert to absolute numbers
+wi_pop = 5.822e6
+pop_age = pop_age * wi_pop / 100
+
+
+
+
 #%% Get overall vax data from CDC
 
 # from Our World In Data github, recording CDC data
@@ -178,10 +212,14 @@ fig.update_layout(showlegend=True)
 
 #%% Alternative bar plot - overlapping
 perc_cols = ['Vaccinated %', 'Est Infected %']
+# perc_cols = perc_cols[-1::-1]
 col_colors = ['seagreen', 'steelblue']
+col_colors = col_colors[-1::-1]
 
 # reformat to "long" for use in the bar graph
-age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
+age_order = ['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+']
+# age_order = age_order[-1::-1]
+age_total = age_total.reindex(age_order)
 age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
 
 # create text labels - strings from rounding each percentage value to nearest whole
@@ -201,18 +239,19 @@ age_long.iloc[7:,-1] = age_total['Vax only %']
 
 # vertical layout
 fig = px.bar(
-    age_long, 
-    x='Age group', 
-    y='Percentage', 
+    age_long[-1::-1], 
+    y='Age group', 
+    x='Percentage', 
     text='ImmuneLabel',
     color='variable',
     base='Base',
     color_discrete_sequence=col_colors,
-    barmode='overlay',
+    barmode='group',
+    orientation='h',
     labels={'variable': '', 'Percentage':'Immune %'},
     title='Estimated Immunity by Age Group',
     width=700,
-    height=700,
+    height=500,
     )
 
 
@@ -225,10 +264,12 @@ fig.for_each_annotation(
     )
 
 fig.update_traces(textposition='outside')
+# make x axis go beyond 100% so can see the text labels
+fig.update_xaxes(range=[0, 105])
 
 
 # other layout
-fig.update_layout(showlegend=True)
+fig.update_layout(showlegend=True, legend_traceorder='reversed')
 
 
 #%% Save and display bar plot
