@@ -99,37 +99,32 @@ vax_age.loc['<18','Completed #'] = vax_age.loc['16-17':'12-15','Completed #'].su
 
 
 
-#%% Get population by age group, from Census
-demo_csv = '.\\data\\demographics\\ACSSPP1Y2018.S0201_data_with_overlays_2020-07-21T153630.csv'
+#%% Get population by age group, from Census ACS 2019 estimates
+# https://data.census.gov/cedsci/table?q=wisconsin%20population%20age&tid=ACSST1Y2019.S0101
 
-demo_data = pd.read_csv(demo_csv).T
+demo_csv = '.\\data\\demographics\\ACSST1Y2019.S0101-2020-12-10T154935.csv'
 
-# manually pick out the index codes for the age population estimates
-age_indices = {'S0201_009E': '<5', 
-               'S0201_010E': '5-17', 
-               'S0201_011E': '18-24',
-               'S0201_012E': '25-34', 
-               'S0201_013E': '35-44', 
-               'S0201_014E': '45-54', 
-               'S0201_015E': '55-64', 
-               'S0201_016E': '65-74',
-               'S0201_017E': '75+',
-               }
-pop_age = demo_data.loc[age_indices.keys(), 1]
-pop_age = pop_age.rename(age_indices)
-pop_age = pd.to_numeric(pop_age)
-pop_age = pd.Series(pop_age)
+demo_data = pd.read_csv(demo_csv)
+demo_data.Label = demo_data.Label.apply(lambda s: str(s).strip())
+demo_data = demo_data.set_index('Label')
+# filter down to just the total estimates
+demo_data = demo_data['Wisconsin!!Total!!Estimate']
+# convert to numeric, handling commas
+demo_data = pd.to_numeric(demo_data.str.replace(',',''), errors='coerce')
 
-# consolidate groups
-pop_age['<18'] = pop_age['<5'] + pop_age['5-17']
-pop_age['65+'] = pop_age['65-74'] + pop_age['75+']
-pop_age = pop_age.drop(['<5', '5-17', '65-74', '75+'])
+pop_age_dict = {'<18'  : demo_data['Under 18 years'],
+                '18-24': demo_data['18 to 24 years'],
+                '25-34': demo_data['25 to 29 years'] + demo_data['30 to 34 years'],
+                '35-44': demo_data['35 to 39 years'] + demo_data['40 to 44 years'], 
+                '45-54': demo_data['45 to 49 years'] + demo_data['50 to 54 years'], 
+                '55-64': demo_data['55 to 59 years'] + demo_data['60 to 64 years'], 
+                '65+'  : demo_data['65 years and over'],
+                'All'  : demo_data['Total population'],
+                }
 
-# convert to absolute numbers
-wi_pop = 5.822e6
-pop_age = round(pop_age * wi_pop / pop_age.sum())
-pop_age['All'] = wi_pop
+pop_age = pd.Series(pop_age_dict)
 
+wi_pop = demo_data['Total population']
 
 
 #%% Get overall vax data from CDC
