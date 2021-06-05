@@ -31,6 +31,14 @@ def loads_with_retries(ts, url, retries):
         raise err    
     return ts
 
+# create text labels - strings from rounding each percentage value to nearest whole
+def perc_to_text(p):
+    if p < 2:
+        t = '{:0.1f}'.format(p) + '%'
+    else:
+        t = '{:0.0f}'.format(p) + '%'
+    return t
+
 #%% Get cases by age group
 # Pull from tableau instead of downloadable data, because the tableau plot has
 # the right age groups to match up with vaccinations.
@@ -53,12 +61,17 @@ age_total = age_total[col_rename.keys()]
 age_total = age_total.rename(columns=col_rename)
 age_total['Week of'] = pd.to_datetime(age_total['Week of'])
 
+# make sure certain columns are numbers
+age_total['Cases'] = pd.to_numeric(age_total['Cases'])
+
 # only need the most recent cumulative number
 age_total = age_total[age_total['Week of'] == age_total['Week of'].max()]
 
 # set age group to index
 age_total = age_total.set_index('Age group')
 
+# Create age_total index for 'All'
+age_total.loc['All', 'Cases'] = age_total['Cases'].sum()
 
 #%% Get vax by age group from WI DHS data
 
@@ -71,6 +84,19 @@ vax_age = vax_age.drop('Reporting date', axis=1)
 
 # set age group to index
 vax_age = vax_age.set_index('Age group')
+
+# create All index for vax_age
+vax_age.loc['All', 'Initiated #'] = vax_age['Initiated #'].sum()
+vax_age.loc['All', 'Completed #'] = vax_age['Completed #'].sum()
+
+
+# create <18 index for vax_age
+vax_age['Population'] = vax_age['Initiated #'] / vax_age['Initiated %']
+vax_age.loc['<18','Initiated #'] = vax_age.loc['16-17':'12-15','Initiated #'].sum()
+vax_age.loc['<18','Completed #'] = vax_age.loc['16-17':'12-15','Completed #'].sum()
+# no need for other columns at the moment
+
+
 
 
 #%% Get population by age group, from Census
@@ -101,8 +127,8 @@ pop_age = pop_age.drop(['<5', '5-17', '65-74', '75+'])
 
 # convert to absolute numbers
 wi_pop = 5.822e6
-pop_age = pop_age * wi_pop / 100
-
+pop_age = round(pop_age * wi_pop / pop_age.sum())
+pop_age['All'] = wi_pop
 
 
 
@@ -129,19 +155,13 @@ vax_cdc = vax_cdc[vax_cdc.date == vax_cdc.date.max()]
 infection_factor = 3
 
 # Increase in estimate from CDC data
-cdc_factor = vax_cdc.people_vaccinated.iloc[0] / vax_age['Initiated #'].sum()
+cdc_factor = vax_cdc.people_vaccinated.iloc[0] / vax_age.loc['All', 'Initiated #']
+# cdc_factor = 1 # if don't want to include a CDC factor
 
 # derived and estimates
-age_total['Population'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
-age_total['Est Infected %'] = age_total['Cases per 100K'] / 1000 * infection_factor
-
-
-# create <18 index for vax_age
-vax_age['Population'] = vax_age['Initiated #'] / vax_age['Initiated %']
-vax_age.loc['<18'] = [np.nan]*5
-vax_age.loc['<18','Initiated #'] = vax_age.loc['16-17':'12-15','Initiated #'].sum()
-vax_age.loc['<18','Completed #'] = vax_age.loc['16-17':'12-15','Completed #'].sum()
-# no need for other columns at the moment
+age_total['Population 1'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
+age_total['Population'] = pop_age
+age_total['Est Infected %'] = age_total['Cases'] / age_total['Population'] * 100 * infection_factor
 
 
 # add initiated # to age_total, adjusted by CDC factor
@@ -156,6 +176,8 @@ age_total['Inf only %'] = (100-age_total['Vaccinated %']) * age_total['Est Infec
 age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf only %']
 
 
+
+
 #%% Bar plots for age groups - explicit three categories
 
 
@@ -168,16 +190,10 @@ col_colors = ['seagreen', 'darkslategray', 'steelblue']
 age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
 age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
 
-# create text labels - strings from rounding each percentage value to nearest whole
-def perc_to_text(p):
-    if p < 2:
-        t = '{:0.1f}'.format(p) + '%'
-    else:
-        t = '{:0.0f}'.format(p) + '%'
-    return t
+
 
 age_long['ImmuneLabel'] = ''
-age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text)
+age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text).to_list()
 
 # vertical layout
 fig = px.bar(
@@ -222,27 +238,23 @@ age_order = ['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+']
 age_total = age_total.reindex(age_order)
 age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
 
-# create text labels - strings from rounding each percentage value to nearest whole
-def perc_to_text(p):
-    if p < 2:
-        t = '{:0.1f}'.format(p) + '%'
-    else:
-        t = '{:0.0f}'.format(p) + '%'
-    return t
 
 age_long['ImmuneLabel'] = ''
-age_long.iloc[7:,-1] = age_total['Immune %'].apply(perc_to_text)
+age_long.iloc[7:,-1] = age_total['Immune %'].apply(perc_to_text).to_list()
+
+age_long['Label'] = age_long.Percentage.apply(perc_to_text)
 
 # create elevated base for the Infected bar
 age_long['Base'] = 0
-age_long.iloc[7:,-1] = age_total['Vax only %']
+age_long.iloc[7:,-1] = age_total['Vax only %'].to_list()
 
 # vertical layout
 fig = px.bar(
     age_long[-1::-1], 
     y='Age group', 
     x='Percentage', 
-    text='ImmuneLabel',
+    # text='ImmuneLabel',
+    text='Label',
     color='variable',
     base='Base',
     color_discrete_sequence=col_colors,
@@ -255,18 +267,15 @@ fig = px.bar(
     )
 
 
-# take out 'variable=' part of the axis titles
-fig.for_each_annotation(
-    lambda a: a.update(
-        text=a.text.split("=")[-1],
-        font=dict(size=15),
-        )
-    )
 
-fig.update_traces(textposition='outside')
+
+fig.update_traces(textposition='inside', insidetextanchor='middle')
 # make x axis go beyond 100% so can see the text labels
 fig.update_xaxes(range=[0, 105])
 
+# add totals annotations
+total_labels = [{"x": total+5, "y": age, "text": perc_to_text(total), "showarrow": False} for age, total in zip(age_total.index, age_total['Immune %'])]
+fig = fig.update_layout(annotations=total_labels)
 
 # other layout
 fig.update_layout(showlegend=True, legend_traceorder='reversed')
@@ -298,7 +307,7 @@ os.startfile(save_png)
 #%% Estimate total 
 
 
-wi_pop = age_total['Population'].sum()
+# wi_pop = age_total['Population'].sum()
 total_immune_age = (age_total['Immune %'] / 100 * age_total['Population']).sum() / wi_pop
 
 total_vax = age_total['Vaccinated #'].sum() / wi_pop
