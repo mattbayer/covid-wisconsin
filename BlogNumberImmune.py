@@ -150,8 +150,8 @@ vax_cdc = vax_cdc[vax_cdc.date == vax_cdc.date.max()]
 infection_factor = 3
 
 # Increase in estimate from CDC data
-cdc_factor = vax_cdc.people_vaccinated.iloc[0] / vax_age.loc['All', 'Initiated #']
-# cdc_factor = 1 # if don't want to include a CDC factor
+# cdc_factor = vax_cdc.people_vaccinated.iloc[0] / vax_age.loc['All', 'Initiated #']
+cdc_factor = 1 # if don't want to include a CDC factor
 
 # derived and estimates
 age_total['Population 1'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
@@ -175,108 +175,109 @@ age_total['Immune %'] = age_total['Vaccinated %'] + age_total['Inf only %']
 
 #%% Bar plots for age groups - explicit three categories
 
-
-# perc_cols = ['Vaccinated %','Immune %', 'Est Infected %']
-# perc_cols = ['Vaccinated %', 'Est Infected %', 'Immune %']
-perc_cols = ['Vax only %', 'Vax+Inf %', 'Inf only %']
-col_colors = ['seagreen', 'darkslategray', 'steelblue']
-
-# reformat to "long" for use in the bar graph
-age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
-age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
-
-
-
-age_long['ImmuneLabel'] = ''
-age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text).to_list()
-
-# vertical layout
-fig = px.bar(
-    age_long, 
-    x='Age group', 
-    y='Percentage', 
-    text='ImmuneLabel',
-    color='variable',
-    color_discrete_sequence=col_colors,
-    # barmode='overlay',
-    labels={'variable': '', 'Percentage':'Immune %'},
-    title='Estimated Immunity by Age Group',
-    width=700,
-    height=700,
-    )
-
-
-# take out 'variable=' part of the axis titles
-fig.for_each_annotation(
-    lambda a: a.update(
-        text=a.text.split("=")[-1],
-        font=dict(size=15),
+if False:
+    # perc_cols = ['Vaccinated %','Immune %', 'Est Infected %']
+    # perc_cols = ['Vaccinated %', 'Est Infected %', 'Immune %']
+    perc_cols = ['Vax only %', 'Vax+Inf %', 'Inf only %']
+    col_colors = ['seagreen', 'darkslategray', 'steelblue']
+    
+    # reformat to "long" for use in the bar graph
+    age_total = age_total.reindex(['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+'])
+    age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
+    
+    
+    
+    age_long['ImmuneLabel'] = ''
+    age_long.iloc[14:,-1] = age_total['Immune %'].apply(perc_to_text).to_list()
+    
+    # vertical layout
+    fig = px.bar(
+        age_long, 
+        x='Age group', 
+        y='Percentage', 
+        text='ImmuneLabel',
+        color='variable',
+        color_discrete_sequence=col_colors,
+        # barmode='overlay',
+        labels={'variable': '', 'Percentage':'Immune %'},
+        title='Estimated Immunity by Age Group',
+        width=700,
+        height=700,
         )
-    )
-
-fig.update_traces(textposition='outside')
-
-
-# other layout
-fig.update_layout(showlegend=True)
-
-
-#%% Alternative bar plot - overlapping
-perc_cols = ['Vaccinated %', 'Est Infected %']
-# perc_cols = perc_cols[-1::-1]
-col_colors = ['seagreen', 'steelblue']
-col_colors = col_colors[-1::-1]
-
-# reformat to "long" for use in the bar graph
-age_order = ['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+']
-# age_order = age_order[-1::-1]
-age_total = age_total.reindex(age_order)
-age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
+    
+    
+    # take out 'variable=' part of the axis titles
+    fig.for_each_annotation(
+        lambda a: a.update(
+            text=a.text.split("=")[-1],
+            font=dict(size=15),
+            )
+        )
+    
+    fig.update_traces(textposition='outside')
+    
+    
+    # other layout
+    fig.update_layout(showlegend=True)
 
 
-age_long['ImmuneLabel'] = ''
-age_long.iloc[7:,-1] = age_total['Immune %'].apply(perc_to_text).to_list()
+#%% Alternative bar plot - side by side
 
-age_long['Label'] = age_long.Percentage.apply(perc_to_text)
+def immune_bar(age_total, age_groups, height_pix):
+    
+    perc_cols = ['Vaccinated %', 'Est Infected %']
+    # perc_cols = perc_cols[-1::-1]
+    col_colors = ['seagreen', 'steelblue']
+    col_colors = col_colors[-1::-1]
+    
+    # reformat to "long" for use in the bar graph
+    age_total = age_total.reindex(age_groups)
+    age_long = age_total.reset_index().melt(id_vars='Age group', value_vars=perc_cols, value_name='Percentage')
+    
+    age_long['Label'] = age_long.Percentage.apply(perc_to_text)
+    
+    # create elevated base for the Infected bar
+    age_long['Base'] = 0
+    age_long.iloc[len(age_groups):,-1] = age_total['Vax only %'].to_list()
+    
+    # vertical layout
+    fig = px.bar(
+        age_long[-1::-1], 
+        y='Age group', 
+        x='Percentage', 
+        # text='ImmuneLabel',
+        text='Label',
+        color='variable',
+        base='Base',
+        color_discrete_sequence=col_colors,
+        barmode='group',
+        orientation='h',
+        labels={'variable': '', 'Percentage':'Immune %'},
+        title='Estimated Immunity by Age Group',
+        width=700,
+        height=height_pix,
+        )
+    
+    fig.data[0].name = 'Infected %<br>(3&times;Cases)'
+    fig.update_traces(textposition='inside', insidetextanchor='middle')
+    # make x axis go beyond 100% so can see the text labels
+    fig.update_xaxes(range=[0, 105])
+    
+    # add totals annotations
+    total_labels = [{"x": total+7, "y": age, "text": perc_to_text(total)+'<br>Immune', "showarrow": False, "align": "left"} for age, total in zip(age_total.index, age_total['Immune %'])]
+    fig = fig.update_layout(annotations=total_labels)
+    
+    # other layout
+    fig.update_layout(showlegend=True, legend_traceorder='reversed')
+    
+    return fig
 
-# create elevated base for the Infected bar
-age_long['Base'] = 0
-age_long.iloc[7:,-1] = age_total['Vax only %'].to_list()
-
-# vertical layout
-fig = px.bar(
-    age_long[-1::-1], 
-    y='Age group', 
-    x='Percentage', 
-    # text='ImmuneLabel',
-    text='Label',
-    color='variable',
-    base='Base',
-    color_discrete_sequence=col_colors,
-    barmode='group',
-    orientation='h',
-    labels={'variable': '', 'Percentage':'Immune %'},
-    title='Estimated Immunity by Age Group',
-    width=700,
-    height=500,
-    )
 
 
+#%% Save and display bar plot - age groups
 
-
-fig.update_traces(textposition='inside', insidetextanchor='middle')
-# make x axis go beyond 100% so can see the text labels
-fig.update_xaxes(range=[0, 105])
-
-# add totals annotations
-total_labels = [{"x": total+5, "y": age, "text": perc_to_text(total), "showarrow": False} for age, total in zip(age_total.index, age_total['Immune %'])]
-fig = fig.update_layout(annotations=total_labels)
-
-# other layout
-fig.update_layout(showlegend=True, legend_traceorder='reversed')
-
-
-#%% Save and display bar plot
+age_groups = ['<18', '18-24', '25-34', '35-44', '45-54', '55-64', '65+']
+fig = immune_bar(age_total, age_groups, 550)
 
 save_html='.\\docs\\assets\\plotly\\Immune-Age.html'
 fig.write_html(
@@ -292,6 +293,29 @@ fig.write_image(
     save_png,
     width=700,
     height=550,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
+#%% Save and display bar plot -  all ages
+
+age_groups = ['All']
+fig = immune_bar(age_total, age_groups, 250)
+
+save_html='.\\docs\\assets\\plotly\\Immune-Total.html'
+fig.write_html(
+    file=save_html,
+    default_height=250,
+    default_width=700,
+    include_plotlyjs='cdn',
+)
+os.startfile(save_html)
+
+save_png = '.\\docs\\assets\\Immune-Total.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=250,
     engine='kaleido',
 )
 os.startfile(save_png)
