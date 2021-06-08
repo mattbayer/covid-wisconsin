@@ -7,7 +7,6 @@ hidden: true
 
 Wisconsin is about half vaccinated, but when you take into account previous infections, the percentage of people with some immunity is probably more like two-thirds. 
 
-New infections have been declining for several weeks now. Are we done? 50% vaccinated would seem to be too low for the fabled "herd immunity", which is a hazy concept in the first place but 
 
 I find the 50% number encouraging on the one hand, because it will certainly be enough to prevent large surges like last winter, and because the number for the elderly is about 80%, which will prevent most Covid deaths in the future. But I'm discouraged on the other hand, because I would love to just grind coronavirus into the dirt so it can never rise up again, and I don't think 50% is going to get us there.
 
@@ -18,19 +17,25 @@ My understanding is that it is not certain whether vaccinated or infected immuni
 But here I'll just treat them as equivalent. I think it's fair to say that whatever hairs you might split between them, both types of immunity confer good protection against reinfection, at least in the short and medium term.
 
 ### How many were infected?
-First we need to know how many people were infected and therefore have natural immunity. [I addressed this once during the fall surge](2020-10-19-true-infections.md) and [here](https://covid-wisconsin.com/2020/11/22/status-update/#how-many-of-us-have-been-infected)
+The CDC now has a [national seroprevalence survey](https://covid.cdc.gov/covid-data-tracker/#national-lab), which samples blood taken from people for non-Covid reasons and tests it for Covid antibodies. This survey puts Wisconsin at 30% infected, which seems reasonable to me. 
 
-The CDC now has a [national seroprevalence survey](https://covid.cdc.gov/covid-data-tracker/#national-lab), which samples blood taken from people for non-Covid reasons and tests it for Covid antibodies. This survey puts Wisconsin at 30% infected, which seems reasonable to me. Another way to get an estimate is to take the number of deaths and divide by an assumed infection fatality rate. In previous posts I have used a 0.45% IFR, following the example of virologist Trevor Bedford. This method would estimate 27% infected (about 7000 deaths, divided by 0.0045, divided by 5.8 million people in Wisconsin), very close to the CDC number.
+Another way to get an estimate is to take the number of deaths and divide by an assumed infection fatality rate. Assuming a 0.45% IFR as in a [previous post](https://covid-wisconsin.com/2020/11/22/status-update/#how-many-of-us-have-been-infected), following virologist Trevor Bedford, that would imply 27% infected, very close to the CDC number. (About 7000 deaths, divided by 0.0045, divided by 5.8 million people in Wisconsin.) 
 
-The total number of confirmed cases in Wisconsin, by contrast, is only about 610,000, or 10.5% of the population. So the true number of infections is larger than recorded cases by about a factor of 3. I'll use this nice round number for the rest of my estimates.
+The total number of confirmed cases in Wisconsin, by contrast, is only about 610,000, or 10.5% of the population. So the true number of infections is larger than recorded cases by about a factor of 3. I'll use this nice round number for the rest of my estimates. 
 
 ### How many are vaccinated?
-The CDC reports that 50.9% of Wisconsinites have received at least one vaccine dose, which  is higher than the WI DHS number at 47.5%. I don't know what explains the discrepancy, which amounts to 200 thousand people and more than two weeks' worth of first doses. My best guess is that the CDC numbers are including some federal programs that aren't included in the state's data for some reason. But I like to be optimistic, so I'll take the higher CDC number.
+The state DHS reports that 47.5% have received at least one dose of the vaccine. Oddly, the CDC reports a higher number of 51%. I don't know what to make of this discrepancy, which amounts to 200 thousand people and more than two weeks' worth of first doses. My best guess is that the CDC numbers are including some federal programs that aren't included in the state's data for some reason. I will use the state's data because it is more detailed, but it may be that we have few more percentage points of vaccinations than it shows.
 
 ### How many are immune?
-So we have our two numbers. 51% of the state is vaccinated, and 30% have been infected, and of course there must be some overlap between the two. If people who had previously been infected were equally likely to be vaccinated as the uninfected, then the total number of immune would be 0.51 + (1-0.51) * 0.3 = 0.66, 66%. My guess is that this is not quite true, and that vaccination and infection are actually somewhat anti-correlated. I mean that people who have already gotten the vaccine are probably more likely to have been taking stringent precautions all along, and thus less likely to have gotten infected. There are probably also people who know they had Covid and have natural immunity, and choose not to get the vaccine for just that reason. Both these considerations would tend to decrease the the overlap between vaccinated and infected immunity, and raise the overall immunity number.  So 66% may be a lower bound.
+So we have our two numbers. 48% of the state is vaccinated, and 31% have been infected, and of course there must be some overlap between the two. I'll assume that the two things are independent; in other words, being previously infected does not If people who had previously been infected were equally likely to be vaccinated as the uninfected, then the total number of immune would be 0.51 + (1-0.51) * 0.3 = 0.66, 66%. 
+
+The figure below illustrates the estimate. The green bar shows the percentage of vaccinated people, the blue the percentage of previously infected, and their overlap represents people with both a previous infection and a vaccination. The combined spread of the bars shows the total immunity.
 
 ![Immunity for the state](../assets/Immune-Total.png)
+
+
+My guess is that this is not quite true, and that vaccination and infection are actually somewhat anti-correlated. I mean that people who have already gotten the vaccine are probably more likely to have been taking stringent precautions all along, and thus less likely to have gotten infected. There are probably also people who know they had Covid and have natural immunity, and choose not to get the vaccine for just that reason. Both these considerations would tend to decrease the the overlap between vaccinated and infected immunity, and raise the overall immunity number.  So 66% may be a lower bound.
+
 
 ### By age
 Another consideration that reduces the overlap between vaccinations and infections is age, at least among adults. In general, older people have been less likely to get Covid, and more likely to get vaccinated. This is very sensible, since the risk of Covid increases rapidly with age. It also means that the age groups that have the least vaccinations also have had the most infections, which in way make up for low levels of vaccination. So although the vaccination rate varies pretty broadly between 38% for 18-24 year olds and 83% for over-65, my estimated immunity rate only varies from 67% to 90%.
