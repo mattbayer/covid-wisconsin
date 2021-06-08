@@ -7,17 +7,16 @@ hidden: true
 
 Wisconsin is about half vaccinated, but when you take into account previous infections, the fraction of people with some immunity is more like two-thirds. 
 
+I find the 50% number encouraging on the one hand, because it will certainly be enough to prevent large surges like last winter, and because the number for the elderly is even higher in the 80s. But I'm discouraged on the other hand, because I would love to just grind coronavirus into the dirt, and I don't think 50% is going to get us there.
 
-I find the 50% number encouraging on the one hand, because it will certainly be enough to prevent large surges like last winter, and because the number for the elderly is about 80%, which will prevent most Covid deaths in the future. But I'm discouraged on the other hand, because I would love to just grind coronavirus into the dirt so it can never rise up again, and I don't think 50% is going to get us there.
+But there is a large number of people who gained immunity to Covid the old-fashioned way, and it's only fair to include them in the numbers. So in this post I will try to estimate the total number of people with some kind of immunity, whether from vaccination or infection. I'll treat them as equivalent, although there is scientific debate over 
 
-On the other, other hand, there is a large percentage of people who gained immunity to Covid the old-fashioned way, and it's only fair to include them in the numbers. So in this post I will try to estimate the total number of people with some kind of immunity, whether from vaccination or infection.
-
-My understanding is that it is not certain whether vaccinated or infected immunity is better than the other; the vaccinated seem to have more antibodies, but previously infected people may have better response in other pieces of the immune system. There are indications that natural immunity plus one vaccine dose may be the ideal combination.
-
-But here I'll just treat them as equivalent. I think it's fair to say that whatever hairs you might split between them, both types of immunity confer good protection against reinfection, at least in the short and medium term.
+I think it's fair to say that whatever hairs you might split between them, both types of immunity confer good protection against reinfection, at least in the short and medium term.
 
 ### How many are vaccinated?
 The state DHS reports that 47.5% have received at least one dose of the vaccine. Oddly, the CDC reports a higher number of 51%. I don't know what to make of this discrepancy, which amounts to 200 thousand people and more than two weeks' worth of first doses. My best guess is that the CDC numbers are including some federal programs that aren't included in the state's data for some reason. I will use the state's data because it is more detailed, but it may be that we have few more percentage points of vaccinations than it shows.
+
+
 
 ### How many were infected?
 The number of confirmed cases in Wisconsin is about 610,000, or 10.5% of the population. But we know this underestimates the true number of infections, so we need more information to estimate those.
@@ -40,7 +39,7 @@ My guess is that this is not quite true, and that vaccination and infection are 
 
 
 ### By age
-Another consideration that reduces the overlap between vaccinations and infections is age, at least among adults. In general, older people have been less likely to get Covid, and more likely to get vaccinated. This is very sensible, since the risk of Covid increases rapidly with age. It also means that the age groups that have the least vaccinations also have had the most infections, which in way make up for low levels of vaccination. So although the vaccination rate varies pretty broadly between 38% for 18-24 year olds and 83% for over-65, my estimated immunity rate only varies from 67% to 90%.
+Another consideration that reduces the overlap between vaccinations and infections is age, at least among adults. In general, older people have been less likely to get Covid, and more likely to get vaccinated. This is very sensible, since the risk of Covid increases rapidly with age. It also means that the age groups that have the least vaccinations also have had the most infections, which in a way make up for low levels of vaccination. So although the vaccination rate varies pretty broadly between 38% for 18-24 year olds and 83% for over-65, my estimated immunity rate only varies from 67% to 90%.
 
 ![Immunity by age group](../assets/Immune-Age.png)
 
@@ -53,3 +52,6 @@ However, looking at adults alone, my estimated immunity level is
 
 [Census estimates from 2019](https://data.census.gov/cedsci/table?q=wisconsin%20population%20age&tid=ACSST1Y2019.S0101)
 
+--
+
+My understanding is that it is not certain whether vaccinated or infected immunity is better than the other; the vaccinated seem to have more antibodies, but previously infected people may have better response in other pieces of the immune system. There are indications that natural immunity plus one vaccine dose may be the ideal combination.
