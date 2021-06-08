@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The immune ones
+title: Double immunity
 hidden: true
 ---
 
@@ -29,6 +29,8 @@ The CDC reports that 50.9% of Wisconsinites have received at least one vaccine d
 
 ### How many are immune?
 So we have our two numbers. 51% of the state is vaccinated, and 30% have been infected, and of course there must be some overlap between the two. If people who had previously been infected were equally likely to be vaccinated as the uninfected, then the total number of immune would be 0.51 + (1-0.51) * 0.3 = 0.66, 66%. My guess is that this is not quite true, and that vaccination and infection are actually somewhat anti-correlated. I mean that people who have already gotten the vaccine are probably more likely to have been taking stringent precautions all along, and thus less likely to have gotten infected. There are probably also people who know they had Covid and have natural immunity, and choose not to get the vaccine for just that reason. Both these considerations would tend to decrease the the overlap between vaccinated and infected immunity, and raise the overall immunity number.  So 66% may be a lower bound.
+
+![Immunity for the state](../assets/Immune-Total.png)
 
 ### By age
 Another consideration that reduces the overlap between vaccinations and infections is age, at least among adults. In general, older people have been less likely to get Covid, and more likely to get vaccinated. This is very sensible, since the risk of Covid increases rapidly with age. It also means that the age groups that have the least vaccinations also have had the most infections, which in way make up for low levels of vaccination. So although the vaccination rate varies pretty broadly between 38% for 18-24 year olds and 83% for over-65, my estimated immunity rate only varies from 67% to 90%.
