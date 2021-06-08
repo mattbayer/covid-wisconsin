@@ -64,14 +64,13 @@ age_total['Week of'] = pd.to_datetime(age_total['Week of'])
 # make sure certain columns are numbers
 age_total['Cases'] = pd.to_numeric(age_total['Cases'])
 
-# only need the most recent cumulative number
-age_total = age_total[age_total['Week of'] == age_total['Week of'].max()]
-
-# set age group to index
-age_total = age_total.set_index('Age group')
+# only need the most recent cumulative number; the date may vary by age group
+age_total = age_total.groupby('Age group').max()
+# Age group is now also the index
 
 # Create age_total index for 'All'
 age_total.loc['All', 'Cases'] = age_total['Cases'].sum()
+
 
 #%% Get vax by age group from WI DHS data
 
@@ -89,9 +88,11 @@ vax_age = vax_age.set_index('Age group')
 vax_age.loc['All', 'Initiated #'] = vax_age['Initiated #'].sum()
 vax_age.loc['All', 'Completed #'] = vax_age['Completed #'].sum()
 
+# population from vax % numbers - inconsistent with others so don't use
+# vax_age['Population'] = vax_age['Initiated #'] / vax_age['Initiated %']
+
 
 # create <18 index for vax_age
-vax_age['Population'] = vax_age['Initiated #'] / vax_age['Initiated %']
 vax_age.loc['<18','Initiated #'] = vax_age.loc['16-17':'12-15','Initiated #'].sum()
 vax_age.loc['<18','Completed #'] = vax_age.loc['16-17':'12-15','Completed #'].sum()
 # no need for other columns at the moment
@@ -146,6 +147,7 @@ vax_cdc = vax_cdc[vax_cdc.date == vax_cdc.date.max()]
 # Note that populations for vax and cases differ by up to ~3.5%
 # Looks like vax might be more accurate - Google says 5.822 million, cases sum to 5.78 million
 
+
 # infection multiplier - 30% infected from CDC / 10.5% cases, round up to 3
 infection_factor = 3
 
@@ -154,17 +156,20 @@ infection_factor = 3
 cdc_factor = 1 # if don't want to include a CDC factor
 
 # derived and estimates
-age_total['Population 1'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
+# - population from case per 100K numbers - off from other estimates for some reason
+# age_total['Population 1'] = age_total['Cases'] / age_total['Cases per 100K'] * 1e5
 age_total['Population'] = pop_age
-age_total['Est Infected %'] = age_total['Cases'] / age_total['Population'] * 100 * infection_factor
-
 
 # add initiated # to age_total, adjusted by CDC factor
 age_total['Vaccinated #'] = vax_age['Initiated #']*cdc_factor
-age_total['Vaccinated %'] = age_total['Vaccinated #'] / age_total['Population'] * 100
 
+# Create age_total index for 'Adults'
+age_total.loc['Adults'] = age_total.loc['All'] - age_total.loc['<18']
 
 # Estimate total immunity by age group
+age_total['Vaccinated %'] = age_total['Vaccinated #'] / age_total['Population'] * 100
+age_total['Est Infected %'] = age_total['Cases'] / age_total['Population'] * 100 * infection_factor
+
 age_total['Vax+Inf %'] = age_total['Vaccinated %'] * age_total['Est Infected %']/100
 age_total['Vax only %'] = age_total['Vaccinated %'] - age_total['Vax+Inf %']
 age_total['Inf only %'] = (100-age_total['Vaccinated %']) * age_total['Est Infected %']/100
@@ -299,8 +304,10 @@ os.startfile(save_png)
 
 #%% Save and display bar plot -  all ages
 
-age_groups = ['All']
-fig = immune_bar(age_total, age_groups, 250)
+# add dummy entry so that there is no y axis label
+age_total.loc[' '] = age_total.loc['All']
+fig = immune_bar(age_total, [' '], 250)
+fig.update_layout(title='Estimated Immunity in Wisconsin', yaxis_title='')
 
 save_html='.\\docs\\assets\\plotly\\Immune-Total.html'
 fig.write_html(
