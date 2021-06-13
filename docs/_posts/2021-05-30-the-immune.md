@@ -4,15 +4,14 @@ title: Who's immune?
 hidden: true
 ---
 
-
 Wisconsin is about half vaccinated, but when you take into account previous infections, the fraction of people with some immunity is more like two-thirds. 
-
-My read on expert opinion is that both types of immunity - from vaccination and from prior infection - confer good protection going forward. There may be hairs to split between them, and in fact [a combination of the two may be the most protective](https://twitter.com/EricTopol/status/1396538615266627585), so it is likely still helpful to get vaccinated even if you have been infected before. But here I'll treat them as equivalent.
 
 To get an estimate of total immunity in the state, I'll start with the number of people vaccinated, which we know pretty well, and then incorporate the number of people with prior infections, which requires some estimation.
 
+My read on expert opinion is that both types of immunity - from vaccination and from prior infection - confer good protection going forward. There may be hairs to split between them, and in fact [a combination of the two may be the most protective](https://twitter.com/EricTopol/status/1396538615266627585), so it is likely still helpful to get vaccinated even if you have been infected before. But here I'll treat them as equivalent.
+
 ### How many are vaccinated?
-The state DHS reports that 47.5% have received at least one dose of the vaccine. Oddly, the CDC reports a higher number of 51%. I don't know what to make of this discrepancy, which amounts to 200 thousand people and more than two weeks' worth of first doses. My best guess is that the CDC numbers are including some federal programs that aren't included in the state's data for some reason. I'll use the state's data because it is more detailed, but it may be that we have few more percentage points of vaccinations than it shows.
+The state DHS reports that 49% have received at least one dose of the vaccine. Oddly, the CDC reports a higher number of 52%. I don't know what to make of this discrepancy, which amounts to over a hundred thousand people and more than two weeks' worth of first doses. My best guess is that the CDC numbers are including some federal programs that aren't included in the state's data for some reason. I'll use the state's data because it is more detailed, but it may be that we have a few more percentage points of vaccinations than it shows.
 
 ### How many were infected?
 The number of confirmed cases in Wisconsin is about 610,000, or 10.5% of the population. But we know this underestimates the true number of infections, so we need more information.
@@ -24,9 +23,9 @@ Another way to get an estimate is to take the number of deaths and divide by an 
 Based on these estimates, the true number of infections is larger than recorded cases by about a factor of 3. For convenience I'll use this nice round number for the rest of the analysis. 
 
 ### How many are immune?
-So we have our two numbers. 48% of the state is vaccinated, and 31% have been infected, and of course there must be some overlap between the two. To figure the overlap I'll assume that the two things are independent; in other words, being previously infected does not affect someone's likelihood of being vaccinated.[^Probability] 
+So we have our two numbers. 49% of the state is vaccinated, and 31% have been infected, and of course there must be some overlap between the two. To figure the overlap I'll assume that the two things are independent; in other words, being previously infected does not affect someone's likelihood of being vaccinated.[^Probability] 
 
-The figure below illustrates the estimate. The green bar shows the percentage of vaccinated people, the blue the percentage of previously infected, and their overlap represents people with both a previous infection and a vaccination. The combined spread of the bars shows the total immunity.
+The graph below illustrates the estimate. The green bar shows the percentage of vaccinated people, the blue the percentage of previously infected, and their overlap represents people with both a previous infection and a vaccination. The combined spread of the bars shows the total immunity.
 
 ![Immunity for the state](../assets/Immune-Total.png)
 
