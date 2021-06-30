@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Update data files scraped from Tableau dashboards on the DHS website
+Includes:
+     - Vaccines by age, race, ethnicity
+     - Vaccines by manufacturer
+     - Deaths by date of death
 
 Uses TableauScraper, https://github.com/bertrandmartel/tableau-scraping
 
