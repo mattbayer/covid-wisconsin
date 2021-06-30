@@ -72,7 +72,7 @@ allocation_dash = ts.getWorkbook()
 url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16212677845310/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 ts = loads_with_retries(ts, url, 3)
 vax_dash = ts.getWorkbook()
-vax_complete = vax_dash.setParameter('Initiation or Completion', 'Residents who have completed the vaccine series')
+vax_complete = vax_dash.setParameter('Initiation or Completion', 'Total population who have completed the series')
 
 
 update_date = format_date(allocation_dash.worksheets[2].data.iloc[0,2])
@@ -135,7 +135,8 @@ vax_age_complete = vax_age_complete.rename(columns=col_rename)
 vax_age = vax_age.merge(vax_age_complete)
 
 # add date
-vax_age.insert(0, 'Reporting date', vax_dash.worksheets[14].data.iloc[0,0])
+repdate = vax_dash.getWorksheet('Title Header').data.iloc[0,1]
+vax_age.insert(0, 'Reporting date', repdate)
 
 
 #%% Update age group file
@@ -186,7 +187,6 @@ vax_race = vax_race.merge(vax_race_complete)
 vax_ethn = vax_ethn.merge(vax_ethn_complete)
 
 # add date
-repdate = vax_dash.worksheets[14].data.iloc[0,0]
 vax_race.insert(0, 'Reporting date', repdate)
 vax_ethn.insert(0, 'Reporting date', repdate)
 
@@ -200,7 +200,7 @@ update_file(vax_ethn_file, vax_ethn, on=['Reporting date', 'Ethnicity'])
 
 #%% Get deaths by date of death
 
-cdeath_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable/Stackeddeathsbyday?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+cdeath_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable_16214287829690/Countydailydeaths?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 
 ts = loads_with_retries(ts, cdeath_url, 3)
 cdeath_dash = ts.getWorkbook()
