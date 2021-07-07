@@ -26,7 +26,10 @@ import os
 # covid data
 widata = covid.read_covid_data_wi('state')
 
-plotdata = pd.DataFrame(index=pd.date_range(start='2021-01-10', end='2021-05-30'))
+start_date = pd.to_datetime('2021-03-01')
+end_date = pd.to_datetime('2021-08-06')
+
+plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
 plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
 plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
 
@@ -56,32 +59,37 @@ wi['Delta fraction'] = wi['Delta'] / wi['Total']
 
 wi.plot(y=['Alpha fraction', 'Delta fraction'])
 
+
+
 #%% Estimates
 
-N = len(plotdata)
+# model_start = pd.to_datetime('2021-05-09')
+# DeltaR = 1.5   # factor that Delta's R exceeds the current mix of strains
+# R1 = 0.75
+# start = 560
 
-R1 = 0.81
-R2 = R1*1.4
-s = 5
+model_start = pd.to_datetime('2021-05-23')
+DeltaR = 1.5   # factor that Delta's R exceeds the current mix of strains
+R1 = 0.72
+start = 320
+
+N = (end_date - model_start).days + 1
+
+R2 = R1*DeltaR
+s = 5   # serial interval, 5 days
 d = np.arange(0,N)
 
-start = 2900
-frac2 = 0.02 / 4    # 2% at Jan 31; start at Jan 10 is two fraction doubling times
-# frac2 = 0.001 / 4     # 0.1% at Jan 31; based on 5 positives / ~5000 sequenced
+ # 4% at May 24 from covariants data, apply the R factor and time delay to start date
+delay = (model_start - pd.to_datetime('2021-05-24')).days
+frac2 = 0.04 * DeltaR**(delay/s)   
 
 v1 = start * np.exp((R1-1)*d/s)
 v2 = frac2 * start * np.exp((R2-1)*d/s)
 
-# plt.figure()
-# plt.plot(v1+v2)
-# plt.plot(v2)
 
-# plt.figure()
-# plt.plot(v2/(v1+v2))
-
-plotdata['Classic trend'] = v1
-plotdata['B.1.1.7 trend'] = v2
-plotdata['Model total'] = v1 + v2
+plotdata.loc[model_start:,'Prior trend'] = v1
+plotdata.loc[model_start:,'Delta trend'] = v2
+plotdata.loc[model_start:,'Model total'] = v1 + v2
 
 plotdata.index.name = 'Date'
 
@@ -106,15 +114,25 @@ variants = variants.loc[datetime.datetime(2021,1,1):datetime.datetime(2021,3,27)
 
 plotdata['B117 estimate'] = plotdata['Cases 7-day'] * variants['B117 fraction']
 
+#%% Use covariants estimates
+
+plotdata2 = wi
+# advanced dates one week, so they're plotted in the middle of the sum range
+plotdata2.index = plotdata2.index + datetime.timedelta(days=7)
+# limit dates
+plotdata2 = plotdata2.loc[(plotdata2.index >= start_date) & (plotdata2.index <= end_date)].copy()
+plotdata2['Delta estimate'] = plotdata['Cases 7-day'] * plotdata2['Delta fraction']
+plotdata2['Alpha estimate'] = plotdata['Cases 7-day'] * plotdata2['Alpha fraction']
+
 
 #%% Plot
 
 # fig = px.line(plotdata, y=['Cases 7-day', 'Classic', 'B.1.1.7', 'Model total'])
 fig = px.area(
     plotdata, 
-    y=['B.1.1.7 trend', 'Classic trend'], 
-    color_discrete_sequence=['orange', 'lightsteelblue'],
-    title='<i><b>Possible</i></b> B.1.1.7 variant trend in WI',
+    y=['Delta trend', 'Prior trend'], 
+    color_discrete_sequence=['tomato', 'lightsteelblue'],
+    title='<i><b>Possible</i></b> Delta variant trend in WI',
     labels={'index':'Date', 'value': 'Cases / day'}
     )
 
@@ -129,13 +147,26 @@ fig.add_trace(
 
 fig.add_trace(
     go.Scatter(
-        x=plotdata.index,
-        y=plotdata['B117 estimate'],
-        name='B117 estimate',
+        x=plotdata2.index,
+        y=plotdata2['Alpha estimate'],
+        name='Alpha estimate',
         marker_color='saddlebrown',
         line_dash='dot'
         )
     )
+
+fig.add_trace(
+    go.Scatter(
+        x=plotdata2.index,
+        y=plotdata2['Delta estimate'],
+        name='Delta estimate',
+        marker_color='darkred',
+        line_dash='dot'
+        )
+    )
+
+
+
 
 fig.update_layout(legend_traceorder='reversed', legend_title='')
 
