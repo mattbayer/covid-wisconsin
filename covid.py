@@ -19,6 +19,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import json
 
+import tableauscraper
 
 
 def plotly_colorbubble(
@@ -1227,6 +1228,47 @@ def download_covid_data_wi(dataset='state'):
     data_table = data_table.apply(pd.to_numeric, errors='ignore')
     
     return data_table
+
+def scrape_widash_postest():
+    """Scrape DHS Tableau dashboard for positives/tests.
+    Returns a DataFrame with columns Date, Positive, Negative, 
+    Percent Positive, Tests.
+    """
+    # load the tableau scraper function class
+    ts = tableauscraper.TableauScraper()
+    
+    pos_url = 'https://bi.wisconsin.gov/t/DHS/views/PercentPositivebyTestPersonandaComparisonandTestCapacity/PercentPositivebyTestDashboard?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    
+    ts.loads(pos_url)
+    pos_dash = ts.getWorkbook()
+    pos_sheet = pos_dash.worksheets[0]
+    
+    
+    # data here not in pos_sheet.data for some reason - that's all zeros - but in selectable items
+    # Many of the columns are repeated, and appear to contain the same data but 
+    # reversed in time. The code below only keeps the second of each repeated 
+    # column, which I think is fine.
+    data = pos_sheet.getSelectableItems()
+    pos_dict = dict()
+    pos_df = pd.DataFrame()
+    for d in data[1::2]:
+        if d['column'] != 'Measure Values':
+            # this column is too long and also redundant
+            pos_dict[d['column']] = d['values']
+            pos_df[d['column']] = d['values']
+    
+    col_rename = {'SUM(Number of Positives)': 'Positive',
+                  'SUM(Number of Negatives)': 'Negative',
+                  'DAY(Encounter Date)': 'Date', 
+                  'AGG(Percent_Positive_tt)': 'Percent Positive'}
+    
+    pos_df = pos_df[col_rename.keys()]
+    pos_df = pos_df.rename(columns=col_rename)
+    
+    pos_df.Date = pd.to_datetime(pos_df.Date)
+    pos_df['Tests'] = pos_df['Positive'] + pos_df['Negative']
+    
+    return pos_df
 
 
 def update_covid_data_wi(dataset='state', save_path='.\\data'):
