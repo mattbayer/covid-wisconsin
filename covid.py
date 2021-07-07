@@ -384,7 +384,8 @@ def plotly_twolines(
         range_max=None,
         date_min=None,
         groupcolors=None,
-        column1_bar=True,
+        col1_mode='avg-bar',
+        col2_mode='avg',
         plotlabels=None,
         fig_height='100%',
         showfig = True,
@@ -404,6 +405,8 @@ def plotly_twolines(
     date_min    -- min date for x axis. If None then use all.
     groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
     column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
+    col1_mode   -- mode for column 1 - 'avg-bar' (plot both a 7-day average line and daily bars), 'avg' (only 7-day avg), 'bar' (only bar), 'line' (only line, no processing)
+    col2_mode   -- mode for column 2 - 'avg' (plot line of 7-day avg), 'line' (just plot the values with a line) 
     plotlabels  -- dict containing strings for 'title', 'yaxis', 'yaxis_secondary'
     fig_height  -- html tag for height of the figure. Default is to fill the div; could also specify pixels.
     showfig     -- flag for displaying the figure after it is created
@@ -503,7 +506,7 @@ def plotly_twolines(
             showlegend = False
             
         # daily non-avg numbers bar chart for column1
-        if column1_bar:
+        if 'bar' in col1_mode:
             fig.add_trace(
                 go.Bar(
                     x=data1.index, 
@@ -518,41 +521,71 @@ def plotly_twolines(
                 )
         
         # 7-day average lines           
-        fig.add_trace(
-            go.Scatter(
-                x=avg1.index, 
-                y=avg1.iloc[:,gg], 
-                name=avg1_label, 
-                line_color=plotcolors[0], 
-                hovertemplate='%{y:.1f}',
-                showlegend=showlegend,
-                ),
-            row=sub_row[gg],
-            col=sub_col[gg],
-            secondary_y=False,
-            )
+        if 'avg' in col1_mode:
+            fig.add_trace(
+                go.Scatter(
+                    x=avg1.index, 
+                    y=avg1.iloc[:,gg], 
+                    name=avg1_label, 
+                    line_color=plotcolors[0], 
+                    hovertemplate='%{y:.1f}',
+                    showlegend=showlegend,
+                    ),
+                row=sub_row[gg],
+                col=sub_col[gg],
+                secondary_y=False,
+                )
+        elif 'line' in col1_mode:
+            fig.add_trace(
+                go.Scatter(
+                    x=data1.index, 
+                    y=data1.iloc[:,gg], 
+                    name=data1_label, 
+                    line_color=plotcolors[0], 
+                    hovertemplate='%{y:.1f}',
+                    showlegend=showlegend,
+                    ),
+                row=sub_row[gg],
+                col=sub_col[gg],
+                secondary_y=False,
+                )                
         
-        fig.add_trace(
-            go.Scatter(
-                x=avg2.index, 
-                y=avg2.iloc[:,gg], 
-                name=avg2_label, 
-                line_color=plotcolors[1], 
-                hovertemplate='%{y:.1f}',
-                showlegend=showlegend,
-                ),
-            row=sub_row[gg],
-            col=sub_col[gg],
-            secondary_y=secondary_y,
-            )
-    
+        if 'avg' in col2_mode:
+            fig.add_trace(
+                go.Scatter(
+                    x=avg2.index, 
+                    y=avg2.iloc[:,gg], 
+                    name=avg2_label, 
+                    line_color=plotcolors[1], 
+                    hovertemplate='%{y:.1f}',
+                    showlegend=showlegend,
+                    ),
+                row=sub_row[gg],
+                col=sub_col[gg],
+                secondary_y=secondary_y,
+                )
+        elif 'line' in col2_mode:
+            fig.add_trace(
+                go.Scatter(
+                    x=data2.index, 
+                    y=data2.iloc[:,gg], 
+                    name=data2_label, 
+                    line_color=plotcolors[1], 
+                    hovertemplate='%{y:.1f}',
+                    showlegend=showlegend,
+                    ),
+                row=sub_row[gg],
+                col=sub_col[gg],
+                secondary_y=secondary_y,
+                )
+            
     if range_max is None:
         # compute y axis range - to_numpy to make robust to multiple columns
         # want secondary to be on a scale exactly 10x primary
         avg1_max = avg1.to_numpy(na_value=0).max()
         avg2_max = avg2.to_numpy(na_value=0).max();
         range_max = max(avg1_max, avg2_max/secondary_scale)
-        if column1_bar:
+        if 'bar' in col1_mode:
             data1_max = data1.to_numpy(na_value=0).max();
             range_max = max(range_max, data1_max)
         

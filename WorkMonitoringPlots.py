@@ -36,27 +36,30 @@ plotpath = '.\\docs\\assets\\plotly'
 #     pos_df, 
 #     'Percent Positive', 
 #     'Positive', 
-#     plotcolors=['violet', 'steelblue', 'thistle'],
+#     plotcolors=['darkmagenta', 'steelblue', 'thistle'],
 #     secondary_scale=300,
 #     savefile=plotpath+'\\Pos-Positivity-WI.html',
 #     )
 
 covid.plotly_twolines(
     pos_df, 
-    'Reported Cases', 
+    'Positive', 
+    # 'Reported Cases', 
     'Percent Positive', 
-    plotcolors=['steelblue', 'violet', 'lightsteelblue'],
+    plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/200,
     range_max=8000,
+    col1_mode='avg-bar',
+    col2_mode='line',
     savefile=plotpath+'\\Pos-Positivity-WI.html',
     )
 
-covid.plotly_twolines(
-    pos_df, 
-    'Positive', 
-    'Tests', 
-    plotcolors=['steelblue', 'olivedrab', 'lightsteelblue'],
-    secondary_scale=10,
-    range_max=8000,
-    savefile=plotpath+'\\Pos-Tests-WI.html',
-    )
+# covid.plotly_twolines(
+#     pos_df, 
+#     'Positive', 
+#     'Tests', 
+#     plotcolors=['steelblue', 'olivedrab', 'lightsteelblue'],
+#     secondary_scale=10,
+#     range_max=8000,
+#     savefile=plotpath+'\\Pos-Tests-WI.html',
+#     )
