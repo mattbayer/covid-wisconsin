@@ -70,8 +70,8 @@ wi.plot(y=['Alpha fraction', 'Delta fraction'])
 
 model_start = pd.to_datetime('2021-05-23')
 DeltaR = 1.5   # factor that Delta's R exceeds the current mix of strains
-R1 = 0.72
-start = 320
+R1 = 0.73
+start = 310
 
 N = (end_date - model_start).days + 1
 
