@@ -30,26 +30,20 @@ pos_df['Reported Cases'] = widata.set_index('Date')['POS_NEW']
 pos_df = pos_df.reset_index()
 pos_df = pos_df.rename(columns={'Positive': 'Positive tests', 'Percent Positive': 'Percent positive'})
 
+# cut off latest date, misleading data
+pos_df = pos_df[pos_df.Date < pos_df.Date.max()]
+
 #%% Plotly plot for cases / positivity
 plotpath = '.\\docs\\_includes\\plotly'
 savefile = plotpath+'\\Cases-Positivity-WI.html'
 
-# covid.plotly_twolines(
-#     pos_df, 
-#     'Percent Positive', 
-#     'Positive', 
-#     plotcolors=['darkmagenta', 'steelblue', 'thistle'],
-#     secondary_scale=300,
-#     savefile=plotpath+'\\Pos-Positivity-WI.html',
-#     )
 
 fig = covid.plotly_twolines(
     pos_df, 
     'Positive tests', 
-    # 'Reported Cases', 
     'Percent positive',
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
-    secondary_scale=1/200,
+    secondary_scale=1/250,
     date_min=datetime.datetime(2021,1,15),
     range_max=2000,
     col1_mode='avg-bar',
@@ -68,15 +62,5 @@ fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
-os.startfile(savefile)
+# os.startfile(savefile)
 
-
-# covid.plotly_twolines(
-#     pos_df, 
-#     'Positive', 
-#     'Tests', 
-#     plotcolors=['steelblue', 'olivedrab', 'lightsteelblue'],
-#     secondary_scale=10,
-#     range_max=8000,
-#     savefile=plotpath+'\\Pos-Tests-WI.html',
-#     )

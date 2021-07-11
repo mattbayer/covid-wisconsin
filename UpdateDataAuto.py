@@ -30,7 +30,7 @@ covid.plotly_casetest(sourcedata=state,
                       test_col='Tests', 
                       date_col='Date', 
                       savefile=plotpath + '\\Cases-Tests-WI.html',
-                      date_min=datetime.datetime(2020,10,15),
+                      date_min=datetime.datetime(2021,1,15),
                       range_max=5000,
                       showfig=False,
                       )
@@ -41,10 +41,15 @@ covid.plotly_deadhosp(sourcedata=state,
                       dead_col='Deaths', 
                       date_col='Date', 
                       savefile=plotpath + '\\Deaths-Hosp-WI.html',
-                      date_min=datetime.datetime(2020,10,15),
+                      date_min=datetime.datetime(2021,1,15),
                       range_max=180,
                       showfig=False,
                       )
+
+try:
+    import UpdateMonitoringPlots
+except:
+    pass
 
 #%% Dashboard - other plots
 
