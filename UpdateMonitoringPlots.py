@@ -35,7 +35,7 @@ pos_df = pos_df[pos_df.Date < pos_df.Date.max()]
 
 #%% Plotly plot for cases / positivity
 plotpath = '.\\docs\\_includes\\plotly'
-savefile = plotpath+'\\Cases-Positivity-WI.html'
+savefile = plotpath+'\\Pos-Positivity-WI.html'
 
 
 fig = covid.plotly_twolines(
