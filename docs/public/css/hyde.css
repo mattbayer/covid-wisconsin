@@ -111,6 +111,15 @@ a.sidebar-nav-item:focus {
   font-weight: bold;
 }
 
+/* Dashboard
+ * 
+ * Special pages primarily for displaying graphs.
+ */
+
+.dashboard p {
+  font-size: 0.8rem;
+}
+
 /* Dashboard nav */
 .dashboard-nav-item {
   font-size: 1.1rem;
