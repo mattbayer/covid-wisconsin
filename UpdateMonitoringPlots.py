@@ -30,6 +30,9 @@ pos_df['Reported Cases'] = widata.set_index('Date')['POS_NEW']
 pos_df = pos_df.reset_index()
 pos_df = pos_df.rename(columns={'Positive': 'Positive tests', 'Percent Positive': 'Percent positive'})
 
+# convert literal percent to proper decimal so interpreted correctly in plot
+pos_df['Percent positive'] = pos_df['Percent positive'] / 100
+
 # cut off latest date, misleading data
 pos_df = pos_df[pos_df.Date < pos_df.Date.max()]
 
@@ -43,7 +46,7 @@ fig = covid.plotly_twolines(
     'Positive tests', 
     'Percent positive',
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
-    secondary_scale=1/250,
+    secondary_scale=1/25000,
     date_min=datetime.datetime(2021,1,15),
     range_max=2000,
     col1_mode='avg-bar',
@@ -57,10 +60,12 @@ fig = covid.plotly_twolines(
     )
 
 fig.update_xaxes(title_text='Date of test result')
+fig.update_yaxes(secondary_y=True, tickformat=',.0%')
+fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
-# os.startfile(savefile)
+os.startfile(savefile)
 
