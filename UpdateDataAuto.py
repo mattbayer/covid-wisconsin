@@ -31,7 +31,7 @@ covid.plotly_casetest(sourcedata=state,
                       date_col='Date', 
                       savefile=plotpath + '\\Cases-Tests-WI.html',
                       date_min=datetime.datetime(2021,1,15),
-                      range_max=5000,
+                      range_max=2000,
                       showfig=False,
                       )
 
@@ -42,9 +42,11 @@ covid.plotly_deadhosp(sourcedata=state,
                       date_col='Date', 
                       savefile=plotpath + '\\Deaths-Hosp-WI.html',
                       date_min=datetime.datetime(2021,1,15),
-                      range_max=180,
+                      range_max=100,
                       showfig=False,
                       )
+
+#%% Dashboard - monitoring plots
 
 try:
     import UpdateMonitoringPlots
