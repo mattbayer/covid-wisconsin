@@ -8,6 +8,7 @@ Created on Wed Jun 30 10:48:03 2021
 """
 
 import pandas as pd
+import geopandas as gpd
 import datetime
 from plotly.offline import plot as pplot
 import plotly.express as px
@@ -68,4 +69,5 @@ fig.write_html(
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
+
 
