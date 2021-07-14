@@ -69,10 +69,13 @@ def plotly_colorbubble(
     fig.update_layout(title=plotlabels['title'])
     
     
-    # Get latitude and longitude of centroids for plotting the bubbles
+    # Get latitude and longitude of centroids for plotting the bubbles, 
+    # if not already set.
     # This will give warning but I don't care
-    geodata['plotlon'] = geodata.geometry.centroid.x
-    geodata['plotlat'] = geodata.geometry.centroid.y    
+    if 'plotlon' not in geodata.columns:
+        geodata['plotlon'] = geodata.geometry.centroid.x
+    if 'plotlat' not in geodata.columns:
+        geodata['plotlat'] = geodata.geometry.centroid.y    
     
     # Create display names for tooltip
     if location_names is None:

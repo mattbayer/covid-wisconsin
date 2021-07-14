@@ -84,7 +84,7 @@ countiesWI['Hospitalizations per 100K'] = countiesWI['Hospitalizations'] / count
 countiesWI['plotlon'] = countiesWI.geometry.centroid.x
 countiesWI['plotlat'] = countiesWI.geometry.centroid.y
 # move Milwaukee's plot center to the right a bit to make more room for its bubble
-countiesWI.loc['Milwaukee', 'plotlon'] = countiesWI.loc['Milwaukee', 'plotlon'] + 0.15
+countiesWI.loc['Milwaukee', 'plotlon'] = countiesWI.loc['Milwaukee', 'plotlon'] + 0.07
 
 # append 'County' for display names
 display_names = [n + ' County' for n in countiesWI.index]
