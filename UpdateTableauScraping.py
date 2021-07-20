@@ -148,7 +148,7 @@ try:
     vax_age = vax_age.merge(vax_age_complete)
     
     # add date
-    repdate = vax_dash.getWorksheet('Title Header').data.iloc[0,1]
+    repdate = vax_dash.getWorksheet('Title Header').data.iloc[0,-1]
     vax_age.insert(0, 'Reporting date', repdate)
     
     
