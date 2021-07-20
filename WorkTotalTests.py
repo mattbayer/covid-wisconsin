@@ -21,15 +21,30 @@ import os
 
 # manually downloaded file - positives and tests
 test_file = "data\\By_Test_Data_data_2020-12-02.csv"
+test = pd.read_csv(test_file)
+
+not_redundant = test['Measure Names'].unique()[0]
+test = test[test['Measure Names'] == not_redundant]
 
 
 # Load file and rearrange some stuff
-test = covid.read_bytest_wi(test_file)
+# test = covid.read_bytest_wi(test_file)
+# test = test.set_index('Date')
+# test = test.rename(columns={'Tests': 'New tests'})
+
+
+col_rename = {'Day of displaydateonly': 'Date', 'Positives': 'Cases', 'Totals': 'New tests' }
+
+test = test[col_rename.keys()]
+test = test.rename(columns=col_rename)
+test['Date'] = pd.to_datetime(test['Date'])
 test = test.set_index('Date')
-test = test.rename(columns={'Tests': 'New tests'})
+test = test.sort_index()
+
 
 # cumulative sum of tests
 test['Total tests'] = test['New tests'].expanding(1).sum()
+
 
 
 
