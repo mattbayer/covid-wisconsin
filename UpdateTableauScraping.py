@@ -104,6 +104,8 @@ except:
 
 #%% 
 try:
+    
+#%%
     # Vaccine by county and age
     # url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16129838459350/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     # updated url 18-May-2021:
@@ -124,7 +126,7 @@ try:
     
     col_rename = {'Age-value': 'Age group',
                   'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
-                  'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+                  'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Initiated %'
                   }
     
     # vax_age = vax_dash.worksheets[1].data[col_rename.keys()]
@@ -134,7 +136,7 @@ try:
     
     col_rename = {'Age-value': 'Age group',
                   'SUM(Initiation or completed count for TT)-alias': 'Completed #',
-                  'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+                  'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Completed %'
                   }
     
     # vax_age_complete = vax_complete.worksheets[8].data[col_rename.keys()]
@@ -162,11 +164,11 @@ try:
     
     race_rename = {'Race-alias': 'Race',
                    'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
-                   'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+                   'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Initiated %'
                    }
     ethn_rename = {'Ethnicity-value': 'Ethnicity',
                    'SUM(Initiation or completed count for TT)-alias': 'Initiated #',
-                   'AGG(Calc- Initiation or Full Coverage)-alias': 'Initiated %'
+                   'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Initiated %'
                    }
     
     # get worksheets by name
@@ -181,11 +183,11 @@ try:
     
     race_rename = {'Race-alias': 'Race',
                    'SUM(Initiation or completed count for TT)-alias': 'Completed #',
-                   'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+                   'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Completed %'
                    }
     ethn_rename = {'Ethnicity-value': 'Ethnicity',
                    'SUM(Initiation or completed count for TT)-alias': 'Completed #',
-                   'AGG(Calc- Initiation or Full Coverage)-alias': 'Completed %'
+                   'AGG(Calc- Initiation or Full Coverage (cap))-alias': 'Completed %'
                    }
     
     vax_race_complete = vax_complete.getWorksheet('Race vax/unvax county').data[race_rename.keys()]
@@ -209,6 +211,7 @@ try:
     update_file(vax_race_file, vax_race, on=['Reporting date', 'Race'])
     update_file(vax_ethn_file, vax_ethn, on=['Reporting date', 'Ethnicity'])
     
+#%%
 except:
     pass
 
