@@ -68,6 +68,6 @@ fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
-os.startfile(savefile)
+# os.startfile(savefile)
 
 
