@@ -147,9 +147,9 @@ display_names = [n + ' County' for n in countiesWI.index]
 popscale = 300
 
 # cases_size_factor = 0.06
-cases_size_factor = 0.01
+cases_size_factor = 0.06
 
-cases_color_range = [0, 28]
+cases_color_range = [0,20]
 
 #%% Change bubble map
 
@@ -221,10 +221,12 @@ def plotly_changebubble(
     geodata[currcol] = geodata[currcol].apply(lambda x: max(x,0))
     
     # Sort increased and decreased locations
-    threshold = 0.2
-    increase = geodata[currcol] / geodata[pastcol]
-    pick_increased = np.array(increase > (1+threshold))
-    pick_decreased = np.array(increase < (1-threshold))
+    threshold = 0.3
+    minchange = 20*size_factor
+    increasefrac = geodata[currcol] / geodata[pastcol]
+    increaseabs = abs(geodata[currcol] - geodata[pastcol])
+    pick_increased = np.array((increasefrac > (1+threshold)) & (increaseabs > minchange))
+    pick_decreased = np.array((increasefrac < (1-threshold) ) & (increaseabs > minchange))
     pick_neither = ~(pick_increased | pick_decreased)
     increased = geodata[pick_increased]
     decreased = geodata[pick_decreased]
@@ -247,13 +249,6 @@ def plotly_changebubble(
                 cmin=color_range[0],
                 cmax=color_range[1],
                 colorscale='Reds',
-                colorbar=dict(
-                    title=plotlabels['colorlabel'],
-                    yanchor='bottom',
-                    y=0.6,
-                    len=0.25,
-                    thickness=12,
-                    ),
                 ),
             line=dict(color=line_colors['marker']),
             hovertemplate=
@@ -291,7 +286,7 @@ def plotly_changebubble(
                     ),
                 ),
             line=dict(color=line_colors['marker']),
-            # No hover info, it will be included in the next bubble plot
+            # No hover info, it was included in the previous bubble plot
             hovertemplate=None,
             hoverinfo='skip', 
             name=currcol,
@@ -347,7 +342,7 @@ def plotly_changebubble(
                 size=decreased[pastcol], 
                 sizeref=size_factor,
                 sizemode='area',
-                color='rgba(255,255,255,0.4)',  # low opacity for fill
+                color='rgba(255,255,255,0.3)',  # low opacity for fill
                 # color=decreased[colorcol],
                 # cmin=color_range[0],
                 # cmax=color_range[1],
