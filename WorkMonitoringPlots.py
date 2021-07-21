@@ -110,13 +110,13 @@ col_rename = {'Date': 'Date', 'NAME': 'County', 'POS_NEW': 'Cases'}
 reduced = widata[col_rename.keys()]
 reduced = reduced.rename(columns=col_rename)
 
-avg_window = 7
+avg_window = 14
 
 # isolate cases
 cases = reduced.pivot(index='Date', columns='County', values='Cases')
 cases_avg = cases.rolling(window=avg_window, center=False).mean()
 currcases = cases_avg.iloc[-1]
-pastcases = cases_avg.iloc[-8]
+pastcases = cases_avg.iloc[-1-avg_window]
 
 # set any negative values to 0
 def zeroneg(x):
@@ -149,7 +149,7 @@ popscale = 300
 # cases_size_factor = 0.06
 cases_size_factor = 0.06
 
-cases_color_range = [0,20]
+cases_color_range = [0,15]
 
 #%% Change bubble map
 
@@ -194,7 +194,7 @@ def plotly_changebubble(
     
 
     # Colors for the background map (not used) and marker lines
-    line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray'}
+    line_colors = {'land':'lightgray', 'border':'darkgray', 'marker':'dimgray', 'past': 'gray'}
     
     
     # Background map
@@ -221,6 +221,9 @@ def plotly_changebubble(
     geodata[currcol] = geodata[currcol].apply(lambda x: max(x,0))
     
     # Sort increased and decreased locations
+    # Have both a proportional threshold and an absolute number threshold for
+    # when to display a concentric circle for change vs. only one circle for
+    # negligible change.
     threshold = 0.3
     minchange = 20*size_factor
     increasefrac = geodata[currcol] / geodata[pastcol]
@@ -245,10 +248,12 @@ def plotly_changebubble(
                 size=increased[currcol], 
                 sizeref=size_factor,
                 sizemode='area',
+                # color='tomato',
                 color=increased[colorcol],
                 cmin=color_range[0],
                 cmax=color_range[1],
                 colorscale='Reds',
+                opacity=0.6,
                 ),
             line=dict(color=line_colors['marker']),
             hovertemplate=
@@ -257,9 +262,9 @@ def plotly_changebubble(
                 plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
                 plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
                 '<extra></extra>',
-            name=currcol,
-            showlegend=False,
-            legendgroup=currcol,
+            showlegend=True,
+            legendgroup='Increasing',
+            name='Increasing',
             )
         )    
     # Inner - blue, past numbers
@@ -273,25 +278,26 @@ def plotly_changebubble(
                 size=increased[pastcol], 
                 sizeref=size_factor,
                 sizemode='area',
+                # color='white',
                 color=increased[colorcol],
                 cmin=color_range[0],
-                cmax=color_range[1],
+                cmax=color_range[1]*1.5,    # times 1.5 to make the color lighter, to make up for the overlap over the existing marker
                 colorscale=colorscale,
-                colorbar=dict(
-                    title=plotlabels['colorlabel'],
-                    yanchor='bottom',
-                    y=0.6,
-                    len=0.25,
-                    thickness=12,
-                    ),
+                # opacity=0.3,
+                # colorbar=dict(
+                #     title=plotlabels['colorlabel'],
+                #     yanchor='bottom',
+                #     y=0.6,
+                #     len=0.25,
+                #     thickness=12,
+                #     ),
                 ),
-            line=dict(color=line_colors['marker']),
+            line=dict(color=line_colors['past']),
             # No hover info, it was included in the previous bubble plot
             hovertemplate=None,
             hoverinfo='skip', 
-            name=currcol,
             showlegend=False,
-            legendgroup=currcol,
+            legendgroup='Increasing',
             )
         )    
     
@@ -325,9 +331,9 @@ def plotly_changebubble(
                 plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
                 plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
                 '<extra></extra>',
-            name=currcol,
-            showlegend=False,
-            legendgroup=currcol,
+            showlegend=True,
+            legendgroup='Steady',
+            name='Steady',
             )
         )
     
@@ -348,13 +354,13 @@ def plotly_changebubble(
                 # cmax=color_range[1],
                 # colorscale='Greys',
                 ),
-            line=dict(color=line_colors['marker']),
+            line=dict(color=line_colors['past']),
             # No hover info, it will be included in the next bubble plot
             hovertemplate=None,
             hoverinfo='skip', 
-            name=currcol,
-            showlegend=False,
-            legendgroup=currcol,
+            showlegend=True,
+            legendgroup='Decreasing',
+            name='Decreasing'
             )
         )    
     
@@ -388,9 +394,8 @@ def plotly_changebubble(
                 plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
                 plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
                 '<extra></extra>',
-            name=currcol,
             showlegend=False,
-            legendgroup=currcol,
+            legendgroup='Decreasing',
             )
         )    
     
@@ -401,25 +406,27 @@ def plotly_changebubble(
     dummy_lon = geodata.plotlon[idx] + 0.1*lon_range
     dummy_lat = geodata.plotlat[idx]
     
+    
+    
     # Bubble legend 
-    covid.plotly_add_bubblelegend(
-        fig, 
-        sizeref=size_factor, 
-        dummy_lon=dummy_lon, 
-        dummy_lat=dummy_lat, 
-        colorscale=colorscale,
-        line_color=line_colors['marker'],
-        legendgroup=None,
-        )     
+    # covid.plotly_add_bubblelegend(
+    #     fig, 
+    #     sizeref=size_factor, 
+    #     dummy_lon=dummy_lon, 
+    #     dummy_lat=dummy_lat, 
+    #     colorscale=colorscale,
+    #     line_color=line_colors['marker'],
+    #     legendgroup=None,
+    #     )     
         
     # Legend title
     fig.update_layout(
         legend_title_text=plotlabels['sizelabel'], 
-        legend_itemclick=False,
-        legend_itemdoubleclick=False,
+        # legend_itemclick=False,
+        # legend_itemdoubleclick=False,
         )
     
-    fig.update_layout(legend_itemsizing='trace')
+    fig.update_layout(legend_itemsizing='constant')
     
     # change margins to smaller than default to get map to be bigger
     fig.update_layout(margin=dict(l=30,b=20))
@@ -453,7 +460,7 @@ plotly_changebubble(
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=display_names,
-    plotlabels=dict(title='Cases by County<br>(Daily, 7-day avg)'),
+    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Change in Cases'),
     savefile='.\\docs\\_includes\\plotly\\Map-CaseChange-WI.html',
     fig_height=600,
     showfig=True,
