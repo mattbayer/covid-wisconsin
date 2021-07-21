@@ -96,7 +96,7 @@ cases_size_factor = 0.06
 hosp_size_factor = 0.015    # now fixed, new hospitalizations I think are very lagged, have more to do with reporting than actual hospitalizations
 # hosp_size_factor = cases_size_factor*.10   # so that bubbles are same size if hosp = 10% of cases 
 
-cases_color_range = [0, 28]
+cases_color_range = [0, 15]
 hosp_color_range=[0, 7]
 
 #%% Cases figure
