@@ -281,7 +281,7 @@ def plotly_changebubble(
                 # color='white',
                 color=increased[colorcol],
                 cmin=color_range[0],
-                cmax=color_range[1]*1.5,    # times 1.5 to make the color lighter, to make up for the overlap over the existing marker
+                cmax=color_range[1]*1.4,    # times 1.x to make the color lighter, to make up for the overlap over the existing marker
                 colorscale=colorscale,
                 # opacity=0.3,
                 # colorbar=dict(
@@ -460,7 +460,7 @@ plotly_changebubble(
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=display_names,
-    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Change in Cases'),
+    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Cases'),
     savefile='.\\docs\\_includes\\plotly\\Map-CaseChange-WI.html',
     fig_height=600,
     showfig=True,
