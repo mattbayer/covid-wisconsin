@@ -248,20 +248,23 @@ def plotly_changebubble(
                 size=increased[currcol], 
                 sizeref=size_factor,
                 sizemode='area',
-                # color='tomato',
-                color=increased[colorcol],
-                cmin=color_range[0],
-                cmax=color_range[1],
-                colorscale='Reds',
-                opacity=0.6,
+                color='darkmagenta',
+                # color=increased[colorcol],
+                # cmin=color_range[0],
+                # cmax=color_range[1],
+                # colorscale='Reds',
+                opacity=0.7,
                 ),
             line=dict(color=line_colors['marker']),
-            hovertemplate=
-                '<b>%{text}</b><br>' +
-                'Population: %{customdata:.0f}<br>' +
-                plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
-                plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
-                '<extra></extra>',
+            # hovertemplate=
+            #     '<b>%{text}</b><br>' +
+            #     'Population: %{customdata:.0f}<br>' +
+            #     plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
+            #     plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
+            #     '<extra></extra>',
+                # No hover info, it was included in the previous bubble plot
+            hovertemplate=None,
+            hoverinfo='skip', 
             showlegend=True,
             legendgroup='Increasing',
             name='Increasing',
@@ -271,8 +274,8 @@ def plotly_changebubble(
     fig.add_trace(
         go.Scattergeo(
             lon=increased.plotlon,
-            lat=increased.plotlat,
-            # text=location_names,
+            lat=increased.plotlat,            
+            text=location_names[pick_increased],
             customdata=increased[popcol],
             marker=dict(
                 size=increased[pastcol], 
@@ -281,9 +284,9 @@ def plotly_changebubble(
                 # color='white',
                 color=increased[colorcol],
                 cmin=color_range[0],
-                cmax=color_range[1]*1.4,    # times 1.x to make the color lighter, to make up for the overlap over the existing marker
+                cmax=color_range[1]*1.1,    # times 1.x to make the color lighter, to make up for the overlap over the existing marker
                 colorscale=colorscale,
-                # opacity=0.3,
+                opacity=1,
                 # colorbar=dict(
                 #     title=plotlabels['colorlabel'],
                 #     yanchor='bottom',
@@ -293,9 +296,15 @@ def plotly_changebubble(
                 #     ),
                 ),
             line=dict(color=line_colors['past']),
-            # No hover info, it was included in the previous bubble plot
-            hovertemplate=None,
-            hoverinfo='skip', 
+            hovertemplate=
+                '<b>%{text}</b><br>' +
+                'Population: %{customdata:.0f}<br>' +
+                plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
+                plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
+                '<extra></extra>',
+                # No hover info, it was included in the previous bubble plot
+            # hovertemplate=None,
+            # hoverinfo='skip', 
             showlegend=False,
             legendgroup='Increasing',
             )
@@ -316,6 +325,7 @@ def plotly_changebubble(
                 cmin=color_range[0],
                 cmax=color_range[1],
                 colorscale=colorscale,
+                opacity=0.8,
                 colorbar=dict(
                     title=plotlabels['colorlabel'],
                     yanchor='bottom',
@@ -379,6 +389,7 @@ def plotly_changebubble(
                 cmin=color_range[0],
                 cmax=color_range[1],
                 colorscale=colorscale,
+                opacity=0.8,
                 colorbar=dict(
                     title=plotlabels['colorlabel'],
                     yanchor='bottom',
