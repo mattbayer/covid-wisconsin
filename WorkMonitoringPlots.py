@@ -102,7 +102,7 @@ countiesWI = countiesWI.sort_index()
 countiesWI['Population'] = popdata
 
 
-#%%
+#%% Prep the data
 
 
 # reduce and rename columns
@@ -129,9 +129,6 @@ countiesWI['Cases'] = currcases.apply(zeroneg)
 countiesWI['Past cases'] = pastcases.apply(zeroneg)
 
 countiesWI['Cases per 100K'] = countiesWI['Cases'] / countiesWI['Population'] * 100000
-
-
-#%% Bubble map - size is numbers, color is per-population
 
 # get latitude and longitude of centroids of counties for plotting
 # this will give warning but I don't care
