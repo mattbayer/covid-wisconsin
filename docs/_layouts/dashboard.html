@@ -10,7 +10,9 @@ layout: default
         <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url | absolute_url }}">{{ node.title }}</a>
   {% endcomment %}  
 
-  <a class="dashboard-nav-item{% if page.url == '/dashboard/' %} active{% endif %}" href="{{ '/dashboard/' | absolute_url }}">State</a>
+  <a class="dashboard-nav-item{% if page.url == '/dashboard/' %} active{% endif %}" href="{{ '/dashboard/' | absolute_url }}">Tracking</a>
+  |
+  <a class="dashboard-nav-item{% if page.url == '/dashboard/state/' %} active{% endif %}" href="{{ '/dashboard/' | absolute_url }}">State</a>
   |
   <a class="dashboard-nav-item{% if page.url == '/dashboard/regional/' %} active{% endif %}" href="{{ '/dashboard/regional/' | absolute_url }}">Regional</a>
   |
