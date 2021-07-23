@@ -23,15 +23,24 @@ import os
 
 #%% Get the data
 
-# covid data
-widata = covid.read_covid_data_wi('state')
+# # covid data
+# widata = covid.read_covid_data_wi('state')
 
 start_date = pd.to_datetime('2021-03-01')
 end_date = pd.to_datetime('2021-08-06')
 
 plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
-plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
-plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
+# plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
+# plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
+
+
+
+#%% Get data by test date
+
+pos_df = covid.scrape_widash_postest()
+
+plotdata['Cases'] = pos_df.set_index('Date')['Positive']
+plotdata['Cases 7-day'] = plotdata.Cases.rolling(7).mean()
 
 #%% Alternative data sources to GISAID
 
@@ -54,10 +63,11 @@ wi['Week'] = pd.to_datetime(wi.week)
 wi = wi.set_index('Week')
 wi = wi[col_rename.keys()]
 wi = wi.rename(columns=col_rename)
-wi['Alpha fraction'] = wi['Alpha'] / wi['Total']
-wi['Delta fraction'] = wi['Delta'] / wi['Total']
+wi['Alpha (B.1.1.7) fraction'] = wi['Alpha'] / wi['Total']
+wi['Delta (B.1.617.2) fraction'] = wi['Delta'] / wi['Total']
+wi['Other strains'] = 1 - wi['Alpha (B.1.1.7) fraction'] - wi['Delta (B.1.617.2) fraction']
 
-wi.plot(y=['Alpha fraction', 'Delta fraction'])
+wi.plot(y=['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other strains'])
 
 
 
@@ -68,10 +78,10 @@ wi.plot(y=['Alpha fraction', 'Delta fraction'])
 # R1 = 0.75
 # start = 560
 
-model_start = pd.to_datetime('2021-05-23')
-DeltaR = 1.5   # factor that Delta's R exceeds the current mix of strains
-R1 = 0.73
-start = 310
+model_start = pd.to_datetime('2021-05-17')
+DeltaR = 1.77   # factor that Delta's R exceeds the current mix of strains
+R1 = 0.7
+start = 430
 
 N = (end_date - model_start).days + 1
 
