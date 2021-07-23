@@ -27,3 +27,4 @@ I am getting more pessimistic they will go higher, however, almost certainly bey
 
 
 Risk for a vaccinated person?
+Infections vs deaths...
