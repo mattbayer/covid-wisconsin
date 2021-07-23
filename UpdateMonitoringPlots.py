@@ -225,7 +225,7 @@ def plotly_changebubble(
     # when to display a concentric circle for change vs. only one circle for
     # negligible change.
     threshold = 0.3
-    minchange = 20*size_factor
+    minchange = 10*size_factor
     increasefrac = geodata[currcol] / geodata[pastcol]
     increaseabs = abs(geodata[currcol] - geodata[pastcol])
     pick_increased = np.array((increasefrac > (1+threshold)) & (increaseabs > minchange))
