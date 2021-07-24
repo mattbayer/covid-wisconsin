@@ -1308,6 +1308,40 @@ def scrape_widash_postest():
     return pos_df
 
 
+def scrape_widash_deaths():
+    """Scrape DHS Tableau dashboard for deaths by date of death.
+    Returns a DataFrame with columns Date, Confirmed, Probable, Total.
+    """
+
+    # load the tableau scraper function class
+    ts = tableauscraper.TableauScraper()
+    
+    death_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable_16214287829690/Countydailydeaths?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    ts.loads(death_url)
+    death_dash = ts.getWorkbook()
+    death_df = death_dash.worksheets[1].data
+    
+    # Select the relevant data and rename
+    col_rename = {'DAY(Epi Dt)-value': 'Date',
+                  'Measure Names-alias': 'Confirmed/Probable',
+                  'Measure Values-value': 'Deaths',
+                  }
+    death_df = death_df[col_rename.keys()]
+    death_df = death_df.rename(columns=col_rename)
+    death_df.Date = pd.to_datetime(death_df.Date)
+    
+    # Separate confirmed and probable into different columns
+    death_df = death_df.pivot(index='Date',columns='Confirmed/Probable', values='Deaths')
+    # and rename
+    death_df = death_df.rename(columns={'Confirmed case death': 'Confirmed', 'Probable case death': 'Probable'})
+    # and sum to Total
+    death_df['Total'] = death_df.Confirmed + death_df.Probable
+    
+    # Reset Date from index to column
+    death_df = death_df.reset_index()
+    
+    return death_df
+
 def update_covid_data_wi(dataset='state', save_path='.\\data'):
     """Update Covid data by downloading recent updates from WI DHS.
     This function downloads updated data, cleans it, then merges it with 
