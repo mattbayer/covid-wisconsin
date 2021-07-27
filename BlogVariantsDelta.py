@@ -21,26 +21,7 @@ import datetime
 import os
 
 
-#%% Get the data
 
-# # covid data
-# widata = covid.read_covid_data_wi('state')
-
-start_date = pd.to_datetime('2021-03-01')
-end_date = pd.to_datetime('2021-08-06')
-
-plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
-# plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
-# plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
-
-
-
-#%% Get data by test date
-
-pos_df = covid.scrape_widash_postest()
-
-plotdata['Cases'] = pos_df.set_index('Date')['Positive']
-plotdata['Cases 7-day'] = plotdata.Cases.rolling(7).mean()
 
 #%% Alternative data sources to GISAID
 
@@ -67,9 +48,9 @@ wi['Alpha (B.1.1.7)'] = wi['Alpha'] / wi['Total']
 wi['Delta (B.1.617.2)'] = wi['Delta'] / wi['Total']
 wi['Other strains'] = 1 - wi['Alpha (B.1.1.7)'] - wi['Delta (B.1.617.2)']
 
-wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other strains'])
+# wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other strains'])
 
-# plotly version
+#%% plotly version
 plotdata = wi #wi[['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other strains']]
 plotdata.index.name='Date'
 plotdata = plotdata.reset_index()
@@ -85,7 +66,7 @@ fig = px.area(
 savefile = '.\\docs\\assets\\plotly\\Variant-Fraction.html'
 fig.write_html(
     file=savefile,
-    height=400,
+    default_height=400,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
@@ -99,6 +80,52 @@ fig.write_image(
     engine='kaleido',
 )
 os.startfile(save_png)
+
+
+#%% Get case data by test date
+
+start_date = pd.to_datetime('2021-03-01')
+end_date = pd.to_datetime('2021-08-06')
+
+plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
+# plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
+# plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
+
+pos_df = covid.scrape_widash_postest()
+
+plotdata['Cases'] = pos_df.set_index('Date')['Positive']
+plotdata['Cases 7-day'] = plotdata.Cases.rolling(7).mean()
+
+#%% Plot cases by proportion of variants
+variants_temp = wi.copy()
+# advanced dates one week, so they're plotted in the middle of the sum range
+variants_temp.index = variants_temp.index + datetime.timedelta(days=7)
+
+plotdata['Alpha fraction'] = variants_temp['Alpha (B.1.1.7)']
+plotdata['Delta fraction'] = variants_temp['Delta (B.1.617.2)']
+plotdata['Other fraction'] = variants_temp['Other strains']
+plotdata[['Alpha fraction', 'Delta fraction', 'Other fraction']] = plotdata[['Alpha fraction', 'Delta fraction', 'Other fraction']].interpolate()
+
+plotdata['Alpha estimate'] = plotdata['Alpha fraction'] * plotdata['Cases 7-day']
+plotdata['Delta estimate'] = plotdata['Delta fraction'] * plotdata['Cases 7-day']
+plotdata['Other estimate'] = plotdata['Other fraction'] * plotdata['Cases 7-day']
+
+plotdata.index.name = 'Date'
+
+fig = px.area(
+    plotdata.reset_index(),
+    x='Date',
+    y=['Delta estimate', 'Alpha estimate', 'Other estimate'], 
+    labels={'value':'Cases', 'variable':'Virus strain'},
+    title='Cases by variant in WI')
+
+savefile = '.\\docs\\assets\\plotly\\Variant-Cases.html'
+fig.write_html(
+    file=savefile,
+    default_height=400,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 #%% Estimates
 
@@ -133,35 +160,16 @@ plotdata.loc[model_start:,'Model total'] = v1 + v2
 plotdata.index.name = 'Date'
 
 
-#%% Load gisaid estimates
-
-gisaid_all = pd.read_csv('data\\sequences\\gisaid-all-WI.csv')
-gisaid_b117 = pd.read_csv('data\\sequences\\gisaid-b117-WI.csv')
-
-variants = gisaid_all.groupby('Collection date').count()
-variants['All'] = variants['Accession ID']
-variants = variants.drop(['Virus name', 'Accession ID'], axis=1)
-variants['B117'] = gisaid_b117.groupby('Collection date').count()['Accession ID']
-variants = variants.fillna(0)
-
-var_smooth = variants.rolling(7).sum()
-variants['B117 fraction'] = var_smooth['B117'] / var_smooth['All']
-
-variants.index.name = 'Date'
-variants.index = pd.to_datetime(variants.index)
-variants = variants.loc[datetime.datetime(2021,1,1):datetime.datetime(2021,3,27)]
-
-plotdata['B117 estimate'] = plotdata['Cases 7-day'] * variants['B117 fraction']
 
 #%% Use covariants estimates
 
-plotdata2 = wi
+plotdata2 = wi.copy()
 # advanced dates one week, so they're plotted in the middle of the sum range
 plotdata2.index = plotdata2.index + datetime.timedelta(days=7)
 # limit dates
 plotdata2 = plotdata2.loc[(plotdata2.index >= start_date) & (plotdata2.index <= end_date)].copy()
-plotdata2['Delta estimate'] = plotdata['Cases 7-day'] * plotdata2['Delta fraction']
-plotdata2['Alpha estimate'] = plotdata['Cases 7-day'] * plotdata2['Alpha fraction']
+plotdata2['Delta estimate'] = plotdata['Cases 7-day'] * plotdata2['Delta (B.1.617.2)']
+plotdata2['Alpha estimate'] = plotdata['Cases 7-day'] * plotdata2['Alpha (B.1.1.7)']
 
 
 #%% Plot
