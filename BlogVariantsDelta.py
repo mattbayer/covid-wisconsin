@@ -63,13 +63,42 @@ wi['Week'] = pd.to_datetime(wi.week)
 wi = wi.set_index('Week')
 wi = wi[col_rename.keys()]
 wi = wi.rename(columns=col_rename)
-wi['Alpha (B.1.1.7) fraction'] = wi['Alpha'] / wi['Total']
-wi['Delta (B.1.617.2) fraction'] = wi['Delta'] / wi['Total']
-wi['Other strains'] = 1 - wi['Alpha (B.1.1.7) fraction'] - wi['Delta (B.1.617.2) fraction']
+wi['Alpha (B.1.1.7)'] = wi['Alpha'] / wi['Total']
+wi['Delta (B.1.617.2)'] = wi['Delta'] / wi['Total']
+wi['Other strains'] = 1 - wi['Alpha (B.1.1.7)'] - wi['Delta (B.1.617.2)']
 
-wi.plot(y=['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other strains'])
+wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other strains'])
+
+# plotly version
+plotdata = wi #wi[['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other strains']]
+plotdata.index.name='Date'
+plotdata = plotdata.reset_index()
+plotdata = plotdata[plotdata.Date >= pd.to_datetime('2021-01-15')]
+
+fig = px.area(
+    plotdata,
+    x='Date',
+    y=['Delta (B.1.617.2)', 'Alpha (B.1.1.7)', 'Other strains'], 
+    labels={'value':'Share of sequences', 'variable':'Virus strain'},
+    title='Coronavirus strain share in WI')
+
+savefile = '.\\docs\\assets\\plotly\\Variant-Fraction.html'
+fig.write_html(
+    file=savefile,
+    height=400,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 
+save_png = '.\\docs\\assets\\Variant-Fraction.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=400,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 #%% Estimates
 
