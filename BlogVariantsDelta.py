@@ -119,7 +119,7 @@ fig = px.area(
     x='Date',
     y=['Delta (B.1.617.2)', 'Alpha (B.1.1.7)', 'Other variants'], 
     # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
-    color_discrete_sequence=['darkgreen', 'tomato', 'gray'],
+    color_discrete_sequence=['darkblue', 'tomato', 'gray'],
     labels={'value':'Cases/day', 'variable':'Variant'},
     title='Estimated cases by variant in WI')
 
