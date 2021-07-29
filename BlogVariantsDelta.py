@@ -46,12 +46,12 @@ wi = wi[col_rename.keys()]
 wi = wi.rename(columns=col_rename)
 wi['Alpha (B.1.1.7)'] = wi['Alpha'] / wi['Total']
 wi['Delta (B.1.617.2)'] = wi['Delta'] / wi['Total']
-wi['Other strains'] = 1 - wi['Alpha (B.1.1.7)'] - wi['Delta (B.1.617.2)']
+wi['Other variants'] = 1 - wi['Alpha (B.1.1.7)'] - wi['Delta (B.1.617.2)']
 
-# wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other strains'])
+# wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other variants'])
 
 #%% plotly version
-plotdata = wi #wi[['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other strains']]
+plotdata = wi #wi[['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other variants']]
 plotdata.index.name='Date'
 plotdata = plotdata.reset_index()
 plotdata = plotdata[plotdata.Date >= pd.to_datetime('2021-01-15')]
@@ -59,9 +59,10 @@ plotdata = plotdata[plotdata.Date >= pd.to_datetime('2021-01-15')]
 fig = px.area(
     plotdata,
     x='Date',
-    y=['Delta (B.1.617.2)', 'Alpha (B.1.1.7)', 'Other strains'], 
-    labels={'value':'Share of sequences', 'variable':'Virus strain'},
-    title='Coronavirus strain share in WI')
+    y=['Delta (B.1.617.2)', 'Alpha (B.1.1.7)', 'Other variants'], 
+    color_discrete_sequence=['darkblue', 'tomato', 'gray'],
+    labels={'value':'Variant share', 'variable':'Variant'},
+    title='Coronavirus variant share in WI')
 
 savefile = '.\\docs\\assets\\plotly\\Variant-Fraction.html'
 fig.write_html(
@@ -84,8 +85,8 @@ os.startfile(save_png)
 
 #%% Get case data by test date
 
-start_date = pd.to_datetime('2021-03-01')
-end_date = pd.to_datetime('2021-08-06')
+start_date = pd.to_datetime('2021-01-15')
+end_date = pd.to_datetime('2021-07-27')
 
 plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
 # plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
@@ -103,21 +104,24 @@ variants_temp.index = variants_temp.index + datetime.timedelta(days=7)
 
 plotdata['Alpha fraction'] = variants_temp['Alpha (B.1.1.7)']
 plotdata['Delta fraction'] = variants_temp['Delta (B.1.617.2)']
-plotdata['Other fraction'] = variants_temp['Other strains']
+plotdata['Other fraction'] = variants_temp['Other variants']
 plotdata[['Alpha fraction', 'Delta fraction', 'Other fraction']] = plotdata[['Alpha fraction', 'Delta fraction', 'Other fraction']].interpolate()
 
-plotdata['Alpha estimate'] = plotdata['Alpha fraction'] * plotdata['Cases 7-day']
-plotdata['Delta estimate'] = plotdata['Delta fraction'] * plotdata['Cases 7-day']
-plotdata['Other estimate'] = plotdata['Other fraction'] * plotdata['Cases 7-day']
+plotdata['Alpha (B.1.1.7)'] = plotdata['Alpha fraction'] * plotdata['Cases 7-day']
+plotdata['Delta (B.1.617.2)'] = plotdata['Delta fraction'] * plotdata['Cases 7-day']
+plotdata['Other variants'] = plotdata['Other fraction'] * plotdata['Cases 7-day']
 
 plotdata.index.name = 'Date'
+plotdata = plotdata[~np.isnan(plotdata['Other variants'])]
 
 fig = px.area(
     plotdata.reset_index(),
     x='Date',
-    y=['Delta estimate', 'Alpha estimate', 'Other estimate'], 
-    labels={'value':'Cases', 'variable':'Virus strain'},
-    title='Cases by variant in WI')
+    y=['Delta (B.1.617.2)', 'Alpha (B.1.1.7)', 'Other variants'], 
+    # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
+    color_discrete_sequence=['darkgreen', 'tomato', 'gray'],
+    labels={'value':'Cases/day', 'variable':'Variant'},
+    title='Estimated cases by variant in WI')
 
 savefile = '.\\docs\\assets\\plotly\\Variant-Cases.html'
 fig.write_html(
@@ -127,7 +131,20 @@ fig.write_html(
     )      
 os.startfile(savefile)
 
+
+
+save_png = '.\\docs\\assets\\Variant-Cases.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=400,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
 #%% Estimates
+
+exit
 
 # model_start = pd.to_datetime('2021-05-09')
 # DeltaR = 1.5   # factor that Delta's R exceeds the current mix of strains
