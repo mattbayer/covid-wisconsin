@@ -36,7 +36,7 @@ death_df = covid.scrape_widash_deaths()
 # Combine in one DF
 pos_lag = pos_df[['Date', 'Positive']]
 pos_lag.Date = pos_lag.Date + datetime.timedelta(days=lag)
-lagcol = 'Positive tests +' + str(lag) + ' days'
+lagcol = 'Positives +' + str(lag) + ' days'
 
 plotdata = pos_df.set_index('Date')
 plotdata[lagcol] = pos_lag.set_index('Date')['Positive']
@@ -47,7 +47,6 @@ plotdata = plotdata.reset_index()
 # Make a plot
 plotpath = '.\\docs\\_includes\\plotly'
 savefile = plotpath+'\\Cases-Deaths-WI.html'
-
 
 fig = covid.plotly_twolines(
     plotdata, 
@@ -71,11 +70,22 @@ fig.update_xaxes(title_text='Date of death')
 # fig.update_yaxes(secondary_y=True, tickformat=',.0%')
 # fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
+
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
+
+
+save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=400,
+    engine='kaleido',
+)
+os.startfile(save_png)
 
 #%%
 exit
