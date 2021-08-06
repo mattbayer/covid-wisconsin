@@ -22,10 +22,4 @@ So a number of serious side effects have now emerged from the vaccines, but they
 
 It is admittedly a closer comparison for children and teens. (Though at this point we're really comparing small numbers, it's like getting struck by lightning vs. being eaten by a shark.) Myocarditis, which the post mentions, is the most serious example I know of. [The CDC has a report on it](https://www.cdc.gov/mmwr/volumes/70/wr/mm7027e2.htm#T2_down), which says the highest incidence observed is in males aged 12-17, with 70 cases per million people vaccinated.
 
-It appears no one has died of the myocarditis, so it seems fair to compare it to rates of Covid ICU or hospitalization. In Wisconsin for ages 10-19, there have been 21 cases in the ICU and 781 hospitalized, out of 75000 total Covid cases. Using the same 3-times multiplier as before, that comes to 93 ICU cases per million Covid infections or 3500 hospitalizations per million Covid infections (or 0.35%). Those are pretty low rates! But they are still higher than the myocarditis rate. 
-
-
-
-
-
-When it comes to kids, *possibly* we're at a situation where the serious risk of Covid is low enough that the vaccine might not be worth it. But the point is that the risk from either is very very low. It's like comparing getting struck by lightning to being eaten by a shark.
+It appears no one has died of the myocarditis, so it seems fair to compare it to rates of Covid ICU or hospitalization. In Wisconsin for ages 10-19, there have been 21 cases in the ICU and 781 hospitalized, out of 75000 total Covid cases. Using the same 3-times multiplier as before, that comes to 93 ICU cases per million Covid infections or 3500 hospitalizations per million Covid infections (or 0.35%). Those are pretty low rates! This is the age bracket at the very lowest risk of bad results from Covid. But the risk is still higher than the risk of myocarditis from the vaccine. 
