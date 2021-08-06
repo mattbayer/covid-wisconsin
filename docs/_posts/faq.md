@@ -1,0 +1,31 @@
+---
+layout: post
+title: Covid FAQ
+hidden: true
+---
+
+The post says "the vaccine has undergone rigorous testing, has been "approved" and is safe and effective, none of those claims are true."  I think all of those claims are true.
+
+First, the vaccines did undergo rigorous testing. The clinical trials were large and rigorous, to my understanding to a degree equal to any other medication or vaccine. Prizer's trial, for example, gave the vaccine to 19,000 people and had another 19,000 as a control. There is a scientist blogger I trust on these things, Derek Lowe, and [here is his post on the clinical data presented to the FDA at the time of the hearing on emergency use authorization](https://blogs.sciencemag.org/pipeline/archives/2020/12/09/the-fda-weighs-its-first-coronavirus-vaccine).
+
+And they are effective. [This plot](https://blogs.sciencemag.org/pipeline/wp-content/uploads/sites/2/2020/12/Pfizer-first-dose.png) from the Pfizer FDA submission made the rounds of the internet, and shows how Covid cases rose steadily for the placebo study group but flatlined for the vaccine group. The Delta variant has reduced that effectiveness somewhat, but not very much (contrary to the muddled and alarmist recent stuff from the CDC and media). And good thing, because it means this coming wave of infections is not going to result in nearly as many deaths as previous waves. 
+
+It is true that the coronavirus vaccines are not fully "approved" by the FDA, but instead have so far only received an "Emergency Use Authorization." But I think this is more of a legal and bureaucratic difference than a scientific one. At least for these vaccines, the clinical trials required for EUA were no different than for full approval, and in fact the companies are going to be applying for full approval without doing any additional trials. 
+
+From what I can find, the only signifcant difference between EUA and approval in terms of safety data is "First, the FDA wants to see longer follow-up of trial participants, particularly at least six months of safety data (compared to the two months required for EUA submission). Second, the FDA needs more detailed chemistry, manufacturing, and control data (including requiring facility inspections) in a BLA submission." [Link here](https://blog.petrieflom.law.harvard.edu/2021/06/15/whats-the-difference-between-vaccine-approval-bla-and-authorization-eua/).
+
+So if someone wanted to wait until full approval, I think that's reasonable, it does give the vaccines a little extra review and time to look at safety. But to call the existing authorization a "medical experiment" is inaccurate and, I suspect, done purposely to scare people.
+
+Finally, I think the data we have do show that the vaccines are safe. Serious side effects are real, of course, but the data shows they are rare. You can't take one story of serious side effects out of the hundreds of millions of people who have gotten the vaccine and conclude that it's not safe. I see that as analogous to how the media can fasten on the one story they can find of a child who died from Covid, and then that becomes the rationale to shut down schools. You obviously have to weigh the costs and benefits of things.
+
+So a number of serious side effects have now emerged from the vaccines, but they have all been rare on the level of several or 10s of incidents per million people vaccinated. [This is my Derek Lowe blog on side effects](https://blogs.sciencemag.org/pipeline/archives/2021/07/13/more-on-vaccine-side-effects). For most age groups, this doesn't even compare with the risk of Covid. For example, in Wisconsin among people 40-49 years old there have been 145 deaths out of 90,000 Covid cases. Say there have been 3 times as many infections as confirmed cases, that comes to more than 500 deaths per million people infected by Covid. That's a lot more dangerous than the vaccines. (This data is at the [WI DHS website](https://www.dhs.wisconsin.gov/covid-19/cases.htm), scroll to the bottom for the table.)
+
+It is admittedly a closer comparison for children and teens. (Though at this point we're really comparing small numbers, it's like getting struck by lightning vs. being eaten by a shark.) Myocarditis, which the post mentions, is the most serious example I know of. [The CDC has a report on it](https://www.cdc.gov/mmwr/volumes/70/wr/mm7027e2.htm#T2_down), which says the highest incidence observed is in males aged 12-17, with 70 cases per million people vaccinated.
+
+It appears no one has died of the myocarditis, so it seems fair to compare it to rates of Covid ICU or hospitalization. In Wisconsin for ages 10-19, there have been 21 cases in the ICU and 781 hospitalized, out of 75000 total Covid cases. Using the same 3-times multiplier as before, that comes to 93 ICU cases per million Covid infections or 3500 hospitalizations per million Covid infections (or 0.35%). Those are pretty low rates! But they are still higher than the myocarditis rate. 
+
+
+
+
+
+When it comes to kids, *possibly* we're at a situation where the serious risk of Covid is low enough that the vaccine might not be worth it. But the point is that the risk from either is very very low. It's like comparing getting struck by lightning to being eaten by a shark.
