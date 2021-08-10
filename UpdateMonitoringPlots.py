@@ -147,9 +147,9 @@ display_names = [n + ' County' for n in countiesWI.index]
 popscale = 300
 
 # cases_size_factor = 0.06
-cases_size_factor = 0.06
+cases_size_factor = 0.12
 
-cases_color_range = [0,15]
+cases_color_range = [0,30]
 
 #%% Change bubble map
 
