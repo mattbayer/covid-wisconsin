@@ -32,23 +32,43 @@ col_rename = {'WEEK(Episode Date Trunc)-value': 'Week of',
               }
 age_cases = age_cases[col_rename.keys()]
 age_cases = age_cases.rename(columns=col_rename)
-age_cases.Week = pd.to_datetime(age_cases.Week)
+age_cases['Week of'] = pd.to_datetime(age_cases['Week of'])
 
  
 
 #%% Plot
 htmlfile='docs\\assets\\plotly\\CaseRate-Age.html'
 save_png = '.\\docs\\assets\\CaseRate-Age.png'
+
+# line colors copied directly from DHS's plot
+colorset = {'<18': 'rgb(78,121,167)',
+            '18-24': 'rgb(242,142,43)',
+            '25-34': 'rgb(225,87,89)',
+            '35-44': 'rgb(118,183,178)',
+            '45-54': 'rgb(89,161,79)',
+            '55-64': 'rgb(237,201,72)',
+            '65+': 'rgb(176,122,161)'}
+
+# get desired order
+# first rename <18 so it naturally goes in the order I want, then sort, then 
+# rename back
+age_cases['Age group'] = age_cases['Age group'].replace('<18', '0<18')
+age_cases = age_cases.sort_values(['Age group', 'Week of'])
+age_cases['Age group'] = age_cases['Age group'].replace('0<18', '<18')
+age_cases.reset_index(drop=True)    
+
  
 fig = px.line(
     age_cases, 
     x='Week of',
     y='Case rate',
     color='Age group',
-    # color_discrete_map=colorset,
+    color_discrete_map=colorset,
     title='Case rate per population by age group',
     labels={'value': 'Cases per 100K'}
     )
+
+fig.update_traces(line_width=2.5)
 
 # save as html, with plotly JS library loaded from CDN
 fig.write_html(
@@ -60,6 +80,8 @@ fig.write_html(
 
 os.startfile(htmlfile)
 
+#%%
+exit
 
 #%% Cases by age data
 
