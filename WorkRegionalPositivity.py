@@ -5,6 +5,7 @@ Update plots for regional cases/tests and deaths/hospitalizations.
 
 import pandas as pd
 import datetime
+import os
 
 import covid
 
@@ -16,7 +17,7 @@ csv_file_pop = '.\\data\\Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-# widata = covid.download_covid_data_wi('county2')
+widata = covid.download_covid_data_wi('county2')
 # widata = covid.read_covid_data_wi('county')
 
 
@@ -62,19 +63,22 @@ regiondata = regiondata.rename(columns=col_rename)
 
 # convert to date and discard the time portion
 regiondata.Date = pd.to_datetime(regiondata.Date).apply(lambda d: d.date())
+regiondata = regiondata.sort_values('Date')
 
 
 #%% compute percent positive - NEED TO GROUP BY REGION
 regiondata['Percent positive'] = regiondata['Cases'] / regiondata['Tests']
 
-regiondata['Percent positive (7-day)'] = (regiondata['Cases'].rolling(7).mean() 
-                                          / regiondata['Tests'].rolling(7).mean())
+# compute 7-day averages inside region groups
+regiondata['Cases (7-day)'] = regiondata.groupby('Region').Cases.rolling(7).mean().reset_index(level=0, drop=True)
+regiondata['Tests (7-day)'] = regiondata.groupby('Region').Tests.rolling(7).mean().reset_index(level=0, drop=True) 
+regiondata['Percent positive (7-day avg)'] = regiondata['Cases (7-day)'] / regiondata['Tests (7-day)']
 
 
 #%% convert per-capita (per 100K)
 regiondata['RegionPop'] = regiondata.Region.apply(lambda n: pop_region[n])
 capita = regiondata.copy()
-datacols = ['Cases', 'Tests', 'Deaths']
+datacols = ['Cases', 'Tests', 'Deaths', 'Cases (7-day)', 'Tests (7-day)']
 capita[datacols] = regiondata[datacols].div(regiondata['RegionPop'], axis=0) * 100000
 
 
@@ -126,7 +130,7 @@ savefile = plotpath+'\\Cases-Positivity-Region.html'
 fig = covid.plotly_twolines(
     capita, 
     'Cases', 
-    'Percent positive',
+    'Percent positive (7-day avg)',
     groupby='Region',
     grouplist=region_ordered,
     groupcolors=colors,
