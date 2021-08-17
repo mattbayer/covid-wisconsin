@@ -383,10 +383,11 @@ def plotly_twolines(
         savefile='.\\temp.html',
         groupby=None,
         grouplist=None,
+        groupcolors=None,
+        ncol=None,
         secondary_scale=1,
         range_max=None,
         date_min=None,
-        groupcolors=None,
         col1_mode='avg-bar',
         col2_mode='avg',
         plotlabels=None,
@@ -403,10 +404,11 @@ def plotly_twolines(
     savefile    -- full path of file for saving the html of the figure
     groupby     -- name of column to use for splitting into a plot grid, such as region
     grouplist   -- list of members of groupby to plot. If None then plot first 9.
+    groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
+    ncol        -- number of columns for a plot grid. If None then use close to sqrt of groups
     secondary_scale -- scale factor of secondary axis, for column2. Max of secondary axis will be (scale) times larger than primary.
     range_max   -- max for primary y scale. Actual max will be padded by 5%. If None, then auto-calculate.
     date_min    -- min date for x axis. If None then use all.
-    groupcolors -- colors for outlining subplots, corresponding to entries in grouplist
     column1_bar -- if True, plot both an average line and a daily bar chart for column1.  If False, only the line.
     col1_mode   -- mode for column 1 - 'avg-bar' (plot both a 7-day average line and daily bars), 'avg' (only 7-day avg), 'bar' (only bar), 'line' (only line, no processing)
     col2_mode   -- mode for column 2 - 'avg' (plot line of 7-day avg), 'line' (just plot the values with a line) 
@@ -468,7 +470,8 @@ def plotly_twolines(
                 
     # create layout of plot grid
     nplots = len(grouplist)      
-    ncol = int(np.ceil(np.sqrt(nplots)))
+    if ncol is None:
+        ncol = int(np.ceil(np.sqrt(nplots)))
     nrow = int(np.ceil(nplots/ncol))
     
     # make subplot grid

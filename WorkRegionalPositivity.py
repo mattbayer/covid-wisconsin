@@ -125,6 +125,12 @@ covid.plotly_casetest(sourcedata=capita,
 plotpath = '.\\docs\\_includes\\plotly'
 savefile = plotpath+'\\Cases-Positivity-Region.html'
 
+region_ordered2 = ['Northwest', 'Northeast', 
+                   'North Central', 'Fox Valley', 
+                   'Western', 'Southeast',
+                   'Madison', 'Milwaukee',
+                   'South Central']
+colors2 = [color_dict[r] for r in region_ordered2]
 
 
 fig = covid.plotly_twolines(
@@ -132,8 +138,9 @@ fig = covid.plotly_twolines(
     'Cases', 
     'Percent positive (7-day avg)',
     groupby='Region',
-    grouplist=region_ordered,
-    groupcolors=colors,
+    grouplist=region_ordered2,
+    groupcolors=colors2,
+    ncol=2,
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/400,
     date_min=datetime.datetime(2021,1,15),
@@ -151,6 +158,32 @@ fig = covid.plotly_twolines(
 # fig.update_xaxes(title_text='Date of test result')
 fig.update_yaxes(secondary_y=True, tickformat=',.0%')
 fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
+
+fig.add_layout_image(
+    dict(
+        source='.\\docs\\assets\\Map-Regions-Small.png',
+        xref="paper", yref="paper",
+        x=1, y=1.05,
+        sizex=0.2, sizey=0.2,
+        xanchor="right", yanchor="bottom"
+    )
+)
+
+# # Add image of regions
+# fig.add_layout_image(
+#     dict(
+#         x=0.6,
+#         sizex=0.3,
+#         y=0.2,
+#         sizey=0.2,
+#         xref='paper',
+#         yref='paper',
+#         opacity=1.0,
+#         layer='above',
+#         sizing='fill',
+#         
+#     )
+# )
 
 fig.write_html(
     file=savefile,
