@@ -161,11 +161,11 @@ fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
 fig.add_layout_image(
     dict(
-        source='.\\docs\\assets\\Map-Regions-Small.png',
+        source='https://covid-wisconsin.com/assets/Map-Regions-Small.png',
         xref="paper", yref="paper",
-        x=1, y=1.05,
-        sizex=0.2, sizey=0.2,
-        xanchor="right", yanchor="bottom"
+        x=0.63, y=-0.1,
+        sizex=0.3, sizey=0.3,
+        xanchor='left', yanchor='bottom'
     )
 )
 
