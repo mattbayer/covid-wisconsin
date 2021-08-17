@@ -21,7 +21,17 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()
 
+#%% Regional cases / positivity plot
 
+# county = covid.download_covid_data_wi('county2')
+
+
+
+
+
+
+#%% 
+exit
 
 #%% Plot delay between cases and deaths
 

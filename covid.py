@@ -1236,7 +1236,9 @@ def download_covid_data_wi(dataset='state'):
     # URLs for direct download of WI DHS data
     urls = {'state' : "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson",
             'county': "https://opendata.arcgis.com/datasets/3161f6e01d8141c6abe85a29ff7f3d3c_12.geojson",
-            'tract' : "https://opendata.arcgis.com/datasets/81a5286520a44e2c8f3546c840265f63_13.geojson"
+            'tract' : "https://opendata.arcgis.com/datasets/81a5286520a44e2c8f3546c840265f63_13.geojson",
+            'state2' : "https://opendata.arcgis.com/datasets/531828fa923c490c8f1895db13d0040e_11.geojson",
+            'county2': "https://opendata.arcgis.com/datasets/6496bdf64f7a44bba593862d04d01b2b_12.geojson",
             }
     
     if dataset not in urls.keys():
