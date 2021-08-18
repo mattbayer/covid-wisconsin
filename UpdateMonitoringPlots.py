@@ -459,7 +459,27 @@ def plotly_changebubble(
     return fig
 
 
-#%% Change bubble map
+
+#%% Cases figure
+plotly_changebubble(
+    countiesWI,
+    currcol='Cases',
+    pastcol='Past cases',
+    colorcol='Cases per 100K',
+    size_factor=cases_size_factor,
+    color_range=cases_color_range,
+    colorscale='Blues',
+    location_names=display_names,
+    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Cases'),
+    savefile='.\\docs\\_includes\\plotly\\Map-CaseChange-WI.html',
+    fig_height=600,
+    showfig=True,
+    )
+
+
+
+
+#%% Change bubble map alternative - increase in inner bubble
 
 
 def plotly_changebubble2(
@@ -705,22 +725,4 @@ def plotly_changebubble2(
         os.startfile(savefile)
     
     return fig
-
-
-#%% Cases figure
-plotly_changebubble(
-    countiesWI,
-    currcol='Cases',
-    pastcol='Past cases',
-    colorcol='Cases per 100K',
-    size_factor=cases_size_factor,
-    color_range=cases_color_range,
-    colorscale='Blues',
-    location_names=display_names,
-    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Cases'),
-    savefile='.\\docs\\_includes\\plotly\\Map-CaseChange-WI.html',
-    fig_height=600,
-    showfig=True,
-    )
-
 
