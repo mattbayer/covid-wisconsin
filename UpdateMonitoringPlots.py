@@ -147,7 +147,7 @@ display_names = [n + ' County' for n in countiesWI.index]
 popscale = 300
 
 # cases_size_factor = 0.06
-cases_size_factor = 0.12
+cases_size_factor = 0.15
 
 cases_color_range = [0,30]
 
@@ -266,8 +266,8 @@ def plotly_changebubble(
             hovertemplate=None,
             hoverinfo='skip', 
             showlegend=True,
-            legendgroup='Increasing',
-            name='Increasing',
+            legendgroup='Increase',
+            name='Increase',
             )
         )    
     # Inner - blue, past numbers
@@ -369,8 +369,8 @@ def plotly_changebubble(
             hovertemplate=None,
             hoverinfo='skip', 
             showlegend=True,
-            legendgroup='Decreasing',
-            name='Decreasing'
+            legendgroup='Decrease',
+            name='Decrease'
             )
         )    
     
