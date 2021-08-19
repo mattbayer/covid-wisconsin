@@ -455,8 +455,14 @@ def plotly_twolines(
         elif type(grouplist) is not list:
             grouplist = [grouplist]
             
-        data1 = data1[grouplist]
-        data2 = data2[grouplist]
+        # select only the data in the group, first taking out blank entries
+        select = grouplist.copy()
+        if None in select:
+            select.remove(None)
+        if '' in select:
+            select.remove('')
+        data1 = data1[select]
+        data2 = data2[select]
         
     # create variables for 7-day average
     avg1 = data1.rolling(window=7, center=False).mean()
@@ -502,6 +508,10 @@ def plotly_twolines(
     
     # loop over the plots
     for gg, group in enumerate(grouplist):
+        # leave space blank if nothing in that spot in grouplist
+        if group is None or len(group)==0:
+            continue
+        
         sub_row[gg] = int(gg / ncol) + 1
         sub_col[gg] = gg - (sub_row[gg]-1)*ncol + 1
     
@@ -516,7 +526,7 @@ def plotly_twolines(
             fig.add_trace(
                 go.Bar(
                     x=data1.index, 
-                    y=data1.iloc[:,gg],
+                    y=data1.loc[:,group],
                     name=data1_label, 
                     marker_color=plotcolors[2], 
                     hovertemplate='%{y:.0f}',
@@ -531,7 +541,7 @@ def plotly_twolines(
             fig.add_trace(
                 go.Scatter(
                     x=avg1.index, 
-                    y=avg1.iloc[:,gg], 
+                    y=avg1.loc[:,group], 
                     name=avg1_label, 
                     line_color=plotcolors[0], 
                     hovertemplate='%{y:.1f}',
@@ -545,7 +555,7 @@ def plotly_twolines(
             fig.add_trace(
                 go.Scatter(
                     x=data1.index, 
-                    y=data1.iloc[:,gg], 
+                    y=data1.loc[:,group], 
                     name=data1_label, 
                     line_color=plotcolors[0], 
                     hovertemplate='%{y:.1f}',
@@ -560,7 +570,7 @@ def plotly_twolines(
             fig.add_trace(
                 go.Scatter(
                     x=avg2.index, 
-                    y=avg2.iloc[:,gg], 
+                    y=avg2.loc[:,group], 
                     name=avg2_label, 
                     line_color=plotcolors[1], 
                     hovertemplate='%{y:.1f}',
@@ -574,7 +584,7 @@ def plotly_twolines(
             fig.add_trace(
                 go.Scatter(
                     x=data2.index, 
-                    y=data2.iloc[:,gg], 
+                    y=data2.loc[:,group], 
                     name=data2_label, 
                     line_color=plotcolors[1], 
                     hovertemplate='%{y:.1f}',

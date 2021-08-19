@@ -98,7 +98,8 @@ color_dict = {'Northwest':     'thistle',
               'Southeast': 'lightsteelblue',
               'South Central': 'pink',
               'Madison':       'red',
-              'Milwaukee':     'navy'}
+              'Milwaukee':     'navy',
+              '': 'black'}
 
 colors = [color_dict[r] for r in region_ordered]
 
@@ -125,11 +126,11 @@ covid.plotly_casetest(sourcedata=capita,
 plotpath = '.\\docs\\_includes\\plotly'
 savefile = plotpath+'\\Cases-Positivity-Region.html'
 
-region_ordered2 = ['Northwest', 'Northeast', 
-                   'North Central', 'Fox Valley', 
-                   'Western', 'Southeast',
-                   'Madison', 'Milwaukee',
-                   'South Central']
+region_ordered2 = ['Northwest', '',
+                   'North Central',  'Northeast',  
+                   'Western', 'Fox Valley',
+                   'South Central', 'Southeast',
+                   'Madison', 'Milwaukee']
 colors2 = [color_dict[r] for r in region_ordered2]
 
 
@@ -188,6 +189,7 @@ fig.add_layout_image(
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
+    default_height=1000,
     )      
 os.startfile(savefile)
 #%% Hospitalizations / Deaths
