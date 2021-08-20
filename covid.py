@@ -1243,8 +1243,10 @@ def download_covid_data_wi(dataset='state'):
     """Download one of the three datasets from WI DHS and return as DataFrame.
     Helper function for update_covid_data_wi().
 
-    dataset -- 'state', 'county', or 'tract'. Each dataset has its own 
-               assortment of data columns.
+    dataset --  'state', county', 'tract', 'state2', 'county2'. 
+                The '2' version is an updated dataset from DHS with different
+                data columns and definitions. State, county, and tract 
+                datasets each have different assortments of data included.
     """
     # URLs for direct download of WI DHS data
     urls = {'state' : "https://opendata.arcgis.com/datasets/859602b5d427456f821de3830f89301c_11.geojson",
