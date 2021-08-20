@@ -147,7 +147,7 @@ fig.add_layout_image(
     dict(
         source='https://covid-wisconsin.com/assets/Map-Regions-Small.png',
         xref="paper", yref="paper",
-        x=1.0, y=0.95,
+        x=1, y=0.95,
         sizex=0.28, sizey=0.28,
         xanchor='right', yanchor='middle'
     )
@@ -166,8 +166,9 @@ fig.update_layout(
         yanchor="top", 
         y=1, 
         xanchor="left", 
-        x=0.5,
+        x=0.48,
         font_size=13,
+        bgcolor='rgba(0,0,0,0)',
     )
 )     
 
