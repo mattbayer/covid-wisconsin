@@ -105,22 +105,22 @@ colors = [color_dict[r] for r in region_ordered]
 
 #%% Facet plot - Cases/Tests
 
-covid.plotly_casetest(sourcedata=capita,  
-                      case_col='Cases', 
-                      test_col='Tests', 
-                      date_col='Date',
-                      groupby='Region',
-                      grouplist=region_ordered, 
-                      groupcolors=colors,
-                      savefile=plotpath + '\\Cases-AllTests-Region.html',
-                      range_max=40,
-                      date_min=datetime.datetime(2021,1,15),
-                      plotlabels=dict(title='Regional Cases and Tests<br>(per 100K population)',
-                                      yaxis='Cases per 100K',
-                                      yaxis_secondary='Tested per 100K',
-                                      ),
-                      showfig=True,
-                      )
+# covid.plotly_casetest(sourcedata=capita,  
+#                       case_col='Cases', 
+#                       test_col='Tests', 
+#                       date_col='Date',
+#                       groupby='Region',
+#                       grouplist=region_ordered, 
+#                       groupcolors=colors,
+#                       savefile=plotpath + '\\Cases-AllTests-Region.html',
+#                       range_max=40,
+#                       date_min=datetime.datetime(2021,1,15),
+#                       plotlabels=dict(title='Regional Cases and Tests<br>(per 100K population)',
+#                                       yaxis='Cases per 100K',
+#                                       yaxis_secondary='Tests per 100K',
+#                                       ),
+#                       showfig=True,
+#                       )
 
 #%% Facet plot - Cases / % Positive
 plotpath = '.\\docs\\_includes\\plotly'
@@ -160,31 +160,35 @@ fig = covid.plotly_twolines(
 fig.update_yaxes(secondary_y=True, tickformat=',.0%')
 fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
+# add image of regions
 fig.add_layout_image(
     dict(
         source='https://covid-wisconsin.com/assets/Map-Regions-Small.png',
         xref="paper", yref="paper",
-        x=0.63, y=-0.1,
-        sizex=0.3, sizey=0.3,
-        xanchor='left', yanchor='bottom'
+        x=1.0, y=0.95,
+        sizex=0.28, sizey=0.28,
+        xanchor='right', yanchor='middle'
     )
 )
 
-# # Add image of regions
-# fig.add_layout_image(
-#     dict(
-#         x=0.6,
-#         sizex=0.3,
-#         y=0.2,
-#         sizey=0.2,
-#         xref='paper',
-#         yref='paper',
-#         opacity=1.0,
-#         layer='above',
-#         sizing='fill',
-#         
-#     )
-# )
+# Insert breaks into trace names for legend
+fig.update_traces(name='Percent positive<br>(7-day avg)',
+                  selector=dict(name='Percent positive (7-day avg)'))
+fig.update_traces(name='Cases<br>(7-day avg)',
+                  selector=dict(name='Cases (7-day avg)'))
+
+# move legend
+fig.update_layout(
+    legend=dict(
+        orientation='v',
+        yanchor="top", 
+        y=1, 
+        xanchor="left", 
+        x=0.5,
+        font_size=13,
+    )
+)     
+
 
 fig.write_html(
     file=savefile,
