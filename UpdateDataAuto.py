@@ -53,6 +53,11 @@ try:
 except:
     pass
 
+try:
+    import UpdateRegionalPositivity
+except:
+    pass
+
 #%% Dashboard - other plots
 
 try:
