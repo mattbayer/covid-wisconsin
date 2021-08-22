@@ -133,6 +133,7 @@ covid.plotly_twolines(
 
 #%% Get county-level cases
 
+# Scrape DHS website and clean data
 ccase_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirmedandprobable_16214282004490/Countydailycases?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 ts.loads(ccase_url)
 ccase_dash = ts.getWorkbook()
@@ -149,21 +150,52 @@ cases = cases[col_rename.keys()]
 cases = cases.rename(columns=col_rename)
 cases['Full Date'] = pd.to_datetime(cases['Full Date'])
 
+# Do 7-day average
+cases = cases.set_index('Full Date')
+cases = cases.rolling(7).mean()
+cases = cases.reset_index()
+
 # Convert dates for plotting overlapping years
 cases['Year'] = cases['Full Date'].apply(lambda d: d.year)
 
-cases['Day of year'] = cases['Full Date'].apply(lambda d: d.dayofyear)
+def plotdate(d):
+    # make everything 2020 since it has a leap day (going to 2021 throws an
+    # error for that leap day)
+    if d.year == 2021:
+        d = datetime.datetime(year=2020, month=d.month, day=d.day)
+    return d
+
+cases['Time of year'] = cases['Full Date'].apply(lambda d: plotdate(d))
+
+# cases['Day of year'] = cases['Full Date'].apply(lambda d: d.dayofyear)
 
 # trim weird extra data
 cases = cases[cases.Year >= 2020]
 
+
+
 #%%
+
+# show only Jun-Dec
+cases_trim = cases[cases['Time of year'] >= datetime.datetime(2020,6,1)]
+# trim last week 
+cases_trim = cases_trim[cases_trim['Full Date'] < cases_trim['Full Date'].max() - datetime.timedelta(days=7)]
+
 # Plotly plot
 fig = px.line(
-    cases,
-    x='Day of year',
+    cases_trim,
+    x='Time of year',
     y='Confirmed',
-    color='Year'
+    color='Year',
+    # color_discrete_sequence=['slateblue', 'slateblue'],
+    # line_dash_sequence=['']
+    labels={'Confirmed': 'Cases/day'},
+    title='WI Covid cases in summer and fall, by year<br>(7-day average confirmed)'
+    )
+
+# don't show year on x-axis
+fig.update_xaxes(
+    tickformat="%b",
     )
 
 savefile = '.\\docs\\assets\\plotly\\Cases-Year.html'
