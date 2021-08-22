@@ -137,6 +137,41 @@ ccase_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirme
 ts.loads(ccase_url)
 ccase_dash = ts.getWorkbook()
 
+cases = ccase_dash.getWorksheet('Cases with prob stacked').data
+
+col_rename= {'SUM(Stacked Confirm + Probable cases)-alias': 'Conf&&&*-Prob',
+             'SUM(Confirmed Cases By Epi Dt)-alias': 'Confirmed',
+             'SUM(Probable By Epi Dt)-alias': 'Probable',
+             'DAY(Epi Dt)-value': 'Full Date',
+             }
+
+cases = cases[col_rename.keys()]
+cases = cases.rename(columns=col_rename)
+cases['Full Date'] = pd.to_datetime(cases['Full Date'])
+
+# Convert dates for plotting overlapping years
+cases['Year'] = cases['Full Date'].apply(lambda d: d.year)
+
+cases['Day of year'] = cases['Full Date'].apply(lambda d: d.dayofyear)
+
+# trim weird extra data
+cases = cases[cases.Year >= 2020]
+
+#%%
+# Plotly plot
+fig = px.line(
+    cases,
+    x='Day of year',
+    y='Confirmed',
+    color='Year'
+    )
+
+savefile = '.\\docs\\assets\\plotly\\Cases-Year.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 
 #%% Get county-level deaths
