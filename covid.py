@@ -1333,6 +1333,7 @@ def scrape_widash_deaths():
     # load the tableau scraper function class
     ts = tableauscraper.TableauScraper()
     
+    # scrape the DHS dashboard
     death_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable_16214287829690/Countydailydeaths?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     ts.loads(death_url)
     death_dash = ts.getWorkbook()
@@ -1367,6 +1368,7 @@ def scrape_widash_agecases():
     # load the tableau scraper function class
     ts = tableauscraper.TableauScraper()
     
+    # scrape the DHS dashboard
     age_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesbyAgeOverTime/CasesbyAgeOverTime?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     ts.loads(age_url)
     age_dash = ts.getWorkbook()
