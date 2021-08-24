@@ -15,26 +15,8 @@ from tableauscraper import TableauScraper as TS
 
 #%% Scrape cases by age data
 
-age_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesbyAgeOverTime/CasesbyAgeOverTime?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
-ts = TS()
-ts.loads(age_url)
+age_cases = covid.scrape_widash_agecases()
 
-age_dash = ts.getWorkbook()
-
-age_cases = age_dash.getWorksheet('Weekly Cases').data
-
-# age_cases.to_csv('.\\data\\temp.csv')
-
-col_rename = {'WEEK(Episode Date Trunc)-value': 'Week of',
-              'New Age Groups-alias': 'Age group',
-              'CNTD(Incident ID)-alias': 'Cases',
-              'SUM(case rate by age for 100K )-alias': 'Case rate',
-              }
-age_cases = age_cases[col_rename.keys()]
-age_cases = age_cases.rename(columns=col_rename)
-age_cases['Week of'] = pd.to_datetime(age_cases['Week of'])
-
- 
 
 #%% Plot
 htmlfile='docs\\assets\\plotly\\CaseRate-Age.html'
@@ -49,13 +31,6 @@ colorset = {'<18': 'rgb(78,121,167)',
             '55-64': 'rgb(237,201,72)',
             '65+': 'rgb(176,122,161)'}
 
-# get desired order
-# first rename <18 so it naturally goes in the order I want, then sort, then 
-# rename back
-age_cases['Age group'] = age_cases['Age group'].replace('<18', '0<18')
-age_cases = age_cases.sort_values(['Age group', 'Week of'])
-age_cases['Age group'] = age_cases['Age group'].replace('0<18', '<18')
-age_cases.reset_index(drop=True)    
 
  
 fig = px.line(

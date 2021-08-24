@@ -1359,6 +1359,39 @@ def scrape_widash_deaths():
     
     return death_df
 
+def scrape_widash_agecases():
+    """Scrape DHS Tableau dashboard for cases by age group.
+    Returns a DataFrame with columns Week of, Age group, Cases, Case rate.
+    """
+    
+    # load the tableau scraper function class
+    ts = tableauscraper.TableauScraper()
+    
+    age_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesbyAgeOverTime/CasesbyAgeOverTime?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    ts.loads(age_url)
+    age_dash = ts.getWorkbook()
+    age_cases = age_dash.getWorksheet('Weekly Cases').data
+    
+    # Select the relevant data and rename
+    col_rename = {'WEEK(Episode Date Trunc)-value': 'Week of',
+                  'New Age Groups-alias': 'Age group',
+                  'CNTD(Incident ID)-alias': 'Cases',
+                  'SUM(case rate by age for 100K )-alias': 'Case rate',
+                  }
+    age_cases = age_cases[col_rename.keys()]
+    age_cases = age_cases.rename(columns=col_rename)
+    age_cases['Week of'] = pd.to_datetime(age_cases['Week of'])
+
+    # Get desired order of age groups (not alphabetical)
+    # first rename <18 so age order is also alphabetical, then sort, then 
+    # rename back
+    age_cases['Age group'] = age_cases['Age group'].replace('<18', '0<18')
+    age_cases = age_cases.sort_values(['Age group', 'Week of'])
+    age_cases['Age group'] = age_cases['Age group'].replace('0<18', '<18')
+    age_cases.reset_index(drop=True)       
+    
+    return age_cases
+    
 def update_covid_data_wi(dataset='state', save_path='.\\data'):
     """Update Covid data by downloading recent updates from WI DHS.
     This function downloads updated data, cleans it, then merges it with 
