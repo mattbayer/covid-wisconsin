@@ -17,6 +17,33 @@ from tableauscraper import TableauScraper as TS
 
 age_cases = covid.scrape_widash_agecases()
 
+#%%
+ts = TS()
+# scrape the specific kids dashboard
+kids_url = 'https://bi.wisconsin.gov/t/DHS/views/Youthagegroupovertime_16219547088360/School-basedages?:embed_code_version=3&:embed=y&:loadOrderID=2&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+ts.loads(kids_url)
+kids_dash = ts.getWorkbook()
+kids_cases = kids_dash.getWorksheet('Weekly Cases').data
+
+# Select the relevant data and rename
+col_rename = {'WEEK(Episode Date Trunc)-value': 'Week of',
+              'School entry groups-alias': 'Age group',
+              'CNTD(Incident ID)-alias': 'Cases',
+              'SUM(case rate by school entry age for 100K)-alias': 'Case rate',
+              }
+kids_cases = kids_cases[col_rename.keys()]
+kids_cases = kids_cases.rename(columns=col_rename)
+kids_cases['Week of'] = pd.to_datetime(kids_cases['Week of'])
+kids_cases['Cases'] = pd.to_numeric(kids_cases['Cases'])
+kids_cases['Case rate'] = pd.to_numeric(kids_cases['Case rate'])
+
+#%% Get population estimate to show the error in the data
+kids_cases['Population'] = 100000*kids_cases.Cases / kids_cases['Case rate']
+kids_cases[kids_cases['Week of'] == kids_cases['Week of'].max()]
+
+# compare sum across age groups, matches the age_cases <18 number pretty closely
+print(kids_cases.groupby('Week of').sum())
+print(age_cases[age_cases['Age group']=='<18'])
 
 #%% Plot
 htmlfile='docs\\assets\\plotly\\CaseRate-Age.html'
