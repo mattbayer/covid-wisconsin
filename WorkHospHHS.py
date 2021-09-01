@@ -40,3 +40,40 @@ widata.plot(x='date', y=['total_pediatric_patients_hospitalized_confirmed_covid'
 
 
 # Big question - numbers seem 50-100% higher than state data. Why?
+
+
+#%%
+statedata = covid.download_covid_data_wi('state2')
+
+#%%
+def clean_state2(state):
+    col_rename = {'POS_NEW_CONF': 'Cases',
+                  'DTH_CONF_Daily': 'Deaths',
+                  'TESTS_NEW': 'Tests',
+                  'Date': 'Date',
+                  }
+    state = state[col_rename.keys()]
+    state = state.rename(columns=col_rename)
+    # convert to date object and discard time portion
+    state.Date = pd.to_datetime(state.Date).apply(lambda d: d.date())
+    return state
+    
+state = clean_state2(statedata)
+
+# add hospital admissions to state data
+state = state.set_index('Date')
+state['Admissions'] = widata.set_index('date')['previous_day_admission_adult_covid_confirmed']
+state = state.reset_index()
+
+#%% Plots with mix and match data
+plotpath = '.\\docs\\assets\\plotly'
+
+covid.plotly_deadhosp(sourcedata=state, 
+                      hosp_col='Admissions', 
+                      dead_col='Deaths', 
+                      date_col='Date', 
+                      savefile=plotpath + '\\Deaths-Hosp-WI-HHS.html',
+                      # date_min=datetime.datetime(2021,1,15),
+                      range_max=100,
+                      showfig=True,
+                      )
