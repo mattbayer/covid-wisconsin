@@ -1360,6 +1360,36 @@ def scrape_widash_deaths():
     
     return death_df
 
+def scrape_widash_cases():
+    """Scrape DHS Tableau dashboard for cases by date of onset or diagnosis.
+    Returns a DataFrame with columns Date, Confirmed, Probable, Total.
+    """
+
+    # load the tableau scraper function class
+    ts = tableauscraper.TableauScraper()
+    
+    # scrape the DHS dashboard
+    case_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirmedandprobable_16214282004490/Countydailycases?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    ts.loads(case_url)
+    case_dash = ts.getWorkbook()
+    case_df = case_dash.getWorksheet('Cases with prob stacked').data
+    
+    # Select the relevant data and rename
+    col_rename = {'DAY(Epi Dt)-alias': 'Date',
+                  'SUM(Confirmed Cases By Epi Dt)-alias': 'Confirmed',
+                  'SUM(Probable By Epi Dt)-alias': 'Probable',
+                  'SUM(Stacked Confirm + Probable cases)-alias': 'Total'
+                  }
+    
+    case_df = case_df[col_rename.keys()]
+    case_df = case_df.rename(columns=col_rename)
+    case_df.Date = pd.to_datetime(case_df.Date)
+    
+    # get rid of excess entries - some reason lots of zeroes in the DF
+    case_df = case_df[case_df.Date >= pd.to_datetime('2020-01-01')]
+    
+    return case_df
+
 def scrape_widash_agecases():
     """Scrape DHS Tableau dashboard for cases by age group.
     Returns a DataFrame with columns Week of, Age group, Cases, Case rate.
