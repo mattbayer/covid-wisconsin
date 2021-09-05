@@ -1282,6 +1282,28 @@ def download_covid_data_wi(dataset='state'):
     
     return data_table
 
+def download_hhs_data_wi():
+    """ Download federal HHS hospitalization data for Wisconsin.
+    Returns DataFrame with columns Date, and many many other columns whose 
+    definition can be found at the HHS data site:
+    https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/g62h-syeh  
+    """
+    
+    # can directly filter on WI in API call to reduce data
+    hhs_wi_url = 'https://healthdata.gov/resource/g62h-syeh.json?state=WI'
+    
+    hosp = pd.read_json(hhs_wi_url)
+    
+    # convert date to capital letters - to match all my other data
+    hosp = hosp.rename(columns={'date':'Date'})
+    # convert date from string to datetime
+    hosp.Date = pd.to_datetime(hosp.Date.copy())
+    # sort by date    
+    hosp = hosp.sort_values('Date')    
+    
+    return hosp
+
+
 def scrape_widash_postest():
     """Scrape DHS Tableau dashboard for positives/tests.
     Returns a DataFrame with columns Date, Positive, Negative, 

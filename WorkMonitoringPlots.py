@@ -21,13 +21,106 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()
 
-#%% Regional cases / positivity plot
+#%% Deaths / cases plot
 
-# county = covid.download_covid_data_wi('county2')
+case_df = covid.scrape_widash_cases()
+death_df = covid.scrape_widash_deaths()
+hosp_df = covid.download_hhs_data_wi()
+
+#%% Put all data into one DF
+
+plotdata = case_df[['Date', 'Confirmed']]
+plotdata = plotdata.rename(columns={'Confirmed': 'Cases'})
+plotdata = plotdata.set_index('Date')
+plotdata['Deaths'] = death_df.set_index('Date')['Confirmed']
+plotdata['Admissions'] = hosp_df.set_index('Date')['previous_day_admission_adult_covid_confirmed']
+plotdata = plotdata.reset_index()
+
+#%% Plot Deaths / Cases
+# parameters for comparison
+lag = 12
+cfr = 0.012
+
+# Make a plot
+plotpath = '.\\docs\\_includes\\plotly'
+savefile = plotpath+'\\Deaths-Cases-WI.html'
+
+fig = covid.plotly_twolines(
+    plotdata, 
+    'Deaths',
+    'Cases', 
+    plotcolors=['firebrick', 'steelblue', 'rosybrown'],
+    secondary_scale=1/cfr,
+    # date_min=datetime.datetime(2021,1,15),
+    range_max=90,
+    col1_mode='avg-bar',
+    col2_mode='avg',
+    plotlabels = {'title': 'Deaths vs Cases - WI',
+                  'yaxis': 'Deaths',
+                  'yaxis_secondary': 'Cases',
+                  },
+    savefile=savefile,
+    showfig=False,
+    )
+
+fig.update_xaxes(title_text='Date of death / Date of test')
+# fig.update_yaxes(secondary_y=True, tickformat=',.0%')
+# fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
 
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 
+# save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
+# fig.write_image(
+#     save_png,
+#     width=700,
+#     height=400,
+#     engine='kaleido',
+# )
+# os.startfile(save_png)
+
+
+#%% Hospitalization plot
+
+# Make a plot
+plotpath = '.\\docs\\_includes\\plotly'
+savefile = plotpath+'\\Hosp-Cases-WI.html'
+
+hrate = 0.09
+
+fig = covid.plotly_twolines(
+    plotdata, 
+    'Admissions',
+    'Cases', 
+    plotcolors=['darkorange', 'steelblue', 'burlywood'],
+    secondary_scale=1/hrate,
+    # date_min=datetime.datetime(2021,1,15),
+    range_max=1000,
+    col1_mode='avg-bar',
+    col2_mode='avg',
+    plotlabels = {'title': 'Hospital Admissions vs Cases - WI',
+                  'yaxis': 'Admissions',
+                  'yaxis_secondary': 'Cases',
+                  },
+    savefile=savefile,
+    showfig=False,
+    )
+
+fig.update_xaxes(title_text='Date of admission / Date of test')
+# fig.update_yaxes(secondary_y=True, tickformat=',.0%')
+# fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
+
+
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 
 #%% 
@@ -101,62 +194,6 @@ os.startfile(save_png)
 exit
 
 
-#%%
-
-
-# add deaths; set index as date temporarily so they merge correctly
-cases = cases.set_index('Date')
-temp_deaths = covid.read_deathdate_wi(death_filename).set_index('Date')
-cases[death_latest] = temp_deaths['Confirm + Probable deaths']
-
-# add reported cases
-cases['Cases (reported)'] = state.set_index('Date').Cases
-cases['Deaths (reported)'] = state.set_index('Date').Deaths
-
-# # switch to reported
-# case_latest = 'Cases (reported)'
-# death_latest = 'Deaths (reported)'
-
-# state
-lag = 14
-cfr = 0.012
-
-# # Milwaukee
-# lag = 16
-# cfr = 0.01
-
-death2 = cases[death_latest].reset_index(drop=False)
-death2['Date'] = death2['Date'] - datetime.timedelta(days=lag)
-cases[death_latest] = death2.set_index('Date')[death_latest] / cfr
-
-cases = cases.rolling(7).mean()
-cases = cases.reset_index(drop=False)
-
-# cases.plot(x='Date', y=[case_latest, 'Cases (reported)'])
-
-# cases.plot(x='Date', y=[case_latest, death_latest])
-
-
-
-fig = px.line(
-    cases, 
-    x='Date',
-    y=[case_latest, death_latest], 
-    color_discrete_sequence=['steelblue', 'firebrick'],
-    title='Cases by test date vs Deaths by death date<br>'
-          +'(7-day avg, 14-day lag, CFR 1.2%)',
-    labels={'value': 'Cases / day'}
-    )
-fig.update_layout(legend_title='')
-
-pngfile = 'docs\\assets\\Cases-Deaths-Match_2021-04-15.png'
-fig.write_image(
-    pngfile,
-    width=700,
-    height=500,
-    engine='kaleido',
-    )
-os.startfile(pngfile)
 
 
 
