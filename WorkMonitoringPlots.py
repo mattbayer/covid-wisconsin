@@ -55,7 +55,7 @@ fig = covid.plotly_twolines(
     range_max=90,
     col1_mode='avg-bar',
     col2_mode='avg',
-    plotlabels = {'title': 'Deaths vs Cases - WI',
+    plotlabels = {'title': 'Deaths vs Cases - WI<br>(CFR '+str(cfr*100)+'%)',
                   'yaxis': 'Deaths',
                   'yaxis_secondary': 'Cases',
                   },
@@ -64,6 +64,8 @@ fig = covid.plotly_twolines(
     )
 
 fig.update_xaxes(title_text='Date of death / Date of test')
+# set background with same color as default, but with lower opacity to make it lighter
+fig.update_layout(plot_bgcolor='rgba(229, 236, 246, 0.7)')
 # fig.update_yaxes(secondary_y=True, tickformat=',.0%')
 # fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
 
@@ -74,15 +76,6 @@ fig.write_html(
     )      
 os.startfile(savefile)
 
-
-# save_png = '.\\docs\\assets\\Cases-Deaths-WI.png'
-# fig.write_image(
-#     save_png,
-#     width=700,
-#     height=400,
-#     engine='kaleido',
-# )
-# os.startfile(save_png)
 
 
 #%% Hospitalization plot
