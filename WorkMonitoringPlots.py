@@ -36,6 +36,25 @@ plotdata['Deaths'] = death_df.set_index('Date')['Confirmed']
 plotdata['Admissions'] = hosp_df.set_index('Date')['previous_day_admission_adult_covid_confirmed']
 plotdata = plotdata.reset_index()
 
+#%% Function to add shading to preliminary area of plot
+def shade_preliminary(fig, x0, x1):
+    # shading applied to the x range between x0 and x1
+    fig.add_shape(
+        type="rect",
+        xref='x', x0=x0, x1=x1,
+        yref='y domain', y0=0, y1=1,
+        line_color='rgba(0,0,0,0)',
+        fillcolor='rgba(0,0,0,0.2)',
+    )
+    fig.add_annotation(
+        xanchor='right', xref='x', x=x0,
+        yanchor='top', yref='y domain', y=1,
+        text='Preliminary<br>data',
+        font_color='rgb(0.5,0.5,0.5)',
+        align='right',
+        showarrow=False,
+        ) 
+
 #%% Plot Deaths / Cases
 # parameters for comparison
 lag = 12
@@ -66,8 +85,16 @@ fig = covid.plotly_twolines(
 fig.update_xaxes(title_text='Date of death / Date of test')
 # set background with same color as default, but with lower opacity to make it lighter
 fig.update_layout(plot_bgcolor='rgba(229, 236, 246, 0.7)')
-# fig.update_yaxes(secondary_y=True, tickformat=',.0%')
-# fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
+
+
+
+# shade the recent data using custom function
+shade_days = 14
+end_date = plotdata.Date.max()
+start_date = end_date - datetime.timedelta(days=shade_days) 
+
+shade_preliminary(fig, start_date, end_date)
+
 
 
 fig.write_html(
@@ -93,7 +120,7 @@ fig = covid.plotly_twolines(
     plotcolors=['darkorange', 'steelblue', 'burlywood'],
     secondary_scale=1/hrate,
     # date_min=datetime.datetime(2021,1,15),
-    range_max=1000,
+    range_max=600,
     col1_mode='avg-bar',
     col2_mode='avg',
     plotlabels = {'title': 'Hospital Admissions vs Cases - WI',
@@ -105,8 +132,16 @@ fig = covid.plotly_twolines(
     )
 
 fig.update_xaxes(title_text='Date of admission / Date of test')
-# fig.update_yaxes(secondary_y=True, tickformat=',.0%')
-# fig.update_traces(secondary_y=True, hovertemplate='%{y:.1%}')
+# set background with same color as default, but with lower opacity to make it lighter
+fig.update_layout(plot_bgcolor='rgba(229, 236, 246, 0.7)')
+
+
+# shade the recent data using custom function
+shade_days = 14
+end_date = plotdata.Date.max()
+start_date = end_date - datetime.timedelta(days=shade_days) 
+
+shade_preliminary(fig, start_date, end_date)
 
 
 fig.write_html(
