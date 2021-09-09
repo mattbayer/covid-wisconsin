@@ -637,8 +637,13 @@ def plotly_twolines(
         else:
             raise ValueError('Number of elements in groupcolors does not match number of elements in grouplist.')
     
+    # Some layout updates
+    # - lighter background color, same as default but with lower opacity
     fig.update_layout(title_text=plotlabels['title'],
-                      hovermode='x unified')
+                      hovermode='x unified',
+                      plot_bgcolor='rgba(229, 236, 246, 0.7)', 
+                      )
+    
     if nplots == 1:
         fig.update_layout(legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01))     
     else:
