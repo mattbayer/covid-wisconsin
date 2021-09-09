@@ -13,4 +13,4 @@ Source: WI DHS [county-level data](https://www.dhs.wisconsin.gov/covid-19/county
   {% include plotly/Hosp-Cases-WI.html %}
 </div>
 
-Source: [CDC hospitalizations](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/g62h-syeh) and WI DHS [cases](https://www.dhs.wisconsin.gov/covid-19/county.htm). CDC data is for previous day hospital admission with confirmed Covid.
+Source: [CDC hospitalizations](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/g62h-syeh) and [WI DHS cases](https://www.dhs.wisconsin.gov/covid-19/county.htm). CDC data is for previous day hospital admission with confirmed Covid.
