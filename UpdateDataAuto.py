@@ -58,6 +58,12 @@ try:
 except:
     pass
 
+#%% Dashboard - outcomes plots
+try:
+    import UpdateOutcomePlots
+except:
+    pass
+
 #%% Dashboard - other plots
 
 try:
