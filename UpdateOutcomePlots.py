@@ -42,13 +42,13 @@ def shade_preliminary(fig, x0, x1):
     fig.add_shape(
         type="rect",
         xref='x', x0=x0, x1=x1,
-        yref='y domain', y0=0, y1=1,
+        yref='paper', y0=0, y1=1,
         line_color='rgba(0,0,0,0)',
         fillcolor='rgba(0,0,0,0.2)',
     )
     fig.add_annotation(
         xanchor='right', xref='x', x=x0,
-        yanchor='top', yref='y domain', y=1,
+        yanchor='top', yref='paper', y=1,
         text='Preliminary<br>data',
         font_color='rgb(0.5,0.5,0.5)',
         align='right',
