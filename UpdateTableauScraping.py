@@ -65,7 +65,9 @@ def loads_with_retries(ts, url, retries):
 try:
     # url = 'https://bi.wisconsin.gov/t/DHS/views/VaccineDistribution/Allocated?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     # updated url 18-May-2021:
-    url = 'https://bi.wisconsin.gov/t/DHS/views/COVID-19VaccineAdministration/Allocated?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    # url = 'https://bi.wisconsin.gov/t/DHS/views/COVID-19VaccineAdministration/Allocated?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    # updated url 15-Sep-2021:
+    url = 'https://bi.wisconsin.gov/t/DHS/views/COVID-19VaccineAdministration/Administration?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     
     ts = TS()       
     ts = loads_with_retries(ts, url, 3)
@@ -100,7 +102,8 @@ try:
     update_file(man_file, manufacturer, on='Reporting date')
 
 except:
-    pass
+    print('Error in vaccine administration scraping')
+
 
 #%% 
 try:
@@ -110,6 +113,7 @@ try:
     # url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16129838459350/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     # updated url 18-May-2021:
     url = 'https://bi.wisconsin.gov/t/DHS/views/VaccinesAdministeredtoWIResidents_16212677845310/VaccinatedWisconsin-County?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    ts = TS()
     ts = loads_with_retries(ts, url, 3)
     vax_dash = ts.getWorkbook()
     vax_complete = vax_dash.setParameter('Initiation or Completion', 'Total population who have completed the series')
@@ -213,7 +217,8 @@ try:
     
 #%%
 except:
-    pass
+    print('Error in vaccine by age/race scraping')
+    
 
 #%% Get deaths by date of death
 try:
@@ -230,4 +235,5 @@ try:
     death_data.to_csv(death_file)
 
 except: 
-    pass
+    print('Error in deaths scraping')
+    
