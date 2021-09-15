@@ -51,27 +51,27 @@ covid.plotly_deadhosp(sourcedata=state,
 try:
     import UpdateMonitoringPlots
 except:
-    pass
+    print("UpdateMonitoringPlots error")
 
 try:
     import UpdateRegionalPositivity
 except:
-    pass
+    print("UpdateRegionalPositivity error")
 
 #%% Dashboard - outcomes plots
 try:
     import UpdateOutcomePlots
 except:
-    pass
+    print("UpdateOutcomePlots error")
 
 #%% Dashboard - other plots
 
 try:
     import UpdateGeo
 except:
-    pass
+    print("UpdateGeo error")
         
 try:
     import UpdateRegional
 except:
-    pass
+    print("UpdateRegional error")
