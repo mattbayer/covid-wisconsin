@@ -9,6 +9,7 @@ import pandas as pd
 import datetime
 from plotly.offline import plot as pplot
 import plotly.express as px
+import plotly.graph_objects as go
 import os
 
 import covid
@@ -16,15 +17,15 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()  
 
+#%% process monthly data
+
 case_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatus/CasesbyVaxStatus?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 hosp_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatus/HospitalizationsbyVaxStatus?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 death_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatus/DeathsbyVaxStatus?:embed_code_version=3&:embed=y&:loadOrderID=2&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 
-
 ts.loads(case_url)
 case_dash = ts.getWorkbook()
 
-#%% 
 cases = case_dash.getWorksheet('Cases').data
 col_rename = {'Month*-value': 'Month',
               'Measure Names-alias': 'Measure',
@@ -74,3 +75,75 @@ nonpre_num = vax_rate/1e5 * nonpre_pop
 non2_num = non_num - nonpre_num
 non2_pop = non_pop - nonpre_pop
 non2_rate = non2_num / non2_pop * 1e5
+
+
+#%% process age tables
+
+age_case_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Cases?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+age_hosp_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Hospitalizations?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+age_death_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Deaths?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+
+
+ts.loads(age_case_url)
+case_dash = ts.getWorkbook()
+
+
+#%% variable width graph
+# based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
+import numpy as np
+
+labels = ["<18","18-24","55-64","65+"]
+widths = {'Vax': np.array([10,20,30,40]),
+          'Unvax': np.array([50,30,20,10])}
+
+widths_total = widths['Vax'] + widths['Unvax']
+
+data = {
+    "Vax": [1,2,3,4],
+    "Unvax": [10,20,30,40]
+}
+
+fig = go.Figure()
+for key in data:
+    x = np.cumsum(widths_total) - widths['Unvax']
+    if key == 'Vax':
+        x = x - widths['Vax']
+        
+    fig.add_trace(go.Bar(
+        name=key,
+        y=data[key],
+        x=x,
+        width=widths[key],
+        offset=0,
+        customdata=np.transpose([labels, widths[key]*data[key]]),
+        texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
+        textposition="inside",
+        textangle=0,
+        textfont_color="white",
+        hovertemplate="<br>".join([
+            "label: %{customdata[0]}",
+            "width: %{width}",
+            "height: %{y}",
+            "area: %{customdata[1]}",
+        ])
+    ))
+
+fig.update_xaxes(
+    tickvals=np.cumsum(widths_total)-widths_total/2,
+    ticktext= ["%s<br>%d" % (l, w) for l, w in zip(labels, widths_total)]
+)
+
+# fig.update_xaxes(range=[0,100])
+# fig.update_yaxes(range=[0,100])
+
+fig.update_layout(
+    title_text="Cases by Age and Vax - Testing",
+    uniformtext=dict(mode="hide", minsize=10),
+)
+
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
