@@ -98,15 +98,21 @@ pop_age = covid.read_pop_age_wi()
 labels = list(pop_age.index)
 labels.remove('All')
 
-widths = {'Vax': np.array([10,20,30,40]),
-          'Unvax': np.array([50,30,20,10])}
+vax_frac = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+
+widths = {'Vax': vax_frac * pop_age[labels],
+          'Unvax': (1-vax_frac) * pop_age[labels]}
 
 widths_total = widths['Vax'] + widths['Unvax']
 
 data = {
-    "Vax": [1,2,3,4],
-    "Unvax": [10,20,30,40]
+    "Vax": [1,2,3,4,5,6,7],
+    "Unvax": [10,20,30,40,50,60,70]
 }
+
+
+color = {'Cases': 'steelblue'}
+pattern = {'Vax': '/', 'Unvax': ''}
 
 fig = go.Figure()
 for key in data:
@@ -120,11 +126,13 @@ for key in data:
         x=x,
         width=widths[key],
         offset=0,
-        customdata=np.transpose([labels, widths[key]*data[key]]),
-        texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
-        textposition="inside",
-        textangle=0,
-        textfont_color="white",
+        marker_pattern=dict(shape='.'),
+        # marker=dict(color=color['Cases'], pattern=dict(shape=pattern[key])),
+        # customdata=np.transpose([labels, widths[key]*data[key]]),
+        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
+        # textposition="inside",
+        # textangle=0,
+        # textfont_color="white",
         hovertemplate="<br>".join([
             "label: %{customdata[0]}",
             "width: %{width}",
@@ -135,7 +143,8 @@ for key in data:
 
 fig.update_xaxes(
     tickvals=np.cumsum(widths_total)-widths_total/2,
-    ticktext= ["%s<br>%d" % (l, w) for l, w in zip(labels, widths_total)]
+    # ticktext= ["%s<br>%d" % (l, w) for l, w in zip(labels, widths_total)]
+    ticktext= labels
 )
 
 # fig.update_xaxes(range=[0,100])
