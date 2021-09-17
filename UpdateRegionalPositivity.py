@@ -9,6 +9,9 @@ import os
 
 import covid
 
+#%% Cases per 100K max for y-axes
+per100k = 60
+
 #%% Get the data
 
 
@@ -127,7 +130,7 @@ fig = covid.plotly_twolines(
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/400,
     date_min=datetime.datetime(2021,1,15),
-    range_max=40,
+    range_max=per100k,
     col1_mode='avg-bar',
     col2_mode='line',
     plotlabels = {'title': 'Regional Cases and Percent Positive',

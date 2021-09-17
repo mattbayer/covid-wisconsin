@@ -19,6 +19,8 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()
 
+#%% Cases per 100K max for y-axes
+per100k = 60
 
 #%% Get positives/tests
 
@@ -49,7 +51,7 @@ fig = covid.plotly_twolines(
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/25000,
     date_min=datetime.datetime(2021,1,15),
-    range_max=2400,
+    range_max= per100k * 60,
     col1_mode='avg-bar',
     col2_mode='line',
     plotlabels = {'title': 'WI Positive Tests and Percent Positive',
@@ -68,7 +70,7 @@ fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
-# os.startfile(savefile)
+os.startfile(savefile)
 
 
 
@@ -148,9 +150,9 @@ popscale = 300
 
 # cases_size_factor = 
 # cases_size_factor = 0.06
-cases_size_factor = 0.20
+cases_size_factor = 0.20 / 40 * per100k
 
-cases_color_range = [0,40]
+cases_color_range = [0,per100k]
 
 #%% Change bubble map
 
