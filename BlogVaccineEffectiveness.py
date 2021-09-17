@@ -86,19 +86,58 @@ age_death_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAg
 
 ts.loads(age_case_url)
 case_dash = ts.getWorkbook()
+case_age = case_dash.getWorksheet('Cases by Age').data
+
+case_age = case_age.pivot(index='Age group-value', columns='Measure Names-alias', values='Measure Values-alias')
+case_age.columns.name = 'Cases per 100K'
+col_rename = {'Percent of people who completed the vaccine series by the middle of the month': 'Vax %',
+              'Rate of cases per 100,000 fully vaccinated people': 'Vax',
+              'Rate of cases per 100,000 not fully vaccinated people': 'Unvax'}
+case_age = case_age.rename(columns=col_rename)
+case_age['Vax fraction'] = pd.to_numeric(case_age['Vax %'].str.replace('%',''))/100
+case_age['Vax'] = pd.to_numeric(case_age.Vax.str.replace(',',''))
+case_age['Unvax'] = pd.to_numeric(case_age.Unvax.str.replace(',',''))
+
+
+
+# create <18 age group
+# except doesn't work to just add these together, never mind
+# case_age.loc['<18',:] = case_age.loc['0-11',:] + case_age.loc['12-15',:] + case_age.loc['16-17',:]
+vax_age = case_age
+outcome = 'Cases'
+
+#%%
+
+outcome = 'Deaths'
+
+ts.loads(age_death_url)
+dashboard = ts.getWorkbook()
+vax_age = dashboard.getWorksheet('Deaths by Age').data
+
+vax_age = vax_age.pivot(index='Age group-value', columns='Measure Names-alias', values='Measure Values-alias')
+vax_age.columns.name = 'Deaths per 100K'
+col_rename = {'Percent of people who completed the vaccine series by the middle of the month': 'Vax %',
+              'Rate of deaths per 100,000 fully vaccinated people': 'Vax',
+              'Rate of deaths per 100,000 not fully vaccinated people': 'Unvax'}
+vax_age = vax_age.rename(columns=col_rename)
+vax_age['Vax fraction'] = pd.to_numeric(vax_age['Vax %'].str.replace('%',''))/100
+vax_age['Vax'] = pd.to_numeric(vax_age.Vax.str.replace(',',''))
+vax_age['Unvax'] = pd.to_numeric(vax_age.Unvax.str.replace(',',''))
 
 
 #%% variable width graph
 # based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
 import numpy as np
 
+
 pop_age = covid.read_pop_age_wi()
 
 # get age group labels from pop_age
 labels = list(pop_age.index)
 labels.remove('All')
+labels.remove('<18')
 
-vax_frac = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+vax_frac = vax_age.loc[labels, 'Vax fraction']
 
 widths = {'Vax': vax_frac * pop_age[labels],
           'Unvax': (1-vax_frac) * pop_age[labels]}
@@ -106,12 +145,13 @@ widths = {'Vax': vax_frac * pop_age[labels],
 widths_total = widths['Vax'] + widths['Unvax']
 
 data = {
-    "Vax": [1,2,3,4,5,6,7],
-    "Unvax": [10,20,30,40,50,60,70]
+    "Vax": vax_age.loc[labels, 'Vax'],
+    "Unvax": vax_age.loc[labels, 'Unvax']
 }
 
 
-color = {'Cases': 'steelblue'}
+color = {'Cases': 'steelblue',
+         'Deaths': 'firebrick'}
 pattern = {'Vax': '/', 'Unvax': ''}
 
 fig = go.Figure()
@@ -126,7 +166,7 @@ for key in data:
         x=x,
         width=widths[key],
         offset=0,
-        marker_color=color['Cases'],
+        marker_color=color[outcome],
         marker_pattern_shape=pattern[key],
         # customdata=np.transpose([labels, widths[key]*data[key]]),
         # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
