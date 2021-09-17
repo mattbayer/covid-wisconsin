@@ -92,7 +92,12 @@ case_dash = ts.getWorkbook()
 # based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
 import numpy as np
 
-labels = ["<18","18-24","55-64","65+"]
+pop_age = covid.read_pop_age_wi()
+
+# get age group labels from pop_age
+labels = list(pop_age.index)
+labels.remove('All')
+
 widths = {'Vax': np.array([10,20,30,40]),
           'Unvax': np.array([50,30,20,10])}
 

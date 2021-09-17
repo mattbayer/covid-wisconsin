@@ -1242,7 +1242,37 @@ def read_pop_data_wi(csv_file = 'Population-Data-WI.csv'):
     popdata_series = popdata_series.append(pd.Series({'WI': popdata_series.sum()}))
     
     return popdata_series
-      
+
+
+def read_pop_age_wi():
+    """Load population by age data in useful age bands from a Census file.
+    
+    Data is in a csv file downloaded from Census ACS 2019 estimates.
+    https://data.census.gov/cedsci/table?q=wisconsin%20population%20age&tid=ACSST1Y2019.S0101
+    
+    """
+    demo_csv = '.\\data\\demographics\\ACSST1Y2019.S0101-2020-12-10T154935.csv'
+    
+    demo_data = pd.read_csv(demo_csv)
+    demo_data.Label = demo_data.Label.apply(lambda s: str(s).strip())
+    demo_data = demo_data.set_index('Label')
+    # filter down to just the total estimates
+    demo_data = demo_data['Wisconsin!!Total!!Estimate']
+    # convert to numeric, handling commas
+    demo_data = pd.to_numeric(demo_data.str.replace(',',''), errors='coerce')
+    
+    pop_age_dict = {'<18'  : demo_data['Under 18 years'],
+                    '18-24': demo_data['18 to 24 years'],
+                    '25-34': demo_data['25 to 29 years'] + demo_data['30 to 34 years'],
+                    '35-44': demo_data['35 to 39 years'] + demo_data['40 to 44 years'], 
+                    '45-54': demo_data['45 to 49 years'] + demo_data['50 to 54 years'], 
+                    '55-64': demo_data['55 to 59 years'] + demo_data['60 to 64 years'], 
+                    '65+'  : demo_data['65 years and over'],
+                    'All'  : demo_data['Total population'],
+                    }
+    
+    pop_age = pd.Series(pop_age_dict)
+    return pop_age
         
 def download_covid_data_wi(dataset='state'):
     """Download one of the three datasets from WI DHS and return as DataFrame.
