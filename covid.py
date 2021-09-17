@@ -1409,6 +1409,7 @@ def scrape_widash_deaths():
     death_df = death_df.pivot(index='Date',columns='Confirmed/Probable', values='Deaths')
     # and rename
     death_df = death_df.rename(columns={'Confirmed case death': 'Confirmed', 'Probable case death': 'Probable'})
+    death_df.columns.name=''
     # and sum to Total
     death_df['Total'] = death_df.Confirmed + death_df.Probable
     
@@ -1430,20 +1431,26 @@ def scrape_widash_cases():
     ts.loads(case_url)
     case_dash = ts.getWorkbook()
     case_df = case_dash.getWorksheet('Cases with prob stacked').data
-    
+
     # Select the relevant data and rename
-    col_rename = {'DAY(Epi Dt)-alias': 'Date',
-                  'SUM(Confirmed Cases By Epi Dt)-alias': 'Confirmed',
-                  'SUM(Probable By Epi Dt)-alias': 'Probable',
-                  'SUM(Stacked Confirm + Probable cases)-alias': 'Total'
+    col_rename = {'DAY(Epi Dt)-value': 'Date',
+                  'Measure Names-alias': 'Confirmed/Probable',
+                  'Measure Values-value': 'Cases',
                   }
-    
     case_df = case_df[col_rename.keys()]
     case_df = case_df.rename(columns=col_rename)
     case_df.Date = pd.to_datetime(case_df.Date)
     
-    # get rid of excess entries - some reason lots of zeroes in the DF
-    case_df = case_df[case_df.Date >= pd.to_datetime('2020-01-01')]
+    # Separate confirmed and probable into different columns
+    case_df = case_df.pivot(index='Date',columns='Confirmed/Probable', values='Cases')
+    # and rename
+    case_df = case_df.rename(columns={'Confirmed cases': 'Confirmed', 'Probable cases': 'Probable'})
+    case_df.columns.name = ''
+    # and sum to Total
+    case_df['Total'] = case_df.Confirmed + case_df.Probable
+    
+    # Reset Date from index to column
+    case_df = case_df.reset_index()
     
     return case_df
 
