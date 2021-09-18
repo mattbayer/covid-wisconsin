@@ -77,58 +77,46 @@ non2_pop = non_pop - nonpre_pop
 non2_rate = non2_num / non2_pop * 1e5
 
 
-#%% process age tables
+#%% Load in age tables for all outcomes
 
-age_case_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Cases?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
-age_hosp_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Hospitalizations?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
-age_death_url = 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Deaths?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+datasets = ['Cases', 'Hospitalizations', 'Deaths']
+
+urls = {'Cases': 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Cases?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link',
+        'Hospitalizations': 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Hospitalizations?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link',
+        'Deaths': 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatusAge/Deaths?:embed_code_version=3&:embed=y&:loadOrderID=0&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link',
+        }
+
+vax_age_all = dict()
+
+for outcome in datasets:
+    
+    ts.loads(urls[outcome])
+    dashboard = ts.getWorkbook()
+    vax_age = dashboard.getWorksheet(outcome + ' by Age').data
+    
+    vax_age = vax_age.pivot(index='Age group-value', columns='Measure Names-alias', values='Measure Values-alias')
+    vax_age.columns.name = outcome + ' per 100K'
+    col_rename = {'Percent of people who completed the vaccine series by the middle of the month': 'Vax %',
+                  'Rate of ' + outcome.lower() + ' per 100,000 fully vaccinated people': 'Vax',
+                  'Rate of ' + outcome.lower() + ' per 100,000 not fully vaccinated people': 'Unvax'}
+    vax_age = vax_age.rename(columns=col_rename)
+    vax_age['Vax fraction'] = pd.to_numeric(vax_age['Vax %'].str.replace('%',''))/100
+    vax_age['Vax'] = pd.to_numeric(vax_age.Vax.str.replace(',',''))
+    vax_age['Unvax'] = pd.to_numeric(vax_age.Unvax.str.replace(',',''))
+    
+    vax_age_all[outcome] = vax_age
 
 
-ts.loads(age_case_url)
-case_dash = ts.getWorkbook()
-case_age = case_dash.getWorksheet('Cases by Age').data
 
-case_age = case_age.pivot(index='Age group-value', columns='Measure Names-alias', values='Measure Values-alias')
-case_age.columns.name = 'Cases per 100K'
-col_rename = {'Percent of people who completed the vaccine series by the middle of the month': 'Vax %',
-              'Rate of cases per 100,000 fully vaccinated people': 'Vax',
-              'Rate of cases per 100,000 not fully vaccinated people': 'Unvax'}
-case_age = case_age.rename(columns=col_rename)
-case_age['Vax fraction'] = pd.to_numeric(case_age['Vax %'].str.replace('%',''))/100
-case_age['Vax'] = pd.to_numeric(case_age.Vax.str.replace(',',''))
-case_age['Unvax'] = pd.to_numeric(case_age.Unvax.str.replace(',',''))
-
-
-
-# create <18 age group
-# except doesn't work to just add these together, never mind
-# case_age.loc['<18',:] = case_age.loc['0-11',:] + case_age.loc['12-15',:] + case_age.loc['16-17',:]
-vax_age = case_age
-outcome = 'Cases'
-
-#%%
-
-outcome = 'Deaths'
-
-ts.loads(age_death_url)
-dashboard = ts.getWorkbook()
-vax_age = dashboard.getWorksheet('Deaths by Age').data
-
-vax_age = vax_age.pivot(index='Age group-value', columns='Measure Names-alias', values='Measure Values-alias')
-vax_age.columns.name = 'Deaths per 100K'
-col_rename = {'Percent of people who completed the vaccine series by the middle of the month': 'Vax %',
-              'Rate of deaths per 100,000 fully vaccinated people': 'Vax',
-              'Rate of deaths per 100,000 not fully vaccinated people': 'Unvax'}
-vax_age = vax_age.rename(columns=col_rename)
-vax_age['Vax fraction'] = pd.to_numeric(vax_age['Vax %'].str.replace('%',''))/100
-vax_age['Vax'] = pd.to_numeric(vax_age.Vax.str.replace(',',''))
-vax_age['Unvax'] = pd.to_numeric(vax_age.Unvax.str.replace(',',''))
 
 
 #%% variable width graph
 # based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
 import numpy as np
 
+outcome = datasets[1]
+
+vax_age = vax_age_all[outcome]
 
 pop_age = covid.read_pop_age_wi()
 
@@ -151,14 +139,19 @@ data = {
 
 
 color = {'Cases': 'steelblue',
+         'Hospitalizations': 'darkorange',
          'Deaths': 'firebrick'}
 pattern = {'Vax': '/', 'Unvax': ''}
 
 fig = go.Figure()
 for key in data:
-    x = np.cumsum(widths_total) - widths['Unvax']
-    if key == 'Vax':
-        x = x - widths['Vax']
+    # x = np.cumsum(widths_total) - widths['Unvax']
+    # if key == 'Vax':
+    #     x = x - widths['Vax']
+        
+    x = np.cumsum(widths[key]) - widths[key]
+    if key == 'Unvax':
+        x = x + widths['Vax'].sum()
         
     fig.add_trace(go.Bar(
         name=key,
@@ -201,3 +194,6 @@ fig.write_html(
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
+
+
+
