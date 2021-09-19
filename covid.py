@@ -1269,7 +1269,7 @@ def read_pop_age_wi(dataset='census'):
                         '45-54': demo_data['45 to 49 years'] + demo_data['50 to 54 years'], 
                         '55-64': demo_data['55 to 59 years'] + demo_data['60 to 64 years'], 
                         '65+'  : demo_data['65 years and over'],
-                        'All'  : demo_data['Total population'],
+                        'Total'  : demo_data['Total population'],
                         }
         
         pop_age = pd.Series(pop_age_dict)
