@@ -84,68 +84,149 @@ pattern = {'Vax': '/', 'Unvax': ''}
 #%% simplify - variable width graph - stratified by age
 # based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
 
-# select outcome
-outcome = datasets[2]
 
-# select age groups to include
-vax_age = vax_age_all[vax_age_all['Age group']!='Total']
-
-# select ordering of Vax status / age group
-vax_age = vax_age.sort_values(['Vax status', 'Age group'], ascending=[False, True])
-
-
-
-# x values of bars - based on population as width
-vax_age['x'] = vax_age.Population.cumsum() - vax_age.Population
-
-
-fig = go.Figure()
-for status in ['Vax', 'Unvax']:
-    data = vax_age[vax_age['Vax status']==status]
+def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
+    # vax_age needs 'Age groups', 'Population', 'Vax status'
+    
+    # select age groups to include
+    if group is None:
+        vax_age = vax_age[vax_age['Age group']!='Total']
+    else:
+        vax_age = vax_age[vax_age['Age group']==group]
         
-    fig.add_trace(go.Bar(
-        name=status,
-        y=data[outcome],
-        x=data['x'],
-        width=data['Population'],
-        offset=0,
-        marker_color=color[outcome],
-        marker_pattern_shape=pattern[status],
-        customdata=np.transpose([data['Age group'], data[outcome]*data.Population/1e5]),
-        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
-        # textposition="inside",
-        # textangle=0,
-        # textfont_color="white",
-        hovertemplate="<br>".join([
-            "%{customdata[0]}",
-            "Population: %{width}",
-            outcome + 'per 100k: %{y}',
-            "Total " + outcome + ": %{customdata[1]}",
-        ])
-    ))
+    # select ordering of Vax status / age group
+    if priority == 'Age group':
+        vax_age = vax_age.sort_values(['Age group', 'Vax status'], ascending=[True, False])
+    else:
+        vax_age = vax_age.sort_values(['Vax status', 'Age group'], ascending=[False, True])
+    
+    # x values of bars - based on population as width
+    vax_age['x'] = vax_age.Population.cumsum() - vax_age.Population
+    
+    fig = go.Figure()
+    for status in ['Vax', 'Unvax']:
+        data = vax_age[vax_age['Vax status']==status]
+            
+        fig.add_trace(go.Bar(
+            name=status,
+            y=data[outcome],
+            x=data['x'],
+            width=data['Population'],
+            offset=0,
+            marker_color=color[outcome],
+            marker_pattern_shape=pattern[status],
+            customdata=np.transpose([data['Age group'], data[outcome]*data.Population/1e5]),
+            # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
+            # textposition="inside",
+            # textangle=0,
+            # textfont_color="white",
+            hovertemplate="<br>".join([
+                "%{customdata[0]}",
+                "Population: %{width}",
+                outcome + 'per 100k: %{y}',
+                "Total " + outcome + ": %{customdata[1]}",
+            ])
+        ))
+        
+    # add dividers for age groups
+    if group is None and priority=='Age group':
+        grouped_widths = vax_age.Population.rolling(2).sum()[1::2]
+        grouped_x = grouped_widths.cumsum() - grouped_widths/2
+        grouptext = vax_age['Age group'].unique()
+        
+        for gg, group in enumerate(grouptext):
+            fig.add_annotation(
+                text=group,
+                x=grouped_x.iloc[gg], y=-2, 
+                xanchor='center', align='center', 
+                showarrow=False,
+            )
+        # fig.update_layout(shapes=[
+        #     dict(
+        #       type= 'line', line_color='gray', line_dash='dash',
+        #       yref= 'paper', y0= 0, y1= 1,
+        #       xref= 'x', x0=datetime.datetime(2020,5,11), x1=datetime.datetime(2020,5,11)
+        #     ),
+        #     dict(
+        #       type= 'line', line_color='gray', line_dash='dash',
+        #       yref= 'paper', y0= 0, y1= 1,
+        #       xref= 'x', x0=datetime.datetime(2020,6,30), x1=datetime.datetime(2020,6,30)
+        #     ),
+        #     dict(
+        #       type= 'line', line_color='gray', line_dash='dash',
+        #       yref= 'paper', y0= 0, y1= 1,
+        #       xref= 'x', x0=datetime.datetime(2020,8,31), x1=datetime.datetime(2020,8,31)
+        #     ),
+        #     dict(
+        #       type= 'line', line_color='gray', line_dash='dash',
+        #       yref= 'paper', y0= 0, y1= 1,
+        #       xref= 'x', x0=datetime.datetime(2020,10,15), x1=datetime.datetime(2020,10,15)
+        #     ),    
+        # ])
+        
+    fig.update_xaxes(
+    #     tickvals = vax_age.Population.cumsum() - vax_age.Population/2,
+    #     ticktext = vax_age['Age group']
+        title = 'Share of population'
+    )
+    fig.update_yaxes(
+        title = outcome + ' per 100K'
+    )
+    
+    # # fig.update_xaxes(range=[0,100])
+    # # fig.update_yaxes(range=[0,100])
+    
+    # fig.update_layout(
+    #     title_text = outcome + " by Age and Vax",
+    #     uniformtext=dict(mode="hide", minsize=10),
+    #     xlabel
+    # )
+    
+    return fig
 
-fig.update_xaxes(
-    tickvals = vax_age.Population.cumsum() - vax_age.Population/2,
-    ticktext = vax_age['Age group']
-)
 
-# fig.update_xaxes(range=[0,100])
-# fig.update_yaxes(range=[0,100])
+#%% 65+ only
+
+
+# select outcome
+outcome = 'Deaths'
+
+fig = plotly_vax_age_bar(vax_age_all, outcome, group='65+')
 
 fig.update_layout(
-    title_text = outcome + " by Age and Vax - Testing",
+    title_text = outcome + " by vax status<br>Ages 65+",
     uniformtext=dict(mode="hide", minsize=10),
-)
+    )
 
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge.html'
+    
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-65.html'
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
 
+
 #%% variable width graph - stratified by age
-# based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
+
+outcome = 'Deaths'
+
+fig = plotly_vax_age_bar(vax_age_all, outcome)
+
+fig.update_layout(
+    title_text = outcome + " by vax status<br>All age groups",
+    uniformtext=dict(mode="hide", minsize=10),
+    )
+
+    
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-All.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
+
+#%%
 
 outcome = datasets[2]
 
