@@ -137,7 +137,8 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
         for gg, group in enumerate(grouptext):
             fig.add_annotation(
                 text=group,
-                x=grouped_x.iloc[gg], y=-2, 
+                x=grouped_x.iloc[gg], 
+                yref='paper', y=1, yanchor='top', 
                 xanchor='center', align='center', 
                 showarrow=False,
             )
@@ -185,6 +186,41 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
     return fig
 
 
+#%% 65+ straight numbers
+fig = go.Figure()
+for status in ['Vax', 'Unvax']:
+    data = vax_age[vax_age['Vax status']==status]
+    data = data[data['Age group']=='65+']
+    data['Deaths'] = data['Deaths'] * data['Population'] / 100e3
+        
+    fig.add_trace(go.Bar(
+        name=status,
+        y=data[outcome],
+        x=[status],
+        # width=data['Population'],
+        # offset=0,
+        marker_color=color[outcome],
+        marker_pattern_shape=pattern[status],
+        # customdata=np.transpose([data['Age group'], data[outcome]*data.Population/1e5]),
+        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
+        # textposition="inside",
+        # textangle=0,
+        # textfont_color="white",
+        # hovertemplate="<br>".join([
+        #     "%{customdata[0]}",
+        #     "Population: %{width}",
+        #     outcome + 'per 100k: %{y}',
+        #     "Total " + outcome + ": %{customdata[1]}",
+        # ])
+    ))
+
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-DeathRaw-65.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
+
 #%% 65+ only
 
 
@@ -214,81 +250,50 @@ outcome = 'Deaths'
 fig = plotly_vax_age_bar(vax_age_all, outcome)
 
 fig.update_layout(
-    title_text = outcome + " by vax status<br>All age groups",
+    title_text = outcome + " by vax status<br>By age group",
     uniformtext=dict(mode="hide", minsize=10),
     )
 
     
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-All.html'
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-StratAge.html'
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
 
-#%%
+#%% vax/unvax totals
 
-outcome = datasets[2]
+outcome = 'Deaths'
 
-vax_age = vax_age_all[outcome]
-
-vax_frac = vax_age.loc[labels, 'Vax fraction']
-
-widths = {'Vax': vax_frac * pop_age[labels],
-          'Unvax': (1-vax_frac) * pop_age[labels]}
-
-widths_total = widths['Vax'] + widths['Unvax']
-
-data = {
-    "Vax": vax_age.loc[labels, 'Vax'],
-    "Unvax": vax_age.loc[labels, 'Unvax']
-}
-
-
-
-fig = go.Figure()
-for key in data:
-    x = np.cumsum(widths_total) - widths['Unvax']
-    if key == 'Vax':
-        x = x - widths['Vax']
-
-        
-    fig.add_trace(go.Bar(
-        name=key,
-        y=data[key],
-        x=x,
-        width=widths[key],
-        offset=0,
-        marker_color=color[outcome],
-        marker_pattern_shape=pattern[key],
-        # customdata=np.transpose([labels, widths[key]*data[key]]),
-        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
-        # textposition="inside",
-        # textangle=0,
-        # textfont_color="white",
-        hovertemplate="<br>".join([
-            "label: %{customdata[0]}",
-            "width: %{width}",
-            "height: %{y}",
-            "area: %{customdata[1]}",
-        ])
-    ))
-
-fig.update_xaxes(
-    tickvals=np.cumsum(widths_total)-widths_total/2,
-    # ticktext= ["%s<br>%d" % (l, w) for l, w in zip(labels, widths_total)]
-    ticktext= labels
-)
-
-# fig.update_xaxes(range=[0,100])
-# fig.update_yaxes(range=[0,100])
+fig = plotly_vax_age_bar(vax_age_all, outcome, group='Total')
 
 fig.update_layout(
-    title_text="Cases by Age and Vax - Testing",
+    title_text = outcome + " by vax status<br>All ages",
     uniformtext=dict(mode="hide", minsize=10),
-)
+    )
 
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge.html'
+    
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-Total.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
+
+#%% vax/unvax with order priority reversed
+
+outcome = 'Deaths'
+
+fig = plotly_vax_age_bar(vax_age_all, outcome, priority='Vax status')
+
+fig.update_layout(
+    title_text = outcome + " by vax status<br>By age group",
+    uniformtext=dict(mode="hide", minsize=10),
+    )
+
+    
+savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-StratAgeVaxGroup.html'
 fig.write_html(
     file=savefile,
     include_plotlyjs='cdn',
