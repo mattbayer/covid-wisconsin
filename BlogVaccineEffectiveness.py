@@ -186,6 +186,11 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
     return fig
 
 
+#%% Parameters for all plots
+imwidth = 600
+imheight = 450
+
+
 #%% 65+ straight numbers
 fig = go.Figure()
 for status in ['Vax', 'Unvax']:
@@ -213,13 +218,23 @@ for status in ['Vax', 'Unvax']:
         #     "Total " + outcome + ": %{customdata[1]}",
         # ])
     ))
+    
+    
+fig.update_layout(
+    title_text =  "Number of " + outcome.lower() + " by vax status - 65+<br>(NOT GOOD ANALYSIS FOR ILLUSTRATION ONLY)",
+    uniformtext=dict(mode="hide", minsize=10),
+    )
+fig.update_yaxes(title='Deaths')
 
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge-DeathRaw-65.html'
-fig.write_html(
-    file=savefile,
-    include_plotlyjs='cdn',
-    )      
-os.startfile(savefile)
+save_png = '.\\docs\\assets\\VaxBarAge-DeathRaw-65.png'
+fig.write_image(
+    save_png,
+    width=imwidth,
+    height=imheight,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
 
 #%% 65+ only
 
@@ -230,17 +245,20 @@ outcome = 'Deaths'
 fig = plotly_vax_age_bar(vax_age_all, outcome, group='65+')
 
 fig.update_layout(
-    title_text = outcome + " by vax status<br>Ages 65+",
+    title_text = 'Rate of ' + outcome.lower() + " by vax status - 65+",
     uniformtext=dict(mode="hide", minsize=10),
     )
 
-    
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-65.html'
-fig.write_html(
-    file=savefile,
-    include_plotlyjs='cdn',
-    )      
-os.startfile(savefile)
+
+save_png = '.\\docs\\assets\\VaxBarAge-Death-65.png'
+fig.write_image(
+    save_png,
+    width=imwidth,
+    height=imheight,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
 
 
 #%% variable width graph - stratified by age
@@ -273,13 +291,22 @@ fig.update_layout(
     uniformtext=dict(mode="hide", minsize=10),
     )
 
+
+save_png = '.\\docs\\assets\\VaxBarAge-Death-Total.png'
+fig.write_image(
+    save_png,
+    width=600,
+    height=500,
+    engine='kaleido',
+)
+os.startfile(save_png)
     
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-Total.html'
-fig.write_html(
-    file=savefile,
-    include_plotlyjs='cdn',
-    )      
-os.startfile(savefile)
+# savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-Total.html'
+# fig.write_html(
+#     file=savefile,
+#     include_plotlyjs='cdn',
+#     )      
+# os.startfile(savefile)
 
 #%% vax/unvax with order priority reversed
 
