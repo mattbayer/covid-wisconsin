@@ -29,7 +29,7 @@ Now this is confusing again - the risk reduction here only appears to be a facto
 
 We have to realize that when compare all vaccinated against all unvaccinated people, we are comparing two groups that differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. You can't make the comparison across vaccination status and draw a conclusion without accounting for age.
 
-![Deaths age stratified](../assets/VaxBarAge-Death-AgeStrat.png)
+![Deaths age stratified](../assets/VaxBarAge-Death-StratAge.png)
 
 
 
