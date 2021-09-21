@@ -139,9 +139,9 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
         for gg, group in enumerate(grouptext):
             fig.add_annotation(
                 text=group,
-                x=grouped_x.iloc[gg], 
-                yref='paper', y=1, yanchor='top', 
-                xanchor='center', align='center', 
+                x=grouped_edge.iloc[gg], xanchor='left', align='left',
+                yref='paper', y=1, yanchor='top',  
+                textangle=-90, valign='top',
                 showarrow=False,
             )
             if gg != 0:
@@ -293,7 +293,7 @@ outcome = 'Deaths'
 fig = plotly_vax_age_bar(vax_age_all, outcome)
 
 fig.update_layout(
-    title_text = outcome + " by vax status<br>By age group",
+    title_text = outcome + " by vax status <i>and</i> age group",
     uniformtext=dict(mode="hide", minsize=10),
     )
 
