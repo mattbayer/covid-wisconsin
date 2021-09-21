@@ -11,27 +11,29 @@ DHS's headline numbers are that in the past month, an unvaccinated person has be
 ### Adjusting for group size
 For the purposes of judging the effectiveness of the vaccine, it is not a good idea to just compare raw numbers of X deaths among the vaccinated to Y among the unvaccinated. This is because the size of the groups can be very different. Let's take the example of deaths among those over 65 in August. Here is a bar graph of the raw numbers of deaths in the vaccinated and unvaccinated groups.
 
-[65+ raw deaths]
+![65+ raw deaths](../assets/VaxBarAge-DeathRaw-65.png)
 
 This looks like the vaccine only reduces the risk of death by half. Now that's better than a sharp stick in the eye, but would be much worse than we've been promised. Luckily, this is not the right way to think about it at all - in fact DHS doesn't even display this data directly for that reason. It overlooks that nearly 90% of those over 65 are vaccinated, so these 48 vaccinated deaths are coming from a much larger group than the 88 not-fully-vaccinated deaths.
 
 So here's another plot to visualize the issue better. Here the height of the bar indicates the rate of deaths per 100,000 people in each of the vaccinated or unvaccinated groups. The width of the bar is proportional to the population of the group. That means the total area of each bar is proportional to the raw number of deaths, but the height more accurately shows the risk reduction from vaccination. For this age group, this per-capita rate of deaths among the unvaccinated were 9 times higher than in the vaccinated.
 
-[65+ pop/percap]
+![65+ death rates](../assets/VaxBarAge-Death-65.png)
 
 
 ### Adjusting for age
 Okay, so now we now to always use per-capita numbers. Let's look at deaths again (per-capita, of course) for the whole population.
 
-[Deaths whole population]
+![Deaths whole population](../assets/VaxBarAge-Death-Total.png)
 
 Now this is confusing again - the risk reduction here only appears to be a factor of 3. But that's much lower than we just saw for the over-65, which we know is the group most at risk of death. How does this make sense?
+
+We have to realize that when compare all vaccinated against all unvaccinated people, we are comparing two groups that differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. You can't make the comparison across vaccination status and draw a conclusion without accounting for age.
+
 
 ...
 
 [Bar graphs]
 
-When we're comparing all vaccinated against all unvaccinated people, we are comparing two groups that differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also age. You can't make the comparison across vaccination status and draw a conclusion without accounting for age.
 
 
 
