@@ -57,8 +57,8 @@ Deaths | 11x | 91%
 
 ---
 
-
-
+[Covid Data Science post on needing to take age into account, using Israeli data](https://www.covid-datascience.com/post/israeli-data-how-can-efficacy-vs-severe-disease-be-strong-when-60-of-hospitalized-are-vaccinated)
+[Covid Data Science post on how not taking account of time can inflate estimates of VE](https://www.covid-datascience.com/post/how-time-confounding-can-bias-vaccine-effectiveness-upwards-via-simpson-s-paradox)
 
 What does it mean when these numbers get adjusted for age? 
 
