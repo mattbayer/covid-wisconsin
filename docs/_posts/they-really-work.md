@@ -50,9 +50,9 @@ It also allows us to compare the observed vaccine efficacy with the numbers from
 
 Outcome | Risk Vax/Unvax (age-adjusted) | Vaccine efficacy (observed)
 ---------- | ----------- | -----------
-Cases | |
-Hospitalizations | |
-Deaths | |
+Cases | 4x | 75%
+Hospitalizations | 9x | 89%
+Deaths | 11x | 91%
 
 
 ---
