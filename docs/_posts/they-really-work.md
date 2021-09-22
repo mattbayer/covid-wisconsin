@@ -27,9 +27,17 @@ Okay, so now we now to always use per-capita numbers. Let's look at deaths again
 
 Now this is confusing again - the risk reduction here only appears to be a factor of 3. But that's much lower than we just saw for the over-65, which we know is the group most at risk of death. How does this make sense?
 
-We have to realize that when compare all vaccinated against all unvaccinated people, we are comparing two groups that differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. You can't make the comparison across vaccination status and draw a conclusion without accounting for age.
+We have to realize that when compare all vaccinated against all unvaccinated people, we are comparing two groups that differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. The age makeup of each group is very different:
+
+![Pie charts](../assets/VaxAgeMakeupPies.png)
+
+So you can't make the comparison across vaccination status and draw a conclusion without accounting for age. To see this more easily, let's imagine a simpler, more extreme situation. Imagine that our entire population was half kids under 12, who are entirely unvaccinated but still vanishingly unlikely to die; and half retirees over 65, who are 100% vaccinated but still have some likelihood of dying (albeit much reduced, say by 90%). In this population 100% of Covid deaths would still occur among the vaccinated, and 0% among the unvaccinated. But that would not be because the vaccines were ineffective - it would be because the elderly were *both* more likely to be vaccinated, *and still* more likely to die of Covid.
+
+The real situation in our state, which mirrors the rest of the country, is not so extreme, but it has the same kind of pattern. To get an accurate picture of vaccine effectiveness, we *have to* separate out data by age group, or adjust for age in some way. 
 
 ![Deaths age stratified](../assets/VaxBarAge-Death-StratAge.png)
+
+
 
 
 
@@ -40,11 +48,7 @@ We have to realize that when compare all vaccinated against all unvaccinated peo
 
 What does it mean when these numbers get adjusted for age? 
 
-Let's take a simpler, more extreme situation. Imagine that our entire population was half kids under 12, who are entirely unvaccinated but still vanishingly unlikely to die; and half retirees over 65, who are 100% vaccinated but still have some likelihood (albeit much reduced) of dying from Covid. In this population 100% of Covid deaths would occur among the vaccinated, and 0% among the unvaccinated. But that would not be because the vaccines were ineffective - they could be very effective at reducing the chances of death for the over-65. It would be because the elderly were *both* more likely to be vaccinated, *and still* more likely to die of Covid. 
 
-The real situation in our state, which mirrors the rest of the country, is not so extreme, but the same pattern is happening. The older someone is, the more likely they are to be vaccinated, and also the more likely they are to die if they catch Covid. So comparing deaths for the vaccinated and unvaccinated without accounting for age is misleading.
-
-This effect, where the correlation between two quantities (here, vaccination and death) over the population as a whole can be very different from the correlation over subgroups of the population, is called [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox).
 
 Luckily the DHS is also now breaking out these numbers by age, and then compiling these age-stratified numbers into an "age-adjusted" number. This age-adjusted number is meant to convey the reduction in risk more accurately. 
 
