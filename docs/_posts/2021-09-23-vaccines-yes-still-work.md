@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Vaccines (yes, still) work
-hidden: true
+hidden: false
 ---
 
 The Wisconsin DHS has begun releasing data on the rates of deaths, hospitalizations, and cases in fully-vaccinated and not-fully-vaccinated people. This gives us the most direct look yet at how the vaccines are working in the real world, and against Delta. They announced that in the month of August, an unvaccinated person has been 11 times as likely to die, 9 times as likely to be hospitalized, and 4 times as likely to get a case as a vaccinated person. But where do these numbers come from?
@@ -60,7 +60,7 @@ In this post I've been belaboring group size and age, but of course there are ot
 ### Age-adjusted numbers
 Finally, with this background I can explain DHS's headline numbers from the first paragraph, which are "age-adjusted" estimates. As we have seen, the vaccinated and unvaccinated groups have different age distributions. Age adjustment uses the data we have to estimate what the total per-capita deaths *would be* if both groups had exactly the same age distribution as the population as a whole.
 
-In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then add them up and divide by the total population to get the adjusted deaths/100k. Then do the same for the unvaxed group data. This is not dark statistical magic. I reproduced the DHS's numbers in Excel in about a half hour - [an Excel sheet I humbly share](https://github.com/mattbayer/covid-wisconsin/raw/master/docs/assets/Age-Adjustment-Deaths-August.xlsx) with those hypothetical readers who would like to replicate it themselves. 
+In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then add them up and divide by the total population to get the adjusted deaths/100k. Then do the same for the unvaxed group data. This is not dark statistical magic. I reproduced the DHS's numbers in Excel in about a half hour - [an Excel sheet I'll share](https://github.com/mattbayer/covid-wisconsin/raw/master/docs/assets/Age-Adjustment-Deaths-August.xlsx) with those hypothetical readers who would like to replicate it themselves. 
 
 For an individual, it's more accurate to look at the age-specific numbers. But this age-adjustment procedure gives us the best single number for the risk reduction from vaccination, taking the population as a whole. It is also, I think, something we can fairly compare with the vaccine efficacy as reported in the original clinical studies, though it's definitely not perfect.
 
@@ -79,6 +79,6 @@ But look, the effectiveness is still really good! The vaccines still work.
 ---
 
 ### Acknowledgments
-I'm indebted to the blog Covid Data Science for discussion of these issues and modeling how to do this analysis. These are two relevant posts.
+I'm indebted to the blog [Covid Data Science](https://www.covid-datascience.com/) for discussion of these issues and demonstrating how to do this analysis. Here are two relevant posts.
 * A similar example from Israeli data of how failing to account for age can make vaccine efficacy appear lower than it is: [Israeli data: How can efficacy vs. severe disease be strong when 60% of hospitalized are vaccinated?](https://www.covid-datascience.com/post/israeli-data-how-can-efficacy-vs-severe-disease-be-strong-when-60-of-hospitalized-are-vaccinated).
 * A contrary example of how failing to take account of changes with time can make efficacy look higher than it really is: [How time confounding can bias vaccine effectiveness upwards via Simpson's paradox](https://www.covid-datascience.com/post/how-time-confounding-can-bias-vaccine-effectiveness-upwards-via-simpson-s-paradox).
