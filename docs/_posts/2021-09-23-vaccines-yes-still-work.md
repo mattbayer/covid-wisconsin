@@ -66,7 +66,7 @@ For an individual, it's more accurate to look at the age-specific numbers. But t
 
 Here is a table of these age-adjusted risk factors and vaccine efficacy values for each outcome, again based on this August data. The risk reduction is calculated as the age-adjusted, per-capita rate for the unvaccinated group divided by the rate for the vaccinated group. The vaccine efficacy is simply 1 - 1 / (risk reduction).
 
-Outcome | Risk reduction (age-adjusted) | Vaccine efficacy (observed)
+Outcome | Risk reduction<br>(age-adjusted) | Vaccine efficacy<br>(observed)
 ---------- | ----------- | -----------
 Cases | 4x | 75%
 Hospitalizations | 9x | 89%
