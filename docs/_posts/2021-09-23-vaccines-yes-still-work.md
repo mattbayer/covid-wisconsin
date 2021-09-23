@@ -4,10 +4,10 @@ title: Vaccines (yes, still) work
 hidden: false
 ---
 
-The Wisconsin DHS has begun releasing data on the rates of deaths, hospitalizations, and cases in fully-vaccinated and not-fully-vaccinated people. This gives us the most direct look yet at how the vaccines are working in the real world, and against Delta. They announced that in the month of August, an unvaccinated person has been 11 times as likely to die, 9 times as likely to be hospitalized, and 4 times as likely to get a case as a vaccinated person. But where do these numbers come from?
+The Wisconsin DHS has begun releasing data on the rates of deaths, hospitalizations, and cases by vaccine status. This gives us the most direct look yet at how the vaccines are working in the real world, and against Delta. They announced that in the month of August, an unvaccinated person has been 11 times as likely to die, 9 times as likely to be hospitalized, and 4 times as likely to get a case as a vaccinated person. But where do these numbers come from?
 
 ### Some adjustments required
-To be clear, these numbers are not just comparing the numbers of X deaths among the unvaccinated to Y among the vaccinated. There are a couple reasons why that would actually be a bad idea for judging the effectiveness of the vaccine. For starters, the size of the vaccinated and unvaccinated groups can be very different. 
+To be clear, they are not just comparing the numbers of X deaths among the unvaccinated to Y among the vaccinated. There are a couple reasons why that would actually be a bad idea for judging the effectiveness of the vaccine. For starters, the size of the vaccinated and unvaccinated groups can be very different. 
 
 Let's take the example of deaths among those over 65. Here is a bar graph of the raw numbers of deaths, in August, in the vaccinated and not-fully-vaccinated groups. (The not-fully-vaccinated group includes people who have only received one dose, and people who have already had Covid. For brevity I am going to label them "Unvax" in these plots, but it is more complicated than that.)
 
