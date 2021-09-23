@@ -37,11 +37,11 @@ The real situation in our state, which mirrors the rest of the country, is not s
 
 Below are three plots that do that, using DHS's August data for deaths, hospitalizations, and cases. They are similar to the second plot above in that the height of each bar shows the rate of the outcome per 100k people, showing the risk for that vax and age group, and the width indicates the population of that group. The tall narrow bar for unvaxed deaths over 65 means the group is small and the risk is high; the wide short/nonexistent bar for deaths under 12 means the group is large but the risk is small.
 
-![Deaths age stratified](../assets/VaxBarAge-Death-StratAge.png)
+![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge.png)
 
-![Hospitalizations age stratified]
+![Hospitalizations age stratified](../assets/VaxBarAge-Hospitalizations-StratAge.png)
 
-![Cases age stratified]
+![Cases age stratified](../assets/VaxBarAge-Cases-StratAge.png)
 
 Deaths and hospitalizations have very heavy skews towards older people, so it is very important to separate out the results by age group. Results for cases are more uniform.
 
