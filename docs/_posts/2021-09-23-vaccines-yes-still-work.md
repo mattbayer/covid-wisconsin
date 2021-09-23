@@ -78,7 +78,7 @@ But look, the effectiveness is still really good! The vaccines still work.
 
 ---
 
-### Acknowledgments
+#### Acknowledgments
 I'm indebted to the blog [Covid Data Science](https://www.covid-datascience.com/) for discussion of these issues and demonstrating how to do this analysis. Here are two relevant posts.
 * A similar example from Israeli data of how failing to account for age can make vaccine efficacy appear lower than it is: [Israeli data: How can efficacy vs. severe disease be strong when 60% of hospitalized are vaccinated?](https://www.covid-datascience.com/post/israeli-data-how-can-efficacy-vs-severe-disease-be-strong-when-60-of-hospitalized-are-vaccinated).
 * A contrary example of how failing to take account of changes with time can make efficacy look higher than it really is: [How time confounding can bias vaccine effectiveness upwards via Simpson's paradox](https://www.covid-datascience.com/post/how-time-confounding-can-bias-vaccine-effectiveness-upwards-via-simpson-s-paradox).
