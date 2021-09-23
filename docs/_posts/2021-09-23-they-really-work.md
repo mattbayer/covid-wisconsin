@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Vaccines still work (continued)
+title: Vaccines (yes, still) work
 hidden: true
 ---
 
@@ -53,11 +53,9 @@ A few points become apparent in these plots.
 * The protection against getting a case is clearly not as good as it is against death and hospitalization. But the vaccine still reduces your chances of getting a case by about three-quarters.
 
 ### "Age-adjusted" numbers
-Finally, I want to explain the age-adjusted numbers that 
+Finally, I want to explain the age-adjusted numbers that the DHS has put out. As we have seen, the vaccinated and unvaccinated groups have different age distributions. Age adjustment uses the data we have to estimate what the total per-capita deaths *would be* if both groups had exactly the same age distribution as the population as a whole.
 
-As we have seen, the vaccinated and unvaccinated groups have different age distributions. Age adjustment uses the data we have to estimate what the total per-capita deaths *would be* if both groups had exactly the same age distribution as the population as a whole. Put another way, it's trying to sim
-
-In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then you add them up and divide by the total population to get their adjusted deaths/100k. Then do the same for the unvaxed group data.
+In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then you add them up and divide by the total population to get their adjusted deaths/100k. Then do the same for the unvaxed group data. This is not dark statistical magic; I reproduced the DHS's numbers in Excel in about a half hour, [an Excel sheet I humbly share]() with those hypothetical readers who would like to replicate it themselves. 
 
 For an individual, it would be more accurate to look at the age-specific numbers. But this age-adjustment procedure gives us the best single number for the risk reduction from vaccination, taking the population as a whole. It is also, I think, the best number to compare with the vaccine efficacy as reported in the original clinical studies, though it is also far from perfect.
 
@@ -69,6 +67,9 @@ Cases | 4x | 75%
 Hospitalizations | 9x | 89%
 Deaths | 11x | 91%
 
+These efficacies are lower than what was originally reported in the clinical trials, which found about 95% efficacy for symptomatic disease (kind of the same as cases, but not exactly), and even higher numbers for severe disease and death. This data would seem to support the idea that some combination of the Delta variant and waning immunity has reduced the effectiveness of the vaccines. But look, the effectiveness is still really good!
+
+In this post I have belabored the important factors of group size and age for interpreting this data. But there are other possible confounders to consider as well. The not-fully-vaccinated group includes people with a single dose and people who have already had Covid. If we excluded them and compared the vaccinated with those with no immunity at all, the vaccine efficacy would likely be even higher. On the other hand, vax/unvax = cautious/incautious, (I suspect this effect may be part of why efficacy looked better earlier on...)
 
 ---
 
