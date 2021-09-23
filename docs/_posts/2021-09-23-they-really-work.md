@@ -72,25 +72,7 @@ Deaths | 11x | 91%
 
 ---
 
-[Covid Data Science post on needing to take age into account, using Israeli data](https://www.covid-datascience.com/post/israeli-data-how-can-efficacy-vs-severe-disease-be-strong-when-60-of-hospitalized-are-vaccinated)
-[Covid Data Science post on how not taking account of time can inflate estimates of VE](https://www.covid-datascience.com/post/how-time-confounding-can-bias-vaccine-effectiveness-upwards-via-simpson-s-paradox)
-
-What does it mean when these numbers get adjusted for age? 
-
-
-
-Luckily the DHS is also now breaking out these numbers by age, and then compiling these age-stratified numbers into an "age-adjusted" number. This age-adjusted number is meant to convey the reduction in risk more accurately. 
-
-To put it another way, I could note that the average vaccinated person is 1/3 as likely to die from Covid as an average unvaccinated person. But the average age of an average vaccinated person is XX years old, while the average of an unvaccinated person is YY years old.  If I'm making a decision about whether to get vaccinated, what I really want to know is how much it reduces the risk for me, a person with a definite certain age which is not going to change when I get the shot. That risk reduction is what the age-adjusted number is trying to estimate.
-
-
-### Adjusting for natural immunity
-Another confounding factor in these numbers is that some proportion of the not-fully-vaccinated bucket are partially vaccinated, and some have natural immunity from a previous infection. These individuals also have some level of risk reduction to the virus, and averaging them in with the fully non-immune gives that group a somewhat lower infection rate overall, and appears to reduce the vaccine effectiveness.
-
-I can make a crude adjustment for this effect.
-
-
-
-
-
-*They really really really really really really work*
+### Acknowledgments
+I'm indebted to the blog Covid Data Science for discussion of these issues and modeling how to do this analysis. These are two relevant posts.
+* A similar example from Israeli data of how failing to account for age can make vaccine efficacy appear lower than it is: [Israeli data: How can efficacy vs. severe disease be strong when 60% of hospitalized are vaccinated?](https://www.covid-datascience.com/post/israeli-data-how-can-efficacy-vs-severe-disease-be-strong-when-60-of-hospitalized-are-vaccinated).
+* A contrary example of how failing to take account of changes with time can make efficacy look higher than it really is: [How time confounding can bias vaccine effectiveness upwards via Simpson's paradox](https://www.covid-datascience.com/post/how-time-confounding-can-bias-vaccine-effectiveness-upwards-via-simpson-s-paradox).
