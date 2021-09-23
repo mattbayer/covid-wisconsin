@@ -68,9 +68,9 @@ Here is a table of these age-adjusted risk factors and vaccine efficacy values f
 
 Outcome | Risk reduction<br>(age-adjusted) | Vaccine efficacy<br>(observed)
 ---------- | ----------- | -----------
-Cases | 4x | 75%
-Hospitalizations | 9x | 89%
-Deaths | 11x | 91%
+Cases | 4&times; | 75%
+Hospitalizations | 9&times; | 89%
+Deaths | 11&times; | 91%
 
 These efficacies are lower than what was originally reported in the clinical trials, which found about 95% efficacy for symptomatic disease (kind of the same as cases, but not exactly), and even higher numbers for severe disease and death. This data would seem to support the idea that some combination of the Delta variant and waning immunity has reduced the effectiveness of the vaccines. 
 
