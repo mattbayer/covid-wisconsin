@@ -19,27 +19,29 @@ So here's another plot that visualizes the data better. The height of the bar no
 
 ![65+ death rates](../assets/VaxBarAge-Death-65.png)
 
+That big empty space above the vaccinated bar and left of the unvaccinated bar represents, plausibly, the number of deaths prevented by the vaccine in this age group.
+
 ### Accounting for age
 So now we know to always use per-capita numbers. Let's look at deaths again (per-capita, of course) for the whole population.
 
 ![Deaths whole population](../assets/VaxBarAge-Death-Total.png)
 
-This is confusing again - the risk reduction here only appears to be a factor of 3. But that's much lower than we just saw for the over-65, which we know is the group most at risk of death. How does this make sense?
+This is confusing again - the risk reduction here only appears to be a factor of 3. But that's much lower than we just saw for the over-65, which we know is the group most at risk of death. How does that make sense?
 
-We have to realize that when compare all vaccinated against all unvaccinated people, these two groups differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. The age makeup of each group is very different:
+We have to realize that if we compare the vaccinated and unvaccinated for the whole population, these two groups differ in *two* ways that we know strongly affect the death rate: vaccination status, obviously, but also *age*. In Wisconsin over 80% of people over 65 are fully vaccinated, while zero people under 12 are. The age makeup of each group is very different:
 
 ![Pie charts](../assets/VaxAgeMakeupPies.png)
 
 This means you can't make a good comparison across vaccination status without accounting for age. 
 
-To get some intuition for this, let's imagine a simpler, more extreme situation. Imagine that our entire population was half kids under 12, who are entirely unvaccinated but still vanishingly unlikely to die; and half retirees over 65, who are 100% vaccinated but still have some likelihood of dying (albeit much reduced, say by 90%). In this population 100% of Covid deaths would still occur among the vaccinated, and 0% among the unvaccinated. But that would not be because the vaccines were ineffective. It would be because the elderly were *both* more likely to be vaccinated, *and still* more likely to die of Covid than the younger, unvaccinated group.
+To get some intuition for this, let's imagine a simpler, more extreme situation. Imagine that our entire population was half kids under 12, who are all unvaccinated but still vanishingly unlikely to die; and half retirees over 65, who are 100% vaccinated but still have some likelihood of dying (albeit much reduced, say by 90%). In this population 100% of Covid deaths would still occur among the vaccinated, and 0% among the unvaccinated. But that would not be because the vaccines were ineffective. It would be because the elderly were *both* more likely to be vaccinated, *and still* more likely to die of Covid than the younger, unvaccinated group.
 
-The real situation in our state, which mirrors the rest of the country, is not so extreme, but it has the same kind of pattern. To get an accurate picture of vaccine effectiveness, we *have to* separate out data by age group, or adjust for age in some way.
+The real situation in our state and the country is not so extreme, but it has the same kind of pattern. To get an accurate picture of vaccine effectiveness, we *have to* separate out data by age group, or adjust for age in some way.
 
 ### The data itself
-Separating and adjusting for age is just what DHS has done in the latest data release, although I think there is some room for better visualization and explanation. (Hence this post.)
+Separating and adjusting for age is just what DHS has done in the latest data release, although I think there is some room for better visualization and explanation.
 
-Below are three plots that show [DHS's August data](https://www.dhs.wisconsin.gov/covid-19/vaccine-status.htm) for deaths, hospitalizations, and cases, separated out by age group. Again the height of each bar shows the rate of the outcome per 100k people, showing the risk for that vax and age group, and the width indicates the population of that group. The tall narrow bar for unvaxed deaths over 65 means the group is small and the risk is high; the wide short bar for hospitalizations under 12 means the group is large but the risk is small.
+Below are three plots that show [DHS's August data](https://www.dhs.wisconsin.gov/covid-19/vaccine-status.htm) for deaths, hospitalizations, and cases, separated out by age group. Again the height of each bar shows the rate of the outcome per 100k people, showing the risk for that vax and age group, and the width indicates the population of that group. The tall narrow bar for unvaxed deaths over 65 means the group is small and the risk is high; the wide short bar for unvaxed hospitalizations under 12 means the group is large but the risk is small.
 
 ![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge.png)
 
@@ -49,7 +51,7 @@ Below are three plots that show [DHS's August data](https://www.dhs.wisconsin.go
 
 A few points become apparent in these plots.
 * Absolute risk (the height of the bars) for deaths and hospitalizations are clearly much higher for older people. Risk of getting a case is more roughly equal.
-* The relative risk reduction (the ratio of the height of the vax bar to the height of the unvax bar) is pretty consistent across age. If you're in your 30s or 40s, the absolute risk of death from Covid is not that high, but the vaccine makes you basically invincible.
+* The relative risk reduction (the ratio of the height of the unvax bar to the height of the vax bar) is pretty consistent across age. If you're in your 30s or 40s, the absolute risk of death from Covid is not that high, but the vaccine makes you basically invincible.
 * The protection against getting a case is clearly not as good as it is against death and hospitalization. But the vaccine still reduces your chances of getting a case by about three-quarters.
 
 In this post I've been belaboring group size and age, but of course there are other possible factors to consider. The not-fully-vaccinated group includes people with only a single dose; people who have had Covid already clearly also have some immunity; maybe vaccinated people are still being more cautious on average; maybe vaccinated people are more (or less) likely to get tested and find a case. This profusion of confounders is the big limitation of observational data like this. Nevertheless, I think group size and age are big and basic, and as long as we take these into account we're getting a pretty good idea of vaccine effectiveness.
@@ -58,9 +60,9 @@ In this post I've been belaboring group size and age, but of course there are ot
 ### Age-adjusted numbers
 Finally, with this background I can explain DHS's headline numbers from the first paragraph, which are "age-adjusted" estimates. As we have seen, the vaccinated and unvaccinated groups have different age distributions. Age adjustment uses the data we have to estimate what the total per-capita deaths *would be* if both groups had exactly the same age distribution as the population as a whole.
 
-In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then add them up and divide by the total population to get the adjusted deaths/100k. Then do the same for the unvaxed group data. This is not dark statistical magic. I reproduced the DHS's numbers in Excel in about a half hour - [an Excel sheet I humbly share](../assets/Age-Adjustment-Deaths-August.xls) with those hypothetical readers who would like to replicate it themselves. 
+In math, for each age band, (adjusted vaxed deaths) = (observed vaxed deaths) &times; (fraction of total population) / (fraction of vaxed population). Then add them up and divide by the total population to get the adjusted deaths/100k. Then do the same for the unvaxed group data. This is not dark statistical magic. I reproduced the DHS's numbers in Excel in about a half hour - [an Excel sheet I humbly share](https://github.com/mattbayer/covid-wisconsin/raw/master/docs/assets/Age-Adjustment-Deaths-August.xlsx) with those hypothetical readers who would like to replicate it themselves. 
 
-For an individual, it's more accurate to look at the age-specific numbers. But this age-adjustment procedure gives us the best single number for the risk reduction from vaccination, taking the population as a whole. It is also, I think, the best number to compare with the vaccine efficacy as reported in the original clinical studies, though it's far from perfect for that.
+For an individual, it's more accurate to look at the age-specific numbers. But this age-adjustment procedure gives us the best single number for the risk reduction from vaccination, taking the population as a whole. It is also, I think, something we can fairly compare with the vaccine efficacy as reported in the original clinical studies, though it's definitely not perfect.
 
 Here is a table of these age-adjusted risk factors and vaccine efficacy values for each outcome, again based on this August data. The risk reduction is calculated as the age-adjusted, per-capita rate for the unvaccinated group divided by the rate for the vaccinated group. The vaccine efficacy is simply 1 - 1 / (risk reduction).
 
