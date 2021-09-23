@@ -50,6 +50,12 @@ for outcome in datasets:
     vax_age['Vax'] = pd.to_numeric(vax_age.Vax.str.replace(',',''))
     vax_age['Unvax'] = pd.to_numeric(vax_age.Unvax.str.replace(',',''))
     
+    # create 12-17 summed age category
+    pop_age['12-17'] = pop_age['12-15']+pop_age['16-17']
+    vax_age.loc['12-17'] = (vax_age.loc['12-15']*pop_age['12-15'] + vax_age.loc['16-17']*pop_age['16-17']) / (pop_age['12-17'])
+    vax_age = vax_age.drop(['12-15', '16-17'])
+    vax_age = vax_age.sort_index()
+    
     # get to a flatter format
     vax_frac = vax_age['Vax fraction']
     vax_age = vax_age.reset_index().melt(id_vars=['Age group', 'Vax fraction'], value_name=outcome)
@@ -147,29 +153,14 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
             if gg != 0:
                 shapes.append(
                     dict(
-                      type= 'line', line_color='lightgray', #line_dash='dash',
+                      type= 'line', line_color='lightgray', 
                       yref= 'paper', y0= 0, y1= 1,
                       xref= 'x', x0=grouped_edge.iloc[gg], x1=grouped_edge.iloc[gg],
                     )
                 )
 
         fig.update_layout(shapes=shapes)
-        #     dict(
-        #       type= 'line', line_color='gray', line_dash='dash',
-        #       yref= 'paper', y0= 0, y1= 1,
-        #       xref= 'x', x0=datetime.datetime(2020,6,30), x1=datetime.datetime(2020,6,30)
-        #     ),
-        #     dict(
-        #       type= 'line', line_color='gray', line_dash='dash',
-        #       yref= 'paper', y0= 0, y1= 1,
-        #       xref= 'x', x0=datetime.datetime(2020,8,31), x1=datetime.datetime(2020,8,31)
-        #     ),
-        #     dict(
-        #       type= 'line', line_color='gray', line_dash='dash',
-        #       yref= 'paper', y0= 0, y1= 1,
-        #       xref= 'x', x0=datetime.datetime(2020,10,15), x1=datetime.datetime(2020,10,15)
-        #     ),    
-        # ])
+
         
     fig.update_xaxes(
     #     tickvals = vax_age.Population.cumsum() - vax_age.Population/2,
@@ -180,7 +171,7 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
         title = outcome + ' per 100K'
     )
     
-    # # fig.update_xaxes(range=[0,100])
+    fig.update_xaxes(range=[0,grouped_widths.sum()])
     # # fig.update_yaxes(range=[0,100])
     
     # fig.update_layout(
@@ -287,25 +278,26 @@ fig.write_image(
 os.startfile(save_png)
 
 #%% variable width graph - stratified by age
+import time
 
-outcome = 'Deaths'
-
-fig = plotly_vax_age_bar(vax_age_all, outcome)
-
-fig.update_layout(
-    title_text = outcome + " by vax status <i>and</i> age group",
-    uniformtext=dict(mode="hide", minsize=10),
-    )
-
+for outcome in datasets:
     
-save_png = '.\\docs\\assets\\VaxBarAge-Death-StratAge.png'
-fig.write_image(
-    save_png,
-    width=700,
-    height=imheight,
-    engine='kaleido',
-)
-os.startfile(save_png)
+    fig = plotly_vax_age_bar(vax_age_all, outcome)
+    
+    fig.update_layout(
+        title_text = outcome + " by vax status <i>and</i> age group",
+        uniformtext=dict(mode="hide", minsize=10),
+        )
+    
+        
+    save_png = '.\\docs\\assets\\VaxBarAge-' + outcome + '-StratAge.png'
+    fig.write_image(
+        save_png,
+        width=700,
+        height=imheight,
+        engine='kaleido',
+    )
+    os.startfile(save_png)
 
 # savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-StratAge.html'
 # fig.write_html(
