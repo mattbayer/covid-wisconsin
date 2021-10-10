@@ -40,33 +40,46 @@ def perc_to_text(p):
     return t
 
 #%% Get cases by age group
-# Pull from tableau instead of downloadable data, because the tableau plot has
-# the right age groups to match up with vaccinations.
+# # Pull from tableau instead of downloadable data, because the tableau plot has
+# # the right age groups to match up with vaccinations.
 
-url = 'https://bi.wisconsin.gov/t/DHS/views/Agegroupovertime/Cases?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+# # url = 'https://bi.wisconsin.gov/t/DHS/views/Agegroupovertime/Cases?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+# url = 'https://bi.wisconsin.gov/t/DHS/views/CasesbyAgeOverTime/CasesbyAgeOverTime?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
 
-ts = TS()       
-ts = loads_with_retries(ts, url, 3)
+# ts = TS()       
+# ts = loads_with_retries(ts, url, 3)
 
-age_dash = ts.getWorkbook()
+# age_dash = ts.getWorkbook()
 
-age_total = age_dash.worksheets[0].data
+# age_total = age_dash.worksheets[0].data
 
-col_rename = {'New Age Groups-alias': 'Age group',
-              'CNTD(Incident ID)-alias': 'Cases',
-              'SUM(case rate by age for 100K )-alias': 'Cases per 100K',
-              'WEEK(Episode Date Trunc)-value': 'Week of'}
+# col_rename = {'New Age Groups-alias': 'Age group',
+#               'CNTD(Incident ID)-alias': 'Cases',
+#               'SUM(case rate by age for 100K )-alias': 'Cases per 100K',
+#               'WEEK(Episode Date Trunc)-value': 'Week of'}
 
-age_total = age_total[col_rename.keys()]
-age_total = age_total.rename(columns=col_rename)
-age_total['Week of'] = pd.to_datetime(age_total['Week of'])
+# age_total = age_total[col_rename.keys()]
+# age_total = age_total.rename(columns=col_rename)
+# age_total['Week of'] = pd.to_datetime(age_total['Week of'])
 
-# make sure certain columns are numbers
-age_total['Cases'] = pd.to_numeric(age_total['Cases'])
+# # make sure certain columns are numbers
+# age_total['Cases'] = pd.to_numeric(age_total['Cases'])
 
-# only need the most recent cumulative number; the date may vary by age group
-age_total = age_total.groupby('Age group').max()
-# Age group is now also the index
+# # only need the most recent cumulative number; the date may vary by age group
+# age_total = age_total.groupby('Age group').max()
+# # Age group is now also the index
+
+# # Create age_total index for 'All'
+# age_total.loc['All', 'Cases'] = age_total['Cases'].sum()
+
+
+#%% Refactor for getting cases by age with library function
+
+age_cases = covid.scrape_widash_agecases()
+
+# Drop case rate and get the cumulative numbers
+age_total = age_cases.drop('Case rate', axis=1)
+age_total = age_total.groupby('Age group').sum()
 
 # Create age_total index for 'All'
 age_total.loc['All', 'Cases'] = age_total['Cases'].sum()
