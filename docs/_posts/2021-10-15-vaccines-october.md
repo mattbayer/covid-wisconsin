@@ -1,6 +1,6 @@
 ---
 layout: post
-title: October vaccines update
+title: Vaccines update for September data
 hidden: true
 ---
 
@@ -11,20 +11,22 @@ Last month I wrote in detail on how to interpret these data, so for more backgro
 
 The bar plots below are a little complex, but I think helpful. Each compares vaccinated and unvaccinated groups for a different outcome: deaths, hospitalizations, and cases. The height of the bar indicates the rate of that outcome per 100,000 people. The width of each bar is proportional to the population of the group. 
 
-This layout hopefully helps you visualize a common source of confusion. lets you visualize how deaths, for example, may be much more common in unvaccinated people over 65 (i.e. they have a higher rate and higher bar). But since the population of the vaccinated group in this age bracket is much larger, the absolute number of vaccinated deaths is about the same(?). Nevertheless, it is the *rate* of these outcomes that tells you the relevant risk reduction from being vaccinated.
-
 Finally, the plots are divided up by age group, because the risk of death and hospitalization is so dependent on age. 
 
-![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge.png)
+![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge_2021-10-15.png)
 
-![Hospitalizations age stratified](../assets/VaxBarAge-Hospitalizations-StratAge.png)
+![Hospitalizations age stratified](../assets/VaxBarAge-Hospitalizations-StratAge_2021-10-15.png)
 
-![Cases age stratified](../assets/VaxBarAge-Cases-StratAge.png)
+![Cases age stratified](../assets/VaxBarAge-Cases-StratAge_2021-10-15.png)
 
+In general, the patterns here are very similar to last month. The vaccines continue to provide very strong risk reduction against death and hospitalization, and pretty strong reduction against getting a case. The table below shows the numbers for vaccine efficacy, in other words the percentage risk reduction, based on this data for this month and last month.[^Disclaimer]
 
 #### Estimated vaccine efficacy by month
 Outcome | August | September
 ------- | ------ | ---------
-Cases   | 75%    | XX%
-Hospitalizations | 89% | YY%
-Deaths  | 91%    | ZZ%
+Cases   | 73%    | 78%
+Hospitalizations | 88% | 89%
+Deaths  | 89%    | 95%
+
+---
+[^Disclaimer]: In this table the August numbers are slightly different from [last month's post](https://covid-wisconsin.com/2021/09/23/vaccines-yes-still-work/#age-adjusted-numbers), because DHS updated its August data. But the difference is only 1 or 2 percentage points.
