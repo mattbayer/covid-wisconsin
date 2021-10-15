@@ -285,7 +285,7 @@ for outcome in datasets:
     fig = plotly_vax_age_bar(vax_age_all, outcome)
     
     fig.update_layout(
-        title_text = outcome + " by vax status <i>and</i> age group",
+        title_text = outcome + " by vax status <i>and</i> age group<br>Sept 2021",
         uniformtext=dict(mode="hide", minsize=10),
         )
     
