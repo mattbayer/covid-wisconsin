@@ -1,7 +1,7 @@
 ---
 layout: post
 title: September breakthrough data
-hidden: true
+hidden: false
 ---
 
 DHS has released their latest update on breakthrough cases with data for the month of September. The risk reduction from the vaccines appears to be pretty much the same as last month.
