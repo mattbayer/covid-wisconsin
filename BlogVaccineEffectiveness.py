@@ -72,7 +72,7 @@ for outcome in datasets:
 # put columns in the right order
 vax_age_all = vax_age_all[['Age group', 'Vax status', 'Population', 'Cases', 'Hospitalizations', 'Deaths']]
 
-# vax_age_all.to_csv('.\\data\\vaccinations\\Breakthroughs_2021-08.csv')
+# vax_age_all.to_csv('.\\data\\vaccinations\\Breakthroughs_2021-09.csv')
 
 #%% Settings for all plots
 
