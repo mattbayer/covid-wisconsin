@@ -43,11 +43,11 @@ Separating and adjusting for age is just what DHS has done in the latest data re
 
 Below are three plots that show [DHS's August data](https://www.dhs.wisconsin.gov/covid-19/vaccine-status.htm) for deaths, hospitalizations, and cases, separated out by age group. Again the height of each bar shows the rate of the outcome per 100k people, showing the risk for that vax and age group, and the width indicates the population of that group. The tall narrow bar for unvaxed deaths over 65 means the group is small and the risk is high; the wide short bar for unvaxed hospitalizations under 12 means the group is large but the risk is small.
 
-![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge.png)
+![Deaths age stratified](../assets/VaxBarAge-Deaths-StratAge_2021-09-23.png)
 
-![Hospitalizations age stratified](../assets/VaxBarAge-Hospitalizations-StratAge.png)
+![Hospitalizations age stratified](../assets/VaxBarAge-Hospitalizations-StratAge_2021-09-23.png)
 
-![Cases age stratified](../assets/VaxBarAge-Cases-StratAge.png)
+![Cases age stratified](../assets/VaxBarAge-Cases-StratAge_2021-09-23.png)
 
 A few points become apparent in these plots.
 * Absolute risk (the height of the bars) for deaths and hospitalizations are clearly much higher for older people. Risk of getting a case is more roughly equal.
