@@ -87,8 +87,7 @@ csv_file_pop = datapath + '\\Population-Data-WI.csv'
 popdata = covid.read_pop_data_wi(csv_file_pop)
 
 # covid data
-widata = covid.read_covid_data_wi('county')
-
+widata = covid.download_covid_data_wi('county2')
 
 #%% Geography work
 
@@ -107,13 +106,20 @@ countiesWI = countiesWI.sort_index()
 countiesWI['Population'] = popdata
 
 
-#%% Prep the data
-
+#%% Prep county data for map
 
 # reduce and rename columns
-col_rename = {'Date': 'Date', 'NAME': 'County', 'POS_NEW': 'Cases'}
+col_rename = {'Date': 'Date', 
+              'GEOName': 'County', 
+              'POS_NEW_CONF': 'Cases',      # confirmed cases
+              }
+
 reduced = widata[col_rename.keys()]
 reduced = reduced.rename(columns=col_rename)
+
+# convert to date and discard the time portion
+reduced.Date = pd.to_datetime(reduced.Date).apply(lambda d: d.date())
+reduced = reduced.sort_values('Date')
 
 avg_window = 14
 
