@@ -27,3 +27,11 @@ The first bit of good news is that the fatality rate has been lower for this wav
 
 You might question why deaths are even this high - the vaccine is supposed to be 90% or more effective at preventing death, why is the death rate only 50% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is not predominantly from vaccinated people getting sick and not dying, but because the people who do get sick (majority unvaccinated), are less old on average than they were last winter.
 
+### Fuel to burn
+
+The other bit of good news is that I think this wave will be limited, because we are running out of fuel to burn. A few posts ago I tried to [estimate how many Wisconsinites had some kind of immunity](2021-06-14-immune.md), whether acquired by vaccination or by infection. Since then, of course, more people have gotten both types, so below is an updated estimate. The green bar represents the percentage of people who have been vaccinated, the blue bar an estimate of the people who have been infected, with infections estimated at three times the official number of cases.
+
+[Immunity bar graph]
+
+By this estimate, only about XX% of Wisconsinites still have no immunity to the virus. This sets some boundaries on how big this new winter wave can be. Our first winter wave infected about a third of the state; even if this winter wave catches everyone left, it will still be smaller. Now clearly not literally everyone will end up infected, but we can also expect a substantial number of reinfections or breakthrough infections as well. So my wild-ass guess is to expect a little less than XX% to get infected in this wave - say YY% - and divide by three to get an estimate of another ZZZ cases.
+
