@@ -19,9 +19,9 @@ There was a further boost in September that I think is primarily due to schools.
 
 This mirrors a pattern from last year, where the start of the college year resulted in a large spike of cases, which then settled down and basically followed the trajectory of the rest of the state. This seems to suggest that large *changes* in people's contacts and socializing can result in case spikes, which then can subside after an adjustment period.
 
+### Deaths
 
-
-The very good news is that the fatality rate has been lower for this wave, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, whcih means the pool of unprotected people is less at risk of death, on average. 
+The first bit of good news is that the fatality rate has been lower for this wave, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, whcih means the pool of unprotected people is less at risk of death, on average. 
 
 [Cases and deaths]
 
