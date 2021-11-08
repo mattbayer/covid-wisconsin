@@ -4,7 +4,9 @@ title: Is this the beginning?
 hidden: true
 ---
 
-...of the Jordan Love era? (Just kidding (maybe).) Actually, of a winter surge. Wisconsin has been 
+...of the Jordan Love era? Probably not. Of another winter Covid wave? I think so. 
+
+Wisconsin has been 
 Still, I have been waiting for signs of a winter surge, and I think the data from the last week show that it might be starting. If we do, I expect fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
 
 ### Where we're at
@@ -31,7 +33,7 @@ You might question why deaths are even this high - the vaccine is supposed to be
 
 The other bit of good news is that I think this wave will be limited, because we are running out of fuel to burn. A few posts ago I tried to [estimate how many Wisconsinites had some kind of immunity](2021-06-14-immune.md), whether acquired by vaccination or by infection. Since then, of course, more people have gotten both types, so below is an updated estimate. The green bar represents the percentage of people who have been vaccinated, the blue bar an estimate of the people who have been infected, with infections estimated at three times the official number of cases.
 
-[Immunity bar graph]
+![Updated immunity bar graph](../assets/Immune-Total.png')
 
-By this estimate, only about XX% of Wisconsinites still have no immunity to the virus. This sets some boundaries on how big this new winter wave can be. Our first winter wave infected about a third of the state; even if this winter wave catches everyone left, it will still be smaller. Now clearly not literally everyone will end up infected, but we can also expect a substantial number of reinfections or breakthrough infections as well. So my wild-ass guess is to expect a little less than XX% to get infected in this wave - say YY% - and divide by three to get an estimate of another ZZZ cases.
+By this estimate, only about 25% of Wisconsinites still have no immunity to the virus. This sets some boundaries on how big this new winter wave can be. Our first winter wave infected about a third of the state; even if this winter wave catches everyone left, it will still be smaller. Now I doubt literally everyone will end up infected, but we can also expect a substantial number of reinfections or breakthrough infections. My wild guess is to expect a little less than the 25% to get infected in this wave, say 15%, for 900,000 infections. Divide by three for an estimate of another 300,000 official cases; multiply that by the current case-fatality rate of 0.8% for 2400 more deaths.
 
