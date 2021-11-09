@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Revenge of the Covid Strikes Back: the last winter wave
+title: Revenge of the Covid Strikes Back - the last winter wave
 hidden: true
 ---
 
