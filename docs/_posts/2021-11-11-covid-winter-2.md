@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Covid Winter 2 - The last wave
-hidden: true
+hidden: false
 ---
 
 Wisconsin has been on a Covid plateau for a while. Still, I have been waiting for signs of a true winter wave, and I think the data from the last week show that it is starting. If it is, I expect moderately fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
@@ -30,7 +30,7 @@ Fortunately, the fatality rate has been lower for the fall wave so far, which I 
 
 [![Deaths and cases](../assets/Deaths-Cases-WI_2021-11-10.png)](../dashboard/deaths-hosp.md)
 
-But why are deaths even this high? If the vaccine is supposed to be [90% or more effective at preventing death](2021-10-15-september breakthrough-data.md), why is the death rate only 40% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is not predominantly because the vaccinated people getting sick are not dying, but instead because the unvaccinated people getting sick are less old on average than they were last winter.
+But why are deaths even this high? If the vaccine is supposed to be [90% or more effective at preventing death](2021-10-15-september breakthrough-data.md), why is the death rate only 40% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is mostly not because the vaccinated people getting sick are not dying, but instead because the unvaccinated people getting sick are less old on average than they were last winter.
 
 ### The final chapter
 
@@ -40,7 +40,7 @@ The other bit of good news is that I think this wave will be limited, because we
 
 By this estimate, only about 25% of Wisconsinites still have no immunity to the virus. This sets some boundaries on how big this new winter wave can be. Our first winter wave infected about 30% of the state; even if this winter wave catches everyone left, it would still be smaller.
 
-Now I think this immunity estimate may be a bit low, for reasons I list in the previous post, and I also don't think literally everyone will end up infected. We'll also pick up some more vaccinations before the wave is over. On the other hand, we can expect some reinfections or breakthrough infections. Overall, my wild guess is to expect somewhat less than the 25% to get infected in this wave, maybe only 10-15%, for 600-900 thousand infections. Divide by three for an estimate of another 200-300 thousand official cases; multiply that by the current case-fatality rate of 0.7% for 1400-2100 more deaths.
+Now I think this immunity estimate may be a bit low, for reasons I listed in the previous post, and I also don't think literally everyone will end up infected. We'll also pick up some more vaccinations before the wave is over. On the other hand, there will be some reinfections or breakthroughs adding to the total. Overall, my wild guess is to expect somewhat less than the 25% to get infected in this wave, maybe only 10-15%, for 600-900 thousand infections. Divide by three for an estimate of another 200-300 thousand official cases; multiply that by the current case fatality rate of 0.7% for 1400-2100 more deaths.
 
 And then I think we really will be done with large waves. Smaller spurts or moderate seasonal waves may still happen, but even if another variant comes along there will be too much built-up immunity for another big one. 
 
