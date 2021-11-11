@@ -46,6 +46,17 @@ print(kids_cases.groupby('Week of').sum())
 print(age_cases[age_cases['Age group']=='<18'])
 
 #%% Plot
+
+date_min = pd.to_datetime('2021-01-16')
+date_max = pd.to_datetime('2021-10-31')
+
+range_dates = [date_min, date_max]
+
+range_max = 500
+range_y = np.array([-range_max * 0.05, 1.05*range_max])
+
+
+
 htmlfile='docs\\assets\\plotly\\CaseRate-Age.html'
 save_png = '.\\docs\\assets\\CaseRate-Age.png'
 
@@ -71,6 +82,9 @@ fig = px.line(
     )
 
 fig.update_traces(line_width=2.5)
+# update axes for date range
+fig.update_xaxes({'range': range_dates})
+fig.update_yaxes({'range': range_y})
 
 # save as html, with plotly JS library loaded from CDN
 fig.write_html(
@@ -80,7 +94,15 @@ fig.write_html(
     include_plotlyjs='cdn',
     )   
 
-os.startfile(htmlfile)
+fig.write_image(
+    file=save_png,
+    height=450,
+    width=700,
+    engine='kaleido',
+    )   
+
+
+os.startfile(save_png)
 
 #%%
 exit
