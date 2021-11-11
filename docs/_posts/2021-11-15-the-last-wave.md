@@ -14,19 +14,19 @@ In the last two months Wisconsin has seen a consistent, moderate level of new ca
 
 There was a further boost in September that I think was primarily due to schools, in a combination of increased transmission and increased testing. You can see in the plot above that positive tests bump up in mid-September, but the postivity rate dips, which indicates that a portion of the cases were probably just from increased testing. (Perhaps from contact tracing school cases?) But then the positivity rate goes back up, so there is increased transmission going on as well.
 
-Then if you break out cases by age, we see that school-age kids and those 35-45 (their parents) account for a lot of this September bump. Then that bump dies away, imitating an overall decrease in cases when in reality, cases in all the other age groups were pretty constant.
+Then if you break out cases by age, we see that school-age kids and those 35-45 (their parents) have the highest case rates in this September bump. The other age groups do follow along, but their trajectory is a lot more gentle. This possibly school-driven bump lasted several weeks, and then began to subside. The plot below shows weekly case rates broken out by age, with data from DHS. I include data from last fall for comparison. 
 
 [![Cases and ages](../assets/CaseRate-Age_2021-11-10.png)](https://www.dhs.wisconsin.gov/covid-19/cases.htm#by%20age)
 
-This mirrors a pattern from last year, where the start of the college year resulted in a large spike of cases, which then settled down and basically followed the trajectory of the rest of the state. This seems to suggest that large *changes* in people's contacts and socializing can result in case spikes, which then can subside after an adjustment period.
+I wonder if this pattern demonstrates a similar dynamic to last fall with college students, where the start of the school year resulted in a large spike of cases, which then settled down and basically followed the trajectory as everyone else. I might speculate that large *changes* in people's contacts and socializing can result in case spikes, which then can subside after an adjustment period.
 
-But now, this week, I think we are finally seeing the beginning, not of the Jordan Love era, but of a winter wave. The graph in the previous section showed the rise in cases and positivity rate in Wisconsin over the last week. The same thing is happening in all our bordering states.
+But the fading of the September bump did not last long. This week I think we are finally seeing the beginning, not of the Jordan Love era, but of a true winter wave. The graph in the previous section showed the rise in cases and positivity rate in Wisconsin over the last week. The same thing is happening in all our bordering states, which makes me more confident it's a seasonal effect instead of something more idiosyncratic. The plot below shows reported cases with data from the [New York Times](https://github.com/nytimes/covid-19-data/blob/master/us-states.csv):
 
-![Midwest cases](../assets/Cases-Midwest-States.png)
+![Midwest cases](../assets/Cases-Midwest-States_2021-11-10.png)
 
 ### Better than the original
 
-The first bit of good news is that the fatality rate has been lower for this wave, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, whcih means the pool of unprotected people is less at risk of death, on average. The plot below shows deaths by death date and cases by diagnosis date. The scale is set so that the lines overlap when the ratio of deaths to cases (the case fatality rate, CFR) is 1.2%. In last winter's peak the CFR was about 1.2%; so far this fall it's more like 0.7%.
+Fortunately, the fatality rate has been lower for the fall wave so far, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, whcih means the pool of unprotected people is less at risk of death. The plot below shows deaths by death date and cases by diagnosis date. The scale is set so that the lines overlap when the ratio of deaths to cases (the case fatality rate, CFR) is 1.2%. In last winter's peak the CFR was about 1.2%; so far this fall it's more like 0.7%.
 
 [![Deaths and cases](../assets/Deaths-Cases-WI_2021-11-10.png)](../dashboard/deaths-hosp.md)
 
