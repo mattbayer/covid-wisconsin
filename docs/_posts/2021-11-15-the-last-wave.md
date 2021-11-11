@@ -4,8 +4,7 @@ title: Winter Covid II: The Last Wave
 hidden: true
 ---
 
-Wisconsin has been 
-Still, I have been waiting for signs of a winter surge, and I think the data from the last week show that it might be starting. If we do, I expect fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
+Wisconsin has been ...Still, I have been waiting for signs of a winter surge, and I think the data from the last week show that it might be starting. If we do, I expect fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
 
 ### Just when you thought it was safe to go back to choir practice
 
@@ -35,7 +34,7 @@ The first bit of good news is that the fatality rate has been lower for this wav
 
 You might question why deaths are even this high - the vaccine is supposed to be 90% or more effective at preventing death, why is the death rate only 50% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is not predominantly from vaccinated people getting sick and not dying, but because the people who do get sick (majority unvaccinated), are less old on average than they were last winter.
 
-![Hospitalizations and cases](Hosp-Cases-WI_2021-11-10.png)
+![Hospitalizations and cases](../assets/Hosp-Cases-WI_2021-11-10.png)
 
 ### Fuel to burn
 
