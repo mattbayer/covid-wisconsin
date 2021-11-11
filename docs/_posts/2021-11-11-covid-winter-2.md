@@ -40,7 +40,9 @@ The other bit of good news is that I think this wave will be limited, because we
 
 By this estimate, only about 25% of Wisconsinites still have no immunity to the virus. This sets some boundaries on how big this new winter wave can be. Our first winter wave infected about 30% of the state; even if this winter wave catches everyone left, it would still be smaller.
 
-Now I think this immunity estimate may be a bit low, for reasons I listed in the previous post, and I also don't think literally everyone will end up infected. We'll also pick up some more vaccinations before the wave is over. On the other hand, there will be some reinfections or breakthroughs adding to the total. Overall, my wild guess is to expect somewhat less than the 25% to get infected in this wave, maybe only 10-15%, for 600-900 thousand infections. Divide by 3 for an estimate of another 200-300 thousand official cases; multiply that by the current case fatality rate of 0.7% for 1400-2100 more deaths.
+Now I think this immunity estimate may be a bit low, for reasons I listed in the previous post, and I also don't think literally everyone will end up infected. We'll also pick up some more vaccinations before the wave is over. On the other hand, there will be some reinfections or breakthroughs adding to the total. 
+
+Overall, my wild guess is to expect somewhat less than the 25% to get infected in this wave, maybe only 10-15%, for 600-900 thousand infections. Divide by 3 for an estimate of another 200-300 thousand official cases; multiply that by the current case fatality rate of 0.7% for 1400-2100 more deaths.
 
 And then I think we really will be done with large waves. Smaller spurts or moderate seasonal waves may still happen, but even if another variant comes along there will be too much built-up immunity for another big one. 
 
