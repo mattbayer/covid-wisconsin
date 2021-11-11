@@ -1795,6 +1795,19 @@ def scrape_widash_agecases():
     age_cases = age_cases.rename(columns=col_rename)
     age_cases['Week of'] = pd.to_datetime(age_cases['Week of'])
 
+    # convert columns to numeric    
+    if isinstance(age_cases['Cases'].iloc[0], str):
+        age_cases['Cases'] = pd.to_numeric(age_cases['Cases'].apply(lambda x: x.replace(',','')))    
+    else:
+        age_cases['Cases'] = pd.to_numeric(age_cases['Cases'])
+        
+    if isinstance(age_cases['Case rate'].iloc[0], str):
+        age_cases['Case rate'] = pd.to_numeric(age_cases['Case rate'].apply(lambda x: x.replace(',','')))
+    else:
+        age_cases['Case rate'] = pd.to_numeric(age_cases['Case rate'])
+        
+            
+
     # Get desired order of age groups (not alphabetical)
     # first rename <18 so age order is also alphabetical, then sort, then 
     # rename back

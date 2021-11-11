@@ -4,7 +4,7 @@ A blog for sharing my attempts at unique analysis of Covid data in Wisconsin.
 ## Author
 **Matt Bayer**
 - https://github.com/mattbayer
-- https://twitter.com/MattBayer3
+- https://twitter.com/MattBayerWI
 
 ## Acknowledgements
 Most data is downloaded from the [State of Wisconsin Department of Health Services Covid data site](https://www.dhs.wisconsin.gov/covid-19/data.htm).

@@ -345,16 +345,19 @@ os.startfile(save_png)
 
 #%% Estimate total 
 
+print('Total immune estimate %')
+print(age_total.loc['All', 'Immune %'])
 
-# wi_pop = age_total['Population'].sum()
-total_immune_age = (age_total['Immune %'] / 100 * age_total['Population']).sum() / wi_pop
+age_adjusted = age_total.loc[age_groups]
+total_immune_adjusted = (age_adjusted['Immune %']/100 * age_adjusted['Population']).sum() / wi_pop
 
-total_vax = age_total['Vaccinated #'].sum() / wi_pop
-total_infected = age_total['Cases'].sum() * infection_factor / wi_pop
-total_immune_naive = total_vax + (1-total_vax) * total_infected
+print('Total immune estimate %, adjusted by age')
+print(total_immune_adjusted*100)
 
 
 #%% Trying by county?
+
+exit
 
 county = covid.read_covid_data_wi('county')
 county = county[county.Date==pd.to_datetime('2021-05-20')]
