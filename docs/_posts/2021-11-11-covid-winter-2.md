@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Winter Wave 2 - The last wave
+title: Covid Winter 2 - The last wave
 hidden: true
 ---
 
-Wisconsin has been on a Covid plateau for a while, not too bad but not great. Still, I have been waiting for signs of a winter surge, and I think the data from the last week show that it might be starting. If we do, I expect moderately fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
+Wisconsin has been on a Covid plateau for a while. Still, I have been waiting for signs of a true winter wave, and I think the data from the last week show that it is starting. If it is, I expect moderately fewer cases than last winter, far fewer deaths, and that this will finally be the last major wave.
 
 ### Just when you thought it was safe to go back to choir practice
 
