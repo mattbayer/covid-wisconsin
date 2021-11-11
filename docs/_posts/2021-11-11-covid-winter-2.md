@@ -26,7 +26,7 @@ In any case, the fading of the September bump did not last long. This week I thi
 
 ### Better than the original
 
-Fortunately, the fatality rate has been lower for the fall wave so far, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, which means the pool of unprotected people is less at risk of death. The plot below shows deaths by death date and cases by diagnosis date. The scale is set so that the lines overlap when the ratio of deaths to cases (the case fatality rate, CFR) is 1.2%. During last winter's peak the CFR was about 1.2%; so far this fall it's more like 0.7%.
+Fortunately, the fatality rate has been lower for the fall wave so far, which I think is directly due to the vaccine. The most vulnerable ages have high vaccination rates, which means the pool of unprotected people is less at risk of death. The plot below shows deaths by death date and cases by diagnosis date from the beginning of the pandemic. The scale is set so that the lines overlap when the ratio of deaths to cases (the case fatality rate, CFR) is 1.2%. During last winter's peak the CFR was about 1.2%; so far this fall it's more like 0.7%.
 
 [![Deaths and cases](../assets/Deaths-Cases-WI_2021-11-10.png)](https://covid-wisconsin.com/dashboard/deaths-hosp/)
 
