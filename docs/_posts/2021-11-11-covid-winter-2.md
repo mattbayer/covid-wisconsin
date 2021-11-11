@@ -30,7 +30,7 @@ Fortunately, the fatality rate has been lower for the fall wave so far, which I 
 
 [![Deaths and cases](../assets/Deaths-Cases-WI_2021-11-10.png)](../dashboard/deaths-hosp.md)
 
-But why are deaths even this high? If the vaccine is supposed to be [90% or more effective at preventing death](2021-10-15-september breakthrough-data.md), why is the death rate only 40% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is mostly not because the vaccinated people getting sick are not dying, but instead because the unvaccinated people getting sick are less old on average than they were last winter.
+But why are deaths even this high? If the vaccine is supposed to be [90% or more effective at preventing death](2021-10-15-september-breakthrough-data.md), why is the death rate only 40% lower than last winter? Well, the majority of people getting sick are not vaccinated. So the reduction of the death rate is mostly not because the vaccinated people getting sick are not dying, but instead because the unvaccinated people getting sick are less old on average than they were last winter.
 
 ### The final chapter
 
