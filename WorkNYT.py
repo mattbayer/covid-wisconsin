@@ -43,7 +43,7 @@ p = p.diff(periods=7)/7
 plotdata = p.melt(value_name='Cases per million', ignore_index=False).reset_index()
 
 # Limit dates
-plotdata = plotdata[plotdata.Date > datetime.datetime(2020, 8, 1)]
+plotdata = plotdata[plotdata.Date > datetime.datetime(2020, 1, 15)]
 # plotdata = plotdata[plotdata.Date < datetime.datetime(2021, 4, 10)]
 
 
@@ -62,7 +62,7 @@ pngfile = 'docs\\assets\\Cases-Midwest-States.png'
 fig.write_image(
     pngfile,
     width=700,
-    height=500,
+    height=450,
     engine='kaleido',
     )
 os.startfile(pngfile)

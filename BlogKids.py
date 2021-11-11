@@ -47,12 +47,12 @@ print(age_cases[age_cases['Age group']=='<18'])
 
 #%% Plot
 
-date_min = pd.to_datetime('2021-01-16')
+date_min = pd.to_datetime('2020-08-01')
 date_max = pd.to_datetime('2021-10-31')
 
 range_dates = [date_min, date_max]
 
-range_max = 500
+range_max = 1100
 range_y = np.array([-range_max * 0.05, 1.05*range_max])
 
 
