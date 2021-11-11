@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Covid Winter 2 - The last wave
+title: "Covid Winter 2: The last wave"
 hidden: false
 ---
 
