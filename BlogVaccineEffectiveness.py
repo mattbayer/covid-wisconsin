@@ -17,6 +17,8 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()  
 
+#%% Date suffix
+date_suffix = '_2021-11-18'
 
 #%% Load population
 
@@ -135,9 +137,8 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
         ))
         
     # add dividers for age groups
+    grouped_widths = vax_age.Population.rolling(2).sum()[1::2]
     if group is None and priority=='Age group':
-        grouped_widths = vax_age.Population.rolling(2).sum()[1::2]
-        grouped_x = grouped_widths.cumsum() - grouped_widths/2
         grouped_edge = grouped_widths.cumsum() - grouped_widths
         grouptext = vax_age['Age group'].unique()
         
@@ -163,8 +164,6 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
 
         
     fig.update_xaxes(
-    #     tickvals = vax_age.Population.cumsum() - vax_age.Population/2,
-    #     ticktext = vax_age['Age group']
         title = 'Share of population'
     )
     fig.update_yaxes(
@@ -172,13 +171,6 @@ def plotly_vax_age_bar(vax_age, outcome, priority='Age group', group=None):
     )
     
     fig.update_xaxes(range=[0,grouped_widths.sum()])
-    # # fig.update_yaxes(range=[0,100])
-    
-    # fig.update_layout(
-    #     title_text = outcome + " by Age and Vax",
-    #     uniformtext=dict(mode="hide", minsize=10),
-    #     xlabel
-    # )
     
     return fig
 
@@ -223,7 +215,7 @@ fig.update_layout(
     )
 fig.update_yaxes(title='Deaths')
 
-save_png = '.\\docs\\assets\\VaxBarAge-DeathRaw-65.png'
+save_png = '.\\docs\\assets\\VaxBarAge-DeathRaw-65'+date_suffix+'.png'
 fig.write_image(
     save_png,
     width=imwidth,
@@ -247,7 +239,7 @@ fig.update_layout(
     )
 
 
-save_png = '.\\docs\\assets\\VaxBarAge-Death-65.png'
+save_png = '.\\docs\\assets\\VaxBarAge-Death-65'+date_suffix+'.png'
 fig.write_image(
     save_png,
     width=imwidth,
@@ -268,7 +260,7 @@ fig.update_layout(
     )
 
 
-save_png = '.\\docs\\assets\\VaxBarAge-Death-Total.png'
+save_png = '.\\docs\\assets\\VaxBarAge-Death-Total'+date_suffix+'.png'
 fig.write_image(
     save_png,
     width=imwidth,
@@ -278,19 +270,18 @@ fig.write_image(
 os.startfile(save_png)
 
 #%% variable width graph - stratified by age
-import time
 
 for outcome in datasets:
     
     fig = plotly_vax_age_bar(vax_age_all, outcome)
     
     fig.update_layout(
-        title_text = outcome + " by vax status <i>and</i> age group<br>Sept 2021",
+        title_text = outcome + " by vax status <i>and</i> age group<br>Oct 2021",
         uniformtext=dict(mode="hide", minsize=10),
         )
     
         
-    save_png = '.\\docs\\assets\\VaxBarAge-' + outcome + '-StratAge.png'
+    save_png = '.\\docs\\assets\\VaxBarAge-' + outcome + '-StratAge'+date_suffix+'.png'
     fig.write_image(
         save_png,
         width=700,
@@ -299,14 +290,11 @@ for outcome in datasets:
     )
     os.startfile(save_png)
 
-# savefile = '.\\docs\\assets\\plotly\\VaxBarAge-Death-StratAge.html'
-# fig.write_html(
-#     file=savefile,
-#     include_plotlyjs='cdn',
-#     )      
-# os.startfile(savefile)
 
 
+
+#%%
+exit
 
 
 #%% vax/unvax with order priority reversed
@@ -327,152 +315,6 @@ fig.write_html(
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
-
-
-
-
-#%% vax/unvax total with age superimposed
-# based loosely on mekko example from plotly documentation https://plotly.com/python/bar-charts/
-
-outcome = datasets[2]
-
-vax_age = vax_age_all[outcome]
-
-labels = 'Total'
-
-vax_frac = vax_age.loc[labels, 'Vax fraction']
-
-widths = {'Vax': vax_frac * pop_age[labels],
-          'Unvax': (1-vax_frac) * pop_age[labels]}
-
-widths_total = widths['Vax'] + widths['Unvax']
-
-data = {
-    "Vax": vax_age.loc[labels, 'Vax'],
-    "Unvax": vax_age.loc[labels, 'Unvax']
-}
-
-
-
-fig = go.Figure()
-for key in data:
-    # x = np.cumsum(widths_total) - widths['Unvax']
-    # if key == 'Vax':
-    #     x = x - widths['Vax']
-        
-    x = np.cumsum(widths[key]) - widths[key]
-    if key == 'Unvax':
-        x = x + widths['Vax'].sum()
-        
-    fig.add_trace(go.Bar(
-        name=key,
-        y=[data[key]],
-        x=x,
-        width=[widths[key]],
-        offset=0,
-        marker_color=color[outcome],
-        marker_pattern_shape=pattern[key],
-        marker_opacity=0.4,
-        # customdata=np.transpose([labels, widths[key]*data[key]]),
-        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
-        # textposition="inside",
-        # textangle=0,
-        # textfont_color="white",
-        hovertemplate="<br>".join([
-            "label: %{customdata[0]}",
-            "width: %{width}",
-            "height: %{y}",
-            "area: %{customdata[1]}",
-        ])
-    ))
-
-# fig.update_xaxes(
-#     tickvals=np.cumsum(widths_total)-widths_total/2,
-#     # ticktext= ["%s<br>%d" % (l, w) for l, w in zip(labels, widths_total)]
-#     ticktext= labels
-# )
-
-# fig.update_xaxes(range=[0,100])
-# fig.update_yaxes(range=[0,100])
-
-
-labels = list(pop_age.index)
-labels.remove('Total')
-vax_frac = vax_age.loc[labels, 'Vax fraction']
-
-widths = {'Vax': vax_frac * pop_age[labels],
-          'Unvax': (1-vax_frac) * pop_age[labels]}
-
-widths_total = widths['Vax'] + widths['Unvax']
-
-data = {
-    "Vax": vax_age.loc[labels, 'Vax'],
-    "Unvax": vax_age.loc[labels, 'Unvax']
-}
-
-
-for key in data:
-    # x = np.cumsum(widths_total) - widths['Unvax']
-    # if key == 'Vax':
-    #     x = x - widths['Vax']
-        
-    x = np.cumsum(widths[key]) - widths[key]
-    if key == 'Unvax':
-        x = x + widths['Vax'].sum()
-        
-    fig.add_trace(go.Bar(
-        name=key,
-        y=data[key],
-        x=x,
-        width=widths[key],
-        offset=0,
-        marker_color=color[outcome],
-        marker_pattern_shape=pattern[key],
-        # customdata=np.transpose([labels, widths[key]*data[key]]),
-        # texttemplate="%{y} x %{width} =<br>%{customdata[1]}",
-        # textposition="inside",
-        # textangle=0,
-        # textfont_color="white",
-        hovertemplate="<br>".join([
-            "label: %{customdata[0]}",
-            "width: %{width}",
-            "height: %{y}",
-            "area: %{customdata[1]}",
-        ])
-    ))
-
-
-
-
-
-
-
-
-
-
-
-
-fig.update_layout(
-    title_text="Cases by Age and Vax - Testing",
-    uniformtext=dict(mode="hide", minsize=10),
-)
-
-savefile = '.\\docs\\assets\\plotly\\VaxBarAge.html'
-fig.write_html(
-    file=savefile,
-    include_plotlyjs='cdn',
-    )      
-os.startfile(savefile)
-
-
-
-
-
-
-
-#%%
-exit
-
 
 #%% process monthly data
 
