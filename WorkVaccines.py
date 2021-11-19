@@ -20,6 +20,7 @@ from tableauscraper import TableauScraper as TS
 # from Our World In Data github, recording CDC data
 
 vax_github = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/us_state_vaccinations.csv'
+vax_local = 'C:\\dev\\covid-wisconsin\\data\\vaccinations\\vax-cdc.csv'
 vax_df = pd.read_csv(vax_github, converters={'date': pd.to_datetime})
 
 # vax_offline = 'data/vaccinations/us_state_vaccinations.csv'
