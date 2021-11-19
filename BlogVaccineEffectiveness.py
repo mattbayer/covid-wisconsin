@@ -76,6 +76,26 @@ vax_age_all = vax_age_all[['Age group', 'Vax status', 'Population', 'Cases', 'Ho
 
 vax_age_all.to_csv('.\\data\\vaccinations\\Breakthroughs_2021-11.csv')
 
+#%% Compute age-adjusted efficacy
+
+vax = vax_age_all[vax_age_all['Vax status'] == 'Vax']
+unvax = vax_age_all[vax_age_all['Vax status'] == 'Unvax']
+vax = vax.set_index('Age group')
+unvax = unvax.set_index('Age group')
+
+vax['Total population'] = vax['Population'] + unvax['Population']
+unvax['Total population'] = vax['Total population']
+pop_wi = vax.loc['Total', 'Total population']
+
+vax['Adjusted Deaths'] = vax['Deaths'] * vax['Total population'] / 1e5
+unvax['Adjusted Deaths'] = unvax['Deaths'] * unvax['Total population'] / 1e5
+
+
+print(vax['Adjusted Deaths'].drop('Total').sum() / pop_wi * 1e5)
+print(unvax['Adjusted Deaths'].drop('Total').sum() / pop_wi * 1e5)
+
+
+
 #%% Settings for all plots
 
 
