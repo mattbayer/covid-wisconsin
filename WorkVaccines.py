@@ -27,9 +27,12 @@ vax_df = pd.read_csv(vax_github, converters={'date': pd.to_datetime})
 # vax_df = pd.read_csv(vax_offline, converters={'date': pd.to_datetime})
 
 vax_wi = vax_df[vax_df.location == 'Wisconsin']
+vax_us = vax_df[vax_df.location == 'United States']
 
 daily = vax_wi.set_index('date').drop('location', axis=1).diff()
 avg7 = daily.rolling(7).mean()
+
+vax_us.plot(x='date', y='people_vaccinated', kind='bar')
 
 #%% Plots
 
