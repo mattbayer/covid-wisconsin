@@ -20,7 +20,7 @@ from tableauscraper import TableauScraper as TS
 ts = TS()
 
 #%% Cases per 100K max for y-axes
-per100k = 60
+per100k = 80
 
 #%% Get positives/tests
 

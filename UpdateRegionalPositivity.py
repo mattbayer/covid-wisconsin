@@ -10,7 +10,7 @@ import os
 import covid
 
 #%% Cases per 100K max for y-axes
-per100k = 60
+per100k = 80
 
 #%% Get the data
 
