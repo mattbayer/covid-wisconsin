@@ -32,7 +32,8 @@ vax_us = vax_df[vax_df.location == 'United States']
 daily = vax_wi.set_index('date').drop('location', axis=1).diff()
 avg7 = daily.rolling(7).mean()
 
-vax_us.plot(x='date', y='people_vaccinated', kind='bar')
+vax_diff = vax_us.set_index('date')['people_vaccinated'].diff()
+vax_diff.plot(y='people_vaccinated')
 
 #%% Plots
 
