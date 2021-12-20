@@ -10,7 +10,8 @@ import os
 import covid
 
 #%% Cases per 100K max for y-axes
-per100k = 80
+per100k = 100
+date_start = datetime.datetime(2021,3,15)
 
 #%% Get the data
 
@@ -129,7 +130,7 @@ fig = covid.plotly_twolines(
     ncol=2,
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/400,
-    date_min=datetime.datetime(2021,1,15),
+    date_min=date_start,
     range_max=per100k,
     col1_mode='avg-bar',
     col2_mode='line',

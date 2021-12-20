@@ -20,7 +20,8 @@ from tableauscraper import TableauScraper as TS
 ts = TS()
 
 #%% Cases per 100K max for y-axes
-per100k = 80
+per100k = 100
+date_start = datetime.datetime(2021,3,15)
 
 #%% Get positives/tests
 
@@ -50,7 +51,7 @@ fig = covid.plotly_twolines(
     'Percent positive',
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/25000,
-    date_min=datetime.datetime(2021,1,15),
+    date_min=date_start,
     range_max= per100k * 60,
     col1_mode='avg-bar',
     col2_mode='line',
