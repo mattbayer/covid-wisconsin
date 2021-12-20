@@ -18,7 +18,8 @@ from tableauscraper import TableauScraper as TS
 ts = TS()  
 
 #%% Date suffix
-date_suffix = '_2021-11-18'
+date_suffix = '_2021-12-19'
+month_label = 'Nov 2021'
 
 #%% Load population
 
@@ -74,7 +75,7 @@ for outcome in datasets:
 # put columns in the right order
 vax_age_all = vax_age_all[['Age group', 'Vax status', 'Population', 'Cases', 'Hospitalizations', 'Deaths']]
 
-vax_age_all.to_csv('.\\data\\vaccinations\\Breakthroughs_2021-11.csv')
+vax_age_all.to_csv('.\\data\\vaccinations\\Breakthroughs' + date_suffix + '.csv')
 
 #%% Compute age-adjusted efficacy
 
@@ -200,6 +201,34 @@ imwidth = 600
 imheight = 450
 
 
+#%% variable width graph - stratified by age
+
+for outcome in datasets:
+    
+    fig = plotly_vax_age_bar(vax_age_all, outcome)
+    
+    fig.update_layout(
+        title_text = outcome + " by vax status <i>and</i> age group<br>" + month_label,
+        uniformtext=dict(mode="hide", minsize=10),
+        )
+    
+        
+    save_png = '.\\docs\\assets\\VaxBarAge-' + outcome + '-StratAge'+date_suffix+'.png'
+    fig.write_image(
+        save_png,
+        width=700,
+        height=imheight,
+        engine='kaleido',
+    )
+    os.startfile(save_png)
+
+
+
+
+
+#%%%%%% Previous plots for explanation blog post, not needed for updates
+exit
+
 #%% 65+ straight numbers
 fig = go.Figure()
 for status in ['Vax', 'Unvax']:
@@ -289,33 +318,9 @@ fig.write_image(
 )
 os.startfile(save_png)
 
-#%% variable width graph - stratified by age
 
-for outcome in datasets:
-    
-    fig = plotly_vax_age_bar(vax_age_all, outcome)
-    
-    fig.update_layout(
-        title_text = outcome + " by vax status <i>and</i> age group<br>Oct 2021",
-        uniformtext=dict(mode="hide", minsize=10),
-        )
-    
-        
-    save_png = '.\\docs\\assets\\VaxBarAge-' + outcome + '-StratAge'+date_suffix+'.png'
-    fig.write_image(
-        save_png,
-        width=700,
-        height=imheight,
-        engine='kaleido',
-    )
-    os.startfile(save_png)
-
-
-
-
-#%%
+#%%%%%%%%%%%% Other plot attempts
 exit
-
 
 #%% vax/unvax with order priority reversed
 
