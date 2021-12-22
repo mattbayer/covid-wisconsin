@@ -237,7 +237,7 @@ def plotly_changebubble(
     # Have both a proportional threshold and an absolute number threshold for
     # when to display a concentric circle for change vs. only one circle for
     # negligible change.
-    threshold = 0.3
+    threshold = 0.2
     minchange = 10*size_factor
     increasefrac = geodata[currcol] / geodata[pastcol]
     increaseabs = abs(geodata[currcol] - geodata[pastcol])
