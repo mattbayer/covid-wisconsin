@@ -290,6 +290,7 @@ def plotly_changebubble(
             lat=increased.plotlat,            
             text=location_names[pick_increased],
             customdata=increased[popcol],
+            # customdata=(increased[popcol], increased[currcol]/increased[pastcol]-1),
             marker=dict(
                 size=increased[currcol], 
                 sizeref=size_factor,
@@ -312,12 +313,11 @@ def plotly_changebubble(
             hovertemplate=
                 '<b>%{text}</b><br>' +
                 'Population: %{customdata:.0f}<br>' +
+                # 'Population: %{customdata[0]:.0f}<br>' +
                 plotlabels['sizelabel']  + ' : %{marker.size:.1f}<br>' + 
                 plotlabels['colorlabel'] + ' : %{marker.color:.1f}'+
                 '<extra></extra>',
-                # No hover info, it was included in the previous bubble plot
-            # hovertemplate=None,
-            # hoverinfo='skip', 
+                # '<extra>%{customdata[1]:.0%}</extra>',
             showlegend=False,
             legendgroup='Current',
             )
