@@ -22,54 +22,64 @@ import os
 
 
 
-#%% GISAID metadata download
-update = True
+#%% TSV data from GISAID
 
-if update:
+# path = 'data\\sequences'
+# tsv_file = 'gisaid_wisconsin_dec_2021-12-27.metadata.tsv'
+
+# gisaid = pd.read_csv(os.path.join(path, tsv_file), sep='\t')
+
+#%% FASTA data from GISAID
+from Bio import SeqIO
+
+path = 'data\\sequences'
+fasta_file = os.path.join(path, 'gisaid_wisconsin_dec_2021-12-27.sequences.fasta')
+
+
+def parse_fasta(fasta_file):    
+    fasta_sequences = SeqIO.parse(open(fasta_file),'fasta')  
+    cols = [[], [], []]
     
-    import zipfile
-    import requests
-    
-    zip_url = 'https://data.nextstrain.org/files/ncov/open/metadata.tsv.gz'
-    sequences_dir = '.\\data\\sequences\\'
-    
-    # download the zip file
-    r = requests.get(zip_url)
-    # write the zip file
-    zip_filename = os.path.join(sequences_dir, 'nextstrain_metadata.tsv.gz')
-    open(zip_filename, 'wb').write(r.content)
-    
-    with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
-        zip_ref.extract('metadata.tsv', path=sequences_dir)
+    # get only the metadata, discard the sequences
+    for seq_record in fasta_sequences:
+        record_id = seq_record.id
+        components = record_id.split('/')
+        cols[0].append(components[0])
+        cols[1].append(components[1])
+        cols[2].append(components[2])
         
-    # remove temp zip file
-    os.remove(zip_filename)
+    fasta_data = pd.DataFrame({'Virus name': cols[0],
+                               'Accession ID': cols[1],
+                               'Collection date': pd.to_datetime(cols[2])})
     
-gisaid = pd.read_csv(os.path.join(sequences_dir, 'metadata.tsv'), sep='\t')
+    return fasta_data
 
-#%% Metadata filtering
-usa = gisaid[gisaid.country=='USA']
-wi = usa[usa.division == 'Wisconsin']
-wi.date = pd.to_datetime(wi.date.copy())
+    
+gisaid = parse_fasta(fasta_file)
+ 
+
+#%% Count by week
 
 def count_by_week(gisaid_data):       
     gisaid_work = gisaid_data.copy()
-    gisaid_work['Week of'] = gisaid_work['date'].apply(lambda d: d - datetime.timedelta(days=d.weekday()))
+    gisaid_work['Week of'] = gisaid_work['Collection date'].apply(lambda d: d - datetime.timedelta(days=d.weekday()))
     
-    # count the sequences, only keep the count of the sequence name column
-    seq_count = gisaid_work.groupby(['Week of', 'Nextstrain_clade']).count().strain
-    
+    seq_count = gisaid_work.groupby('Week of').count()
+    seq_count['Sequence count'] = seq_count['Virus name']
+    seq_count = seq_count['Sequence count']
     seq_count = seq_count.reset_index(drop=False)
-    seq_count = seq_count.rename(columns={'strain': 'count', 'Nextstrain_clade': 'clade'})
-    seq_count = seq_count.pivot(index='Week of', columns='clade', values='count')
     
     return seq_count
 
-wi_count = count_by_week(wi)
+seq_count = count_by_week(gisaid_all)
 
-#%% Alternative data sources to GISAID
+seq_count.plot(x='Week of', y='Sequence count', kind='bar')    
 
-# covariants.org
+var_count = count_by_week(gisaid_variants)
+var_count.plot(x='Week of', y='Sequence count', kind='bar')   
+
+
+#%% Covariants.org data
 # nice because they compile the GISAID data into a file on github
 # disadvantage is that it's already aggregated to 2-week blocks
 covariants = pd.read_json('https://raw.githubusercontent.com/hodcroftlab/covariants/master/cluster_tables/USAClusters_data.json')
@@ -97,9 +107,10 @@ col_rename = {'total_sequences': 'Total',
               'Delta': 'Delta',
               'Omicron': 'Omicron'}
 
-wi_num['Week'] = pd.to_datetime(wi_num.week)
+# change to midweek
+wi_num['Date'] = pd.to_datetime(wi_num.week) + datetime.timedelta(days=7)
 
-wi_num = wi_num.set_index('Week')
+wi_num = wi_num.set_index('Date')
 wi_num = wi_num[col_rename.keys()]
 wi_num = wi_num.rename(columns=col_rename)
 
@@ -113,11 +124,16 @@ wi_frac =wi_num.div(wi_num['Total'], axis='rows')
 
 # wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other variants'])
 
-#%% plotly version
-plotdata = wi_frac.copy() #wi[['Alpha (B.1.1.7) fraction', 'Delta (B.1.617.2) fraction', 'Other variants']]
-plotdata.index.name='Date'
+#%% plotly fraction plot version
+
+
+start_date = pd.to_datetime('2021-02-15')
+end_date = pd.to_datetime('2021-12-27')
+
+
+plotdata = wi_frac.copy() 
 plotdata = plotdata.reset_index()
-plotdata = plotdata[plotdata.Date >= pd.to_datetime('2021-01-15')]
+plotdata = plotdata[plotdata.Date >= start_date]
 
 fig = px.area(
     plotdata,
@@ -148,8 +164,6 @@ os.startfile(save_png)
 
 #%% Get case data by test date
 
-start_date = pd.to_datetime('2021-01-15')
-end_date = pd.to_datetime('2021-12-27')
 
 plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
 # plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
@@ -208,3 +222,54 @@ fig.write_image(
 os.startfile(save_png)
 
 
+
+#%%
+exit
+
+#%% extra
+
+
+#%% Nextstrain metadata download
+update = True
+
+if update:
+    
+    import zipfile
+    import requests
+    
+    zip_url = 'https://data.nextstrain.org/files/ncov/open/metadata.tsv.gz'
+    sequences_dir = '.\\data\\sequences\\'
+    
+    # download the zip file
+    r = requests.get(zip_url)
+    # write the zip file
+    zip_filename = os.path.join(sequences_dir, 'nextstrain_metadata.tsv.gz')
+    open(zip_filename, 'wb').write(r.content)
+    
+    with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+        zip_ref.extract('metadata.tsv', path=sequences_dir)
+        
+    # remove temp zip file
+    os.remove(zip_filename)
+    
+gisaid = pd.read_csv(os.path.join(sequences_dir, 'metadata.tsv'), sep='\t')
+
+#%% Metadata filtering
+usa = gisaid[gisaid.country=='USA']
+wi = usa[usa.division == 'Wisconsin']
+wi.date = pd.to_datetime(wi.date.copy())
+
+def count_by_week(gisaid_data):       
+    gisaid_work = gisaid_data.copy()
+    gisaid_work['Week of'] = gisaid_work['date'].apply(lambda d: d - datetime.timedelta(days=d.weekday()))
+    
+    # count the sequences, only keep the count of the sequence name column
+    seq_count = gisaid_work.groupby(['Week of', 'Nextstrain_clade']).count().strain
+    
+    seq_count = seq_count.reset_index(drop=False)
+    seq_count = seq_count.rename(columns={'strain': 'count', 'Nextstrain_clade': 'clade'})
+    seq_count = seq_count.pivot(index='Week of', columns='clade', values='count')
+    
+    return seq_count
+
+wi_count = count_by_week(wi)
