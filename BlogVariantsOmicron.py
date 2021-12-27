@@ -23,61 +23,22 @@ import os
 
 
 #%% TSV data from GISAID
+# this didn't contain lineage information...
 
 # path = 'data\\sequences'
 # tsv_file = 'gisaid_wisconsin_dec_2021-12-27.metadata.tsv'
 
 # gisaid = pd.read_csv(os.path.join(path, tsv_file), sep='\t')
 
-#%% FASTA data from GISAID
-from Bio import SeqIO
 
-path = 'data\\sequences'
-fasta_file = os.path.join(path, 'gisaid_wisconsin_dec_2021-12-27.sequences.fasta')
+#%% Also tried fasta
+# but found out again that these files don't contain lineage information either.
+# Previously I was downloading multiple files, filtered by lineage before downloading.
 
+#%% Manual data from WI dashboard
 
-def parse_fasta(fasta_file):    
-    fasta_sequences = SeqIO.parse(open(fasta_file),'fasta')  
-    cols = [[], [], []]
-    
-    # get only the metadata, discard the sequences
-    for seq_record in fasta_sequences:
-        record_id = seq_record.id
-        components = record_id.split('/')
-        cols[0].append(components[0])
-        cols[1].append(components[1])
-        cols[2].append(components[2])
-        
-    fasta_data = pd.DataFrame({'Virus name': cols[0],
-                               'Accession ID': cols[1],
-                               'Collection date': pd.to_datetime(cols[2])})
-    
-    return fasta_data
-
-    
-gisaid = parse_fasta(fasta_file)
- 
-
-#%% Count by week
-
-def count_by_week(gisaid_data):       
-    gisaid_work = gisaid_data.copy()
-    gisaid_work['Week of'] = gisaid_work['Collection date'].apply(lambda d: d - datetime.timedelta(days=d.weekday()))
-    
-    seq_count = gisaid_work.groupby('Week of').count()
-    seq_count['Sequence count'] = seq_count['Virus name']
-    seq_count = seq_count['Sequence count']
-    seq_count = seq_count.reset_index(drop=False)
-    
-    return seq_count
-
-seq_count = count_by_week(gisaid_all)
-
-seq_count.plot(x='Week of', y='Sequence count', kind='bar')    
-
-var_count = count_by_week(gisaid_variants)
-var_count.plot(x='Week of', y='Sequence count', kind='bar')   
-
+manual = pd.read_csv('data/sequences/manual-wi-dashboard.csv')
+manual['Start Date'] = manual.Week.apply(lambda w: datetime.datetime.strptime('2021-'+str(w)+'-1', '%Y-%U-%w'))
 
 #%% Covariants.org data
 # nice because they compile the GISAID data into a file on github
