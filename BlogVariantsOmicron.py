@@ -50,7 +50,22 @@ gisaid = pd.read_csv(os.path.join(sequences_dir, 'metadata.tsv'), sep='\t')
 #%% Metadata filtering
 usa = gisaid[gisaid.country=='USA']
 wi = usa[usa.division == 'Wisconsin']
+wi.date = pd.to_datetime(wi.date.copy())
 
+def count_by_week(gisaid_data):       
+    gisaid_work = gisaid_data.copy()
+    gisaid_work['Week of'] = gisaid_work['date'].apply(lambda d: d - datetime.timedelta(days=d.weekday()))
+    
+    # count the sequences, only keep the count of the sequence name column
+    seq_count = gisaid_work.groupby(['Week of', 'Nextstrain_clade']).count().strain
+    
+    seq_count = seq_count.reset_index(drop=False)
+    seq_count = seq_count.rename(columns={'strain': 'count', 'Nextstrain_clade': 'clade'})
+    seq_count = seq_count.pivot(index='Week of', columns='clade', values='count')
+    
+    return seq_count
+
+wi_count = count_by_week(wi)
 
 #%% Alternative data sources to GISAID
 
