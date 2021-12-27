@@ -6,3 +6,4 @@ __pycache__/covid.cpython-37.pyc
 docs/graphics-work/~$CovidWI.pptx
 *.fasta
 *.xz
+data/sequences/metadata.tsv

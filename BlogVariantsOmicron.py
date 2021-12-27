@@ -22,6 +22,35 @@ import os
 
 
 
+#%% GISAID metadata download
+update = True
+
+if update:
+    
+    import zipfile
+    import requests
+    
+    zip_url = 'https://data.nextstrain.org/files/ncov/open/metadata.tsv.gz'
+    sequences_dir = '.\\data\\sequences\\'
+    
+    # download the zip file
+    r = requests.get(zip_url)
+    # write the zip file
+    zip_filename = os.path.join(sequences_dir, 'nextstrain_metadata.tsv.gz')
+    open(zip_filename, 'wb').write(r.content)
+    
+    with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+        zip_ref.extract('metadata.tsv', path=sequences_dir)
+        
+    # remove temp zip file
+    os.remove(zip_filename)
+    
+gisaid = pd.read_csv(os.path.join(sequences_dir, 'metadata.tsv'), sep='\t')
+
+#%% Metadata filtering
+usa = gisaid[gisaid.country=='USA']
+wi = usa[usa.division == 'Wisconsin']
+
 
 #%% Alternative data sources to GISAID
 
