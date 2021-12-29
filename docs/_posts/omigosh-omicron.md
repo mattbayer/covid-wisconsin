@@ -12,11 +12,17 @@ We're still having a winter wave, of course, but its complexion will be quite a 
 ### Omicron in Wisconsin
 As of this writing, it looks like Omicron makes up over 50% of cases in Wisconsin, and will likely be more than 90% within another week or two. It was less than 5% at the beginning of December. The warnings about how fast it would take over and spread turned out to be true. The plot below shows what fraction of cases is attributable to each variant dating back to March. For a similar but updated dashboard, see the [State Library of Hygiene dashboard](https://dataportal.slh.wisc.edu/sc2dashboard), clicking "Variant Report" and then "Proportion of Variants".
 
-![Variant fractions](../assets/Variant-Fraction_2021-12-27.png)
+![Variant fractions](../assets/Variant-Fraction_2021-12-29.png)
 
-I think we are just starting to see this translate into a spike of new cases. Below is a plot of positive tests multiplied by the variant fractions above. I think the rise in the last week or so is the start of our Omicron spike. (The small dip in the last couple days is from lower numbers of tests over Christmas.)
+I think we are just starting to see this translate into a spike of new cases. Below is a plot of positive tests multiplied by the variant fractions above. The rise in the last week or so sure looks like the start of our Omicron spike. (The small dip in the last couple days is from lower numbers of tests over Christmas.)
 
-Based on how this is playing out in other states, I expect it to show up first in the cities, where travelers seeded it earlier. 
+![Variant cases](../assets/Variant-Cases_2021-12-29.png)
+
+Based on how this is playing out in other states, I expect it to show up first in the cities, where travelers seeded it earlier. This pattern is easiest to see in the South, where cases levels were recently very low until Omicron arrived. The map below is from the [New York Times](https://www.nytimes.com/interactive/2021/us/covid-cases.html) - see if you can find Miami, Atlanta, and Houston, not to mention New York City, Washington DC, and Seattle.
+
+In Wisconsin I think it is starting out similarly. Milwaukee and Madison are the only counties currently showing a significant increase in cases averaged over 14 days. I'm guessing that will ramp up and then spread to the rest of the state.
+
+[![Case change WI](../assets/Map-CaseChange-WI-2021_12_29.png)](https://covid-wisconsin.com/dashboard/)
 
 
 ### Omicron in a nutshell
