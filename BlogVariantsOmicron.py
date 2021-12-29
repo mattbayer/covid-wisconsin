@@ -118,7 +118,7 @@ fig = px.area(
     plotdata,
     x='Date',
     y=['Omicron', 'Delta', 'Alpha', 'Other'], 
-    color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
+    color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
     labels={'value':'Variant share', 'variable':'Variant'},
     title='Coronavirus variant share in WI')
 
@@ -177,7 +177,8 @@ fig = px.area(
     x='Date',
     y=['Omicron', 'Delta', 'Alpha', 'Other variants'], 
     # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
-    color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
+    # color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
+    color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
     labels={'value':'Cases/day', 'variable':'Variant'},
     title='Estimated cases by variant in WI')
 
