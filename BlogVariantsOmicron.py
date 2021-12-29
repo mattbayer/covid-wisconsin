@@ -37,8 +37,21 @@ import os
 
 #%% Manual data from WI dashboard
 
+# read csv of manual-input data
 manual = pd.read_csv('data/sequences/manual-wi-dashboard.csv')
+
+
+manual['Total'] = manual.drop('Week', axis=1).sum(axis=1)
 manual['Start Date'] = manual.Week.apply(lambda w: datetime.datetime.strptime('2021-'+str(w)+'-1', '%Y-%U-%w'))
+
+# midpoint date for plotting
+manual['Date'] = manual['Start Date'] + datetime.timedelta(days=3)
+
+# create fraction dataframe
+manual_frac = manual[['Date', 'Delta', 'Omicron', 'Other', 'Total']]
+manual_frac = manual_frac.set_index('Date')
+manual_frac = manual_frac.div(manual_frac['Total'], axis='rows')
+
 
 #%% Covariants.org data
 # nice because they compile the GISAID data into a file on github
@@ -77,7 +90,7 @@ wi_num = wi_num.rename(columns=col_rename)
 
 wi_num['Other'] = wi_num['Total'] - wi_num['Alpha'] - wi_num['Delta'] - wi_num['Omicron']
 
-wi_frac =wi_num.div(wi_num['Total'], axis='rows')
+wi_frac = wi_num.div(wi_num['Total'], axis='rows')
 
 # wi['Alpha'] = wi['Alpha #'] / wi['Total']
 # wi['Delta'] = wi['Delta #'] / wi['Total']
@@ -85,11 +98,16 @@ wi_frac =wi_num.div(wi_num['Total'], axis='rows')
 
 # wi.plot(y=['Alpha (B.1.1.7)', 'Delta (B.1.617.2)', 'Other variants'])
 
-#%% plotly fraction plot version
+#%% Combine auto and manual fraction dataframes
 
+wi_frac = wi_frac[wi_frac.index < manual_frac.index.min()]
+wi_frac = wi_frac.append(manual_frac)
+
+#%% plotly fraction plot version
+end_date_str = '2021-12-27'
 
 start_date = pd.to_datetime('2021-02-15')
-end_date = pd.to_datetime('2021-12-27')
+end_date = pd.to_datetime(end_date_str)
 
 
 plotdata = wi_frac.copy() 
@@ -113,7 +131,7 @@ fig.write_html(
 os.startfile(savefile)
 
 
-save_png = '.\\docs\\assets\\Variant-Fraction_2021-12-27.png'
+save_png = '.\\docs\\assets\\Variant-Fraction_'+end_date_str+'.png'
 fig.write_image(
     save_png,
     width=700,
@@ -173,7 +191,7 @@ os.startfile(savefile)
 
 
 
-save_png = '.\\docs\\assets\\Variant-Cases_2021-12-27.png'
+save_png = '.\\docs\\assets\\Variant-Cases_'+end_date_str+'.png'
 fig.write_image(
     save_png,
     width=700,
