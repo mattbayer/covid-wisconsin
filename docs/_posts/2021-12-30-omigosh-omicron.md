@@ -20,7 +20,7 @@ I think we are just starting to see this translate into a spike of new cases. Be
 
 ![Variant cases](../assets/Variant-Cases_2021-12-27.png)
 
-Based on how this is playing out in other states, I expect it to show up first in the cities, where travelers may seed it first. This pattern is easiest to see in states where cases levels were previously pretty low. The map below is from the [New York Times](https://www.nytimes.com/interactive/2021/us/covid-cases.html) - see if you can find Miami, Atlanta, and Houston, not to mention New York City, Washington DC, and Seattle.
+Based on how this is playing out in other states, I expect it to show up first in the cities, where it first gets seeded by travelers. This pattern is easiest to see in states where cases levels were previously pretty low. The map below is from the [New York Times](https://www.nytimes.com/interactive/2021/us/covid-cases.html) - see if you can find Miami, Atlanta, and Houston, not to mention New York City, Washington DC, and Seattle.
 
 ![NYT case map](../assets/NYT-Map-USA_2021-12-29.png)
 
