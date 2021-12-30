@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Omigosh Omicron
-hidden: true
+hidden: false
 ---
 
 Omicron is here in Wisconsin. It will cause a large spike in cases; outcomes will be less severe than previous waves. I am not going to try to predict how large or how much less.
