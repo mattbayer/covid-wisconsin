@@ -28,7 +28,7 @@ In Wisconsin I think it is starting out similarly. Milwaukee and Madison are the
 
 [![Case change WI](../assets/Map-CaseChange-WI-2021_12_29.png)](https://covid-wisconsin.com/dashboard/)
 
-### Omicron in a nutshell
+### Onset and outcomes
 So what now? Here's what I think we know about Omicron. A good summing-up reference is [the UK's risk assessment](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043840/22-december-2021-risk-assessment-for-SARS-Omicron_VOC-21NOV-01_B.1.1.529.pdf).
 
 **Transmission.** Omicron is clearly spreading quickly and overtaking Delta. This is because:
