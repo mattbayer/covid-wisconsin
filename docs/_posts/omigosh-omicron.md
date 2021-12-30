@@ -4,10 +4,12 @@ title: Omigosh Omicron
 hidden: true
 ---
 
+Omicron is here in Wisconsin. It will cause a large spike in cases; outcomes will be less severe than previous waves. I am not going to try to predict how large or how much less.
 
-First of all, I need to stop making predictions, because Covid seems to take that as an invitation to sweep the world with a new variant. [Last June](https://covid-wisconsin.com/2021/06/14/immune/#is-it-enough) I predicted a quiet summer and smallish winter wave; by July Delta had taken over the state, sparked a late-summer wave, and worsened the winter prognosis. Then in [early November](2021-11-11-covid-winter-2.md) I predicted that Wisconsin would see a sizable winter wave of Delta, but that this would be the last major Covid wave. Two weeks later Omicron was discovered. 
+### O, I am fortune's fool
+See, whenever I make a prediction, Covid seems to take that as an invitation to sweep the world with a new variant. [Last June](https://covid-wisconsin.com/2021/06/14/immune/#is-it-enough) I predicted a quiet summer and smallish winter wave; by July Delta had taken over the state, sparked a late-summer wave that only got worse in winter. Then in [early November](2021-11-11-covid-winter-2.md) I predicted that Wisconsin would see a sizable winter wave of Delta, but that this would be the last major Covid wave. Two weeks later Omicron was discovered. 
 
-We're still having a winter wave, of course, but its complexion will be quite a bit different. It might still be "the end", but I'm done with predictions for now.
+We're still having a winter wave, of course, but its complexion will be quite a bit different.
 
 ### Omicron in Wisconsin
 As of this writing, it looks like Omicron makes up over 50% of cases in Wisconsin, and will likely be more than 90% within another week or two. It was less than 5% at the beginning of December. The warnings about how fast it would take over and spread turned out to be true. The plot below shows what fraction of cases is attributable to each variant dating back to March. For a similar but updated dashboard, see the [State Library of Hygiene dashboard](https://dataportal.slh.wisc.edu/sc2dashboard), clicking "Variant Report" and then "Proportion of Variants".
@@ -26,19 +28,16 @@ In Wisconsin I think it is starting out similarly. Milwaukee and Madison are the
 
 [![Case change WI](../assets/Map-CaseChange-WI-2021_12_29.png)](https://covid-wisconsin.com/dashboard/)
 
-
 ### Omicron in a nutshell
-Omicron is clearly spreading quickly and overtaking Delta. 
+So what now? Here's what I think we know about Omicron. A good summing-up reference is [the UK's risk assessment](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1043840/22-december-2021-risk-assessment-for-SARS-Omicron_VOC-21NOV-01_B.1.1.529.pdf).
 
+**Transmission.** Omicron is clearly spreading quickly and overtaking Delta. This is because:
 1. Omicron reduces protection against new infection from existing immunity, making breakthrough and reinfection more likely.
-1. It probably has a shorter transmission interval (the time between infection and onward transmission), which means it both spreads and peaks faster.
-1. It may also be instrinsically more transmissible, even for people without existing immunity. But this is less clear, because it is hard to disentangle intrinsic and immunity effects.
+1. It probably has a [shorter transmission interval](https://mobile.twitter.com/Bob_Wachter/status/1473787896339439616) (the time between infection and onward transmission), which means it both spreads and peaks faster.
+1. For those without immunity, it may have [comparable transmissibility to Delta](https://twitter.com/kakape/status/1476516113664163841). This is less clear, because it is hard to disentangle intrinsic and immunity effects.
 
-In other words, Omicron is not slowed down as much by existing immunity, and it moves faster in the first place.
+**Severity.** Outcomes will most likely be less severe than in previous waves.
+1. Existing immunity holds up against severe disease, better than against infection.
+1. Omicron looks to be moderately less severe than Delta, even apart from immunity. (Moderate meaning something like 50% lower risk of hospitalization, not like a common cold.)
 
-On the other hand, there's good reason to think the results will be less severe than in previous waves.
-
-1. Existing immunity holds up much better against severe disease from Omicron.
-1. Omicron looks to be intrinsically less severe than Delta, moderately so. Again this is not totally clear because of the combination intrinsic and immunity effects, but there seems to be some converging evidence.
-
-In any event 
+So we will see a lot of infections, but each infection is less likely to be severe than in previous waves. I don't think we know enough to predict precisely how that will multiply together. We'll find out pretty quickly.
