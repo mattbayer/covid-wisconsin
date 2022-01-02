@@ -104,7 +104,7 @@ wi_frac = wi_frac[wi_frac.index < manual_frac.index.min()]
 wi_frac = wi_frac.append(manual_frac)
 
 #%% plotly fraction plot version
-end_date_str = '2021-12-27'
+end_date_str = '2021-12-29'
 
 start_date = pd.to_datetime('2021-02-15')
 end_date = pd.to_datetime(end_date_str)
