@@ -104,9 +104,10 @@ wi_frac = wi_frac[wi_frac.index < manual_frac.index.min()]
 wi_frac = wi_frac.append(manual_frac)
 
 #%% plotly fraction plot version
-end_date_str = '2021-12-29'
+end_date_str = '2022-01-05'
 
-start_date = pd.to_datetime('2021-02-15')
+# start_date = pd.to_datetime('2021-02-15')
+start_date = pd.to_datetime('2021-06-15')
 end_date = pd.to_datetime(end_date_str)
 
 
@@ -155,8 +156,6 @@ plotdata['Cases 7-day'] = plotdata.Cases.rolling(7).mean()
 
 #%% Plot cases by proportion of variants
 variants_temp = wi_frac.copy()
-# advanced dates one week, so they're plotted in the middle of the sum range
-variants_temp.index = variants_temp.index + datetime.timedelta(days=7)
 
 plotdata['Alpha fraction'] = variants_temp['Alpha']
 plotdata['Delta fraction'] = variants_temp['Delta']
@@ -175,10 +174,12 @@ plotdata = plotdata[~np.isnan(plotdata['Other variants'])]
 fig = px.area(
     plotdata.reset_index(),
     x='Date',
-    y=['Omicron', 'Delta', 'Alpha', 'Other variants'], 
+    y=['Omicron', 'Delta', 'Other variants'], 
+    # y=['Omicron', 'Delta', 'Alpha', 'Other variants'], 
     # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
     # color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
-    color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
+    # color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
+    color_discrete_sequence=['black', 'darkslateblue', 'gray'],
     labels={'value':'Cases/day', 'variable':'Variant'},
     title='Estimated cases by variant in WI')
 
