@@ -20,8 +20,8 @@ from tableauscraper import TableauScraper as TS
 ts = TS()
 
 #%% Cases per 100K max for y-axes
-per100k = 200
-date_start = datetime.datetime(2021,5,15)
+per100k = 250
+date_start = datetime.datetime(2021,6,15)
 
 #%% Get positives/tests
 
@@ -122,13 +122,14 @@ reduced = reduced.rename(columns=col_rename)
 reduced.Date = pd.to_datetime(reduced.Date).apply(lambda d: d.date())
 reduced = reduced.sort_values('Date')
 
-avg_window = 14
+avg_window = 7
+diff_window = 14
 
 # isolate cases
 cases = reduced.pivot(index='Date', columns='County', values='Cases')
 cases_avg = cases.rolling(window=avg_window, center=False).mean()
 currcases = cases_avg.iloc[-1]
-pastcases = cases_avg.iloc[-1-avg_window]
+pastcases = cases_avg.iloc[-1-diff_window]
 
 # set any negative values to 0
 def zeroneg(x):
@@ -173,7 +174,7 @@ covid.plotly_changebubble(
     color_range=cases_color_range,
     colorscale='Blues',
     location_names=display_names,
-    plotlabels=dict(title='Change in Cases by County<br>(by 14-day avg)', sizelabel='Cases'),
+    plotlabels=dict(title='Change in Cases by County<br>(7-day avg, 14-day change)', sizelabel='Cases'),
     savefile='.\\docs\\_includes\\plotly\\Map-CaseChange-WI.html',
     fig_height=600,
     showfig=True,

@@ -10,8 +10,8 @@ import os
 import covid
 
 #%% Cases per 100K max for y-axes
-per100k =200
-date_start = datetime.datetime(2021,5,15)
+per100k = 250
+date_start = datetime.datetime(2021,6,15)
 
 #%% Get the data
 
