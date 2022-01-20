@@ -96,7 +96,7 @@ shade_preliminary(fig, start_date, end_date)
 
 fig.write_html(
     file=savefile,
-    default_height=500,
+    default_height=480,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
@@ -142,7 +142,7 @@ shade_preliminary(fig, start_date, end_date)
 
 fig.write_html(
     file=savefile,
-    default_height=500,
+    default_height=480,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
