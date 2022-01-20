@@ -71,7 +71,7 @@ fig = covid.plotly_twolines(
     plotcolors=['firebrick', 'steelblue', 'rosybrown'],
     secondary_scale=1/cfr,
     # date_min=datetime.datetime(2021,1,15),
-    range_max=110,
+    range_max=160,
     col1_mode='avg-bar',
     col2_mode='avg',
     plotlabels = {'title': 'Deaths vs Cases - WI<br>(CFR '+str(cfr*100)+'%)',
@@ -96,6 +96,7 @@ shade_preliminary(fig, start_date, end_date)
 
 fig.write_html(
     file=savefile,
+    default_height=400,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
@@ -117,7 +118,7 @@ fig = covid.plotly_twolines(
     plotcolors=['darkorange', 'steelblue', 'burlywood'],
     secondary_scale=1/hrate,
     # date_min=datetime.datetime(2021,1,15),
-    range_max=850,
+    range_max=1200,
     col1_mode='avg-bar',
     col2_mode='avg',
     plotlabels = {'title': 'Hospital Admissions vs Cases - WI',
@@ -141,6 +142,7 @@ shade_preliminary(fig, start_date, end_date)
 
 fig.write_html(
     file=savefile,
+    default_height=400,
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
