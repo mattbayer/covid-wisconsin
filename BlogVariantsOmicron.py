@@ -37,12 +37,12 @@ import os
 
 #%% Manual data from WI dashboard
 
-# read csv of manual-input data
+# read csv of manual-input dataWeek.
 manual = pd.read_csv('data/sequences/manual-wi-dashboard.csv')
 
 
-manual['Total'] = manual.drop('Week', axis=1).sum(axis=1)
-manual['Start Date'] = manual.Week.apply(lambda w: datetime.datetime.strptime('2021-'+str(w)+'-1', '%Y-%U-%w'))
+manual['Total'] = manual.drop(['Year', 'Week'], axis=1).sum(axis=1)
+manual['Start Date'] = manual.apply(lambda x: datetime.datetime.strptime(str(x.Year)+'-'+str(x.Week)+'-1', '%Y-%U-%w'), axis=1)
 
 # midpoint date for plotting
 manual['Date'] = manual['Start Date'] + datetime.timedelta(days=3)
@@ -104,7 +104,7 @@ wi_frac = wi_frac[wi_frac.index < manual_frac.index.min()]
 wi_frac = wi_frac.append(manual_frac)
 
 #%% plotly fraction plot version
-end_date_str = '2022-01-05'
+end_date_str = '2022-01-30'
 
 # start_date = pd.to_datetime('2021-02-15')
 start_date = pd.to_datetime('2021-06-15')
@@ -144,26 +144,76 @@ os.startfile(save_png)
 
 #%% Get case data by test date
 
+start_date = pd.to_datetime('2021-06-15')
+end_date = pd.to_datetime(end_date_str)
 
 plotdata = pd.DataFrame(index=pd.date_range(start=start_date, end=end_date))
-# plotdata['Cases'] = widata.set_index('Date')['POS_NEW']
-# plotdata['Cases 7-day'] = widata.set_index('Date')['POS_NEW'].rolling(7).mean()
 
 pos_df = covid.scrape_widash_postest()
 
 plotdata['Cases'] = pos_df.set_index('Date')['Positive']
 plotdata['Cases 7-day'] = plotdata.Cases.rolling(7).mean()
 
-#%% Plot cases by proportion of variants
+#%% Plot cases by proportion of variants, Dec 2021 version
+# variants_temp = wi_frac.copy()
+
+# plotdata['Alpha fraction'] = variants_temp['Alpha']
+# plotdata['Delta fraction'] = variants_temp['Delta']
+# plotdata['Omicron fraction'] = variants_temp['Omicron']
+# plotdata['Other fraction'] = variants_temp['Other']
+# plotdata[['Alpha fraction', 'Delta fraction', 'Omicron fraction', 'Other fraction']] = plotdata[['Alpha fraction', 'Delta fraction', 'Omicron fraction', 'Other fraction']].interpolate()
+
+# plotdata['Alpha'] = plotdata['Alpha fraction'] * plotdata['Cases 7-day']
+# plotdata['Delta'] = plotdata['Delta fraction'] * plotdata['Cases 7-day']
+# plotdata['Omicron'] = plotdata['Omicron fraction'] * plotdata['Cases 7-day']
+# plotdata['Other variants'] = plotdata['Other fraction'] * plotdata['Cases 7-day']
+
+# plotdata.index.name = 'Date'
+# plotdata = plotdata[~np.isnan(plotdata['Other variants'])]
+
+# fig = px.area(
+#     plotdata.reset_index(),
+#     x='Date',
+#     y=['Omicron', 'Delta', 'Other variants'], 
+#     # y=['Omicron', 'Delta', 'Alpha', 'Other variants'], 
+#     # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
+#     # color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
+#     # color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
+#     color_discrete_sequence=['black', 'darkslateblue', 'gray'],
+#     labels={'value':'Cases/day', 'variable':'Variant'},
+#     title='Estimated cases by variant in WI')
+
+# savefile = '.\\docs\\assets\\plotly\\Variant-Cases.html'
+# fig.write_html(
+#     file=savefile,
+#     default_height=400,
+#     include_plotlyjs='cdn',
+#     )      
+# os.startfile(savefile)
+
+
+
+# save_png = '.\\docs\\assets\\Variant-Cases_'+end_date_str+'.png'
+# fig.write_image(
+#     save_png,
+#     width=700,
+#     height=400,
+#     engine='kaleido',
+# )
+# os.startfile(save_png)
+
+
+#%% Plot cases by proportion of variants, Feb 2022 version
+
+
+
 variants_temp = wi_frac.copy()
 
-plotdata['Alpha fraction'] = variants_temp['Alpha']
 plotdata['Delta fraction'] = variants_temp['Delta']
 plotdata['Omicron fraction'] = variants_temp['Omicron']
 plotdata['Other fraction'] = variants_temp['Other']
-plotdata[['Alpha fraction', 'Delta fraction', 'Omicron fraction', 'Other fraction']] = plotdata[['Alpha fraction', 'Delta fraction', 'Omicron fraction', 'Other fraction']].interpolate()
+plotdata[['Delta fraction', 'Omicron fraction', 'Other fraction']] = plotdata[['Delta fraction', 'Omicron fraction', 'Other fraction']].interpolate()
 
-plotdata['Alpha'] = plotdata['Alpha fraction'] * plotdata['Cases 7-day']
 plotdata['Delta'] = plotdata['Delta fraction'] * plotdata['Cases 7-day']
 plotdata['Omicron'] = plotdata['Omicron fraction'] * plotdata['Cases 7-day']
 plotdata['Other variants'] = plotdata['Other fraction'] * plotdata['Cases 7-day']
@@ -174,12 +224,8 @@ plotdata = plotdata[~np.isnan(plotdata['Other variants'])]
 fig = px.area(
     plotdata.reset_index(),
     x='Date',
-    y=['Omicron', 'Delta', 'Other variants'], 
-    # y=['Omicron', 'Delta', 'Alpha', 'Other variants'], 
-    # color_discrete_sequence=['darkgreen', 'rgb(209, 52, 52)', 'gray'],
-    # color_discrete_sequence=['black', 'darkblue', 'tomato', 'gray'],
-    # color_discrete_sequence=['black', 'darkslateblue', 'tomato', 'gray'],
-    color_discrete_sequence=['black', 'darkslateblue', 'gray'],
+    y=['Delta', 'Omicron', 'Other variants'], 
+    color_discrete_sequence=['darkslateblue', 'black', 'gray'],
     labels={'value':'Cases/day', 'variable':'Variant'},
     title='Estimated cases by variant in WI')
 
@@ -201,7 +247,6 @@ fig.write_image(
     engine='kaleido',
 )
 os.startfile(save_png)
-
 
 
 #%%
