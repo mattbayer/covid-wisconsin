@@ -18,9 +18,9 @@ What proportion of these cases are Omicron, and what proportion are Delta? Delta
 
 Despite the deluge of cases, the rate of new hospital admissions topped out at a bit below last winter's peak, and is now declining as well. A different measure of hospitalization, the total number of people in the hospital at one time, reached just four patients higher than last winter's peak and is also declining.
 
-[![Hospital admissions](../assets/Hosp-Cases-WI_2022-02-02.png)](https://covid-wisconsin.com/dashboard/deaths-hosp/)
+[![Hospital admissions](../assets/Hosp-Cases-WI_2022-02-03.png)](https://covid-wisconsin.com/dashboard/deaths-hosp/)
 
-[![Hospital patients](../assets/WHA-Hospitalized_2022-02-03.png)](https://www.whainfocenter.com/Covid-19Update)
+[![Hospital patients](../assets/WHA-Hospitalized_2022-02-02.png)](https://www.whainfocenter.com/Covid-19Update)
 
 The outlook on deaths is also encouraging. Now, I don't trust that the plot below is really complete yet, because more death reports will filter in over the coming weeks. But it has been a long enough time that I don't think it will change drastically. So duly caveated, the peak rate of deaths from Omicron was not even half of the rate from last winter, and in fact may end up lower than the peak of Delta deaths from the previous month.
 
