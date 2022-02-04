@@ -26,4 +26,4 @@ The outlook on deaths is also encouraging. Now, I don't trust that the plot belo
 
 [![Deaths](../assets/Deaths-Cases-WI_2022-02-03.png)](https://covid-wisconsin.com/dashboard/deaths-hosp/)
 
-Overall, compared with last winter, Omicron brought us two times the peak of cases, a notch fewer hospitalizations, and less than half the deaths. A crappy Christmas present, but certainly better than some other possibilities.
+Overall, compared with last winter, Omicron brought us two times the peak of cases, a notch fewer hospitalizations, and less than half the deaths. Still a crappy Christmas present, but it has turned out better than it might have.
