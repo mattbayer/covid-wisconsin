@@ -104,7 +104,7 @@ wi_frac = wi_frac[wi_frac.index < manual_frac.index.min()]
 wi_frac = wi_frac.append(manual_frac)
 
 #%% plotly fraction plot version
-end_date_str = '2022-01-30'
+end_date_str = '2022-02-02'
 
 # start_date = pd.to_datetime('2021-02-15')
 start_date = pd.to_datetime('2021-06-15')
@@ -224,8 +224,8 @@ plotdata = plotdata[~np.isnan(plotdata['Other variants'])]
 fig = px.area(
     plotdata.reset_index(),
     x='Date',
-    y=['Delta', 'Omicron', 'Other variants'], 
-    color_discrete_sequence=['darkslateblue', 'black', 'gray'],
+    y=['Delta', 'Omicron'], 
+    color_discrete_sequence=['darkslateblue', 'black'],
     labels={'value':'Cases/day', 'variable':'Variant'},
     title='Estimated cases by variant in WI')
 
