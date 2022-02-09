@@ -18,8 +18,8 @@ from tableauscraper import TableauScraper as TS
 ts = TS()  
 
 #%% Date suffix
-date_suffix = '_2021-12-19'
-month_label = 'Nov 2021'
+date_suffix = '_2022-02-08'
+month_label = 'Dec 2021'
 
 #%% Load population
 
@@ -54,10 +54,15 @@ for outcome in datasets:
     vax_age['Unvax'] = pd.to_numeric(vax_age.Unvax.str.replace(',',''))
     
     # create 12-17 summed age category
-    pop_age['12-17'] = pop_age['12-15']+pop_age['16-17']
+    # pop_age['12-17'] = pop_age['12-15']+pop_age['16-17']
     vax_age.loc['12-17'] = (vax_age.loc['12-15']*pop_age['12-15'] + vax_age.loc['16-17']*pop_age['16-17']) / (pop_age['12-17'])
     vax_age = vax_age.drop(['12-15', '16-17'])
-    vax_age = vax_age.sort_index()
+    
+    # order the rows correctly
+    vax_age = vax_age.loc[['0-4', '5-11', '12-17', '18-24', '25-34', '35-44', '45-54', '55-64', '65+', 'Total'], :]
+    # vax_age = vax_age.sort_index()
+    
+    # create 0-11 summed age category (they )
     
     # get to a flatter format
     vax_frac = vax_age['Vax fraction']
