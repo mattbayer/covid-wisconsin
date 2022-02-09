@@ -18,3 +18,4 @@ https://data.census.gov/cedsci/table?q=healthcare&g=0400000US55,55.050000&tid=AC
 
 Vax age
 Populations implied by the DHS vaccination dashboard. The version "pre5-11approval" are numbers that were used before the vaccine was approved for ages 5-11, when the dashboard was updated with apparent new numbers. This was between Nov 2021 and Feb 2022 sometime.
+The current version split 0-11 into two bins, and combined 12-15 and 16-17 into one bin. For consistency with efficacy data, I made estimates for 12-15 and 16-17, by using the 12-17 population and keeping the same ratio as the pre5-11approval numbers.
