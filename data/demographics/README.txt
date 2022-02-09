@@ -15,3 +15,6 @@ Downloaded from interactive table at
 https://data.census.gov/cedsci/table?q=healthcare&g=0400000US55,55.050000&tid=ACSST1Y2019.S2401&hidePreview=true
 1-year estimates, I take it, are more current for looking at rates of change, but only have high-population counties.
 5-year estimates would be more averaged and have all counties.
+
+Vax age
+Populations implied by the DHS vaccination dashboard. The version "pre5-11approval" are numbers that were used before the vaccine was approved for ages 5-11, when the dashboard was updated with apparent new numbers. This was between Nov 2021 and Feb 2022 sometime.
