@@ -119,10 +119,9 @@ try:
     vax_complete = vax_dash.setParameter('Initiation or Completion', 'Total population who have completed the series')
     
     
-    update_date = format_date(allocation_dash.worksheets[2].data.iloc[0,2])
+    repdate = vax_dash.getWorksheet('Title Header').data.iloc[0,-1]
     
-    
-    datafile = 'data\\vaccinations\\vax-dashboards_'+update_date+'.pkl'
+    datafile = 'data\\vaccinations\\vax-dashboards_'+format_date(repdate)+'.pkl'
     with open(datafile, 'wb') as f:
         pickle.dump([allocation_dash, vax_dash, vax_complete], f)
         
@@ -152,7 +151,6 @@ try:
     vax_age = vax_age.merge(vax_age_complete)
     
     # add date
-    repdate = vax_dash.getWorksheet('Title Header').data.iloc[0,-1]
     vax_age.insert(0, 'Reporting date', repdate)
     
     
