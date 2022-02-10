@@ -32,10 +32,10 @@ widata = covid.read_covid_data_wi('state')
 pos_df = pos_df.set_index('Date')
 pos_df['Reported Cases'] = widata.set_index('Date')['POS_NEW']
 pos_df = pos_df.reset_index()
-pos_df = pos_df.rename(columns={'Positive': 'Positive tests', 'Percent Positive': 'Percent positive'})
+pos_df = pos_df.rename(columns={'Positive': 'Positive tests', 'Percent Positive 7-day': 'Percent positive (7-day avg)'})
 
 # convert literal percent to proper decimal so interpreted correctly in plot
-pos_df['Percent positive'] = pos_df['Percent positive'] / 100
+pos_df['Percent positive (7-day avg)'] = pos_df['Percent positive (7-day avg)'] / 100
 
 # cut off latest date, misleading data
 pos_df = pos_df[pos_df.Date < pos_df.Date.max()]
@@ -48,7 +48,7 @@ savefile = plotpath+'\\Pos-Positivity-WI.html'
 fig = covid.plotly_twolines(
     pos_df, 
     'Positive tests', 
-    'Percent positive',
+    'Percent positive (7-day avg)',
     plotcolors=['steelblue', 'darkmagenta', 'lightsteelblue'],
     secondary_scale=1/25000,
     date_min=date_start,

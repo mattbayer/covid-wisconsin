@@ -1688,7 +1688,7 @@ def scrape_widash_postest():
     col_rename = {'SUM(Number of Positives)': 'Positive',
                   'SUM(Number of Negatives)': 'Negative',
                   'DAY(Encounter Date)': 'Date', 
-                  'AGG(Percent_Positive_tt)': 'Percent Positive'}
+                  'AGG(7_Day_Avg_Percent_Positive_tt)': 'Percent Positive 7-day'}
     
     pos_df = pos_df[col_rename.keys()]
     pos_df = pos_df.rename(columns=col_rename)
