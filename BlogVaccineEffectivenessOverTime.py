@@ -28,7 +28,7 @@ urls = {'Cases': 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatus_
         'Deaths': 'https://bi.wisconsin.gov/t/DHS/views/CasesOutcomesbyVaxStatus_16303581926310/DeathsbyVaxStatus?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link',
         }
 
-#%%
+#%% Fetch and arrange data
 
 data_all = pd.DataFrame()
 
@@ -50,8 +50,48 @@ for outcome in datasets:
     # print(data)
 
     data = data.reset_index().melt(id_vars='Month', var_name='Vax status')
+    
+    # convert Month from string to datetime, and sort
+    data.Month = pd.to_datetime(data.Month)
+    data = data.sort_values(['Vax status', 'Month'])
+    
+    # convert value from string to numeric
+    data.value = pd.to_numeric(data.value.apply(lambda v: v.replace(',', '')))
+    
+    # add outcome column
     data['Outcome'] = outcome + ' per 100k'
+    
+    # append to overall dataframe
     data_all = data_all.append(data)
+    
+# renumber the indices
+data_all = data_all.reset_index(drop=True)
+
+
+#%% Process to get efficacy
+vax = data_all[data_all['Vax status'] == 'Vax'].reset_index(drop=True)
+unvax = data_all[data_all['Vax status'] == 'Unvax'].reset_index(drop=True)
+
+vax['Relative risk'] = vax.value / unvax.value
+
+
+#%% Plots of relative risk by month
+
+fig = px.line(
+    vax, 
+    x='Month',
+    y='Relative risk',
+    color='Outcome',
+    color_discrete_sequence=['steelblue', 'darkorange', 'firebrick'],
+    markers=True,
+    )
+
+savefile = '.\\docs\\assets\\plotly\\VaxEfficacyTime.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
 
 #%% Load all the saved data
 
@@ -65,6 +105,7 @@ for m in months:
 #%% Booster dose info
 # retrieved from https://covid.cdc.gov/covid-data-tracker/#vaccinations_vacc-people-additional-dose-count-pop65
 # on 14-Feb-2022, 8:36pm
+# upshot - about 75% of over-65 in WI have a booster; US average only 58%, e.g. Texas 51%.
 
 # total number of people in WI with a booster
 N_boost = 2_008_780
