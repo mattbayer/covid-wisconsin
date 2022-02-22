@@ -19,6 +19,11 @@ import covid
 from tableauscraper import TableauScraper as TS
 ts = TS()  
 
+#%% Parameters for all plots
+imwidth = 600
+imheight = 450
+date_suffix = '2022-01'
+
 #%% Load the age-adjusted table from DHS
 
 datasets = ['Cases', 'Hospitalizations', 'Deaths']
@@ -137,6 +142,16 @@ fig.write_html(
     include_plotlyjs='cdn',
     )      
 os.startfile(savefile)
+
+save_png = '.\\docs\\assets\\VaxRatesTime_'+date_suffix+'.png'
+fig.write_image(
+    save_png,
+    width=700,
+    height=600,
+    engine='kaleido',
+)
+os.startfile(save_png)
+
 
 #%% Plots of relative risk by month
 
