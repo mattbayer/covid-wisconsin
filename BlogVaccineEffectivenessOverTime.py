@@ -75,6 +75,69 @@ unvax = data_all[data_all['Vax status'] == 'Unvax'].reset_index(drop=True)
 vax['Relative risk'] = vax.value / unvax.value
 
 
+#%% Plots of risk for vax/unvax
+# modify month for the sake of the plot
+data_all['Plot month'] = data_all.Month + datetime.timedelta(days=15)
+
+fig = px.line(
+    data_all,
+    x='Plot month',
+    y='value',
+    line_dash='Vax status',
+    color='Outcome',
+    color_discrete_sequence=['steelblue', 'darkorange', 'firebrick'],
+    facet_row='Outcome',
+    )
+
+
+# update x axis range
+fig.update_xaxes({'range': [pd.to_datetime('2021-02-17'), pd.to_datetime('2022-01-15')]})
+
+# Name and ticks for x axis
+fig.update_xaxes(row=1, title_text='Month')
+fig.update_xaxes(showgrid=False, nticks=11)
+
+# turn off y axis matching for the facets
+fig.update_yaxes(matches=None)
+
+# Facet labels - on the left
+# Change names of left axis label
+fig.update_yaxes(row=3, title_text='Cases per 100k')
+fig.update_yaxes(row=2, title_text='Hosp per 100k')
+fig.update_yaxes(row=1, title_text='Deaths per 100k')
+# make all y axis labels in the same spot - hack by setting standoff high but 
+# automargin False so the margin doesn't expand with the standoff
+fig.update_yaxes(automargin=False, title_standoff=40)
+
+# update right plot titles - just blank
+fig.for_each_annotation(lambda a: a.update(text=''))
+
+# # Facet labels - on the right
+# # Change names of left axis label
+# fig.update_yaxes(title_text=None)
+
+# # update right plot titles - just blank
+# fig.for_each_annotation(
+#     lambda a: a.update(
+#         text=a.text.split("=")[-1],
+#         font=dict(size=15),
+#         )
+#     )
+
+
+
+# make the plot stair-step style
+# hvh is centered on the x value, hv is starting at the x value
+fig.update_traces(line={"shape": 'vh'})
+
+
+savefile = '.\\docs\\assets\\plotly\\VaxRatesTime.html'
+fig.write_html(
+    file=savefile,
+    include_plotlyjs='cdn',
+    )      
+os.startfile(savefile)
+
 #%% Plots of relative risk by month
 
 fig = px.line(
@@ -83,7 +146,7 @@ fig = px.line(
     y='Relative risk',
     color='Outcome',
     color_discrete_sequence=['steelblue', 'darkorange', 'firebrick'],
-    markers=True,
+    # markers=True,
     )
 
 savefile = '.\\docs\\assets\\plotly\\VaxEfficacyTime.html'
