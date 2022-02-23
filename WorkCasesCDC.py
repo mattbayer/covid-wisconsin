@@ -13,7 +13,7 @@ import os
 import covid
 
 # Data from 
-# https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf
+# https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36
 
 cases_full = pd.read_csv('data\\United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv')
 
