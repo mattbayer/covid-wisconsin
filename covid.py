@@ -1708,7 +1708,7 @@ def scrape_widash_deaths():
     ts = tableauscraper.TableauScraper()
     
     # scrape the DHS dashboard
-    death_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobable_16214287829690/Countydailydeaths?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    death_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailydeathsconfirmedandprobablewithdateslider_16450432532100/Countydailydeathsslider?:embed_code_version=3&:embed=y&:loadOrderID=3&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
     ts.loads(death_url)
     death_dash = ts.getWorkbook()
     death_df = death_dash.worksheets[1].data
@@ -1744,10 +1744,11 @@ def scrape_widash_cases():
     ts = tableauscraper.TableauScraper()
     
     # scrape the DHS dashboard
-    case_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirmedandprobable_16214282004490/Countydailycases?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    case_url = 'https://bi.wisconsin.gov/t/DHS/views/County-leveldailycasesconfirmedandprobablewithdateslider_16450431512890/Countydailycasesslider?:embed_code_version=3&:embed=y&:loadOrderID=1&:display_spinner=no&:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link'
+    
     ts.loads(case_url)
     case_dash = ts.getWorkbook()
-    case_df = case_dash.getWorksheet('Cases with prob stacked').data
+    case_df = case_dash.getWorksheet('Cases by day w/ date slider').data
 
     # Select the relevant data and rename
     col_rename = {'DAY(Epi Dt)-value': 'Date',

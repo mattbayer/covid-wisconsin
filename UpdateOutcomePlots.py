@@ -7,14 +7,8 @@ Created on Wed Jun 30 10:48:03 2021
 @author: 212367548
 """
 
-import pandas as pd
-import geopandas as gpd
 import datetime
-from plotly.offline import plot as pplot
-import plotly.express as px
-import plotly.graph_objects as go
 import os
-import numpy as np
 
 import covid
 
