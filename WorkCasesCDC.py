@@ -33,6 +33,7 @@ cases['new_case_7'] = cases.new_case.rolling(7).mean()
 
 cases = cases[cases.index >= pd.to_datetime('2021-12-31')]
 
-cases['projection'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime('2022-02-19')).days)
+cases['projection1'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime('2022-02-19')).days)
+cases['projection2'] = 85e3 * np.exp(-0.050*(cases.index.copy() - pd.to_datetime('2022-02-21')).days)
 
-cases.plot(y=['new_case_7', 'projection'], logy=True)
+cases.plot(y=['new_case_7', 'projection1', 'projection2'], logy=True)
