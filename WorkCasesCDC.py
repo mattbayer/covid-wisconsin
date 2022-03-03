@@ -15,9 +15,15 @@ import covid
 # Data from 
 # https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36
 
-cases_full = pd.read_csv('data\\United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv')
+# Move file from downloads to storage folder
+fname = 'United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv'
+os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join('data', fname))
 
-#%%
+
+#%% Read and process data
+
+cases_full = pd.read_csv(os.path.join('data', fname))
+
 col_list = ['submission_date', 'state', 
             'tot_cases', 'conf_cases', 'prob_cases',
             'new_case', 'pnew_case',
@@ -37,3 +43,5 @@ cases['projection1'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime(
 cases['projection2'] = 85e3 * np.exp(-0.050*(cases.index.copy() - pd.to_datetime('2022-02-21')).days)
 
 cases.plot(y=['new_case_7', 'projection1', 'projection2'], logy=True)
+
+print(cases.iloc[-14:,[3,5,6,7]])
