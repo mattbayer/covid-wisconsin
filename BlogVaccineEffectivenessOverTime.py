@@ -92,6 +92,7 @@ fig = px.line(
     color='Outcome',
     color_discrete_sequence=['steelblue', 'darkorange', 'firebrick'],
     facet_row='Outcome',
+    title='Covid rates by vax status<br>(Age-adjusted)'
     )
 
 
@@ -173,11 +174,35 @@ os.startfile(savefile)
 
 #%% Load all the saved data
 
-months = list(range(8,12))  # months 8:11 inclusive
+years = [2021, 2022]
+months = [[8, 9, 10, 11, 12], []]
+detailed = pd.DataFrame()
 
-for m in months:
-    filestr = 'Breakthroughs_2021-' + str(m).zfill(2) + '.csv'
-    print(filestr)
+# get per-100k data for each month and append them into one detailed dataframe
+for yy, year in enumerate(years):
+    for m in months[yy]:
+        month_str = str(year) + '-' + str(m).zfill(2)
+        filestr = os.path.join('data', 'vaccinations', 'Breakthroughs_' + month_str + '.csv')
+        print(filestr)
+        
+        vax_month = pd.read_csv(filestr, index_col=0)
+        vax_month['Month'] = pd.to_datetime(month_str)
+        detailed = detailed.append(vax_month)
+
+
+# melt the outcome columns
+detailed = detailed.melt(id_vars=['Month', 'Age group', 'Vax status', 'Population'],
+                         value_vars=['Cases', 'Hospitalizations', 'Deaths'],
+                         var_name='Outcome', value_name='value')
+
+# renumber index
+detailed = detailed.reset_index(drop=True)
+
+# split into vax/unvax for efficacy
+vax = detailed[detailed['Vax status'] == 'Vax'].reset_index(drop=True)
+unvax = detailed[detailed['Vax status'] == 'Unvax'].reset_index(drop=True)
+
+vax['Relative risk'] = vax.value / unvax.value
     
     
 #%% Booster dose info
