@@ -204,6 +204,7 @@ unvax = detailed[detailed['Vax status'] == 'Unvax'].reset_index(drop=True)
 
 vax['Relative risk'] = vax.value / unvax.value
     
+#%% Plot efficacy by age group
     
 #%% Booster dose info
 # retrieved from https://covid.cdc.gov/covid-data-tracker/#vaccinations_vacc-people-additional-dose-count-pop65
