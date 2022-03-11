@@ -23,6 +23,7 @@ os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join(
 #%% Read and process data
 
 cases_full = pd.read_csv(os.path.join('data', fname))
+cases_full.submission_date = pd.to_datetime(cases_full.submission_date)
 
 col_list = ['submission_date', 'state', 
             'tot_cases', 'conf_cases', 'prob_cases',
@@ -30,19 +31,20 @@ col_list = ['submission_date', 'state',
             ]
             # 'created_at']
 
-cases = cases_full[col_list]
-cases.submission_date = pd.to_datetime(cases.submission_date)
+cases_full = cases_full[col_list]
 
-cases = cases.groupby('submission_date').sum()
-# cases = cases[cases.state=='MA'].set_index('submission_date').sort_index()
+cases = cases_full.groupby('submission_date').sum()
+# cases_full[cases_full.state=='NYC'].sort_values('submission_date').tail(14)
 
 cases['new_case_7'] = cases.new_case.rolling(7).mean()
 
 cases = cases[cases.index >= pd.to_datetime('2022-01-15')]
 
 cases['projection1'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime('2022-02-19')).days)
-cases['projection2'] = 85e3 * np.exp(-0.052*(cases.index.copy() - pd.to_datetime('2022-02-21')).days)
+t2 = (cases.index.copy() - pd.to_datetime('2022-02-21')).days
+cases['projection2'] = 85e3 * np.exp(-0.052 * t2)
+t3 = (cases.index.copy() - pd.to_datetime('2022-02-14')).days
+cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0006*t3) * t3 )
+cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3'], logy=True)
 
-cases.plot(y=['new_case_7', 'projection1', 'projection2'], logy=True)
-
-print(cases.iloc[-14:,[3,5,6,7]])
+print(cases.iloc[-14:,[3,5,7,8]])
