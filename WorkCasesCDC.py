@@ -18,7 +18,7 @@ import covid
 # Move file from downloads to storage folder
 fname = 'United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv'
 os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join('data', fname))
-
+# os.replace(os.path.join('C:\\Users\\matt_\\Downloads', fname), os.path.join('data', fname))
 
 #%% Read and process data
 
