@@ -44,7 +44,37 @@ cases['projection1'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime(
 t2 = (cases.index.copy() - pd.to_datetime('2022-02-21')).days
 cases['projection2'] = 85e3 * np.exp(-0.052 * t2)
 t3 = (cases.index.copy() - pd.to_datetime('2022-02-14')).days
-cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0006*t3) * t3 )
+cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0007*t3) * t3 )
 cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3'], logy=True)
 
 print(cases.iloc[-14:,[3,5,7,8]])
+
+
+#%% Model of BA2 (from Matlab originally)
+
+x = np.arange(0,10);    # week; 0 = Feb 6
+offset = 6.8;
+# ba1_factor = 0.6;
+# ba1_factor - gradually increasing factor of decrease
+ba1_factor = 0.59 + 0.01*x
+ba1_factor_cum = np.insert(ba1_factor.cumprod(), 0, 1)[0:-1]
+
+ba2_exp = 0.69;     # exponential coeff to match observed increase in share
+ba2_factor = np.exp(ba2_exp) * ba1_factor;     # convert to factor for increase in number
+
+ba2 = 1 / (1+np.exp(-ba2_exp*(x-offset)))
+ba1 = 1 - ba2;
+
+start = 280;    # thousand cases
+
+C = np.zeros((len(x), 3));
+C[:,0] = start * ba1[0] * ba1_factor_cum;
+C[:,1] = start * ba2[0] * ba2_factor**x;
+
+C[:,2] = C.sum(axis=1);
+
+print(C)
+
+# figure
+# semilogy(cases)
+
