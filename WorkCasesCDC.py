@@ -32,6 +32,7 @@ col_list = ['submission_date', 'state',
             # 'created_at']
 
 cases_full = cases_full[col_list]
+cases_full = cases_full.sort_values('submission_date')
 
 cases = cases_full.groupby('submission_date').sum()
 # cases_full[cases_full.state=='NYC'].sort_values('submission_date').tail(14)
