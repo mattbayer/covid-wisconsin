@@ -48,7 +48,7 @@ t3 = (cases.index.copy() - pd.to_datetime('2022-02-14')).days
 cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0007*t3) * t3 )
 cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3'], logy=True)
 
-print(cases.iloc[-14:,[3,5,7,8]])
+print(cases.iloc[-15:,[3,5,7,8]])
 
 
 #%% Model of BA2 (from Matlab originally)
