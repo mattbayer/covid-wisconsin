@@ -46,9 +46,8 @@ t2 = (cases.index.copy() - pd.to_datetime('2022-02-21')).days
 cases['projection2'] = 85e3 * np.exp(-0.052 * t2)
 t3 = (cases.index.copy() - pd.to_datetime('2022-02-14')).days
 cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0007*t3) * t3 )
-cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3'], logy=True)
 
-print(cases.iloc[-15:,[3,5,7,8]])
+
 
 
 #%% Model of BA2 (from Matlab originally)
@@ -79,3 +78,12 @@ print(C)
 # figure
 # semilogy(cases)
 
+t4 = ((cases.index.copy() - pd.to_datetime('2022-03-20')).days)/7 + 6
+cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
+
+#%% Plot and print
+
+
+cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3', 'ba2'], logy=True)
+
+print(cases.iloc[-15:,[3,5,8,9]])
