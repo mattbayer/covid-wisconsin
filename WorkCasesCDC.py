@@ -14,9 +14,10 @@ import covid
 
 # Data from 
 # https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36
-
-# Move file from downloads to storage folder
 fname = 'United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv'
+
+#%% 
+# Move file from downloads to storage folder
 os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join('data', fname))
 # os.replace(os.path.join('C:\\Users\\matt_\\Downloads', fname), os.path.join('data', fname))
 
@@ -45,7 +46,7 @@ cases['projection1'] = 1e5 * np.exp(-0.079*(cases.index.copy() - pd.to_datetime(
 t2 = (cases.index.copy() - pd.to_datetime('2022-02-21')).days
 cases['projection2'] = 85e3 * np.exp(-0.052 * t2)
 t3 = (cases.index.copy() - pd.to_datetime('2022-02-14')).days
-cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0007*t3) * t3 )
+cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0008*t3) * t3 )
 
 
 
@@ -53,10 +54,11 @@ cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0007*t3) * t3 )
 #%% Model of BA2 (from Matlab originally)
 
 x = np.arange(0,10);    # week; 0 = Feb 6
-offset = 6.8;
+offset = 5.8;
 # ba1_factor = 0.6;
 # ba1_factor - gradually increasing factor of decrease
-ba1_factor = 0.59 + 0.01*x
+# ba1_factor = 0.59 + 0.01*x
+ba1_factor = 0.6 + 0.000*x
 ba1_factor_cum = np.insert(ba1_factor.cumprod(), 0, 1)[0:-1]
 
 ba2_exp = 0.69;     # exponential coeff to match observed increase in share
@@ -83,7 +85,6 @@ cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
 
 #%% Plot and print
 
-
-cases.plot(y=['new_case_7', 'projection1', 'projection2', 'projection3', 'ba2'], logy=True)
+cases.plot(y=['new_case_7', 'projection2', 'projection3', 'ba2'], logy=True)
 
 print(cases.iloc[-15:,[3,5,8,9]])
