@@ -54,14 +54,14 @@ cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0008*t3) * t3 )
 #%% Model of BA2 (from Matlab originally)
 
 x = np.arange(0,14);    # week; 0 = Feb 6
-offset = 5.8;
+offset = 5.5;
 # ba1_factor = 0.6;
 # ba1_factor - gradually increasing factor of decrease
 # ba1_factor = 0.59 + 0.01*x
-ba1_factor = 0.6 + 0.000*x
+ba1_factor = 0.57 + 0.000*x
 ba1_factor_cum = np.insert(ba1_factor.cumprod(), 0, 1)[0:-1]
 
-ba2_exp = 0.69;     # exponential coeff to match observed increase in share
+ba2_exp = 0.8;     # exponential coeff to match observed increase in share
 ba2_factor = np.exp(ba2_exp) * ba1_factor;     # convert to factor for increase in number
 
 ba2 = 1 / (1+np.exp(-ba2_exp*(x-offset)))
