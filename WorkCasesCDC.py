@@ -85,6 +85,6 @@ cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
 
 #%% Plot and print
 
-cases.plot(y=['new_case_7', 'projection2', 'projection3', 'ba2'], logy=True)
+cases.plot(y=['new_case_7', 'projection3', 'ba2'], logy=True)
 
 print(cases.iloc[-15:,[3,5,8,9]])
