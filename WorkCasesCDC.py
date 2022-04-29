@@ -53,7 +53,7 @@ cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0008*t3) * t3 )
 
 #%% Model of BA2 (from Matlab originally)
 
-x = np.arange(0,14);    # week; 0 = Feb 6
+x = np.arange(0,16);    # week; 0 = Feb 6
 offset = 5.5;
 # ba1_factor = 0.6;
 # ba1_factor - gradually increasing factor of decrease
