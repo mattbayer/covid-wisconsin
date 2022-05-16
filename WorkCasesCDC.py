@@ -53,7 +53,7 @@ cases['projection3'] = 145e3 * np.exp((-0.075 + 0.0008*t3) * t3 )
 
 #%% Model of BA2 (from Matlab originally)
 
-x = np.arange(0,16);    # week; 0 = Feb 6
+x = np.arange(0,19);    # week; 0 = Feb 6
 offset = 5.5;
 # ba1_factor = 0.6;
 # ba1_factor - gradually increasing factor of decrease
@@ -85,6 +85,6 @@ cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
 
 #%% Plot and print
 
-cases.plot(y=['new_case_7', 'projection3', 'ba2'], logy=True)
+cases.plot(y=['new_case_7', 'ba2'], logy=True)
 
 print(cases.iloc[-15:,[3,5,8,9]])
