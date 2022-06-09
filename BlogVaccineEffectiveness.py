@@ -18,8 +18,8 @@ from tableauscraper import TableauScraper as TS
 ts = TS()  
 
 #%% Date suffix
-date_suffix = '_2022-02-08'
-month_label = 'Dec 2021'
+date_suffix = '_2022-04-14'
+month_label = 'Mar 2022'
 
 #%% Load population
 

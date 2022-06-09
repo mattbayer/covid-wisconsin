@@ -22,7 +22,7 @@ ts = TS()
 #%% Parameters for all plots
 imwidth = 600
 imheight = 450
-date_suffix = '2022-01'
+date_suffix = '2022-04'
 
 #%% Load the age-adjusted table from DHS
 
