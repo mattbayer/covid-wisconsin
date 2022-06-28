@@ -83,8 +83,27 @@ print(C)
 t4 = ((cases.index.copy() - pd.to_datetime('2022-03-20')).days)/7 + 6
 cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
 
+#%% ba5 model
+start_date = pd.to_datetime('2022-05-21')
+ba2_start = 110;
+ba5_start = 5;
+ba2_factor = 0.9;   # factor = increase per week
+ba5_factor = 1.6;
+
+x = np.arange(0,10)
+ba2_est = ba2_start * ba2_factor**x
+ba5_est = ba5_start * ba5_factor**x
+ba5_model = ba2_est + ba5_est
+
+share = ba5_est / ba5_model
+print(share)
+
+t5 = (cases.index.copy() - start_date).days/7
+cases['ba5'] = np.interp(t5, x, ba5_model, left=np.nan) * 1e3
+
+
 #%% Plot and print
 
-cases.plot(y=['new_case_7', 'ba2'], logy=True)
+cases.plot(y=['new_case_7', 'ba2', 'ba5'], logy=True)
 
-print(cases.iloc[-15:,[3,5,8,9]])
+print(cases.iloc[-15:,[3,5,9,10]])
