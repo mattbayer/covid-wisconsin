@@ -84,14 +84,15 @@ t4 = ((cases.index.copy() - pd.to_datetime('2022-03-20')).days)/7 + 6
 cases['ba2'] = np.interp(t4, x, C[:,2]) * 1e3
 
 #%% ba5 model
+x = np.arange(0,10)
 start_date = pd.to_datetime('2022-05-21')
+
 ba2_start = 110;
 ba5_start = 5;
-ba2_factor = 0.9;   # factor = increase per week
-ba5_factor = 1.6;
+ba2_factor = 0.95 - 0.01*x;   # factor = increase per week
+ba5_factor = 1.4;
 
-x = np.arange(0,10)
-ba2_est = ba2_start * ba2_factor**x
+ba2_est = ba2_start / ba2_factor[0] * ba2_factor.cumprod()
 ba5_est = ba5_start * ba5_factor**x
 ba5_model = ba2_est + ba5_est
 
