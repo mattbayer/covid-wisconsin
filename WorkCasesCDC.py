@@ -75,7 +75,7 @@ C[:,1] = start * ba2[0] * ba2_factor**x;
 
 C[:,2] = C.sum(axis=1);
 
-print(C)
+# print(C)
 
 # figure
 # semilogy(cases)
