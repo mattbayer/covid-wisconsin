@@ -18,8 +18,11 @@ fname = 'United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv'
 
 #%% 
 # Move file from downloads to storage folder
-os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join('data', fname))
-# os.replace(os.path.join('C:\\Users\\matt_\\Downloads', fname), os.path.join('data', fname))
+try:
+    os.replace(os.path.join('C:\\Users\\212367548\\Downloads', fname), os.path.join('data', fname))
+    # os.replace(os.path.join('C:\\Users\\matt_\\Downloads', fname), os.path.join('data', fname))
+except FileNotFoundError:
+    print('The system cannot find a recently downloaded data file. Proceeding with current version.')
 
 #%% Read and process data
 
