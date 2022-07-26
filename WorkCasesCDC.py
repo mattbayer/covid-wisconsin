@@ -15,6 +15,8 @@ import covid
 # Data from 
 # https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36
 fname = 'United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv'
+url = 'https://data.cdc.gov/api/views/9mfq-cb36/rows.csv?accessType=DOWNLOAD'
+    # can't auto-download from work though
 
 #%% 
 # Move file from downloads to storage folder
