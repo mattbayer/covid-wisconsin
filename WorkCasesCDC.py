@@ -108,13 +108,17 @@ t5 = (cases.index.copy() - start_date).days/7
 cases['ba5-rise'] = np.interp(t5, x, ba5_model, left=np.nan) * 1e3
 
 #%% ba5 fall model
-x = np.arange(0,14)
+x = np.arange(0,20)
 start_date = pd.to_datetime('2022-08-14')
 
 ba5_start = 110;
 fall_factor = 0.88;   # factor = increase per week
 
 ba5_fall = ba5_start * fall_factor**x
+
+ba5_fall_df = pd.DataFrame(
+    {'Week': [start_date + datetime.timedelta(days=float(d*7)) for d in x],
+    'Cases': ba5_fall*1000})
 
 t6 = (cases.index.copy() - start_date).days/7
 cases['ba5-fall'] = np.interp(t6, x, ba5_fall, left=np.nan) * 1e3
